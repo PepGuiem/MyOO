@@ -1,0 +1,38 @@
+[ 1523.4s] === fases: preparar, hornear, exportar, render | vistas 360 | 07_camisa_cubana | Blender 5.2.3 LTS
+[ 1524.3s] importado: Tela 582262 tri., Pespuntes 70140 tri.
+[ 1525.0s] atributos del punto en 1s
+[ 1532.2s] desdoblado UV: MINIMUM_STRETCH
+[ 1553.5s] UV: 1508 islas
+[ 1553.9s] versión ligera: 120000 tri., UV en 26s, estiramiento: mediana de la desviación de área 0.067, 95% < 0.894, ocupación UV 57%
+[ 1557.8s] piezas: Manga izquierda, Manga derecha, Delantero derecho, Espalda, Canesú, Cuello, Tapeta, Delantero izquierdo
+[ 1557.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisas\camisa_cubana\camisa_cubana.blend
+[ 1557.9s] fase preparar terminada en 35s
+[ 1557.9s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 1584.6s] horneado BaseColor (4096 px) en 27s
+[ 1610.5s] horneado Roughness (4096 px) en 26s
+[ 1638.5s] horneado Normal (4096 px) en 28s
+[ 1678.6s] horneado AO (4096 px) en 40s
+[ 1708.5s] horneado Height (4096 px) en 30s
+[ 1708.5s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisas\camisa_cubana\camisa_cubana.blend
+[ 1708.5s] fase hornear terminada en 151s
+[ 1710.1s] exportado 07_camisa_cubana_pbr.glb: 4.9 MB
+[ 1710.3s] exportado 07_camisa_cubana_pbr.fbx (texturas en texturas/)
+[ 1710.3s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisas\camisa_cubana\camisa_cubana.blend
+[ 1710.3s] fase exportar terminada en 2s
+[ 1710.3s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 1717.8s] render 1 frente en 8s
+[ 1724.9s] render 2 derecha en 7s
+[ 1732.5s] render 3 atras en 8s
+[ 1739.6s] render 4 izquierda en 7s
+[ 1740.1s] lámina 360 guardada
+[ 1740.1s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisas\camisa_cubana\camisa_cubana.blend
+[ 1740.1s] fase render terminada en 30s
+[ 1740.1s] === listo
+[   42.5s] === fases: rig | vistas 360 | 07_camisa_cubana | Blender 5.2.3 LTS
+[   46.0s] pesos Camiseta PBR: 63203 vértices; cadera 10396, columna 4529, pecho 22518, clavicula.L 1586, brazo.L 8297, muslo.L 2472, clavicula.R 1548, brazo.R 9371, muslo.R 2486
+[   46.0s] pesos Botones: 3012 vértices; cadera 1836, columna 662, pecho 514
+[   49.0s] exportado 07_camisa_cubana_rig.glb: 8.2 MB
+[   49.6s] exportado 07_camisa_cubana_rig.fbx
+[   49.7s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisas\camisa_cubana\camisa_cubana.blend
+[   49.7s] fase rig terminada en 7s
+[   49.7s] === listo

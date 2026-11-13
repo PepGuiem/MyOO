@@ -1,0 +1,275 @@
+[    0.0s] === fases: preparar | Blender 5.2.3 LTS
+[    2.0s] importado: Tela 686168 tri., Botón y remaches 8280 tri., Etiqueta de piel 6000 tri., Pespuntes 253740 tri.
+[    2.1s] atributos de tejido, interior y desgaste en Tela (345180 vértices)
+[    8.2s] versión ligera: 150000 tri., UV en 2s, estiramiento: mediana de la desviación de área 0.079, 95% < 0.238, ocupación UV 41%
+[    8.4s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_baggy\vaquero_baggy.blend
+[    8.4s] fase preparar terminada en 8s
+[    8.4s] === listo
+[    0.0s] === fases: preparar, hornear, exportar | Blender 5.2.3 LTS
+[    1.7s] importado: Tela 686168 tri., Botón y remaches 8280 tri., Etiqueta de piel 6000 tri., Pespuntes 253740 tri.
+[    1.8s] atributos de tejido, interior y desgaste en Tela (345180 vértices)
+[    8.6s] versión ligera: 150000 tri., UV en 2s, estiramiento: mediana de la desviación de área 0.079, 95% < 0.238, ocupación UV 41%
+[    8.7s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_baggy\vaquero_baggy.blend
+[    8.7s] fase preparar terminada en 9s
+[    9.0s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  143.9s] horneado BaseColor (4096 px) en 135s
+[  156.3s] horneado Roughness (4096 px) en 12s
+[  169.7s] horneado Normal (4096 px) en 13s
+[  197.1s] horneado AO (4096 px) en 27s
+[  208.2s] horneado Height (4096 px) en 11s
+[  208.3s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_baggy\vaquero_baggy.blend
+[  208.3s] fase hornear terminada en 200s
+[  211.3s] exportado 19_vaquero_baggy_pbr.glb: 7.5 MB
+[  214.4s] piezas: Cinturilla, Trabillas, Cinturilla.001, Cinturilla.002, Cinturilla.003, Cinturilla.004, Cinturilla.005, Cinturilla.006
+[  214.5s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_baggy\vaquero_baggy.blend
+[  214.5s] fase exportar terminada en 6s
+[  214.5s] === listo
+[    0.0s] === fases: preparar | Blender 5.2.3 LTS
+[    2.0s] importado: Tela 686168 tri., Botón y remaches 8280 tri., Etiqueta de piel 6000 tri., Pespuntes 253740 tri.
+[    2.1s] atributos de tejido, interior y desgaste en Tela (345180 vértices)
+[   25.1s] versión ligera: 150000 tri., UV en 19s, estiramiento: mediana de la desviación de área 0.079, 95% < 0.238, ocupación UV 49%
+[   25.2s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_baggy\vaquero_baggy.blend
+[   25.2s] fase preparar terminada en 25s
+[   25.2s] === listo
+[    0.0s] === fases: preparar | Blender 5.2.3 LTS
+[    1.6s] importado: Tela 686168 tri., Botón y remaches 8280 tri., Etiqueta de piel 6000 tri., Pespuntes 253740 tri.
+[    1.6s] atributos de tejido, interior y desgaste en Tela (345180 vértices)
+[   16.9s] desdoblado UV: MINIMUM_STRETCH
+[   25.7s] UV: 305 islas (perneras por dentro y por fuera, trabillas)
+[   25.8s] versión ligera: 150000 tri., UV en 20s, estiramiento: mediana de la desviación de área 0.061, 95% < 0.330, ocupación UV 53%
+[   25.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_baggy\vaquero_baggy.blend
+[   25.9s] fase preparar terminada en 26s
+[   25.9s] === listo
+[    0.0s] === fases: preparar | Blender 5.2.3 LTS
+[    1.6s] importado: Tela 686168 tri., Botón y remaches 8280 tri., Etiqueta de piel 6000 tri., Pespuntes 253740 tri.
+[    1.7s] atributos de tejido, interior y desgaste en Tela (345180 vértices)
+[   17.2s] desdoblado UV: MINIMUM_STRETCH
+[   37.2s] UV: 133 islas (perneras por dentro y por fuera, trabillas)
+[   37.7s] versión ligera: 150000 tri., UV en 32s, estiramiento: mediana de la desviación de área 0.052, 95% < 0.293, ocupación UV 45%
+[   37.8s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_baggy\vaquero_baggy.blend
+[   37.8s] fase preparar terminada en 38s
+[   37.8s] === listo
+[    0.0s] === fases: preparar, hornear, exportar, render | Blender 5.2.3 LTS
+[    1.6s] importado: Tela 686168 tri., Botón y remaches 8280 tri., Etiqueta de piel 6000 tri., Pespuntes 253740 tri.
+[    1.7s] atributos de tejido, interior y desgaste en Tela (345180 vértices)
+[   17.1s] desdoblado UV: MINIMUM_STRETCH
+[   25.4s] UV: 133 islas (perneras por dentro y por fuera, trabillas)
+[   25.9s] versión ligera: 150000 tri., UV en 20s, estiramiento: mediana de la desviación de área 0.485, 95% < 1.312, ocupación UV 53%
+[   25.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_baggy\vaquero_baggy.blend
+[   25.9s] fase preparar terminada en 26s
+[   26.2s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[   41.1s] horneado BaseColor (4096 px) en 15s
+[   53.7s] horneado Roughness (4096 px) en 13s
+[   67.0s] horneado Normal (4096 px) en 13s
+[   95.0s] horneado AO (4096 px) en 28s
+[  105.7s] horneado Height (4096 px) en 11s
+[  105.8s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_baggy\vaquero_baggy.blend
+[  105.8s] fase hornear terminada en 80s
+[  108.4s] exportado 19_vaquero_baggy_pbr.glb: 5.5 MB
+[  111.3s] piezas: Trasero izquierdo, Trabillas, Delantero derecho, Trasero derecho, Cinturilla, Bolsillos traseros, Bolsillo monedero, Delantero izquierdo
+[  111.4s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_baggy\vaquero_baggy.blend
+[  111.4s] fase exportar terminada en 6s
+[  111.4s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  129.3s] render 01 frontal en 18s
+[  147.1s] render 02 trasera en 18s
+[  162.2s] render 03 lateral_izquierda en 15s
+[  177.5s] render 04 lateral_derecha en 15s
+[  199.7s] render 05 detalle_cintura en 22s
+[  220.3s] render 06 detalle_bolsillos en 21s
+[  240.3s] render 07 detalle_tejido en 20s
+[  264.3s] render 08 detalle_bajos en 24s
+[  264.4s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_baggy\vaquero_baggy.blend
+[  264.4s] fase render terminada en 153s
+[  264.4s] === listo
+[    0.0s] === fases: preparar, hornear, exportar, render | Blender 5.2.3 LTS
+[    1.6s] importado: Tela 686168 tri., Botón y remaches 8236 tri., Etiqueta de piel 6000 tri., Pespuntes 253200 tri.
+[    1.8s] atributos de tejido, interior y desgaste en Tela (345180 vértices)
+[   17.7s] desdoblado UV: MINIMUM_STRETCH
+[   26.3s] UV: 133 islas (perneras por dentro y por fuera, trabillas)
+[   26.7s] versión ligera: 150000 tri., UV en 21s, estiramiento: mediana de la desviación de área 0.488, 95% < 1.310, ocupación UV 53%
+[   26.8s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_baggy\vaquero_baggy.blend
+[   26.8s] fase preparar terminada en 27s
+[   26.9s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[   43.3s] horneado BaseColor (4096 px) en 16s
+[   55.5s] horneado Roughness (4096 px) en 12s
+[   69.5s] horneado Normal (4096 px) en 14s
+[   97.6s] horneado AO (4096 px) en 28s
+[  108.2s] horneado Height (4096 px) en 11s
+[  108.3s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_baggy\vaquero_baggy.blend
+[  108.3s] fase hornear terminada en 81s
+[  110.2s] exportado 19_vaquero_baggy_pbr.glb: 5.4 MB
+[  113.0s] piezas: Trasero izquierdo, Trabillas, Delantero derecho, Trasero derecho, Cinturilla, Bolsillo monedero, Bolsillos traseros, Delantero izquierdo
+[  113.1s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_baggy\vaquero_baggy.blend
+[  113.1s] fase exportar terminada en 5s
+[  113.1s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  130.7s] render 01 frontal en 18s
+[  147.7s] render 02 trasera en 17s
+[  162.9s] render 03 lateral_izquierda en 15s
+[  178.4s] render 04 lateral_derecha en 15s
+[  200.2s] render 05 detalle_cintura en 22s
+[  220.0s] render 06 detalle_bolsillos en 20s
+[  240.2s] render 07 detalle_tejido en 20s
+[  263.4s] render 08 detalle_bajos en 23s
+[  263.5s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_baggy\vaquero_baggy.blend
+[  263.5s] fase render terminada en 150s
+[  263.5s] === listo
+[    0.0s] === fases: preparar, hornear, exportar, render | Blender 5.2.3 LTS
+[    1.6s] importado: Tela 686168 tri., Botón y remaches 8236 tri., Etiqueta de piel 6000 tri., Pespuntes 253200 tri.
+[    1.9s] atributos de tejido, interior y desgaste en Tela (345180 vértices)
+[   17.4s] desdoblado UV: MINIMUM_STRETCH
+[   25.7s] UV: 133 islas (perneras por dentro y por fuera, trabillas)
+[   26.1s] versión ligera: 150000 tri., UV en 21s, estiramiento: mediana de la desviación de área 0.488, 95% < 1.310, ocupación UV 53%
+[   26.2s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_baggy\vaquero_baggy.blend
+[   26.2s] fase preparar terminada en 26s
+[   26.2s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[   39.5s] horneado BaseColor (4096 px) en 13s
+[   51.6s] horneado Roughness (4096 px) en 12s
+[   64.7s] horneado Normal (4096 px) en 13s
+[   92.7s] horneado AO (4096 px) en 28s
+[  103.2s] horneado Height (4096 px) en 10s
+[  103.2s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_baggy\vaquero_baggy.blend
+[  103.2s] fase hornear terminada en 77s
+[  105.2s] exportado 19_vaquero_baggy_pbr.glb: 5.4 MB
+[  108.0s] piezas: Trasero izquierdo, Trabillas, Delantero derecho, Trasero derecho, Cinturilla, Bolsillo monedero, Bolsillos traseros, Delantero izquierdo
+[  108.1s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_baggy\vaquero_baggy.blend
+[  108.1s] fase exportar terminada en 5s
+[  108.1s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  126.2s] render 01 frontal en 18s
+[  143.2s] render 02 trasera en 17s
+[  158.5s] render 03 lateral_izquierda en 15s
+[  173.7s] render 04 lateral_derecha en 15s
+[  194.6s] render 05 detalle_cintura en 21s
+[  214.4s] render 06 detalle_bolsillos en 20s
+[  233.6s] render 07 detalle_tejido en 19s
+[  255.9s] render 08 detalle_bajos en 22s
+[  256.0s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_baggy\vaquero_baggy.blend
+[  256.0s] fase render terminada en 148s
+[  256.0s] === listo
+[    0.0s] === fases: preparar, hornear, exportar, render | Blender 5.2.3 LTS
+[    1.5s] importado: Tela 686168 tri., Botón y remaches 8236 tri., Etiqueta de piel 6000 tri., Pespuntes 253200 tri.
+[    1.8s] atributos de tejido, interior y desgaste en Tela (345180 vértices)
+[   17.1s] desdoblado UV: MINIMUM_STRETCH
+[   25.3s] UV: 133 islas (perneras por dentro y por fuera, trabillas)
+[   25.8s] versión ligera: 150000 tri., UV en 20s, estiramiento: mediana de la desviación de área 0.488, 95% < 1.310, ocupación UV 53%
+[   25.8s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_baggy\vaquero_baggy.blend
+[   25.8s] fase preparar terminada en 26s
+[   25.9s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[   39.2s] horneado BaseColor (4096 px) en 13s
+[   51.2s] horneado Roughness (4096 px) en 12s
+[   64.4s] horneado Normal (4096 px) en 13s
+[   92.0s] horneado AO (4096 px) en 28s
+[  102.4s] horneado Height (4096 px) en 10s
+[  102.5s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_baggy\vaquero_baggy.blend
+[  102.5s] fase hornear terminada en 77s
+[  104.4s] exportado 19_vaquero_baggy_pbr.glb: 5.4 MB
+[  107.2s] piezas: Trasero izquierdo, Trabillas, Delantero derecho, Trasero derecho, Cinturilla, Bolsillo monedero, Bolsillos traseros, Delantero izquierdo
+[  107.3s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_baggy\vaquero_baggy.blend
+[  107.3s] fase exportar terminada en 5s
+[  107.3s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  124.6s] render 01 frontal en 17s
+[  141.5s] render 02 trasera en 17s
+[  156.7s] render 03 lateral_izquierda en 15s
+[  171.8s] render 04 lateral_derecha en 15s
+[  193.0s] render 05 detalle_cintura en 21s
+[  212.5s] render 06 detalle_bolsillos en 20s
+[  231.8s] render 07 detalle_tejido en 19s
+[  254.1s] render 08 detalle_bajos en 22s
+[  254.2s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_baggy\vaquero_baggy.blend
+[  254.2s] fase render terminada en 147s
+[  254.2s] === listo
+[    0.0s] === fases: preparar, hornear, exportar, render | Blender 5.2.3 LTS
+[    1.6s] importado: Tela 686168 tri., Botón y remaches 8236 tri., Etiqueta de piel 6000 tri., Pespuntes 253200 tri.
+[    1.8s] atributos de tejido, interior y desgaste en Tela (345180 vértices)
+[   17.1s] desdoblado UV: MINIMUM_STRETCH
+[   25.4s] UV: 133 islas (perneras por dentro y por fuera, trabillas)
+[   25.8s] versión ligera: 150000 tri., UV en 20s, estiramiento: mediana de la desviación de área 0.051, 95% < 0.259, ocupación UV 53%
+[   25.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_baggy\vaquero_baggy.blend
+[   25.9s] fase preparar terminada en 26s
+[   25.9s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[   38.6s] horneado BaseColor (4096 px) en 13s
+[   50.6s] horneado Roughness (4096 px) en 12s
+[   64.1s] horneado Normal (4096 px) en 14s
+[   92.5s] horneado AO (4096 px) en 28s
+[  103.1s] horneado Height (4096 px) en 11s
+[  103.2s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_baggy\vaquero_baggy.blend
+[  103.2s] fase hornear terminada en 77s
+[  105.1s] exportado 19_vaquero_baggy_pbr.glb: 5.4 MB
+[  107.9s] piezas: Trasero izquierdo, Trabillas, Delantero derecho, Trasero derecho, Cinturilla, Bolsillo monedero, Bolsillos traseros, Delantero izquierdo
+[  108.0s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_baggy\vaquero_baggy.blend
+[  108.0s] fase exportar terminada en 5s
+[  108.0s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  125.5s] render 01 frontal en 17s
+[  142.8s] render 02 trasera en 17s
+[  158.0s] render 03 lateral_izquierda en 15s
+[  173.4s] render 04 lateral_derecha en 15s
+[  194.5s] render 05 detalle_cintura en 21s
+[  214.1s] render 06 detalle_bolsillos en 20s
+[  233.6s] render 07 detalle_tejido en 19s
+[  255.8s] render 08 detalle_bajos en 22s
+[  255.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_baggy\vaquero_baggy.blend
+[  255.9s] fase render terminada en 148s
+[  255.9s] === listo
+[    0.0s] === fases: preparar, hornear, exportar, render | Blender 5.2.3 LTS
+[    1.5s] importado: Tela 686168 tri., Botón y remaches 8236 tri., Etiqueta de piel 6000 tri., Pespuntes 253200 tri.
+[    1.8s] atributos de tejido, interior y desgaste en Tela (345180 vértices)
+[   17.3s] desdoblado UV: MINIMUM_STRETCH
+[   25.5s] UV: 133 islas (perneras por dentro y por fuera, trabillas)
+[   26.0s] versión ligera: 150000 tri., UV en 20s, estiramiento: mediana de la desviación de área 0.051, 95% < 0.259, ocupación UV 53%
+[   26.1s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_baggy\vaquero_baggy.blend
+[   26.1s] fase preparar terminada en 26s
+[   26.1s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[   48.8s] horneado BaseColor (4096 px) en 23s
+[   61.0s] horneado Roughness (4096 px) en 12s
+[   75.1s] horneado Normal (4096 px) en 14s
+[  103.3s] horneado AO (4096 px) en 28s
+[  113.9s] horneado Height (4096 px) en 11s
+[  114.0s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_baggy\vaquero_baggy.blend
+[  114.0s] fase hornear terminada en 88s
+[  115.9s] exportado 19_vaquero_baggy_pbr.glb: 5.4 MB
+[  118.8s] piezas: Trasero izquierdo, Trabillas, Delantero derecho, Trasero derecho, Cinturilla, Bolsillo monedero, Bolsillos traseros, Delantero izquierdo
+[  118.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_baggy\vaquero_baggy.blend
+[  118.9s] fase exportar terminada en 5s
+[  118.9s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  136.3s] render 01 frontal en 17s
+[  153.6s] render 02 trasera en 17s
+[  168.8s] render 03 lateral_izquierda en 15s
+[  184.3s] render 04 lateral_derecha en 16s
+[  205.4s] render 05 detalle_cintura en 21s
+[  225.2s] render 06 detalle_bolsillos en 20s
+[  245.1s] render 07 detalle_tejido en 20s
+[  267.6s] render 08 detalle_bajos en 22s
+[  267.6s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_baggy\vaquero_baggy.blend
+[  267.6s] fase render terminada en 149s
+[  267.6s] === listo
+[    0.0s] === fases: preparar, hornear, exportar, render | Blender 5.2.3 LTS
+[    1.6s] importado: Tela 686184 tri., Botón y remaches 8244 tri., Etiqueta de piel 6000 tri., Pespuntes 253200 tri.
+[    1.8s] atributos de tejido, interior y desgaste en Tela (345196 vértices)
+[   17.5s] desdoblado UV: MINIMUM_STRETCH
+[   26.5s] UV: 115 islas (perneras por dentro y por fuera, trabillas)
+[   26.9s] versión ligera: 149999 tri., UV en 21s, estiramiento: mediana de la desviación de área 0.051, 95% < 0.261, ocupación UV 53%
+[   26.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_baggy\vaquero_baggy.blend
+[   26.9s] fase preparar terminada en 27s
+[   27.0s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[   50.1s] horneado BaseColor (4096 px) en 23s
+[   62.0s] horneado Roughness (4096 px) en 12s
+[   75.6s] horneado Normal (4096 px) en 14s
+[  104.7s] horneado AO (4096 px) en 29s
+[  115.2s] horneado Height (4096 px) en 11s
+[  115.3s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_baggy\vaquero_baggy.blend
+[  115.3s] fase hornear terminada en 88s
+[  117.3s] exportado 19_vaquero_baggy_pbr.glb: 5.4 MB
+[  120.1s] piezas: Trasero izquierdo, Trabillas, Delantero derecho, Trasero derecho, Cinturilla, Bolsillo monedero, Bolsillos traseros, Delantero izquierdo
+[  120.2s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_baggy\vaquero_baggy.blend
+[  120.2s] fase exportar terminada en 5s
+[  120.2s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  138.0s] render 01 frontal en 18s
+[  155.9s] render 02 trasera en 18s
+[  171.2s] render 03 lateral_izquierda en 15s
+[  186.6s] render 04 lateral_derecha en 15s
+[  207.9s] render 05 detalle_cintura en 21s
+[  227.9s] render 06 detalle_bolsillos en 20s
+[  247.7s] render 07 detalle_tejido en 20s
+[  270.4s] render 08 detalle_bajos en 23s
+[  270.5s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_baggy\vaquero_baggy.blend
+[  270.5s] fase render terminada en 150s
+[  270.5s] === listo

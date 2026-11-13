@@ -1,0 +1,40 @@
+[  673.4s] === fases: preparar, hornear, exportar, render | vistas todas | 04_camiseta_boxy | Blender 5.2.3 LTS
+[  674.3s] importado: Tela 502574 tri., Pespuntes 101580 tri.
+[  675.0s] atributos del punto en 1s
+[  683.1s] desdoblado UV: MINIMUM_STRETCH
+[  706.4s] UV: 501 islas
+[  706.7s] versión ligera: 119999 tri., UV en 29s, estiramiento: mediana de la desviación de área 0.042, 95% < 0.295, ocupación UV 50%
+[  709.8s] piezas: Manga izquierda, Manga derecha, Delantero, Espalda, Cuello
+[  709.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_boxy\camiseta_boxy.blend
+[  709.9s] fase preparar terminada en 36s
+[  709.9s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  730.0s] horneado BaseColor (4096 px) en 20s
+[  749.7s] horneado Roughness (4096 px) en 20s
+[  771.4s] horneado Normal (4096 px) en 22s
+[  804.4s] horneado AO (4096 px) en 33s
+[  826.4s] horneado Height (4096 px) en 22s
+[  826.4s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_boxy\camiseta_boxy.blend
+[  826.4s] fase hornear terminada en 117s
+[  828.1s] exportado 04_camiseta_boxy_pbr.glb: 4.4 MB
+[  828.2s] exportado 04_camiseta_boxy_pbr.fbx (texturas en texturas/)
+[  828.3s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_boxy\camiseta_boxy.blend
+[  828.3s] fase exportar terminada en 2s
+[  828.3s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  837.6s] render 1 frente en 9s
+[  845.8s] render 2 derecha en 8s
+[  855.1s] render 3 atras en 9s
+[  863.1s] render 4 izquierda en 8s
+[  879.4s] render 5 detalle_cuello en 16s
+[  893.4s] render 6 detalle_bajo en 14s
+[  910.3s] render 7 detalle_tejido en 17s
+[  910.7s] lámina 360 guardada
+[  910.7s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_boxy\camiseta_boxy.blend
+[  910.7s] fase render terminada en 82s
+[  910.7s] === listo
+[   22.8s] === fases: rig | vistas 360 | 04_camiseta_boxy | Blender 5.2.3 LTS
+[   24.9s] pesos Camiseta PBR: 61939 vértices; cadera 13696, columna 4273, pecho 19499, clavicula.L 1818, brazo.L 10263, muslo.L 197, clavicula.R 1736, brazo.R 10275, muslo.R 182
+[   27.8s] exportado 04_camiseta_boxy_rig.glb: 8.7 MB
+[   28.3s] exportado 04_camiseta_boxy_rig.fbx
+[   28.6s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_boxy\camiseta_boxy.blend
+[   28.6s] fase rig terminada en 6s
+[   28.6s] === listo

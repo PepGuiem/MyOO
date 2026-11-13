@@ -1,0 +1,38 @@
+[  524.3s] === fases: preparar, hornear, exportar, render | vistas 360 | 03_camisa_oversize | Blender 5.2.3 LTS
+[  525.3s] importado: Tela 588786 tri., Pespuntes 92460 tri.
+[  526.1s] atributos del punto en 1s
+[  534.6s] desdoblado UV: MINIMUM_STRETCH
+[  557.2s] UV: 1532 islas
+[  557.5s] versión ligera: 119998 tri., UV en 28s, estiramiento: mediana de la desviación de área 0.038, 95% < 0.332, ocupación UV 54%
+[  562.7s] piezas: Puño izquierdo, Puño derecho, Manga derecha, Delantero derecho, Espalda, Canesú, Cuello, Tapeta, Delantero izquierdo, Bolsillos, Manga izquierda
+[  562.7s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisas\camisa_oversize\camisa_oversize.blend
+[  562.7s] fase preparar terminada en 38s
+[  562.7s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  598.0s] horneado BaseColor (4096 px) en 35s
+[  632.0s] horneado Roughness (4096 px) en 34s
+[  668.4s] horneado Normal (4096 px) en 36s
+[  717.6s] horneado AO (4096 px) en 49s
+[  757.1s] horneado Height (4096 px) en 39s
+[  757.1s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisas\camisa_oversize\camisa_oversize.blend
+[  757.1s] fase hornear terminada en 194s
+[  758.7s] exportado 03_camisa_oversize_pbr.glb: 5.1 MB
+[  758.9s] exportado 03_camisa_oversize_pbr.fbx (texturas en texturas/)
+[  758.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisas\camisa_oversize\camisa_oversize.blend
+[  758.9s] fase exportar terminada en 2s
+[  758.9s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  767.7s] render 1 frente en 9s
+[  775.5s] render 2 derecha en 8s
+[  784.2s] render 3 atras en 9s
+[  791.9s] render 4 izquierda en 8s
+[  792.2s] lámina 360 guardada
+[  792.3s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisas\camisa_oversize\camisa_oversize.blend
+[  792.3s] fase render terminada en 33s
+[  792.3s] === listo
+[   17.0s] === fases: rig | vistas 360 | 03_camisa_oversize | Blender 5.2.3 LTS
+[   20.3s] pesos Camiseta PBR: 62746 vértices; cadera 8160, columna 1953, pecho 15256, clavicula.L 947, brazo.L 6606, antebrazo.L 7664, mano.L 2105, muslo.L 2337, clavicula.R 735, brazo.R 6005, antebrazo.R 6707, mano.R 1832, muslo.R 2439
+[   20.3s] pesos Botones: 5774 vértices; cadera 2648, pecho 1842, mano.L 648, mano.R 636
+[   23.2s] exportado 03_camisa_oversize_rig.glb: 8.8 MB
+[   23.5s] exportado 03_camisa_oversize_rig.fbx
+[   23.6s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisas\camisa_oversize\camisa_oversize.blend
+[   23.6s] fase rig terminada en 6s
+[   23.6s] === listo

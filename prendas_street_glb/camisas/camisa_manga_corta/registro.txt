@@ -1,0 +1,38 @@
+[ 1740.1s] === fases: preparar, hornear, exportar, render | vistas 360 | 08_camisa_manga_corta | Blender 5.2.3 LTS
+[ 1741.0s] importado: Tela 563402 tri., Pespuntes 82320 tri.
+[ 1741.7s] atributos del punto en 1s
+[ 1748.8s] desdoblado UV: MINIMUM_STRETCH
+[ 1767.9s] UV: 1881 islas
+[ 1768.2s] versión ligera: 119999 tri., UV en 24s, estiramiento: mediana de la desviación de área 0.050, 95% < 0.229, ocupación UV 50%
+[ 1772.2s] piezas: Manga izquierda, Manga derecha, Delantero derecho, Espalda, Canesú, Cuello, Tapeta, Delantero izquierdo, Bolsillos
+[ 1772.2s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisas\camisa_manga_corta\camisa_manga_corta.blend
+[ 1772.2s] fase preparar terminada en 32s
+[ 1772.2s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 1800.4s] horneado BaseColor (4096 px) en 28s
+[ 1827.9s] horneado Roughness (4096 px) en 28s
+[ 1857.3s] horneado Normal (4096 px) en 29s
+[ 1897.6s] horneado AO (4096 px) en 40s
+[ 1929.4s] horneado Height (4096 px) en 32s
+[ 1929.4s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisas\camisa_manga_corta\camisa_manga_corta.blend
+[ 1929.4s] fase hornear terminada en 157s
+[ 1931.0s] exportado 08_camisa_manga_corta_pbr.glb: 5.2 MB
+[ 1931.1s] exportado 08_camisa_manga_corta_pbr.fbx (texturas en texturas/)
+[ 1931.2s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisas\camisa_manga_corta\camisa_manga_corta.blend
+[ 1931.2s] fase exportar terminada en 2s
+[ 1931.2s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 1939.4s] render 1 frente en 8s
+[ 1946.8s] render 2 derecha en 7s
+[ 1954.9s] render 3 atras en 8s
+[ 1962.2s] render 4 izquierda en 7s
+[ 1962.5s] lámina 360 guardada
+[ 1962.6s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisas\camisa_manga_corta\camisa_manga_corta.blend
+[ 1962.6s] fase render terminada en 31s
+[ 1962.6s] === listo
+[   49.7s] === fases: rig | vistas 360 | 08_camisa_manga_corta | Blender 5.2.3 LTS
+[   51.8s] pesos Camiseta PBR: 63323 vértices; cadera 10759, columna 6081, pecho 21888, clavicula.L 1541, brazo.L 8014, muslo.L 2294, clavicula.R 1499, brazo.R 8950, muslo.R 2297
+[   51.9s] pesos Botones: 4214 vértices; cadera 2364, columna 660, pecho 1190
+[   54.6s] exportado 08_camisa_manga_corta_rig.glb: 8.8 MB
+[   55.0s] exportado 08_camisa_manga_corta_rig.fbx
+[   55.5s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisas\camisa_manga_corta\camisa_manga_corta.blend
+[   55.5s] fase rig terminada en 6s
+[   55.5s] === listo

@@ -1,0 +1,330 @@
+00:00.031  color_management | Using OCIO=C:\Program Files\Blender Foundation\Blender 5.2\5.2\datafiles\colormanagement\config.ocio
+[vaquero] [    0.0s] === fases: preparar, hornear, exportar, render | vistas 360 | 24_vaquero_wide_leg | Blender 5.2.3 LTS
+12:17:34 | INFO: Data are loaded, start creating Blender stuff
+12:17:34 | INFO: Blender create Mesh node body
+12:17:34 | INFO: Blender create Mesh node hardware
+12:17:34 | INFO: Blender create Mesh node trim
+12:17:34 | INFO: glTF import finished in 0.89s
+12:17:35 | INFO: Data are loaded, start creating Blender stuff
+12:17:35 | INFO: Blender create Mesh node stitch
+12:17:35 | INFO: glTF import finished in 0.26s
+[vaquero] [    1.5s] importado: Tela 686498 tri., Botón y remaches 8312 tri., Etiqueta de piel 6000 tri., Pespuntes 223320 tri.
+[vaquero] [    1.8s] atributos de tejido, interior y desgaste en Tela (345511 vértices)
+C:\Users\Usuario\Documents\MyOut\prendas_street_glb\generador\blender_vaquero.py:278: DeprecationWarning: 'Material.use_nodes' is expected to be removed in Blender 6.0
+  mat.use_nodes = True
+[vaquero] [   17.2s] desdoblado UV: MINIMUM_STRETCH
+[vaquero] [   27.9s] UV: 122 islas (perneras por dentro y por fuera, trabillas)
+[vaquero] [   28.4s] versión ligera: 150000 tri., UV en 23s, estiramiento: mediana de la desviación de área 0.059, 95% < 0.326, ocupación UV 58%
+Info: Saved as "vaquero_wide_leg.blend"
+[vaquero] [   28.4s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_wide_leg\vaquero_wide_leg.blend
+[vaquero] [   28.4s] fase preparar terminada en 28s
+[vaquero] [   28.6s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+Info: Circular dependency for image "Vaquero_BaseColor" from object "Vaquero PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[vaquero] [   41.9s] horneado BaseColor (4096 px) en 13s
+Info: Circular dependency for image "Vaquero_Roughness" from object "Vaquero PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[vaquero] [   54.3s] horneado Roughness (4096 px) en 12s
+Info: Circular dependency for image "Vaquero_Normal" from object "Vaquero PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[vaquero] [   68.1s] horneado Normal (4096 px) en 14s
+Info: Baking map saved to internal image, save it externally or pack it
+[vaquero] [   97.8s] horneado AO (4096 px) en 30s
+Info: Circular dependency for image "Vaquero_Height" from object "Vaquero PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[vaquero] [  108.8s] horneado Height (4096 px) en 11s
+Info: Saved as "vaquero_wide_leg.blend"
+[vaquero] [  108.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_wide_leg\vaquero_wide_leg.blend
+[vaquero] [  108.9s] fase hornear terminada en 80s
+INFO Draco is available, use library at C:\Program Files\Blender Foundation\Blender 5.2\5.2\scripts\addons_core\io_scene_gltf2\bf_intern_draco_bridge.dll
+INFO MeshOptimizer is available, use library at C:\Program Files\Blender Foundation\Blender 5.2\5.2\scripts\addons_core\io_scene_gltf2\bf_intern_meshopt_bridge.dll
+12:19:24 | INFO: Starting glTF 2.0 export
+12:19:24 | INFO: Extracting primitive: Botón y remaches
+12:19:24 | INFO: Primitives created: 1
+12:19:24 | INFO: Extracting primitive: Etiqueta de piel
+12:19:24 | INFO: Primitives created: 1
+12:19:24 | INFO: Extracting primitive: Vaquero PBR.001
+12:19:24 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+12:19:24 | INFO: Primitives created: 1
+12:19:24 | INFO: Finished glTF 2.0 export in 0.774937629699707 s
+
+[vaquero] [  110.8s] exportado 24_vaquero_wide_leg_pbr.glb: 5.4 MB
+[vaquero] [  113.7s] piezas: Trasero izquierdo, Trabillas, Delantero derecho, Trasero derecho, Cinturilla, Bolsillo monedero, Bolsillos traseros, Delantero izquierdo
+Info: Saved as "vaquero_wide_leg.blend"
+[vaquero] [  113.8s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_wide_leg\vaquero_wide_leg.blend
+[vaquero] [  113.8s] fase exportar terminada en 5s
+[vaquero] [  113.8s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+C:\Users\Usuario\Documents\MyOut\prendas_street_glb\generador\blender_vaquero.py:1006: DeprecationWarning: 'World.use_nodes' is expected to be removed in Blender 6.0
+  w.use_nodes = True
+02:06.453  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_wide_leg\render\360_1_frente.png'
+[vaquero] [  124.6s] render 1 frente en 11s
+02:15.672  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_wide_leg\render\360_2_derecha.png'
+[vaquero] [  133.8s] render 2 derecha en 9s
+02:25.984  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_wide_leg\render\360_3_atras.png'
+[vaquero] [  144.2s] render 3 atras en 10s
+02:35.453  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_wide_leg\render\360_4_izquierda.png'
+[vaquero] [  153.6s] render 4 izquierda en 9s
+[vaquero] [  153.9s] lámina 360 guardada
+Info: Saved as "vaquero_wide_leg.blend"
+[vaquero] [  154.0s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_wide_leg\vaquero_wide_leg.blend
+[vaquero] [  154.0s] fase render terminada en 40s
+[vaquero] [  154.0s] === listo
+[vaquero] [  154.0s] === fases: preparar, hornear, exportar, render | vistas 360 | 25_vaquero_flare | Blender 5.2.3 LTS
+12:20:08 | INFO: Data are loaded, start creating Blender stuff
+12:20:08 | INFO: Blender create Mesh node body
+12:20:08 | INFO: Blender create Mesh node hardware
+12:20:08 | INFO: Blender create Mesh node trim
+12:20:08 | INFO: glTF import finished in 0.87s
+12:20:08 | INFO: Data are loaded, start creating Blender stuff
+12:20:08 | INFO: Blender create Mesh node stitch
+12:20:09 | INFO: glTF import finished in 0.25s
+[vaquero] [  155.4s] importado: Tela 686058 tri., Botón y remaches 6640 tri., Etiqueta de piel 6000 tri., Pespuntes 241140 tri.
+[vaquero] [  155.6s] atributos de tejido, interior y desgaste en Tela (345071 vértices)
+[vaquero] [  170.7s] desdoblado UV: MINIMUM_STRETCH
+[vaquero] [  185.2s] UV: 106 islas (perneras por dentro y por fuera, trabillas)
+[vaquero] [  185.7s] versión ligera: 149999 tri., UV en 26s, estiramiento: mediana de la desviación de área 0.044, 95% < 0.254, ocupación UV 48%
+Info: Saved as "vaquero_flare.blend"
+[vaquero] [  185.7s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_flare\vaquero_flare.blend
+[vaquero] [  185.7s] fase preparar terminada en 32s
+[vaquero] [  185.7s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+Info: Circular dependency for image "Vaquero_BaseColor" from object "Vaquero PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[vaquero] [  198.0s] horneado BaseColor (4096 px) en 12s
+Info: Circular dependency for image "Vaquero_Roughness" from object "Vaquero PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[vaquero] [  209.8s] horneado Roughness (4096 px) en 12s
+Info: Circular dependency for image "Vaquero_Normal" from object "Vaquero PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[vaquero] [  222.8s] horneado Normal (4096 px) en 13s
+Info: Baking map saved to internal image, save it externally or pack it
+[vaquero] [  248.9s] horneado AO (4096 px) en 26s
+Info: Circular dependency for image "Vaquero_Height" from object "Vaquero PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[vaquero] [  260.3s] horneado Height (4096 px) en 11s
+Info: Saved as "vaquero_flare.blend"
+[vaquero] [  260.4s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_flare\vaquero_flare.blend
+[vaquero] [  260.4s] fase hornear terminada en 75s
+12:21:55 | INFO: Starting glTF 2.0 export
+12:21:55 | INFO: Extracting primitive: Botón y remaches
+12:21:55 | INFO: Primitives created: 1
+12:21:55 | INFO: Extracting primitive: Etiqueta de piel
+12:21:55 | INFO: Primitives created: 1
+12:21:55 | INFO: Extracting primitive: Vaquero PBR.001
+12:21:55 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+12:21:56 | INFO: Primitives created: 1
+12:21:56 | INFO: Finished glTF 2.0 export in 0.7956528663635254 s
+
+[vaquero] [  262.2s] exportado 25_vaquero_flare_pbr.glb: 5.3 MB
+[vaquero] [  265.2s] piezas: Trasero izquierdo, Trabillas, Delantero derecho, Trasero derecho, Cinturilla, Bolsillos traseros, Bolsillo monedero, Delantero izquierdo
+Info: Saved as "vaquero_flare.blend"
+[vaquero] [  265.3s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_flare\vaquero_flare.blend
+[vaquero] [  265.3s] fase exportar terminada en 5s
+[vaquero] [  265.3s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+04:37.281  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_flare\render\360_1_frente.png'
+[vaquero] [  275.5s] render 1 frente en 10s
+04:46.422  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_flare\render\360_2_derecha.png'
+[vaquero] [  284.6s] render 2 derecha en 9s
+04:56.062  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_flare\render\360_3_atras.png'
+[vaquero] [  294.2s] render 3 atras en 10s
+05:04.859  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_flare\render\360_4_izquierda.png'
+[vaquero] [  303.0s] render 4 izquierda en 9s
+[vaquero] [  303.3s] lámina 360 guardada
+Info: Saved as "vaquero_flare.blend"
+[vaquero] [  303.4s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_flare\vaquero_flare.blend
+[vaquero] [  303.4s] fase render terminada en 38s
+[vaquero] [  303.4s] === listo
+[vaquero] [  303.4s] === fases: preparar, hornear, exportar, render | vistas 360 | 26_vaquero_bootcut | Blender 5.2.3 LTS
+12:22:37 | INFO: Data are loaded, start creating Blender stuff
+12:22:37 | INFO: Blender create Mesh node body
+12:22:38 | INFO: Blender create Mesh node hardware
+12:22:38 | INFO: Blender create Mesh node trim
+12:22:38 | INFO: glTF import finished in 0.78s
+12:22:38 | INFO: Data are loaded, start creating Blender stuff
+12:22:38 | INFO: Blender create Mesh node stitch
+12:22:38 | INFO: glTF import finished in 0.28s
+[vaquero] [  304.7s] importado: Tela 660266 tri., Botón y remaches 6680 tri., Etiqueta de piel 6000 tri., Pespuntes 243180 tri.
+[vaquero] [  304.9s] atributos de tejido, interior y desgaste en Tela (332015 vértices)
+[vaquero] [  319.7s] desdoblado UV: MINIMUM_STRETCH
+[vaquero] [  329.1s] UV: 112 islas (perneras por dentro y por fuera, trabillas)
+[vaquero] [  329.5s] versión ligera: 150000 tri., UV en 21s, estiramiento: mediana de la desviación de área 0.039, 95% < 0.260, ocupación UV 51%
+Info: Saved as "vaquero_bootcut.blend"
+[vaquero] [  329.6s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_bootcut\vaquero_bootcut.blend
+[vaquero] [  329.6s] fase preparar terminada en 26s
+[vaquero] [  329.6s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+Info: Circular dependency for image "Vaquero_BaseColor" from object "Vaquero PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[vaquero] [  342.1s] horneado BaseColor (4096 px) en 12s
+Info: Circular dependency for image "Vaquero_Roughness" from object "Vaquero PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[vaquero] [  353.8s] horneado Roughness (4096 px) en 12s
+Info: Circular dependency for image "Vaquero_Normal" from object "Vaquero PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[vaquero] [  366.8s] horneado Normal (4096 px) en 13s
+Info: Baking map saved to internal image, save it externally or pack it
+[vaquero] [  394.6s] horneado AO (4096 px) en 28s
+Info: Circular dependency for image "Vaquero_Height" from object "Vaquero PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[vaquero] [  405.1s] horneado Height (4096 px) en 11s
+Info: Saved as "vaquero_bootcut.blend"
+[vaquero] [  405.2s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_bootcut\vaquero_bootcut.blend
+[vaquero] [  405.2s] fase hornear terminada en 76s
+12:24:20 | INFO: Starting glTF 2.0 export
+12:24:20 | INFO: Extracting primitive: Botón y remaches
+12:24:20 | INFO: Primitives created: 1
+12:24:20 | INFO: Extracting primitive: Etiqueta de piel
+12:24:20 | INFO: Primitives created: 1
+12:24:20 | INFO: Extracting primitive: Vaquero PBR.001
+12:24:20 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+12:24:20 | INFO: Primitives created: 1
+12:24:20 | INFO: Finished glTF 2.0 export in 0.7593803405761719 s
+
+[vaquero] [  407.0s] exportado 26_vaquero_bootcut_pbr.glb: 5.3 MB
+[vaquero] [  409.7s] piezas: Trasero izquierdo, Trabillas, Delantero derecho, Trasero derecho, Cinturilla, Bolsillos traseros, Bolsillo monedero, Delantero izquierdo
+Info: Saved as "vaquero_bootcut.blend"
+[vaquero] [  409.7s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_bootcut\vaquero_bootcut.blend
+[vaquero] [  409.7s] fase exportar terminada en 5s
+[vaquero] [  409.7s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+07:01.281  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_bootcut\render\360_1_frente.png'
+[vaquero] [  419.4s] render 1 frente en 10s
+07:10.047  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_bootcut\render\360_2_derecha.png'
+[vaquero] [  428.2s] render 2 derecha en 9s
+07:19.656  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_bootcut\render\360_3_atras.png'
+[vaquero] [  437.8s] render 3 atras en 10s
+07:28.406  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_bootcut\render\360_4_izquierda.png'
+[vaquero] [  446.6s] render 4 izquierda en 9s
+[vaquero] [  446.9s] lámina 360 guardada
+Info: Saved as "vaquero_bootcut.blend"
+[vaquero] [  446.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_bootcut\vaquero_bootcut.blend
+[vaquero] [  446.9s] fase render terminada en 37s
+[vaquero] [  446.9s] === listo
+[vaquero] [  446.9s] === fases: preparar, hornear, exportar, render | vistas 360 | 27_vaquero_mom | Blender 5.2.3 LTS
+12:25:00 | INFO: Data are loaded, start creating Blender stuff
+12:25:00 | INFO: Blender create Mesh node body
+12:25:01 | INFO: Blender create Mesh node hardware
+12:25:01 | INFO: Blender create Mesh node trim
+12:25:01 | INFO: glTF import finished in 0.84s
+12:25:01 | INFO: Data are loaded, start creating Blender stuff
+12:25:01 | INFO: Blender create Mesh node stitch
+12:25:02 | INFO: glTF import finished in 0.25s
+[vaquero] [  448.3s] importado: Tela 685160 tri., Botón y remaches 6652 tri., Etiqueta de piel 6000 tri., Pespuntes 222300 tri.
+[vaquero] [  448.5s] atributos de tejido, interior y desgaste en Tela (344172 vértices)
+[vaquero] [  463.3s] desdoblado UV: MINIMUM_STRETCH
+[vaquero] [  477.1s] UV: 125 islas (perneras por dentro y por fuera, trabillas)
+[vaquero] [  477.4s] versión ligera: 149999 tri., UV en 25s, estiramiento: mediana de la desviación de área 0.050, 95% < 0.294, ocupación UV 47%
+Info: Saved as "vaquero_mom.blend"
+[vaquero] [  477.5s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_mom\vaquero_mom.blend
+[vaquero] [  477.5s] fase preparar terminada en 31s
+[vaquero] [  477.5s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+Info: Circular dependency for image "Vaquero_BaseColor" from object "Vaquero PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[vaquero] [  489.3s] horneado BaseColor (4096 px) en 12s
+Info: Circular dependency for image "Vaquero_Roughness" from object "Vaquero PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[vaquero] [  500.8s] horneado Roughness (4096 px) en 11s
+Info: Circular dependency for image "Vaquero_Normal" from object "Vaquero PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[vaquero] [  513.3s] horneado Normal (4096 px) en 13s
+Info: Baking map saved to internal image, save it externally or pack it
+[vaquero] [  538.8s] horneado AO (4096 px) en 26s
+Info: Circular dependency for image "Vaquero_Height" from object "Vaquero PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[vaquero] [  549.0s] horneado Height (4096 px) en 10s
+Info: Saved as "vaquero_mom.blend"
+[vaquero] [  549.1s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_mom\vaquero_mom.blend
+[vaquero] [  549.1s] fase hornear terminada en 72s
+12:26:44 | INFO: Starting glTF 2.0 export
+12:26:44 | INFO: Extracting primitive: Botón y remaches
+12:26:44 | INFO: Primitives created: 1
+12:26:44 | INFO: Extracting primitive: Etiqueta de piel
+12:26:44 | INFO: Primitives created: 1
+12:26:44 | INFO: Extracting primitive: Vaquero PBR.001
+12:26:44 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+12:26:44 | INFO: Primitives created: 1
+12:26:44 | INFO: Finished glTF 2.0 export in 0.760887622833252 s
+
+[vaquero] [  550.8s] exportado 27_vaquero_mom_pbr.glb: 5.3 MB
+[vaquero] [  553.6s] piezas: Trasero izquierdo, Trabillas, Delantero derecho, Trasero derecho, Cinturilla, Bolsillo monedero, Bolsillos traseros, Delantero izquierdo
+Info: Saved as "vaquero_mom.blend"
+[vaquero] [  553.7s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_mom\vaquero_mom.blend
+[vaquero] [  553.7s] fase exportar terminada en 5s
+[vaquero] [  553.7s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+09:25.218  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_mom\render\360_1_frente.png'
+[vaquero] [  563.4s] render 1 frente en 10s
+09:33.984  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_mom\render\360_2_derecha.png'
+[vaquero] [  572.2s] render 2 derecha en 9s
+09:43.453  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_mom\render\360_3_atras.png'
+[vaquero] [  581.6s] render 3 atras en 9s
+09:52.203  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_mom\render\360_4_izquierda.png'
+[vaquero] [  590.4s] render 4 izquierda en 9s
+[vaquero] [  590.7s] lámina 360 guardada
+Info: Saved as "vaquero_mom.blend"
+[vaquero] [  590.7s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_mom\vaquero_mom.blend
+[vaquero] [  590.7s] fase render terminada en 37s
+[vaquero] [  590.7s] === listo
+[vaquero] [  590.7s] === fases: preparar, hornear, exportar, render | vistas 360 | 28_vaquero_boyfriend | Blender 5.2.3 LTS
+12:27:24 | INFO: Data are loaded, start creating Blender stuff
+12:27:24 | INFO: Blender create Mesh node body
+12:27:25 | INFO: Blender create Mesh node hardware
+12:27:25 | INFO: Blender create Mesh node trim
+12:27:25 | INFO: glTF import finished in 0.84s
+12:27:25 | INFO: Data are loaded, start creating Blender stuff
+12:27:25 | INFO: Blender create Mesh node stitch
+12:27:25 | INFO: glTF import finished in 0.16s
+[vaquero] [  592.0s] importado: Tela 685784 tri., Botón y remaches 8228 tri., Etiqueta de piel 6000 tri., Pespuntes 164220 tri.
+[vaquero] [  592.2s] atributos de tejido, interior y desgaste en Tela (344796 vértices)
+[vaquero] [  607.1s] desdoblado UV: MINIMUM_STRETCH
+[vaquero] [  616.0s] UV: 116 islas (perneras por dentro y por fuera, trabillas)
+[vaquero] [  616.4s] versión ligera: 150000 tri., UV en 21s, estiramiento: mediana de la desviación de área 0.058, 95% < 0.307, ocupación UV 50%
+Info: Saved as "vaquero_boyfriend.blend"
+[vaquero] [  616.5s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_boyfriend\vaquero_boyfriend.blend
+[vaquero] [  616.5s] fase preparar terminada en 26s
+[vaquero] [  616.5s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+Info: Circular dependency for image "Vaquero_BaseColor" from object "Vaquero PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[vaquero] [  628.4s] horneado BaseColor (4096 px) en 12s
+Info: Circular dependency for image "Vaquero_Roughness" from object "Vaquero PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[vaquero] [  639.9s] horneado Roughness (4096 px) en 12s
+Info: Circular dependency for image "Vaquero_Normal" from object "Vaquero PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[vaquero] [  652.9s] horneado Normal (4096 px) en 13s
+Info: Baking map saved to internal image, save it externally or pack it
+[vaquero] [  679.8s] horneado AO (4096 px) en 27s
+Info: Circular dependency for image "Vaquero_Height" from object "Vaquero PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[vaquero] [  690.2s] horneado Height (4096 px) en 10s
+Info: Saved as "vaquero_boyfriend.blend"
+[vaquero] [  690.3s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_boyfriend\vaquero_boyfriend.blend
+[vaquero] [  690.3s] fase hornear terminada en 74s
+12:29:05 | INFO: Starting glTF 2.0 export
+12:29:05 | INFO: Extracting primitive: Botón y remaches
+12:29:05 | INFO: Primitives created: 1
+12:29:05 | INFO: Extracting primitive: Etiqueta de piel
+12:29:05 | INFO: Primitives created: 1
+12:29:05 | INFO: Extracting primitive: Vaquero PBR.001
+12:29:05 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+12:29:06 | INFO: Primitives created: 1
+12:29:06 | INFO: Finished glTF 2.0 export in 0.7544629573822021 s
+
+[vaquero] [  692.0s] exportado 28_vaquero_boyfriend_pbr.glb: 5.5 MB
+[vaquero] [  694.9s] piezas: Trasero izquierdo, Trabillas, Delantero derecho, Trasero derecho, Cinturilla, Bolsillo monedero, Bolsillos traseros, Delantero izquierdo
+Info: Saved as "vaquero_boyfriend.blend"
+[vaquero] [  694.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_boyfriend\vaquero_boyfriend.blend
+[vaquero] [  694.9s] fase exportar terminada en 5s
+[vaquero] [  694.9s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+11:46.500  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_boyfriend\render\360_1_frente.png'
+[vaquero] [  704.7s] render 1 frente en 10s
+11:55.453  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_boyfriend\render\360_2_derecha.png'
+[vaquero] [  713.6s] render 2 derecha en 9s
+12:05.203  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_boyfriend\render\360_3_atras.png'
+[vaquero] [  723.4s] render 3 atras en 10s
+12:13.906  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_boyfriend\render\360_4_izquierda.png'
+[vaquero] [  732.1s] render 4 izquierda en 9s
+[vaquero] [  732.4s] lámina 360 guardada
+Info: Saved as "vaquero_boyfriend.blend"
+[vaquero] [  732.5s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_boyfriend\vaquero_boyfriend.blend
+[vaquero] [  732.5s] fase render terminada en 38s
+[vaquero] [  732.5s] === listo
+Blender 5.2.3 LTS (hash e13b728c6880 built 2026-10-22 01:37:16)
+
+Blender quit

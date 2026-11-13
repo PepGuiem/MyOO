@@ -1,0 +1,38 @@
+[ 1265.0s] === fases: preparar, hornear, exportar, render | vistas 360 | 06_camisa_vaquera | Blender 5.2.3 LTS
+[ 1265.9s] importado: Tela 569400 tri., Pespuntes 95520 tri.
+[ 1266.7s] atributos del punto en 1s
+[ 1274.1s] desdoblado UV: MINIMUM_STRETCH
+[ 1298.2s] UV: 1594 islas
+[ 1298.5s] versión ligera: 120000 tri., UV en 29s, estiramiento: mediana de la desviación de área 0.034, 95% < 0.880, ocupación UV 53%
+[ 1303.1s] piezas: Puño izquierdo, Puño derecho, Manga derecha, Delantero derecho, Espalda, Canesú, Bolsillos, Cuello, Tapeta, Delantero izquierdo, Manga izquierda
+[ 1303.2s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisas\camisa_vaquera\camisa_vaquera.blend
+[ 1303.2s] fase preparar terminada en 38s
+[ 1303.2s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 1336.6s] horneado BaseColor (4096 px) en 33s
+[ 1369.9s] horneado Roughness (4096 px) en 33s
+[ 1405.2s] horneado Normal (4096 px) en 35s
+[ 1452.1s] horneado AO (4096 px) en 47s
+[ 1490.3s] horneado Height (4096 px) en 38s
+[ 1490.3s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisas\camisa_vaquera\camisa_vaquera.blend
+[ 1490.3s] fase hornear terminada en 187s
+[ 1492.1s] exportado 06_camisa_vaquera_pbr.glb: 5.4 MB
+[ 1492.2s] exportado 06_camisa_vaquera_pbr.fbx (texturas en texturas/)
+[ 1492.3s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisas\camisa_vaquera\camisa_vaquera.blend
+[ 1492.3s] fase exportar terminada en 2s
+[ 1492.3s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 1500.5s] render 1 frente en 8s
+[ 1507.6s] render 2 derecha en 7s
+[ 1515.8s] render 3 atras en 8s
+[ 1522.9s] render 4 izquierda en 7s
+[ 1523.3s] lámina 360 guardada
+[ 1523.4s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisas\camisa_vaquera\camisa_vaquera.blend
+[ 1523.4s] fase render terminada en 31s
+[ 1523.4s] === listo
+[   36.7s] === fases: rig | vistas 360 | 06_camisa_vaquera | Blender 5.2.3 LTS
+[   39.6s] pesos Camiseta PBR: 62434 vértices; cadera 7697, columna 4522, pecho 15501, clavicula.L 898, brazo.L 6152, antebrazo.L 8716, mano.L 1124, muslo.L 1652, clavicula.R 766, brazo.R 5371, antebrazo.R 7279, mano.R 976, muslo.R 1780
+[   39.7s] pesos Punteras y ojales: 8810 vértices; cadera 3278, columna 860, pecho 3054, antebrazo.L 253, mano.L 563, antebrazo.R 244, mano.R 558
+[   42.0s] exportado 06_camisa_vaquera_rig.glb: 10.5 MB
+[   42.4s] exportado 06_camisa_vaquera_rig.fbx
+[   42.5s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisas\camisa_vaquera\camisa_vaquera.blend
+[   42.5s] fase rig terminada en 5s
+[   42.5s] === listo

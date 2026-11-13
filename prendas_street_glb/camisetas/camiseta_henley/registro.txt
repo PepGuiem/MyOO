@@ -1,0 +1,41 @@
+[  905.5s] === fases: preparar, hornear, exportar, render | vistas todas | 10_camiseta_henley | Blender 5.2.3 LTS
+[  906.4s] importado: Tela 524552 tri., Pespuntes 100680 tri.
+[  907.0s] atributos del punto en 1s
+[  914.6s] desdoblado UV: MINIMUM_STRETCH
+[  922.1s] UV: 291 islas
+[  922.4s] versión ligera: 119999 tri., UV en 13s, estiramiento: mediana de la desviación de área 0.042, 95% < 0.378, ocupación UV 54%
+[  925.6s] piezas: Manga izquierda, Manga derecha, Delantero, Espalda, Cuello, Tapeta
+[  925.6s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_henley\camiseta_henley.blend
+[  925.6s] fase preparar terminada en 20s
+[  925.6s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  947.7s] horneado BaseColor (4096 px) en 22s
+[  969.2s] horneado Roughness (4096 px) en 21s
+[  992.8s] horneado Normal (4096 px) en 24s
+[ 1027.9s] horneado AO (4096 px) en 35s
+[ 1051.8s] horneado Height (4096 px) en 24s
+[ 1051.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_henley\camiseta_henley.blend
+[ 1051.9s] fase hornear terminada en 126s
+[ 1053.5s] exportado 10_camiseta_henley_pbr.glb: 4.4 MB
+[ 1053.7s] exportado 10_camiseta_henley_pbr.fbx (texturas en texturas/)
+[ 1053.7s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_henley\camiseta_henley.blend
+[ 1053.7s] fase exportar terminada en 2s
+[ 1053.7s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 1062.9s] render 1 frente en 9s
+[ 1070.8s] render 2 derecha en 8s
+[ 1079.9s] render 3 atras en 9s
+[ 1087.8s] render 4 izquierda en 8s
+[ 1102.9s] render 5 detalle_cuello en 15s
+[ 1116.2s] render 6 detalle_bajo en 13s
+[ 1132.4s] render 7 detalle_tejido en 16s
+[ 1132.8s] lámina 360 guardada
+[ 1132.8s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_henley\camiseta_henley.blend
+[ 1132.8s] fase render terminada en 79s
+[ 1132.8s] === listo
+[   58.2s] === fases: rig | vistas 360 | 10_camiseta_henley | Blender 5.2.3 LTS
+[   60.2s] pesos Camiseta PBR: 61676 vértices; cadera 13130, columna 5909, pecho 17350, clavicula.L 1571, brazo.L 8451, muslo.L 2402, clavicula.R 1505, brazo.R 8913, muslo.R 2445
+[   60.3s] pesos Botones: 1902 vértices; pecho 1902
+[   62.8s] exportado 10_camiseta_henley_rig.glb: 8.6 MB
+[   63.0s] exportado 10_camiseta_henley_rig.fbx
+[   63.1s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_henley\camiseta_henley.blend
+[   63.1s] fase rig terminada en 5s
+[   63.1s] === listo

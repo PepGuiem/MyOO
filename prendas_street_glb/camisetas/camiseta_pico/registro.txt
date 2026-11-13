@@ -1,0 +1,40 @@
+[  675.5s] === fases: preparar, hornear, exportar, render | vistas todas | 09_camiseta_pico | Blender 5.2.3 LTS
+[  676.3s] importado: Tela 502928 tri., Pespuntes 96600 tri.
+[  677.0s] atributos del punto en 1s
+[  684.9s] desdoblado UV: MINIMUM_STRETCH
+[  701.0s] UV: 307 islas
+[  701.3s] versión ligera: 120000 tri., UV en 22s, estiramiento: mediana de la desviación de área 0.033, 95% < 0.258, ocupación UV 59%
+[  704.4s] piezas: Manga izquierda, Manga derecha, Delantero, Espalda, Cuello
+[  704.4s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_pico\camiseta_pico.blend
+[  704.4s] fase preparar terminada en 29s
+[  704.4s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  725.1s] horneado BaseColor (4096 px) en 21s
+[  744.8s] horneado Roughness (4096 px) en 20s
+[  766.7s] horneado Normal (4096 px) en 22s
+[  800.8s] horneado AO (4096 px) en 34s
+[  822.2s] horneado Height (4096 px) en 21s
+[  822.2s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_pico\camiseta_pico.blend
+[  822.2s] fase hornear terminada en 118s
+[  823.9s] exportado 09_camiseta_pico_pbr.glb: 4.3 MB
+[  824.0s] exportado 09_camiseta_pico_pbr.fbx (texturas en texturas/)
+[  824.1s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_pico\camiseta_pico.blend
+[  824.1s] fase exportar terminada en 2s
+[  824.1s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  833.3s] render 1 frente en 9s
+[  841.2s] render 2 derecha en 8s
+[  850.3s] render 3 atras en 9s
+[  858.1s] render 4 izquierda en 8s
+[  875.7s] render 5 detalle_cuello en 18s
+[  888.9s] render 6 detalle_bajo en 13s
+[  905.1s] render 7 detalle_tejido en 16s
+[  905.4s] lámina 360 guardada
+[  905.5s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_pico\camiseta_pico.blend
+[  905.5s] fase render terminada en 81s
+[  905.5s] === listo
+[   51.6s] === fases: rig | vistas 360 | 09_camiseta_pico | Blender 5.2.3 LTS
+[   54.2s] pesos Camiseta PBR: 61621 vértices; cadera 13204, columna 6127, pecho 16444, clavicula.L 1653, brazo.L 8750, muslo.L 2428, clavicula.R 1606, brazo.R 8966, muslo.R 2443
+[   57.3s] exportado 09_camiseta_pico_rig.glb: 9.0 MB
+[   58.1s] exportado 09_camiseta_pico_rig.fbx
+[   58.2s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_pico\camiseta_pico.blend
+[   58.2s] fase rig terminada en 6s
+[   58.2s] === listo

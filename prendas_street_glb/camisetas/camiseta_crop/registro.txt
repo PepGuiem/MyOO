@@ -1,0 +1,40 @@
+[  910.7s] === fases: preparar, hornear, exportar, render | vistas todas | 05_camiseta_crop | Blender 5.2.3 LTS
+[  911.4s] importado: Tela 335776 tri., Pespuntes 90660 tri.
+[  911.8s] atributos del punto en 0s
+[  918.3s] desdoblado UV: MINIMUM_STRETCH
+[  936.8s] UV: 351 islas
+[  937.1s] versión ligera: 120000 tri., UV en 24s, estiramiento: mediana de la desviación de área 0.054, 95% < 0.323, ocupación UV 52%
+[  939.0s] piezas: Manga izquierda, Manga derecha, Espalda, Delantero, Cuello
+[  939.0s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_crop\camiseta_crop.blend
+[  939.0s] fase preparar terminada en 28s
+[  939.0s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  958.6s] horneado BaseColor (4096 px) en 20s
+[  977.6s] horneado Roughness (4096 px) en 19s
+[  998.0s] horneado Normal (4096 px) en 20s
+[ 1029.0s] horneado AO (4096 px) en 31s
+[ 1049.0s] horneado Height (4096 px) en 20s
+[ 1049.1s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_crop\camiseta_crop.blend
+[ 1049.1s] fase hornear terminada en 110s
+[ 1050.7s] exportado 05_camiseta_crop_pbr.glb: 4.4 MB
+[ 1050.8s] exportado 05_camiseta_crop_pbr.fbx (texturas en texturas/)
+[ 1050.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_crop\camiseta_crop.blend
+[ 1050.9s] fase exportar terminada en 2s
+[ 1050.9s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 1059.1s] render 1 frente en 8s
+[ 1066.2s] render 2 derecha en 7s
+[ 1074.3s] render 3 atras en 8s
+[ 1081.4s] render 4 izquierda en 7s
+[ 1096.0s] render 5 detalle_cuello en 15s
+[ 1108.1s] render 6 detalle_bajo en 12s
+[ 1123.9s] render 7 detalle_tejido en 16s
+[ 1124.2s] lámina 360 guardada
+[ 1124.3s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_crop\camiseta_crop.blend
+[ 1124.3s] fase render terminada en 73s
+[ 1124.3s] === listo
+[   28.6s] === fases: rig | vistas 360 | 05_camiseta_crop | Blender 5.2.3 LTS
+[   29.9s] pesos Camiseta PBR: 61838 vértices; cadera 8546, columna 8181, pecho 21220, clavicula.L 2298, brazo.L 9526, clavicula.R 2210, brazo.R 9857
+[   32.9s] exportado 05_camiseta_crop_rig.glb: 8.9 MB
+[   33.3s] exportado 05_camiseta_crop_rig.fbx
+[   33.5s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_crop\camiseta_crop.blend
+[   33.5s] fase rig terminada en 5s
+[   33.5s] === listo

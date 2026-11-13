@@ -1,0 +1,29 @@
+[  590.7s] === fases: preparar, hornear, exportar, render | vistas 360 | 28_vaquero_boyfriend | Blender 5.2.3 LTS
+[  592.0s] importado: Tela 685784 tri., Botón y remaches 8228 tri., Etiqueta de piel 6000 tri., Pespuntes 164220 tri.
+[  592.2s] atributos de tejido, interior y desgaste en Tela (344796 vértices)
+[  607.1s] desdoblado UV: MINIMUM_STRETCH
+[  616.0s] UV: 116 islas (perneras por dentro y por fuera, trabillas)
+[  616.4s] versión ligera: 150000 tri., UV en 21s, estiramiento: mediana de la desviación de área 0.058, 95% < 0.307, ocupación UV 50%
+[  616.5s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_boyfriend\vaquero_boyfriend.blend
+[  616.5s] fase preparar terminada en 26s
+[  616.5s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  628.4s] horneado BaseColor (4096 px) en 12s
+[  639.9s] horneado Roughness (4096 px) en 12s
+[  652.9s] horneado Normal (4096 px) en 13s
+[  679.8s] horneado AO (4096 px) en 27s
+[  690.2s] horneado Height (4096 px) en 10s
+[  690.3s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_boyfriend\vaquero_boyfriend.blend
+[  690.3s] fase hornear terminada en 74s
+[  692.0s] exportado 28_vaquero_boyfriend_pbr.glb: 5.5 MB
+[  694.9s] piezas: Trasero izquierdo, Trabillas, Delantero derecho, Trasero derecho, Cinturilla, Bolsillo monedero, Bolsillos traseros, Delantero izquierdo
+[  694.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_boyfriend\vaquero_boyfriend.blend
+[  694.9s] fase exportar terminada en 5s
+[  694.9s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  704.7s] render 1 frente en 10s
+[  713.6s] render 2 derecha en 9s
+[  723.4s] render 3 atras en 10s
+[  732.1s] render 4 izquierda en 9s
+[  732.4s] lámina 360 guardada
+[  732.5s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_boyfriend\vaquero_boyfriend.blend
+[  732.5s] fase render terminada en 38s
+[  732.5s] === listo

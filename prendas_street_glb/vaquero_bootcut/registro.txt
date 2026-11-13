@@ -1,0 +1,29 @@
+[  303.4s] === fases: preparar, hornear, exportar, render | vistas 360 | 26_vaquero_bootcut | Blender 5.2.3 LTS
+[  304.7s] importado: Tela 660266 tri., Botón y remaches 6680 tri., Etiqueta de piel 6000 tri., Pespuntes 243180 tri.
+[  304.9s] atributos de tejido, interior y desgaste en Tela (332015 vértices)
+[  319.7s] desdoblado UV: MINIMUM_STRETCH
+[  329.1s] UV: 112 islas (perneras por dentro y por fuera, trabillas)
+[  329.5s] versión ligera: 150000 tri., UV en 21s, estiramiento: mediana de la desviación de área 0.039, 95% < 0.260, ocupación UV 51%
+[  329.6s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_bootcut\vaquero_bootcut.blend
+[  329.6s] fase preparar terminada en 26s
+[  329.6s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  342.1s] horneado BaseColor (4096 px) en 12s
+[  353.8s] horneado Roughness (4096 px) en 12s
+[  366.8s] horneado Normal (4096 px) en 13s
+[  394.6s] horneado AO (4096 px) en 28s
+[  405.1s] horneado Height (4096 px) en 11s
+[  405.2s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_bootcut\vaquero_bootcut.blend
+[  405.2s] fase hornear terminada en 76s
+[  407.0s] exportado 26_vaquero_bootcut_pbr.glb: 5.3 MB
+[  409.7s] piezas: Trasero izquierdo, Trabillas, Delantero derecho, Trasero derecho, Cinturilla, Bolsillos traseros, Bolsillo monedero, Delantero izquierdo
+[  409.7s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_bootcut\vaquero_bootcut.blend
+[  409.7s] fase exportar terminada en 5s
+[  409.7s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  419.4s] render 1 frente en 10s
+[  428.2s] render 2 derecha en 9s
+[  437.8s] render 3 atras en 10s
+[  446.6s] render 4 izquierda en 9s
+[  446.9s] lámina 360 guardada
+[  446.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_bootcut\vaquero_bootcut.blend
+[  446.9s] fase render terminada en 37s
+[  446.9s] === listo

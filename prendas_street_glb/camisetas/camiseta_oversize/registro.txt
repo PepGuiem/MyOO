@@ -1,0 +1,50 @@
+[    0.0s] === fases: preparar, hornear, exportar, render | vistas todas | 02_camiseta_oversize | Blender 5.2.3 LTS
+[    1.1s] importado: Tela 526400 tri., Pespuntes 112080 tri.
+[    1.8s] atributos del punto en 1s
+[   11.1s] desdoblado UV: MINIMUM_STRETCH
+[   18.1s] UV: 523 islas
+[   18.5s] versión ligera: 120000 tri., UV en 14s, estiramiento: mediana de la desviación de área 0.052, 95% < 0.252, ocupación UV 55%
+[   22.1s] piezas: Manga izquierda, Manga derecha, Delantero, Espalda, Cuello
+[   22.2s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_oversize\camiseta_oversize.blend
+[   22.2s] fase preparar terminada en 22s
+[   22.2s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  233.2s] === fases: preparar, hornear, exportar, render | vistas todas | 02_camiseta_oversize | Blender 5.2.3 LTS
+[  234.2s] importado: Tela 526400 tri., Pespuntes 112080 tri.
+[  234.9s] atributos del punto en 1s
+[  242.9s] desdoblado UV: MINIMUM_STRETCH
+[  249.7s] UV: 523 islas
+[  250.0s] versión ligera: 120000 tri., UV en 13s, estiramiento: mediana de la desviación de área 0.052, 95% < 0.252, ocupación UV 55%
+[  253.3s] piezas: Manga izquierda, Manga derecha, Delantero, Espalda, Cuello
+[  253.4s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_oversize\camiseta_oversize.blend
+[  253.4s] fase preparar terminada en 20s
+[  253.4s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  274.4s] horneado BaseColor (4096 px) en 21s
+[  294.6s] horneado Roughness (4096 px) en 20s
+[  316.7s] horneado Normal (4096 px) en 22s
+[  350.9s] horneado AO (4096 px) en 34s
+[  373.3s] horneado Height (4096 px) en 22s
+[  373.4s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_oversize\camiseta_oversize.blend
+[  373.4s] fase hornear terminada en 120s
+[  375.1s] exportado 02_camiseta_oversize_pbr.glb: 4.3 MB
+[  375.3s] exportado 02_camiseta_oversize_pbr.fbx (texturas en texturas/)
+[  375.3s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_oversize\camiseta_oversize.blend
+[  375.3s] fase exportar terminada en 2s
+[  375.3s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  383.4s] render 1 frente en 8s
+[  391.1s] render 2 derecha en 8s
+[  399.3s] render 3 atras en 8s
+[  406.9s] render 4 izquierda en 8s
+[  419.5s] render 5 detalle_cuello en 13s
+[  431.5s] render 6 detalle_bajo en 12s
+[  443.8s] render 7 detalle_tejido en 12s
+[  444.2s] lámina 360 guardada
+[  444.2s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_oversize\camiseta_oversize.blend
+[  444.2s] fase render terminada en 69s
+[  444.2s] === listo
+[    9.5s] === fases: rig | vistas 360 | 02_camiseta_oversize | Blender 5.2.3 LTS
+[   13.0s] pesos Camiseta PBR: 62087 vértices; cadera 12012, columna 3121, pecho 16050, clavicula.L 1406, brazo.L 10639, muslo.L 3231, clavicula.R 1264, brazo.R 11085, muslo.R 3279
+[   16.1s] exportado 02_camiseta_oversize_rig.glb: 8.3 MB
+[   16.4s] exportado 02_camiseta_oversize_rig.fbx
+[   16.6s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_oversize\camiseta_oversize.blend
+[   16.6s] fase rig terminada en 7s
+[   16.6s] === listo

@@ -1,0 +1,219 @@
+00:00.094  color_management | Using OCIO=C:\Program Files\Blender Foundation\Blender 5.2\5.2\datafiles\colormanagement\config.ocio
+[camiseta] [    0.0s] === fases: rig | vistas 360 | 01_camiseta_clasica | Blender 5.2.3 LTS
+00:04.375  blend            | Read blend: "C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_clasica\camiseta_clasica.blend"
+[camiseta] [    4.7s] pesos Camiseta PBR: 61593 vértices; cadera 13317, columna 6123, pecho 16796, clavicula.L 1629, brazo.L 8362, muslo.L 2391, clavicula.R 1600, brazo.R 8959, muslo.R 2416
+INFO Draco is available, use library at C:\Program Files\Blender Foundation\Blender 5.2\5.2\scripts\addons_core\io_scene_gltf2\bf_intern_draco_bridge.dll
+INFO MeshOptimizer is available, use library at C:\Program Files\Blender Foundation\Blender 5.2\5.2\scripts\addons_core\io_scene_gltf2\bf_intern_meshopt_bridge.dll
+14:56:52 | INFO: Starting glTF 2.0 export
+14:56:52 | INFO: Extracting primitive: Camiseta PBR.001
+14:56:54 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+14:56:56 | INFO: Primitives created: 1
+14:56:56 | INFO: Finished glTF 2.0 export in 3.782381772994995 s
+
+[camiseta] [    8.9s] exportado 01_camiseta_clasica_rig.glb: 8.9 MB
+
+FBX export starting... 'C:\\Users\\Usuario\\Documents\\MyOut\\prendas_street_glb\\camisetas\\camiseta_clasica\\01_camiseta_clasica_rig.fbx'
+(bpy.data.armatures['Esqueleto'], 'POSE')
+export finished in 0.3806 sec.
+[camiseta] [    9.4s] exportado 01_camiseta_clasica_rig.fbx
+Info: Saved as "camiseta_clasica.blend"
+[camiseta] [    9.5s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_clasica\camiseta_clasica.blend
+[camiseta] [    9.5s] fase rig terminada en 9s
+[camiseta] [    9.5s] === listo
+[camiseta] [    9.5s] === fases: rig | vistas 360 | 02_camiseta_oversize | Blender 5.2.3 LTS
+00:13.891  blend            | Read blend: "C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_oversize\camiseta_oversize.blend"
+[camiseta] [   13.0s] pesos Camiseta PBR: 62087 vértices; cadera 12012, columna 3121, pecho 16050, clavicula.L 1406, brazo.L 10639, muslo.L 3231, clavicula.R 1264, brazo.R 11085, muslo.R 3279
+14:57:00 | INFO: Starting glTF 2.0 export
+14:57:00 | INFO: Extracting primitive: Camiseta PBR.001
+14:57:01 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+14:57:03 | INFO: Primitives created: 1
+14:57:03 | INFO: Finished glTF 2.0 export in 3.118577718734741 s
+
+[camiseta] [   16.1s] exportado 02_camiseta_oversize_rig.glb: 8.3 MB
+
+FBX export starting... 'C:\\Users\\Usuario\\Documents\\MyOut\\prendas_street_glb\\camisetas\\camiseta_oversize\\02_camiseta_oversize_rig.fbx'
+(bpy.data.armatures['Esqueleto'], 'POSE')
+export finished in 0.3578 sec.
+[camiseta] [   16.4s] exportado 02_camiseta_oversize_rig.fbx
+Info: Saved as "camiseta_oversize.blend"
+[camiseta] [   16.6s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_oversize\camiseta_oversize.blend
+[camiseta] [   16.6s] fase rig terminada en 7s
+[camiseta] [   16.6s] === listo
+[camiseta] [   16.6s] === fases: rig | vistas 360 | 03_camiseta_slim | Blender 5.2.3 LTS
+00:20.938  blend            | Read blend: "C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_slim\camiseta_slim.blend"
+[camiseta] [   19.1s] pesos Camiseta PBR: 61484 vértices; cadera 14835, columna 6620, pecho 15499, clavicula.L 1710, brazo.L 8685, muslo.L 2374, clavicula.R 1680, brazo.R 7694, muslo.R 2387
+14:57:06 | INFO: Starting glTF 2.0 export
+14:57:06 | INFO: Extracting primitive: Camiseta PBR.001
+14:57:07 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+14:57:09 | INFO: Primitives created: 1
+14:57:09 | INFO: Finished glTF 2.0 export in 3.1047041416168213 s
+
+[camiseta] [   22.2s] exportado 03_camiseta_slim_rig.glb: 9.1 MB
+
+FBX export starting... 'C:\\Users\\Usuario\\Documents\\MyOut\\prendas_street_glb\\camisetas\\camiseta_slim\\03_camiseta_slim_rig.fbx'
+(bpy.data.armatures['Esqueleto'], 'POSE')
+export finished in 0.5647 sec.
+[camiseta] [   22.8s] exportado 03_camiseta_slim_rig.fbx
+Info: Saved as "camiseta_slim.blend"
+[camiseta] [   22.8s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_slim\camiseta_slim.blend
+[camiseta] [   22.8s] fase rig terminada en 6s
+[camiseta] [   22.8s] === listo
+[camiseta] [   22.8s] === fases: rig | vistas 360 | 04_camiseta_boxy | Blender 5.2.3 LTS
+00:27.235  blend            | Read blend: "C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_boxy\camiseta_boxy.blend"
+[camiseta] [   24.9s] pesos Camiseta PBR: 61939 vértices; cadera 13696, columna 4273, pecho 19499, clavicula.L 1818, brazo.L 10263, muslo.L 197, clavicula.R 1736, brazo.R 10275, muslo.R 182
+14:57:12 | INFO: Starting glTF 2.0 export
+14:57:12 | INFO: Extracting primitive: Camiseta PBR.001
+14:57:13 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+14:57:14 | INFO: Primitives created: 1
+14:57:14 | INFO: Finished glTF 2.0 export in 2.8658013343811035 s
+
+[camiseta] [   27.8s] exportado 04_camiseta_boxy_rig.glb: 8.7 MB
+
+FBX export starting... 'C:\\Users\\Usuario\\Documents\\MyOut\\prendas_street_glb\\camisetas\\camiseta_boxy\\04_camiseta_boxy_rig.fbx'
+(bpy.data.armatures['Esqueleto'], 'POSE')
+export finished in 0.5855 sec.
+[camiseta] [   28.3s] exportado 04_camiseta_boxy_rig.fbx
+Info: Saved as "camiseta_boxy.blend"
+[camiseta] [   28.6s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_boxy\camiseta_boxy.blend
+[camiseta] [   28.6s] fase rig terminada en 6s
+[camiseta] [   28.6s] === listo
+[camiseta] [   28.6s] === fases: rig | vistas 360 | 05_camiseta_crop | Blender 5.2.3 LTS
+00:32.985  blend            | Read blend: "C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_crop\camiseta_crop.blend"
+[camiseta] [   29.9s] pesos Camiseta PBR: 61838 vértices; cadera 8546, columna 8181, pecho 21220, clavicula.L 2298, brazo.L 9526, clavicula.R 2210, brazo.R 9857
+14:57:17 | INFO: Starting glTF 2.0 export
+14:57:17 | INFO: Extracting primitive: Camiseta PBR.001
+14:57:18 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+14:57:20 | INFO: Primitives created: 1
+14:57:20 | INFO: Finished glTF 2.0 export in 3.0097532272338867 s
+
+[camiseta] [   32.9s] exportado 05_camiseta_crop_rig.glb: 8.9 MB
+
+FBX export starting... 'C:\\Users\\Usuario\\Documents\\MyOut\\prendas_street_glb\\camisetas\\camiseta_crop\\05_camiseta_crop_rig.fbx'
+(bpy.data.armatures['Esqueleto'], 'POSE')
+export finished in 0.4128 sec.
+[camiseta] [   33.3s] exportado 05_camiseta_crop_rig.fbx
+Info: Saved as "camiseta_crop.blend"
+[camiseta] [   33.5s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_crop\camiseta_crop.blend
+[camiseta] [   33.5s] fase rig terminada en 5s
+[camiseta] [   33.5s] === listo
+[camiseta] [   33.5s] === fases: rig | vistas 360 | 06_camiseta_longline | Blender 5.2.3 LTS
+00:37.875  blend            | Read blend: "C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_longline\camiseta_longline.blend"
+[camiseta] [   36.1s] pesos Camiseta PBR: 61533 vértices; cadera 11270, columna 5449, pecho 15155, clavicula.L 1459, brazo.L 8976, muslo.L 4565, clavicula.R 1334, brazo.R 8612, muslo.R 4713
+14:57:23 | INFO: Starting glTF 2.0 export
+14:57:23 | INFO: Extracting primitive: Camiseta PBR.001
+14:57:24 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+14:57:26 | INFO: Primitives created: 1
+14:57:26 | INFO: Finished glTF 2.0 export in 3.0241379737854004 s
+
+[camiseta] [   39.1s] exportado 06_camiseta_longline_rig.glb: 8.4 MB
+
+FBX export starting... 'C:\\Users\\Usuario\\Documents\\MyOut\\prendas_street_glb\\camisetas\\camiseta_longline\\06_camiseta_longline_rig.fbx'
+(bpy.data.armatures['Esqueleto'], 'POSE')
+export finished in 0.3315 sec.
+[camiseta] [   39.4s] exportado 06_camiseta_longline_rig.fbx
+Info: Saved as "camiseta_longline.blend"
+[camiseta] [   39.5s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_longline\camiseta_longline.blend
+[camiseta] [   39.5s] fase rig terminada en 6s
+[camiseta] [   39.5s] === listo
+[camiseta] [   39.5s] === fases: rig | vistas 360 | 07_baby_tee | Blender 5.2.3 LTS
+00:43.891  blend            | Read blend: "C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\baby_tee\baby_tee.blend"
+[camiseta] [   40.6s] pesos Camiseta PBR: 61704 vértices; cadera 15439, columna 10449, pecho 19528, clavicula.L 2397, brazo.L 5839, clavicula.R 2305, brazo.R 5747
+14:57:27 | INFO: Starting glTF 2.0 export
+14:57:27 | INFO: Extracting primitive: Camiseta PBR.001
+14:57:28 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+14:57:30 | INFO: Primitives created: 1
+14:57:30 | INFO: Finished glTF 2.0 export in 2.561511754989624 s
+
+[camiseta] [   43.2s] exportado 07_baby_tee_rig.glb: 9.4 MB
+
+FBX export starting... 'C:\\Users\\Usuario\\Documents\\MyOut\\prendas_street_glb\\camisetas\\baby_tee\\07_baby_tee_rig.fbx'
+(bpy.data.armatures['Esqueleto'], 'POSE')
+export finished in 0.5975 sec.
+[camiseta] [   43.8s] exportado 07_baby_tee_rig.fbx
+Info: Saved as "baby_tee.blend"
+[camiseta] [   44.0s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\baby_tee\baby_tee.blend
+[camiseta] [   44.0s] fase rig terminada en 4s
+[camiseta] [   44.1s] === listo
+[camiseta] [   44.1s] === fases: rig | vistas 360 | 08_camiseta_raglan | Blender 5.2.3 LTS
+00:48.454  blend            | Read blend: "C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_raglan\camiseta_raglan.blend"
+[camiseta] [   47.9s] pesos Camiseta PBR: 62596 vértices; cadera 9100, columna 3846, pecho 14383, clavicula.L 1117, brazo.L 9470, antebrazo.L 5345, muslo.L 1805, clavicula.R 1092, brazo.R 9208, antebrazo.R 5347, muslo.R 1883
+14:57:35 | INFO: Starting glTF 2.0 export
+14:57:35 | INFO: Extracting primitive: Camiseta PBR.001
+14:57:36 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+14:57:38 | INFO: Primitives created: 1
+14:57:38 | INFO: Finished glTF 2.0 export in 3.09771466255188 s
+
+[camiseta] [   51.0s] exportado 08_camiseta_raglan_rig.glb: 9.3 MB
+
+FBX export starting... 'C:\\Users\\Usuario\\Documents\\MyOut\\prendas_street_glb\\camisetas\\camiseta_raglan\\08_camiseta_raglan_rig.fbx'
+(bpy.data.armatures['Esqueleto'], 'POSE')
+export finished in 0.4747 sec.
+[camiseta] [   51.5s] exportado 08_camiseta_raglan_rig.fbx
+Info: Saved as "camiseta_raglan.blend"
+[camiseta] [   51.6s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_raglan\camiseta_raglan.blend
+[camiseta] [   51.6s] fase rig terminada en 7s
+[camiseta] [   51.6s] === listo
+[camiseta] [   51.6s] === fases: rig | vistas 360 | 09_camiseta_pico | Blender 5.2.3 LTS
+00:55.985  blend            | Read blend: "C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_pico\camiseta_pico.blend"
+[camiseta] [   54.2s] pesos Camiseta PBR: 61621 vértices; cadera 13204, columna 6127, pecho 16444, clavicula.L 1653, brazo.L 8750, muslo.L 2428, clavicula.R 1606, brazo.R 8966, muslo.R 2443
+14:57:41 | INFO: Starting glTF 2.0 export
+14:57:41 | INFO: Extracting primitive: Camiseta PBR.001
+14:57:43 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+14:57:44 | INFO: Primitives created: 1
+14:57:44 | INFO: Finished glTF 2.0 export in 3.0957789421081543 s
+
+[camiseta] [   57.3s] exportado 09_camiseta_pico_rig.glb: 9.0 MB
+
+FBX export starting... 'C:\\Users\\Usuario\\Documents\\MyOut\\prendas_street_glb\\camisetas\\camiseta_pico\\09_camiseta_pico_rig.fbx'
+(bpy.data.armatures['Esqueleto'], 'POSE')
+export finished in 0.7238 sec.
+[camiseta] [   58.1s] exportado 09_camiseta_pico_rig.fbx
+Info: Saved as "camiseta_pico.blend"
+[camiseta] [   58.2s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_pico\camiseta_pico.blend
+[camiseta] [   58.2s] fase rig terminada en 6s
+[camiseta] [   58.2s] === listo
+[camiseta] [   58.2s] === fases: rig | vistas 360 | 10_camiseta_henley | Blender 5.2.3 LTS
+01:02.610  blend            | Read blend: "C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_henley\camiseta_henley.blend"
+[camiseta] [   60.2s] pesos Camiseta PBR: 61676 vértices; cadera 13130, columna 5909, pecho 17350, clavicula.L 1571, brazo.L 8451, muslo.L 2402, clavicula.R 1505, brazo.R 8913, muslo.R 2445
+[camiseta] [   60.3s] pesos Botones: 1902 vértices; pecho 1902
+14:57:47 | INFO: Starting glTF 2.0 export
+14:57:47 | INFO: Extracting primitive: Botones
+14:57:47 | INFO: Primitives created: 1
+14:57:47 | INFO: Extracting primitive: Camiseta PBR.001
+14:57:48 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+14:57:49 | INFO: Primitives created: 1
+14:57:50 | INFO: Finished glTF 2.0 export in 2.5032765865325928 s
+
+[camiseta] [   62.8s] exportado 10_camiseta_henley_rig.glb: 8.6 MB
+
+FBX export starting... 'C:\\Users\\Usuario\\Documents\\MyOut\\prendas_street_glb\\camisetas\\camiseta_henley\\10_camiseta_henley_rig.fbx'
+(bpy.data.armatures['Esqueleto'], 'POSE')
+(bpy.data.armatures['Esqueleto'], 'POSE')
+export finished in 0.2829 sec.
+[camiseta] [   63.0s] exportado 10_camiseta_henley_rig.fbx
+Info: Saved as "camiseta_henley.blend"
+[camiseta] [   63.1s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_henley\camiseta_henley.blend
+[camiseta] [   63.1s] fase rig terminada en 5s
+[camiseta] [   63.1s] === listo
+[camiseta] [   63.1s] === fases: rig | vistas 360 | 11_camiseta_manga_larga | Blender 5.2.3 LTS
+01:07.516  blend            | Read blend: "C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_manga_larga\camiseta_manga_larga.blend"
+[camiseta] [   65.8s] pesos Camiseta PBR: 61182 vértices; cadera 8432, columna 3933, pecho 9971, clavicula.L 977, brazo.L 7707, antebrazo.L 8870, mano.L 1366, muslo.L 1659, clavicula.R 860, brazo.R 5887, antebrazo.R 8473, mano.R 1324, muslo.R 1723
+14:57:53 | INFO: Starting glTF 2.0 export
+14:57:53 | INFO: Extracting primitive: Camiseta PBR.001
+14:57:54 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+14:57:55 | INFO: Primitives created: 1
+14:57:55 | INFO: Finished glTF 2.0 export in 2.7294559478759766 s
+
+[camiseta] [   68.5s] exportado 11_camiseta_manga_larga_rig.glb: 9.0 MB
+
+FBX export starting... 'C:\\Users\\Usuario\\Documents\\MyOut\\prendas_street_glb\\camisetas\\camiseta_manga_larga\\11_camiseta_manga_larga_rig.fbx'
+(bpy.data.armatures['Esqueleto'], 'POSE')
+export finished in 0.2697 sec.
+[camiseta] [   68.8s] exportado 11_camiseta_manga_larga_rig.fbx
+Info: Saved as "camiseta_manga_larga.blend"
+[camiseta] [   68.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_manga_larga\camiseta_manga_larga.blend
+[camiseta] [   68.9s] fase rig terminada en 6s
+[camiseta] [   68.9s] === listo
+Blender 5.2.3 LTS (hash e13b728c6880 built 2026-10-22 01:37:16)
+
+Blender quit

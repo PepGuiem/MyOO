@@ -1,0 +1,40 @@
+[  214.6s] === fases: preparar, hornear, exportar, render | vistas todas | 07_baby_tee | Blender 5.2.3 LTS
+[  215.1s] importado: Tela 310544 tri., Pespuntes 82800 tri.
+[  215.5s] atributos del punto en 0s
+[  222.4s] desdoblado UV: MINIMUM_STRETCH
+[  234.3s] UV: 321 islas
+[  234.6s] versión ligera: 119999 tri., UV en 18s, estiramiento: mediana de la desviación de área 0.028, 95% < 0.125, ocupación UV 59%
+[  236.4s] piezas: Manga izquierda, Manga derecha, Delantero, Espalda, Cuello
+[  236.4s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\baby_tee\baby_tee.blend
+[  236.4s] fase preparar terminada en 22s
+[  236.4s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  256.7s] horneado BaseColor (4096 px) en 20s
+[  276.9s] horneado Roughness (4096 px) en 20s
+[  299.3s] horneado Normal (4096 px) en 22s
+[  332.8s] horneado AO (4096 px) en 34s
+[  353.4s] horneado Height (4096 px) en 21s
+[  353.4s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\baby_tee\baby_tee.blend
+[  353.4s] fase hornear terminada en 117s
+[  355.1s] exportado 07_baby_tee_pbr.glb: 4.4 MB
+[  355.3s] exportado 07_baby_tee_pbr.fbx (texturas en texturas/)
+[  355.3s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\baby_tee\baby_tee.blend
+[  355.3s] fase exportar terminada en 2s
+[  355.3s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  364.6s] render 1 frente en 9s
+[  372.5s] render 2 derecha en 8s
+[  381.7s] render 3 atras en 9s
+[  389.4s] render 4 izquierda en 8s
+[  405.1s] render 5 detalle_cuello en 16s
+[  417.3s] render 6 detalle_bajo en 12s
+[  433.6s] render 7 detalle_tejido en 16s
+[  434.0s] lámina 360 guardada
+[  434.0s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\baby_tee\baby_tee.blend
+[  434.0s] fase render terminada en 79s
+[  434.0s] === listo
+[   39.5s] === fases: rig | vistas 360 | 07_baby_tee | Blender 5.2.3 LTS
+[   40.6s] pesos Camiseta PBR: 61704 vértices; cadera 15439, columna 10449, pecho 19528, clavicula.L 2397, brazo.L 5839, clavicula.R 2305, brazo.R 5747
+[   43.2s] exportado 07_baby_tee_rig.glb: 9.4 MB
+[   43.8s] exportado 07_baby_tee_rig.fbx
+[   44.0s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\baby_tee\baby_tee.blend
+[   44.0s] fase rig terminada en 4s
+[   44.1s] === listo

@@ -1,0 +1,40 @@
+[  444.2s] === fases: preparar, hornear, exportar, render | vistas todas | 03_camiseta_slim | Blender 5.2.3 LTS
+[  445.1s] importado: Tela 452028 tri., Pespuntes 81240 tri.
+[  445.7s] atributos del punto en 1s
+[  453.9s] desdoblado UV: MINIMUM_STRETCH
+[  466.6s] UV: 261 islas
+[  466.9s] versión ligera: 119999 tri., UV en 19s, estiramiento: mediana de la desviación de área 0.042, 95% < 0.572, ocupación UV 63%
+[  469.7s] piezas: Manga izquierda, Manga derecha, Delantero, Espalda, Cuello
+[  469.8s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_slim\camiseta_slim.blend
+[  469.8s] fase preparar terminada en 26s
+[  469.8s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  491.1s] horneado BaseColor (4096 px) en 21s
+[  511.7s] horneado Roughness (4096 px) en 21s
+[  534.2s] horneado Normal (4096 px) en 23s
+[  570.1s] horneado AO (4096 px) en 36s
+[  592.4s] horneado Height (4096 px) en 22s
+[  592.5s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_slim\camiseta_slim.blend
+[  592.5s] fase hornear terminada en 123s
+[  594.2s] exportado 03_camiseta_slim_pbr.glb: 4.3 MB
+[  594.4s] exportado 03_camiseta_slim_pbr.fbx (texturas en texturas/)
+[  594.4s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_slim\camiseta_slim.blend
+[  594.4s] fase exportar terminada en 2s
+[  594.4s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  603.6s] render 1 frente en 9s
+[  611.5s] render 2 derecha en 8s
+[  620.8s] render 3 atras en 9s
+[  628.7s] render 4 izquierda en 8s
+[  643.8s] render 5 detalle_cuello en 15s
+[  656.9s] render 6 detalle_bajo en 13s
+[  673.0s] render 7 detalle_tejido en 16s
+[  673.4s] lámina 360 guardada
+[  673.4s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_slim\camiseta_slim.blend
+[  673.4s] fase render terminada en 79s
+[  673.4s] === listo
+[   16.6s] === fases: rig | vistas 360 | 03_camiseta_slim | Blender 5.2.3 LTS
+[   19.1s] pesos Camiseta PBR: 61484 vértices; cadera 14835, columna 6620, pecho 15499, clavicula.L 1710, brazo.L 8685, muslo.L 2374, clavicula.R 1680, brazo.R 7694, muslo.R 2387
+[   22.2s] exportado 03_camiseta_slim_rig.glb: 9.1 MB
+[   22.8s] exportado 03_camiseta_slim_rig.fbx
+[   22.8s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_slim\camiseta_slim.blend
+[   22.8s] fase rig terminada en 6s
+[   22.8s] === listo

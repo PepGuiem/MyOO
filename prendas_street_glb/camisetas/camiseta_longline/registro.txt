@@ -1,0 +1,54 @@
+[ 1124.3s] === fases: preparar, hornear, exportar, render | vistas todas | 06_camiseta_longline | Blender 5.2.3 LTS
+[ 1125.1s] importado: Tela 525328 tri., Pespuntes 95460 tri.
+[ 1125.8s] atributos del punto en 1s
+[ 1133.6s] desdoblado UV: MINIMUM_STRETCH
+[ 1146.1s] UV: 427 islas
+[ 1146.4s] versión ligera: 119999 tri., UV en 18s, estiramiento: mediana de la desviación de área 0.031, 95% < 0.179, ocupación UV 63%
+[ 1149.6s] piezas: Manga izquierda, Manga derecha, Delantero, Espalda, Cuello
+[ 1149.6s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_longline\camiseta_longline.blend
+[ 1149.6s] fase preparar terminada en 25s
+[ 1149.6s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 1170.0s] horneado BaseColor (4096 px) en 20s
+[ 1189.6s] horneado Roughness (4096 px) en 20s
+[ 1211.4s] horneado Normal (4096 px) en 22s
+[ 1247.7s] horneado AO (4096 px) en 36s
+[    0.0s] === fases: preparar, hornear, exportar, render | vistas todas | 06_camiseta_longline | Blender 5.2.3 LTS
+[    1.6s] importado: Tela 525328 tri., Pespuntes 95460 tri.
+[    2.4s] atributos del punto en 1s
+[   10.9s] desdoblado UV: MINIMUM_STRETCH
+[   23.3s] UV: 427 islas
+[   23.6s] versión ligera: 119999 tri., UV en 19s, estiramiento: mediana de la desviación de área 0.031, 95% < 0.179, ocupación UV 63%
+[   26.9s] piezas: Manga izquierda, Manga derecha, Delantero, Espalda, Cuello
+[   26.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_longline\camiseta_longline.blend
+[   27.0s] fase preparar terminada en 27s
+[   27.1s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[   48.8s] horneado BaseColor (4096 px) en 22s
+[   69.5s] horneado Roughness (4096 px) en 21s
+[   91.6s] horneado Normal (4096 px) en 22s
+[  126.9s] horneado AO (4096 px) en 35s
+[  148.7s] horneado Height (4096 px) en 22s
+[  148.7s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_longline\camiseta_longline.blend
+[  148.7s] fase hornear terminada en 122s
+[  151.0s] exportado 06_camiseta_longline_pbr.glb: 4.3 MB
+[  151.3s] exportado 06_camiseta_longline_pbr.fbx (texturas en texturas/)
+[  151.3s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_longline\camiseta_longline.blend
+[  151.3s] fase exportar terminada en 3s
+[  151.3s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  159.0s] render 1 frente en 8s
+[  166.2s] render 2 derecha en 7s
+[  173.6s] render 3 atras en 7s
+[  180.8s] render 4 izquierda en 7s
+[  192.1s] render 5 detalle_cuello en 11s
+[  203.3s] render 6 detalle_bajo en 11s
+[  214.1s] render 7 detalle_tejido en 11s
+[  214.5s] lámina 360 guardada
+[  214.6s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_longline\camiseta_longline.blend
+[  214.6s] fase render terminada en 63s
+[  214.6s] === listo
+[   33.5s] === fases: rig | vistas 360 | 06_camiseta_longline | Blender 5.2.3 LTS
+[   36.1s] pesos Camiseta PBR: 61533 vértices; cadera 11270, columna 5449, pecho 15155, clavicula.L 1459, brazo.L 8976, muslo.L 4565, clavicula.R 1334, brazo.R 8612, muslo.R 4713
+[   39.1s] exportado 06_camiseta_longline_rig.glb: 8.4 MB
+[   39.4s] exportado 06_camiseta_longline_rig.fbx
+[   39.5s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_longline\camiseta_longline.blend
+[   39.5s] fase rig terminada en 6s
+[   39.5s] === listo

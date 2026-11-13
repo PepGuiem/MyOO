@@ -1,0 +1,29 @@
+[  446.9s] === fases: preparar, hornear, exportar, render | vistas 360 | 27_vaquero_mom | Blender 5.2.3 LTS
+[  448.3s] importado: Tela 685160 tri., Botón y remaches 6652 tri., Etiqueta de piel 6000 tri., Pespuntes 222300 tri.
+[  448.5s] atributos de tejido, interior y desgaste en Tela (344172 vértices)
+[  463.3s] desdoblado UV: MINIMUM_STRETCH
+[  477.1s] UV: 125 islas (perneras por dentro y por fuera, trabillas)
+[  477.4s] versión ligera: 149999 tri., UV en 25s, estiramiento: mediana de la desviación de área 0.050, 95% < 0.294, ocupación UV 47%
+[  477.5s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_mom\vaquero_mom.blend
+[  477.5s] fase preparar terminada en 31s
+[  477.5s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  489.3s] horneado BaseColor (4096 px) en 12s
+[  500.8s] horneado Roughness (4096 px) en 11s
+[  513.3s] horneado Normal (4096 px) en 13s
+[  538.8s] horneado AO (4096 px) en 26s
+[  549.0s] horneado Height (4096 px) en 10s
+[  549.1s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_mom\vaquero_mom.blend
+[  549.1s] fase hornear terminada en 72s
+[  550.8s] exportado 27_vaquero_mom_pbr.glb: 5.3 MB
+[  553.6s] piezas: Trasero izquierdo, Trabillas, Delantero derecho, Trasero derecho, Cinturilla, Bolsillo monedero, Bolsillos traseros, Delantero izquierdo
+[  553.7s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_mom\vaquero_mom.blend
+[  553.7s] fase exportar terminada en 5s
+[  553.7s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  563.4s] render 1 frente en 10s
+[  572.2s] render 2 derecha en 9s
+[  581.6s] render 3 atras en 9s
+[  590.4s] render 4 izquierda en 9s
+[  590.7s] lámina 360 guardada
+[  590.7s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_mom\vaquero_mom.blend
+[  590.7s] fase render terminada en 37s
+[  590.7s] === listo

@@ -1,0 +1,40 @@
+[ 1132.8s] === fases: preparar, hornear, exportar, render | vistas todas | 11_camiseta_manga_larga | Blender 5.2.3 LTS
+[ 1133.7s] importado: Tela 524384 tri., Pespuntes 66000 tri.
+[ 1134.3s] atributos del punto en 1s
+[ 1141.7s] desdoblado UV: MINIMUM_STRETCH
+[ 1155.4s] UV: 389 islas
+[ 1155.7s] versión ligera: 119999 tri., UV en 19s, estiramiento: mediana de la desviación de área 0.027, 95% < 0.148, ocupación UV 59%
+[ 1159.3s] piezas: Puño izquierdo, Puño derecho, Manga derecha, Delantero, Espalda, Cuello, Manga izquierda
+[ 1159.3s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_manga_larga\camiseta_manga_larga.blend
+[ 1159.3s] fase preparar terminada en 26s
+[ 1159.3s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 1184.2s] horneado BaseColor (4096 px) en 25s
+[ 1208.7s] horneado Roughness (4096 px) en 24s
+[ 1235.2s] horneado Normal (4096 px) en 27s
+[ 1275.0s] horneado AO (4096 px) en 40s
+[ 1302.3s] horneado Height (4096 px) en 27s
+[ 1302.4s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_manga_larga\camiseta_manga_larga.blend
+[ 1302.4s] fase hornear terminada en 143s
+[ 1304.2s] exportado 11_camiseta_manga_larga_pbr.glb: 4.5 MB
+[ 1304.3s] exportado 11_camiseta_manga_larga_pbr.fbx (texturas en texturas/)
+[ 1304.4s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_manga_larga\camiseta_manga_larga.blend
+[ 1304.4s] fase exportar terminada en 2s
+[ 1304.4s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 1313.2s] render 1 frente en 9s
+[ 1320.6s] render 2 derecha en 7s
+[ 1329.3s] render 3 atras en 9s
+[ 1336.8s] render 4 izquierda en 7s
+[ 1352.4s] render 5 detalle_cuello en 16s
+[ 1365.8s] render 6 detalle_bajo en 13s
+[ 1382.3s] render 7 detalle_tejido en 16s
+[ 1382.7s] lámina 360 guardada
+[ 1382.8s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_manga_larga\camiseta_manga_larga.blend
+[ 1382.8s] fase render terminada en 78s
+[ 1382.8s] === listo
+[   63.1s] === fases: rig | vistas 360 | 11_camiseta_manga_larga | Blender 5.2.3 LTS
+[   65.8s] pesos Camiseta PBR: 61182 vértices; cadera 8432, columna 3933, pecho 9971, clavicula.L 977, brazo.L 7707, antebrazo.L 8870, mano.L 1366, muslo.L 1659, clavicula.R 860, brazo.R 5887, antebrazo.R 8473, mano.R 1324, muslo.R 1723
+[   68.5s] exportado 11_camiseta_manga_larga_rig.glb: 9.0 MB
+[   68.8s] exportado 11_camiseta_manga_larga_rig.fbx
+[   68.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisetas\camiseta_manga_larga\camiseta_manga_larga.blend
+[   68.9s] fase rig terminada en 6s
+[   68.9s] === listo

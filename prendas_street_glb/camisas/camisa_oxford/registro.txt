@@ -1,0 +1,38 @@
+[  258.5s] === fases: preparar, hornear, exportar, render | vistas 360 | 02_camisa_oxford | Blender 5.2.3 LTS
+[  259.4s] importado: Tela 565182 tri., Pespuntes 88380 tri.
+[  260.2s] atributos del punto en 1s
+[  267.8s] desdoblado UV: MINIMUM_STRETCH
+[  288.5s] UV: 1599 islas
+[  288.9s] versión ligera: 119999 tri., UV en 26s, estiramiento: mediana de la desviación de área 0.029, 95% < 0.526, ocupación UV 55%
+[  293.6s] piezas: Puño izquierdo, Puño derecho, Manga derecha, Delantero derecho, Espalda, Canesú, Cuello, Tapeta, Delantero izquierdo, Bolsillos, Manga izquierda
+[  293.6s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisas\camisa_oxford\camisa_oxford.blend
+[  293.6s] fase preparar terminada en 35s
+[  293.6s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  328.7s] horneado BaseColor (4096 px) en 35s
+[  362.8s] horneado Roughness (4096 px) en 34s
+[  399.1s] horneado Normal (4096 px) en 36s
+[  448.8s] horneado AO (4096 px) en 50s
+[  489.5s] horneado Height (4096 px) en 41s
+[  489.6s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisas\camisa_oxford\camisa_oxford.blend
+[  489.6s] fase hornear terminada en 196s
+[  491.3s] exportado 02_camisa_oxford_pbr.glb: 5.2 MB
+[  491.5s] exportado 02_camisa_oxford_pbr.fbx (texturas en texturas/)
+[  491.5s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisas\camisa_oxford\camisa_oxford.blend
+[  491.5s] fase exportar terminada en 2s
+[  491.5s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  500.2s] render 1 frente en 9s
+[  507.7s] render 2 derecha en 8s
+[  516.2s] render 3 atras en 8s
+[  523.8s] render 4 izquierda en 8s
+[  524.2s] lámina 360 guardada
+[  524.3s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisas\camisa_oxford\camisa_oxford.blend
+[  524.3s] fase render terminada en 33s
+[  524.3s] === listo
+[    9.5s] === fases: rig | vistas 360 | 02_camisa_oxford | Blender 5.2.3 LTS
+[   13.3s] pesos Camiseta PBR: 62568 vértices; cadera 8527, columna 4193, pecho 14559, clavicula.L 943, brazo.L 6379, antebrazo.L 8276, mano.L 1192, muslo.L 1995, clavicula.R 781, brazo.R 5025, antebrazo.R 7596, mano.R 1068, muslo.R 2034
+[   13.3s] pesos Botones: 6248 vértices; cadera 2338, columna 1086, pecho 1542, antebrazo.L 181, mano.L 465, antebrazo.R 179, mano.R 457
+[   16.4s] exportado 02_camisa_oxford_rig.glb: 9.2 MB
+[   16.9s] exportado 02_camisa_oxford_rig.fbx
+[   17.0s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisas\camisa_oxford\camisa_oxford.blend
+[   17.0s] fase rig terminada en 7s
+[   17.0s] === listo

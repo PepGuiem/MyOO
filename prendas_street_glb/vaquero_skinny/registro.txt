@@ -1,0 +1,29 @@
+[  149.6s] === fases: preparar, hornear, exportar, render | vistas 360 | 21_vaquero_skinny | Blender 5.2.3 LTS
+[  150.6s] importado: Tela 520610 tri., Botón y remaches 6672 tri., Etiqueta de piel 6000 tri., Pespuntes 225060 tri.
+[  150.8s] atributos de tejido, interior y desgaste en Tela (261651 vértices)
+[  165.4s] desdoblado UV: MINIMUM_STRETCH
+[  175.7s] UV: 97 islas (perneras por dentro y por fuera, trabillas)
+[  176.0s] versión ligera: 150000 tri., UV en 23s, estiramiento: mediana de la desviación de área 0.040, 95% < 0.254, ocupación UV 56%
+[  176.1s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_skinny\vaquero_skinny.blend
+[  176.1s] fase preparar terminada en 27s
+[  176.1s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  188.6s] horneado BaseColor (4096 px) en 12s
+[  200.3s] horneado Roughness (4096 px) en 12s
+[  213.5s] horneado Normal (4096 px) en 13s
+[  242.1s] horneado AO (4096 px) en 29s
+[  252.5s] horneado Height (4096 px) en 10s
+[  252.6s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_skinny\vaquero_skinny.blend
+[  252.6s] fase hornear terminada en 76s
+[  254.4s] exportado 21_vaquero_skinny_pbr.glb: 5.4 MB
+[  256.4s] piezas: Trasero izquierdo, Trabillas, Delantero derecho, Trasero derecho, Cinturilla, Bolsillos traseros, Bolsillo monedero, Delantero izquierdo
+[  256.5s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_skinny\vaquero_skinny.blend
+[  256.5s] fase exportar terminada en 4s
+[  256.5s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  265.7s] render 1 frente en 9s
+[  274.0s] render 2 derecha en 8s
+[  282.9s] render 3 atras en 9s
+[  291.3s] render 4 izquierda en 8s
+[  291.6s] lámina 360 guardada
+[  291.7s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_skinny\vaquero_skinny.blend
+[  291.7s] fase render terminada en 35s
+[  291.7s] === listo

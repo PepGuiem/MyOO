@@ -1,0 +1,29 @@
+[  154.0s] === fases: preparar, hornear, exportar, render | vistas 360 | 25_vaquero_flare | Blender 5.2.3 LTS
+[  155.4s] importado: Tela 686058 tri., Botón y remaches 6640 tri., Etiqueta de piel 6000 tri., Pespuntes 241140 tri.
+[  155.6s] atributos de tejido, interior y desgaste en Tela (345071 vértices)
+[  170.7s] desdoblado UV: MINIMUM_STRETCH
+[  185.2s] UV: 106 islas (perneras por dentro y por fuera, trabillas)
+[  185.7s] versión ligera: 149999 tri., UV en 26s, estiramiento: mediana de la desviación de área 0.044, 95% < 0.254, ocupación UV 48%
+[  185.7s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_flare\vaquero_flare.blend
+[  185.7s] fase preparar terminada en 32s
+[  185.7s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  198.0s] horneado BaseColor (4096 px) en 12s
+[  209.8s] horneado Roughness (4096 px) en 12s
+[  222.8s] horneado Normal (4096 px) en 13s
+[  248.9s] horneado AO (4096 px) en 26s
+[  260.3s] horneado Height (4096 px) en 11s
+[  260.4s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_flare\vaquero_flare.blend
+[  260.4s] fase hornear terminada en 75s
+[  262.2s] exportado 25_vaquero_flare_pbr.glb: 5.3 MB
+[  265.2s] piezas: Trasero izquierdo, Trabillas, Delantero derecho, Trasero derecho, Cinturilla, Bolsillos traseros, Bolsillo monedero, Delantero izquierdo
+[  265.3s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_flare\vaquero_flare.blend
+[  265.3s] fase exportar terminada en 5s
+[  265.3s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  275.5s] render 1 frente en 10s
+[  284.6s] render 2 derecha en 9s
+[  294.2s] render 3 atras en 10s
+[  303.0s] render 4 izquierda en 9s
+[  303.3s] lámina 360 guardada
+[  303.4s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_flare\vaquero_flare.blend
+[  303.4s] fase render terminada en 38s
+[  303.4s] === listo

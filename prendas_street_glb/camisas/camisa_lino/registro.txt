@@ -1,0 +1,38 @@
+[  792.3s] === fases: preparar, hornear, exportar, render | vistas 360 | 04_camisa_lino | Blender 5.2.3 LTS
+[  793.2s] importado: Tela 563758 tri., Pespuntes 57480 tri.
+[  793.9s] atributos del punto en 1s
+[  801.6s] desdoblado UV: MINIMUM_STRETCH
+[  814.6s] UV: 1447 islas
+[  814.9s] versión ligera: 119999 tri., UV en 18s, estiramiento: mediana de la desviación de área 0.036, 95% < 0.194, ocupación UV 55%
+[  818.9s] piezas: Manga izquierda, Manga derecha, Delantero derecho, Espalda, Canesú, Cuello, Tapeta, Delantero izquierdo
+[  818.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisas\camisa_lino\camisa_lino.blend
+[  818.9s] fase preparar terminada en 27s
+[  818.9s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  846.2s] horneado BaseColor (4096 px) en 27s
+[  872.9s] horneado Roughness (4096 px) en 27s
+[  901.6s] horneado Normal (4096 px) en 29s
+[  940.6s] horneado AO (4096 px) en 39s
+[  970.0s] horneado Height (4096 px) en 29s
+[  970.1s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisas\camisa_lino\camisa_lino.blend
+[  970.1s] fase hornear terminada en 151s
+[  971.7s] exportado 04_camisa_lino_pbr.glb: 5.0 MB
+[  971.9s] exportado 04_camisa_lino_pbr.fbx (texturas en texturas/)
+[  971.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisas\camisa_lino\camisa_lino.blend
+[  971.9s] fase exportar terminada en 2s
+[  971.9s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  980.3s] render 1 frente en 8s
+[  987.6s] render 2 derecha en 7s
+[  995.9s] render 3 atras en 8s
+[ 1003.1s] render 4 izquierda en 7s
+[ 1003.5s] lámina 360 guardada
+[ 1003.5s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisas\camisa_lino\camisa_lino.blend
+[ 1003.5s] fase render terminada en 32s
+[ 1003.5s] === listo
+[   23.6s] === fases: rig | vistas 360 | 04_camisa_lino | Blender 5.2.3 LTS
+[   26.7s] pesos Camiseta PBR: 62797 vértices; cadera 9179, columna 3386, pecho 14819, clavicula.L 1029, brazo.L 10371, antebrazo.L 4631, muslo.L 2031, clavicula.R 914, brazo.R 10146, antebrazo.R 4214, muslo.R 2077
+[   26.7s] pesos Botones: 4210 vértices; cadera 2388, columna 1180, pecho 642
+[   29.6s] exportado 04_camisa_lino_rig.glb: 8.6 MB
+[   30.0s] exportado 04_camisa_lino_rig.fbx
+[   30.2s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisas\camisa_lino\camisa_lino.blend
+[   30.2s] fase rig terminada en 6s
+[   30.2s] === listo

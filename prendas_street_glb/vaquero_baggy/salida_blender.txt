@@ -1,0 +1,81 @@
+00:00.015  color_management | Using OCIO=C:\Program Files\Blender Foundation\Blender 5.2\5.2\datafiles\colormanagement\config.ocio
+[vaquero] [    0.0s] === fases: preparar, hornear, exportar, render | Blender 5.2.3 LTS
+11:23:58 | INFO: Data are loaded, start creating Blender stuff
+11:23:58 | INFO: Blender create Mesh node body
+11:23:58 | INFO: Blender create Mesh node hardware
+11:23:58 | INFO: Blender create Mesh node trim
+11:23:58 | INFO: glTF import finished in 0.88s
+11:23:58 | INFO: Data are loaded, start creating Blender stuff
+11:23:58 | INFO: Blender create Mesh node stitch
+11:23:59 | INFO: glTF import finished in 0.30s
+[vaquero] [    1.6s] importado: Tela 686184 tri., Botón y remaches 8244 tri., Etiqueta de piel 6000 tri., Pespuntes 253200 tri.
+[vaquero] [    1.8s] atributos de tejido, interior y desgaste en Tela (345196 vértices)
+C:\Users\Usuario\Documents\MyOut\prendas_street_glb\generador\blender_vaquero.py:258: DeprecationWarning: 'Material.use_nodes' is expected to be removed in Blender 6.0
+  mat.use_nodes = True
+[vaquero] [   17.5s] desdoblado UV: MINIMUM_STRETCH
+[vaquero] [   26.5s] UV: 115 islas (perneras por dentro y por fuera, trabillas)
+[vaquero] [   26.9s] versión ligera: 149999 tri., UV en 21s, estiramiento: mediana de la desviación de área 0.051, 95% < 0.261, ocupación UV 53%
+Info: Saved as "vaquero_baggy.blend"
+[vaquero] [   26.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_baggy\vaquero_baggy.blend
+[vaquero] [   26.9s] fase preparar terminada en 27s
+[vaquero] [   27.0s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+Info: Circular dependency for image "Vaquero_BaseColor" from object "Vaquero PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[vaquero] [   50.1s] horneado BaseColor (4096 px) en 23s
+Info: Circular dependency for image "Vaquero_Roughness" from object "Vaquero PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[vaquero] [   62.0s] horneado Roughness (4096 px) en 12s
+Info: Circular dependency for image "Vaquero_Normal" from object "Vaquero PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[vaquero] [   75.6s] horneado Normal (4096 px) en 14s
+Info: Baking map saved to internal image, save it externally or pack it
+[vaquero] [  104.7s] horneado AO (4096 px) en 29s
+Info: Circular dependency for image "Vaquero_Height" from object "Vaquero PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[vaquero] [  115.2s] horneado Height (4096 px) en 11s
+Info: Saved as "vaquero_baggy.blend"
+[vaquero] [  115.3s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_baggy\vaquero_baggy.blend
+[vaquero] [  115.3s] fase hornear terminada en 88s
+INFO Draco is available, use library at C:\Program Files\Blender Foundation\Blender 5.2\5.2\scripts\addons_core\io_scene_gltf2\bf_intern_draco_bridge.dll
+INFO MeshOptimizer is available, use library at C:\Program Files\Blender Foundation\Blender 5.2\5.2\scripts\addons_core\io_scene_gltf2\bf_intern_meshopt_bridge.dll
+11:25:54 | INFO: Starting glTF 2.0 export
+11:25:54 | INFO: Extracting primitive: Botón y remaches
+11:25:54 | INFO: Primitives created: 1
+11:25:54 | INFO: Extracting primitive: Etiqueta de piel
+11:25:54 | INFO: Primitives created: 1
+11:25:54 | INFO: Extracting primitive: Vaquero PBR.001
+11:25:54 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+11:25:55 | INFO: Primitives created: 1
+11:25:55 | INFO: Finished glTF 2.0 export in 0.7755556106567383 s
+
+[vaquero] [  117.3s] exportado 19_vaquero_baggy_pbr.glb: 5.4 MB
+[vaquero] [  120.1s] piezas: Trasero izquierdo, Trabillas, Delantero derecho, Trasero derecho, Cinturilla, Bolsillo monedero, Bolsillos traseros, Delantero izquierdo
+Info: Saved as "vaquero_baggy.blend"
+[vaquero] [  120.2s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_baggy\vaquero_baggy.blend
+[vaquero] [  120.2s] fase exportar terminada en 5s
+[vaquero] [  120.2s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+C:\Users\Usuario\Documents\MyOut\prendas_street_glb\generador\blender_vaquero.py:984: DeprecationWarning: 'World.use_nodes' is expected to be removed in Blender 6.0
+  w.use_nodes = True
+02:19.843  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_baggy\render\01_frontal.png'
+[vaquero] [  138.0s] render 01 frontal en 18s
+02:37.718  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_baggy\render\02_trasera.png'
+[vaquero] [  155.9s] render 02 trasera en 18s
+02:53.046  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_baggy\render\03_lateral_izquierda.png'
+[vaquero] [  171.2s] render 03 lateral_izquierda en 15s
+03:08.437  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_baggy\render\04_lateral_derecha.png'
+[vaquero] [  186.6s] render 04 lateral_derecha en 15s
+03:29.750  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_baggy\render\05_detalle_cintura.png'
+[vaquero] [  207.9s] render 05 detalle_cintura en 21s
+03:49.687  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_baggy\render\06_detalle_bolsillos.png'
+[vaquero] [  227.9s] render 06 detalle_bolsillos en 20s
+04:09.546  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_baggy\render\07_detalle_tejido.png'
+[vaquero] [  247.7s] render 07 detalle_tejido en 20s
+04:32.187  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_baggy\render\08_detalle_bajos.png'
+[vaquero] [  270.4s] render 08 detalle_bajos en 23s
+Info: Saved as "vaquero_baggy.blend"
+[vaquero] [  270.5s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_baggy\vaquero_baggy.blend
+[vaquero] [  270.5s] fase render terminada en 150s
+[vaquero] [  270.5s] === listo
+Blender 5.2.3 LTS (hash e13b728c6880 built 2026-10-22 01:37:16)
+
+Blender quit

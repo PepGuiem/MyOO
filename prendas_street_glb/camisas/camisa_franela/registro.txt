@@ -1,0 +1,38 @@
+[ 1003.5s] === fases: preparar, hornear, exportar, render | vistas 360 | 05_camisa_franela | Blender 5.2.3 LTS
+[ 1004.5s] importado: Tela 569718 tri., Pespuntes 95820 tri.
+[ 1005.2s] atributos del punto en 1s
+[ 1012.6s] desdoblado UV: MINIMUM_STRETCH
+[ 1037.7s] UV: 1515 islas
+[ 1038.0s] versión ligera: 120000 tri., UV en 30s, estiramiento: mediana de la desviación de área 0.027, 95% < 0.282, ocupación UV 53%
+[ 1042.7s] piezas: Puño izquierdo, Puño derecho, Manga derecha, Espalda, Delantero derecho, Canesú, Bolsillos, Cuello, Tapeta, Delantero izquierdo, Manga izquierda
+[ 1042.8s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisas\camisa_franela\camisa_franela.blend
+[ 1042.8s] fase preparar terminada en 39s
+[ 1042.8s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 1076.6s] horneado BaseColor (4096 px) en 34s
+[ 1110.7s] horneado Roughness (4096 px) en 34s
+[ 1146.5s] horneado Normal (4096 px) en 36s
+[ 1194.7s] horneado AO (4096 px) en 48s
+[ 1232.8s] horneado Height (4096 px) en 38s
+[ 1232.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisas\camisa_franela\camisa_franela.blend
+[ 1232.9s] fase hornear terminada en 190s
+[ 1234.6s] exportado 05_camisa_franela_pbr.glb: 5.3 MB
+[ 1234.7s] exportado 05_camisa_franela_pbr.fbx (texturas en texturas/)
+[ 1234.8s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisas\camisa_franela\camisa_franela.blend
+[ 1234.8s] fase exportar terminada en 2s
+[ 1234.8s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 1242.8s] render 1 frente en 8s
+[ 1249.9s] render 2 derecha en 7s
+[ 1257.5s] render 3 atras en 8s
+[ 1264.6s] render 4 izquierda en 7s
+[ 1264.9s] lámina 360 guardada
+[ 1265.0s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisas\camisa_franela\camisa_franela.blend
+[ 1265.0s] fase render terminada en 30s
+[ 1265.0s] === listo
+[   30.2s] === fases: rig | vistas 360 | 05_camisa_franela | Blender 5.2.3 LTS
+[   33.0s] pesos Camiseta PBR: 62460 vértices; cadera 7997, columna 4175, pecho 15438, clavicula.L 901, brazo.L 5817, antebrazo.L 8853, mano.L 1113, muslo.L 1687, clavicula.R 791, brazo.R 5404, antebrazo.R 7508, mano.R 978, muslo.R 1798
+[   33.0s] pesos Botones: 6709 vértices; cadera 2460, columna 580, pecho 2383, antebrazo.L 188, mano.L 462, antebrazo.R 185, mano.R 451
+[   36.0s] exportado 05_camisa_franela_rig.glb: 9.1 MB
+[   36.6s] exportado 05_camisa_franela_rig.fbx
+[   36.7s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\camisas\camisa_franela\camisa_franela.blend
+[   36.7s] fase rig terminada en 6s
+[   36.7s] === listo

@@ -1,0 +1,29 @@
+[    0.0s] === fases: preparar, hornear, exportar, render | vistas 360 | 20_vaquero_clasico | Blender 5.2.3 LTS
+[    1.6s] importado: Tela 669594 tri., Botón y remaches 6676 tri., Etiqueta de piel 6000 tri., Pespuntes 226980 tri.
+[    1.9s] atributos de tejido, interior y desgaste en Tela (336543 vértices)
+[   16.7s] desdoblado UV: MINIMUM_STRETCH
+[   25.9s] UV: 116 islas (perneras por dentro y por fuera, trabillas)
+[   26.3s] versión ligera: 150000 tri., UV en 21s, estiramiento: mediana de la desviación de área 0.045, 95% < 0.272, ocupación UV 52%
+[   26.3s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_clasico\vaquero_clasico.blend
+[   26.3s] fase preparar terminada en 26s
+[   26.4s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[   39.2s] horneado BaseColor (4096 px) en 13s
+[   51.1s] horneado Roughness (4096 px) en 12s
+[   64.1s] horneado Normal (4096 px) en 13s
+[   91.6s] horneado AO (4096 px) en 28s
+[  106.4s] horneado Height (4096 px) en 15s
+[  106.5s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_clasico\vaquero_clasico.blend
+[  106.5s] fase hornear terminada en 80s
+[  108.5s] exportado 20_vaquero_clasico_pbr.glb: 5.3 MB
+[  111.2s] piezas: Trasero izquierdo, Trabillas, Trasero derecho, Delantero derecho, Cinturilla, Bolsillos traseros, Bolsillo monedero, Delantero izquierdo
+[  111.3s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_clasico\vaquero_clasico.blend
+[  111.3s] fase exportar terminada en 5s
+[  111.3s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  121.7s] render 1 frente en 10s
+[  130.8s] render 2 derecha en 9s
+[  140.4s] render 3 atras en 10s
+[  149.2s] render 4 izquierda en 9s
+[  149.5s] lámina 360 guardada
+[  149.6s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\vaquero_clasico\vaquero_clasico.blend
+[  149.6s] fase render terminada en 38s
+[  149.6s] === listo
