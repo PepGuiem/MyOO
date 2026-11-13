@@ -1,0 +1,37 @@
+[ 2306.7s] === fases: preparar, hornear, exportar, render, rig | vistas 360 | 11_chaqueta_utility | Blender 5.2.3 LTS
+[ 2307.6s] importado: Tela 524842 tri., Pespuntes 102720 tri.
+[ 2308.3s] atributos del punto en 1s
+[ 2315.3s] desdoblado UV: MINIMUM_STRETCH
+[ 2339.1s] UV: 496 islas
+[ 2339.4s] versión ligera: 120000 tri., UV en 29s, estiramiento: mediana de la desviación de área 0.031, 95% < 0.237, ocupación UV 58%
+[ 2343.6s] piezas: Puño izquierdo, Puño derecho, Manga derecha, Delantero derecho, Espalda, Bolsillos, Cuello, Tapeta, Delantero izquierdo, Manga izquierda
+[ 2343.7s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\chaqueta_utility\chaqueta_utility.blend
+[ 2343.7s] fase preparar terminada en 37s
+[ 2343.7s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 2375.3s] horneado BaseColor (4096 px) en 32s
+[ 2406.2s] horneado Roughness (4096 px) en 31s
+[ 2439.8s] horneado Normal (4096 px) en 34s
+[ 2486.2s] horneado AO (4096 px) en 46s
+[ 2521.7s] horneado Height (4096 px) en 35s
+[ 2521.8s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\chaqueta_utility\chaqueta_utility.blend
+[ 2521.8s] fase hornear terminada en 178s
+[ 2523.4s] exportado 11_chaqueta_utility_pbr.glb: 5.4 MB
+[ 2523.6s] exportado 11_chaqueta_utility_pbr.fbx (texturas en texturas/)
+[ 2523.6s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\chaqueta_utility\chaqueta_utility.blend
+[ 2523.6s] fase exportar terminada en 2s
+[ 2523.6s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 2531.8s] render 1 frente en 8s
+[ 2539.1s] render 2 derecha en 7s
+[ 2547.2s] render 3 atras en 8s
+[ 2554.5s] render 4 izquierda en 7s
+[ 2554.9s] lámina 360 guardada
+[ 2554.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\chaqueta_utility\chaqueta_utility.blend
+[ 2554.9s] fase render terminada en 31s
+[ 2556.3s] pesos Camiseta PBR: 61253 vértices; cadera 15503, columna 2616, pecho 12420, clavicula.L 776, brazo.L 5563, antebrazo.L 6389, mano.L 1102, muslo.L 2683, clavicula.R 627, brazo.R 4178, antebrazo.R 6239, mano.R 922, muslo.R 2235
+[ 2556.3s] pesos Cordones y adornos: 5154 vértices; muslo.L 2572, muslo.R 2582
+[ 2556.4s] pesos Punteras y ojales: 18270 vértices; cadera 4744, pecho 5806, antebrazo.L 346, mano.L 524, muslo.L 3002, antebrazo.R 318, mano.R 528, muslo.R 3002
+[ 2558.1s] exportado 11_chaqueta_utility_rig.glb: 9.1 MB
+[ 2558.4s] exportado 11_chaqueta_utility_rig.fbx
+[ 2558.4s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\chaqueta_utility\chaqueta_utility.blend
+[ 2558.4s] fase rig terminada en 3s
+[ 2558.4s] === listo

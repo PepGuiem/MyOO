@@ -1,0 +1,36 @@
+[ 1203.3s] === fases: preparar, hornear, exportar, render, rig | vistas 360 | 06_plumifero | Blender 5.2.3 LTS
+[ 1204.2s] importado: Tela 528370 tri., Pespuntes 70500 tri.
+[ 1204.9s] atributos del punto en 1s
+[ 1212.6s] desdoblado UV: MINIMUM_STRETCH
+[ 1234.3s] UV: 1180 islas
+[ 1234.6s] versión ligera: 119999 tri., UV en 27s, estiramiento: mediana de la desviación de área 0.071, 95% < 0.382, ocupación UV 47%
+[ 1238.8s] piezas: Puño izquierdo, Manga derecha, Puño derecho, Delantero derecho, Espalda, Bajo, Cuello, Delantero izquierdo, Manga izquierda
+[ 1238.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\plumifero\plumifero.blend
+[ 1238.9s] fase preparar terminada en 36s
+[ 1238.9s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 1267.7s] horneado BaseColor (4096 px) en 29s
+[ 1295.6s] horneado Roughness (4096 px) en 28s
+[ 1325.6s] horneado Normal (4096 px) en 30s
+[ 1367.9s] horneado AO (4096 px) en 42s
+[ 1400.0s] horneado Height (4096 px) en 32s
+[ 1400.1s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\plumifero\plumifero.blend
+[ 1400.1s] fase hornear terminada en 161s
+[ 1401.6s] exportado 06_plumifero_pbr.glb: 5.6 MB
+[ 1401.8s] exportado 06_plumifero_pbr.fbx (texturas en texturas/)
+[ 1401.8s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\plumifero\plumifero.blend
+[ 1401.8s] fase exportar terminada en 2s
+[ 1401.8s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 1409.8s] render 1 frente en 8s
+[ 1417.0s] render 2 derecha en 7s
+[ 1424.8s] render 3 atras en 8s
+[ 1432.0s] render 4 izquierda en 7s
+[ 1432.4s] lámina 360 guardada
+[ 1432.4s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\plumifero\plumifero.blend
+[ 1432.4s] fase render terminada en 31s
+[ 1433.7s] pesos Camiseta PBR: 61416 vértices; cadera 13744, columna 2950, pecho 14081, clavicula.L 1145, brazo.L 7120, antebrazo.L 6514, mano.L 967, muslo.L 445, clavicula.R 1033, brazo.R 6304, antebrazo.R 5779, mano.R 907, muslo.R 427
+[ 1433.7s] pesos Cremallera: 7937 vértices; cadera 1800, columna 512, pecho 5625
+[ 1435.3s] exportado 06_plumifero_rig.glb: 9.4 MB
+[ 1435.5s] exportado 06_plumifero_rig.fbx
+[ 1435.6s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\plumifero\plumifero.blend
+[ 1435.6s] fase rig terminada en 3s
+[ 1435.6s] === listo

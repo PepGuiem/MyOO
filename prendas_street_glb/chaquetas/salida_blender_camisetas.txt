@@ -1,0 +1,95 @@
+00:00.015  color_management | Using OCIO=C:\Program Files\Blender Foundation\Blender 5.2\5.2\datafiles\colormanagement\config.ocio
+[camiseta] [    0.0s] === fases: preparar, hornear, exportar, render, rig | vistas 360 | 12_chaleco_acolchado | Blender 5.2.3 LTS
+16:57:31 | INFO: Data are loaded, start creating Blender stuff
+16:57:31 | INFO: Blender create Mesh node body
+16:57:31 | INFO: Blender create Mesh node zipper
+16:57:31 | INFO: glTF import finished in 0.57s
+16:57:31 | INFO: Data are loaded, start creating Blender stuff
+16:57:31 | INFO: Blender create Mesh node stitch
+16:57:32 | INFO: glTF import finished in 0.06s
+C:\Users\Usuario\Documents\MyOut\prendas_street_glb\generador\blender_camiseta.py:272: DeprecationWarning: 'Material.use_nodes' is expected to be removed in Blender 6.0
+  mat.use_nodes = True
+[camiseta] [    1.0s] importado: Tela 500276 tri., Pespuntes 54180 tri.
+[camiseta] [    1.7s] atributos del punto en 1s
+[camiseta] [    9.7s] desdoblado UV: MINIMUM_STRETCH
+[camiseta] [   21.5s] UV: 789 islas
+[camiseta] [   21.9s] versión ligera: 120000 tri., UV en 18s, estiramiento: mediana de la desviación de área 0.064, 95% < 0.412, ocupación UV 49%
+[camiseta] [   25.2s] piezas: Delantero izquierdo, Delantero derecho, Espalda, Bajo, Cuello
+Info: Saved as "chaleco_acolchado.blend"
+[camiseta] [   25.3s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\chaleco_acolchado\chaleco_acolchado.blend
+[camiseta] [   25.3s] fase preparar terminada en 25s
+[camiseta] [   25.6s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+Info: Circular dependency for image "Camiseta_BaseColor" from object "Camiseta PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [   48.2s] horneado BaseColor (4096 px) en 23s
+Info: Circular dependency for image "Camiseta_Roughness" from object "Camiseta PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [   68.4s] horneado Roughness (4096 px) en 20s
+Info: Circular dependency for image "Camiseta_Normal" from object "Camiseta PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [   90.2s] horneado Normal (4096 px) en 22s
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [  123.6s] horneado AO (4096 px) en 33s
+Info: Circular dependency for image "Camiseta_Height" from object "Camiseta PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [  145.3s] horneado Height (4096 px) en 22s
+Info: Saved as "chaleco_acolchado.blend"
+[camiseta] [  145.4s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\chaleco_acolchado\chaleco_acolchado.blend
+[camiseta] [  145.4s] fase hornear terminada en 120s
+INFO Draco is available, use library at C:\Program Files\Blender Foundation\Blender 5.2\5.2\scripts\addons_core\io_scene_gltf2\bf_intern_draco_bridge.dll
+INFO MeshOptimizer is available, use library at C:\Program Files\Blender Foundation\Blender 5.2\5.2\scripts\addons_core\io_scene_gltf2\bf_intern_meshopt_bridge.dll
+16:59:57 | INFO: Starting glTF 2.0 export
+16:59:57 | INFO: Extracting primitive: Camiseta PBR.001
+16:59:57 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+16:59:58 | INFO: Primitives created: 1
+16:59:58 | INFO: Extracting primitive: Cremallera
+16:59:58 | INFO: Primitives created: 1
+16:59:58 | INFO: Finished glTF 2.0 export in 0.6808874607086182 s
+
+[camiseta] [  147.3s] exportado 12_chaleco_acolchado_pbr.glb: 5.2 MB
+
+FBX export starting... 'C:\\Users\\Usuario\\Documents\\MyOut\\prendas_street_glb\\chaquetas\\chaleco_acolchado\\12_chaleco_acolchado_pbr.fbx'
+export finished in 0.1541 sec.
+[camiseta] [  147.5s] exportado 12_chaleco_acolchado_pbr.fbx (texturas en texturas/)
+Info: Saved as "chaleco_acolchado.blend"
+[camiseta] [  147.6s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\chaleco_acolchado\chaleco_acolchado.blend
+[camiseta] [  147.6s] fase exportar terminada en 2s
+[camiseta] [  147.6s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+C:\Users\Usuario\Documents\MyOut\prendas_street_glb\generador\blender_camiseta.py:1195: DeprecationWarning: 'World.use_nodes' is expected to be removed in Blender 6.0
+  w.use_nodes = True
+02:38.312  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\chaleco_acolchado\render\360_1_frente.png'
+[camiseta] [  156.4s] render 1 frente en 9s
+02:46.390  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\chaleco_acolchado\render\360_2_derecha.png'
+[camiseta] [  164.5s] render 2 derecha en 8s
+02:54.781  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\chaleco_acolchado\render\360_3_atras.png'
+[camiseta] [  172.9s] render 3 atras en 8s
+03:02.515  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\chaleco_acolchado\render\360_4_izquierda.png'
+[camiseta] [  180.6s] render 4 izquierda en 8s
+[camiseta] [  181.0s] lámina 360 guardada
+Info: Saved as "chaleco_acolchado.blend"
+[camiseta] [  181.1s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\chaleco_acolchado\chaleco_acolchado.blend
+[camiseta] [  181.1s] fase render terminada en 34s
+[camiseta] [  182.0s] pesos Camiseta PBR: 62216 vértices; cadera 26024, columna 7200, pecho 24504, clavicula.L 1222, brazo.L 231, muslo.L 802, clavicula.R 1231, brazo.R 218, muslo.R 784
+[camiseta] [  182.0s] pesos Cremallera: 7914 vértices; cadera 1778, columna 555, pecho 5581
+17:00:33 | INFO: Starting glTF 2.0 export
+17:00:33 | INFO: Extracting primitive: Camiseta PBR.001
+17:00:33 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+17:00:34 | INFO: Primitives created: 1
+17:00:34 | INFO: Extracting primitive: Cremallera
+17:00:34 | INFO: Primitives created: 1
+17:00:34 | INFO: Finished glTF 2.0 export in 1.5814628601074219 s
+
+[camiseta] [  183.6s] exportado 12_chaleco_acolchado_rig.glb: 8.7 MB
+
+FBX export starting... 'C:\\Users\\Usuario\\Documents\\MyOut\\prendas_street_glb\\chaquetas\\chaleco_acolchado\\12_chaleco_acolchado_rig.fbx'
+(bpy.data.armatures['Esqueleto'], 'POSE')
+(bpy.data.armatures['Esqueleto'], 'POSE')
+export finished in 0.2585 sec.
+[camiseta] [  183.9s] exportado 12_chaleco_acolchado_rig.fbx
+Info: Saved as "chaleco_acolchado.blend"
+[camiseta] [  184.0s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\chaleco_acolchado\chaleco_acolchado.blend
+[camiseta] [  184.0s] fase rig terminada en 3s
+[camiseta] [  184.0s] === listo
+Blender 5.2.3 LTS (hash e13b728c6880 built 2026-10-22 01:37:16)
+
+Blender quit

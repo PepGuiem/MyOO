@@ -1,0 +1,37 @@
+[  242.4s] === fases: preparar, hornear, exportar, render, rig | vistas 360 | 02_chaqueta_varsity | Blender 5.2.3 LTS
+[  243.6s] importado: Tela 426918 tri., Mangas 297798 tri., Pespuntes 59100 tri.
+[  244.7s] atributos del punto en 1s
+[  253.1s] desdoblado UV: MINIMUM_STRETCH
+[  268.3s] UV: 4244 islas
+[  268.6s] versión ligera: 119999 tri., UV en 20s, estiramiento: mediana de la desviación de área 0.041, 95% < 0.467, ocupación UV 35%
+[  272.1s] piezas: Puño izquierdo, Mangas, Puño derecho, Manga derecha, Delantero derecho, Espalda, Bajo, Cuello, Tapeta, Delantero izquierdo, Manga izquierda
+[  272.2s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\chaqueta_varsity\chaqueta_varsity.blend
+[  272.2s] fase preparar terminada en 30s
+[  272.2s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  306.0s] horneado BaseColor (4096 px) en 34s
+[  354.5s] horneado Roughness (4096 px) en 49s
+[  395.5s] horneado Normal (4096 px) en 41s
+[  443.1s] horneado AO (4096 px) en 48s
+[  483.6s] horneado Height (4096 px) en 41s
+[  483.8s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\chaqueta_varsity\chaqueta_varsity.blend
+[  483.8s] fase hornear terminada en 212s
+[  485.6s] exportado 02_chaqueta_varsity_pbr.glb: 8.4 MB
+[  485.8s] exportado 02_chaqueta_varsity_pbr.fbx (texturas en texturas/)
+[  485.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\chaqueta_varsity\chaqueta_varsity.blend
+[  485.9s] fase exportar terminada en 2s
+[  485.9s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  494.1s] render 1 frente en 8s
+[  501.5s] render 2 derecha en 7s
+[  509.4s] render 3 atras en 8s
+[  516.7s] render 4 izquierda en 7s
+[  517.0s] lámina 360 guardada
+[  517.1s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\chaqueta_varsity\chaqueta_varsity.blend
+[  517.1s] fase render terminada en 31s
+[  518.8s] pesos Camiseta PBR: 71583 vértices; cadera 21736, columna 2155, pecho 14975, clavicula.L 1160, brazo.L 4844, antebrazo.L 8117, mano.L 1568, muslo.L 41, clavicula.R 1162, brazo.R 6141, antebrazo.R 7966, mano.R 1675, muslo.R 43
+[  519.3s] pesos Cordones y adornos: 44451 vértices; cadera 14572, pecho 14013, clavicula.L 1914, antebrazo.L 2926, mano.L 3107, clavicula.R 1898, antebrazo.R 2895, mano.R 3126
+[  519.4s] pesos Punteras y ojales: 6118 vértices; cadera 1964, columna 970, pecho 3184
+[  521.3s] exportado 02_chaqueta_varsity_rig.glb: 14.7 MB
+[  521.8s] exportado 02_chaqueta_varsity_rig.fbx
+[  521.8s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\chaqueta_varsity\chaqueta_varsity.blend
+[  521.8s] fase rig terminada en 5s
+[  521.8s] === listo

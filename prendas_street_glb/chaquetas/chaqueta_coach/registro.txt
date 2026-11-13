@@ -1,0 +1,37 @@
+[ 1889.9s] === fases: preparar, hornear, exportar, render, rig | vistas 360 | 09_chaqueta_coach | Blender 5.2.3 LTS
+[ 1890.9s] importado: Tela 576040 tri., Pespuntes 62280 tri.
+[ 1891.6s] atributos del punto en 1s
+[ 1899.4s] desdoblado UV: MINIMUM_STRETCH
+[ 1910.8s] UV: 1460 islas
+[ 1911.2s] versión ligera: 119999 tri., UV en 17s, estiramiento: mediana de la desviación de área 0.057, 95% < 0.365, ocupación UV 55%
+[ 1915.6s] piezas: Puño izquierdo, Manga derecha, Puño derecho, Delantero derecho, Espalda, Cuello, Tapeta, Delantero izquierdo, Manga izquierda
+[ 1915.6s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\chaqueta_coach\chaqueta_coach.blend
+[ 1915.6s] fase preparar terminada en 26s
+[ 1915.6s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 1944.7s] horneado BaseColor (4096 px) en 29s
+[ 1973.1s] horneado Roughness (4096 px) en 28s
+[ 2003.9s] horneado Normal (4096 px) en 31s
+[ 2047.4s] horneado AO (4096 px) en 44s
+[ 2080.1s] horneado Height (4096 px) en 33s
+[ 2080.2s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\chaqueta_coach\chaqueta_coach.blend
+[ 2080.2s] fase hornear terminada en 165s
+[ 2081.7s] exportado 09_chaqueta_coach_pbr.glb: 5.2 MB
+[ 2081.9s] exportado 09_chaqueta_coach_pbr.fbx (texturas en texturas/)
+[ 2081.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\chaqueta_coach\chaqueta_coach.blend
+[ 2081.9s] fase exportar terminada en 2s
+[ 2081.9s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 2089.6s] render 1 frente en 8s
+[ 2096.8s] render 2 derecha en 7s
+[ 2104.4s] render 3 atras en 8s
+[ 2111.4s] render 4 izquierda en 7s
+[ 2111.8s] lámina 360 guardada
+[ 2111.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\chaqueta_coach\chaqueta_coach.blend
+[ 2111.9s] fase render terminada en 30s
+[ 2113.2s] pesos Camiseta PBR: 62605 vértices; cadera 11984, columna 1806, pecho 13679, clavicula.L 874, brazo.L 7133, antebrazo.L 6552, mano.L 1540, muslo.L 2343, clavicula.R 720, brazo.R 6830, antebrazo.R 5740, mano.R 1580, muslo.R 1824
+[ 2113.3s] pesos Cordones y adornos: 5154 vértices; cadera 2184, muslo.L 1520, muslo.R 1450
+[ 2113.4s] pesos Punteras y ojales: 11222 vértices; cadera 2070, columna 1064, pecho 2084, muslo.L 3002, muslo.R 3002
+[ 2114.9s] exportado 09_chaqueta_coach_rig.glb: 8.6 MB
+[ 2115.2s] exportado 09_chaqueta_coach_rig.fbx
+[ 2115.3s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\chaqueta_coach\chaqueta_coach.blend
+[ 2115.3s] fase rig terminada en 3s
+[ 2115.3s] === listo

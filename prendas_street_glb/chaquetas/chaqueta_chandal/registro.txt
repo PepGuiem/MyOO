@@ -1,0 +1,37 @@
+[ 1664.1s] === fases: preparar, hornear, exportar, render, rig | vistas 360 | 08_chaqueta_chandal | Blender 5.2.3 LTS
+[ 1665.0s] importado: Tela 535002 tri., Pespuntes 63120 tri.
+[ 1665.7s] atributos del punto en 1s
+[ 1672.3s] desdoblado UV: MINIMUM_STRETCH
+[ 1690.5s] UV: 720 islas
+[ 1690.8s] versión ligera: 119999 tri., UV en 23s, estiramiento: mediana de la desviación de área 0.040, 95% < 0.202, ocupación UV 50%
+[ 1694.9s] piezas: Puño izquierdo, Puño derecho, Manga derecha, Delantero derecho, Espalda, Bajo, Cuello, Delantero izquierdo, Manga izquierda
+[ 1695.0s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\chaqueta_chandal\chaqueta_chandal.blend
+[ 1695.0s] fase preparar terminada en 31s
+[ 1695.0s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 1723.5s] horneado BaseColor (4096 px) en 28s
+[ 1751.2s] horneado Roughness (4096 px) en 28s
+[ 1781.3s] horneado Normal (4096 px) en 30s
+[ 1823.2s] horneado AO (4096 px) en 42s
+[ 1855.1s] horneado Height (4096 px) en 32s
+[ 1855.2s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\chaqueta_chandal\chaqueta_chandal.blend
+[ 1855.2s] fase hornear terminada en 160s
+[ 1856.7s] exportado 08_chaqueta_chandal_pbr.glb: 5.5 MB
+[ 1856.9s] exportado 08_chaqueta_chandal_pbr.fbx (texturas en texturas/)
+[ 1856.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\chaqueta_chandal\chaqueta_chandal.blend
+[ 1856.9s] fase exportar terminada en 2s
+[ 1856.9s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 1864.4s] render 1 frente en 7s
+[ 1871.5s] render 2 derecha en 7s
+[ 1878.9s] render 3 atras en 7s
+[ 1885.9s] render 4 izquierda en 7s
+[ 1886.3s] lámina 360 guardada
+[ 1886.4s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\chaqueta_chandal\chaqueta_chandal.blend
+[ 1886.4s] fase render terminada en 29s
+[ 1887.7s] pesos Camiseta PBR: 63165 vértices; cadera 15545, columna 2299, pecho 10107, clavicula.L 860, brazo.L 5383, antebrazo.L 7098, mano.L 2351, muslo.L 2033, clavicula.R 703, brazo.R 5295, antebrazo.R 7264, mano.R 2278, muslo.R 1949
+[ 1887.9s] pesos Cordones y adornos: 15211 vértices; clavicula.L 446, brazo.L 4070, antebrazo.L 3017, clavicula.R 485, brazo.R 4149, antebrazo.R 3044
+[ 1887.9s] pesos Cremallera: 8061 vértices; cadera 2210, columna 795, pecho 5056
+[ 1889.5s] exportado 08_chaqueta_chandal_rig.glb: 9.0 MB
+[ 1889.8s] exportado 08_chaqueta_chandal_rig.fbx
+[ 1889.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\chaqueta_chandal\chaqueta_chandal.blend
+[ 1889.9s] fase rig terminada en 4s
+[ 1889.9s] === listo

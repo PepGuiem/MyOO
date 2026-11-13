@@ -1,0 +1,36 @@
+[  521.9s] === fases: preparar, hornear, exportar, render, rig | vistas 360 | 03_chaqueta_vaquera | Blender 5.2.3 LTS
+[  522.9s] importado: Tela 575442 tri., Pespuntes 86040 tri.
+[  523.6s] atributos del punto en 1s
+[  531.3s] desdoblado UV: MINIMUM_STRETCH
+[  551.9s] UV: 1484 islas
+[  552.3s] versión ligera: 120000 tri., UV en 26s, estiramiento: mediana de la desviación de área 0.058, 95% < 0.544, ocupación UV 53%
+[  557.1s] piezas: Puño izquierdo, Puño derecho, Manga derecha, Delantero derecho, Espalda, Bajo, Bolsillos, Cuello, Tapeta, Delantero izquierdo, Manga izquierda
+[  557.2s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\chaqueta_vaquera\chaqueta_vaquera.blend
+[  557.2s] fase preparar terminada en 35s
+[  557.2s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  592.6s] horneado BaseColor (4096 px) en 35s
+[  627.9s] horneado Roughness (4096 px) en 35s
+[  665.4s] horneado Normal (4096 px) en 37s
+[  716.2s] horneado AO (4096 px) en 51s
+[  756.4s] horneado Height (4096 px) en 40s
+[  756.4s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\chaqueta_vaquera\chaqueta_vaquera.blend
+[  756.4s] fase hornear terminada en 199s
+[  758.2s] exportado 03_chaqueta_vaquera_pbr.glb: 5.7 MB
+[  758.4s] exportado 03_chaqueta_vaquera_pbr.fbx (texturas en texturas/)
+[  758.5s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\chaqueta_vaquera\chaqueta_vaquera.blend
+[  758.5s] fase exportar terminada en 2s
+[  758.5s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  766.8s] render 1 frente en 8s
+[  774.1s] render 2 derecha en 7s
+[  782.4s] render 3 atras en 8s
+[  789.6s] render 4 izquierda en 7s
+[  790.0s] lámina 360 guardada
+[  790.1s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\chaqueta_vaquera\chaqueta_vaquera.blend
+[  790.1s] fase render terminada en 32s
+[  791.3s] pesos Camiseta PBR: 62400 vértices; cadera 10648, columna 4797, pecho 16674, clavicula.L 915, brazo.L 6560, antebrazo.L 7098, mano.L 763, clavicula.R 781, brazo.R 6013, antebrazo.R 7440, mano.R 711
+[  791.4s] pesos Punteras y ojales: 11868 vértices; cadera 5022, columna 1148, pecho 4004, antebrazo.L 748, mano.L 112, antebrazo.R 726, mano.R 108
+[  793.2s] exportado 03_chaqueta_vaquera_rig.glb: 10.9 MB
+[  793.5s] exportado 03_chaqueta_vaquera_rig.fbx
+[  793.6s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\chaqueta_vaquera\chaqueta_vaquera.blend
+[  793.6s] fase rig terminada en 4s
+[  793.6s] === listo

@@ -1,0 +1,37 @@
+[  793.6s] === fases: preparar, hornear, exportar, render, rig | vistas 360 | 04_chaqueta_piel | Blender 5.2.3 LTS
+[  794.4s] importado: Tela 526696 tri., Pespuntes 58800 tri.
+[  795.2s] atributos del punto en 1s
+[  802.9s] desdoblado UV: MINIMUM_STRETCH
+[  816.9s] UV: 542 islas
+[  817.3s] versión ligera: 120000 tri., UV en 20s, estiramiento: mediana de la desviación de área 0.034, 95% < 0.170, ocupación UV 52%
+[  820.8s] piezas: Manga izquierda, Manga derecha, Delantero derecho, Espalda, Bajo, Cuello, Delantero izquierdo
+[  820.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\chaqueta_piel\chaqueta_piel.blend
+[  820.9s] fase preparar terminada en 27s
+[  820.9s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  845.6s] horneado BaseColor (4096 px) en 25s
+[  869.5s] horneado Roughness (4096 px) en 24s
+[  895.1s] horneado Normal (4096 px) en 26s
+[  932.1s] horneado AO (4096 px) en 37s
+[  958.6s] horneado Height (4096 px) en 27s
+[  958.7s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\chaqueta_piel\chaqueta_piel.blend
+[  958.7s] fase hornear terminada en 138s
+[  960.2s] exportado 04_chaqueta_piel_pbr.glb: 4.7 MB
+[  960.4s] exportado 04_chaqueta_piel_pbr.fbx (texturas en texturas/)
+[  960.5s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\chaqueta_piel\chaqueta_piel.blend
+[  960.5s] fase exportar terminada en 2s
+[  960.5s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  968.2s] render 1 frente en 8s
+[  975.3s] render 2 derecha en 7s
+[  983.1s] render 3 atras en 8s
+[  990.3s] render 4 izquierda en 7s
+[  990.7s] lámina 360 guardada
+[  990.8s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\chaqueta_piel\chaqueta_piel.blend
+[  990.8s] fase render terminada en 30s
+[  992.1s] pesos Camiseta PBR: 61310 vértices; cadera 11433, columna 3986, pecho 12961, clavicula.L 868, brazo.L 6173, antebrazo.L 7061, mano.L 1957, muslo.L 244, clavicula.R 738, brazo.R 5218, antebrazo.R 8440, mano.R 1988, muslo.R 243
+[  992.1s] pesos Punteras y ojales: 798 vértices; pecho 798
+[  992.1s] pesos Cremallera: 7533 vértices; cadera 1853, columna 1074, pecho 4606
+[  993.6s] exportado 04_chaqueta_piel_rig.glb: 7.6 MB
+[  993.9s] exportado 04_chaqueta_piel_rig.fbx
+[  994.0s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\chaqueta_piel\chaqueta_piel.blend
+[  994.0s] fase rig terminada en 3s
+[  994.0s] === listo

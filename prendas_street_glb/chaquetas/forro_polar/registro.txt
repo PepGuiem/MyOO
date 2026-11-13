@@ -1,0 +1,37 @@
+[ 2115.3s] === fases: preparar, hornear, exportar, render, rig | vistas 360 | 10_forro_polar | Blender 5.2.3 LTS
+[ 2116.2s] importado: Tela 527624 tri., Pespuntes 73260 tri.
+[ 2116.9s] atributos del punto en 1s
+[ 2124.4s] desdoblado UV: MINIMUM_STRETCH
+[ 2144.6s] UV: 497 islas
+[ 2144.9s] versión ligera: 119999 tri., UV en 26s, estiramiento: mediana de la desviación de área 0.029, 95% < 0.214, ocupación UV 51%
+[ 2148.2s] piezas: Manga izquierda, Manga derecha, Delantero derecho, Espalda, Cuello, Delantero izquierdo
+[ 2148.3s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\forro_polar\forro_polar.blend
+[ 2148.3s] fase preparar terminada en 33s
+[ 2148.3s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 2169.9s] horneado BaseColor (4096 px) en 22s
+[ 2190.7s] horneado Roughness (4096 px) en 21s
+[ 2213.2s] horneado Normal (4096 px) en 22s
+[ 2246.4s] horneado AO (4096 px) en 33s
+[ 2269.6s] horneado Height (4096 px) en 23s
+[ 2269.7s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\forro_polar\forro_polar.blend
+[ 2269.7s] fase hornear terminada en 121s
+[ 2271.3s] exportado 10_forro_polar_pbr.glb: 5.5 MB
+[ 2271.4s] exportado 10_forro_polar_pbr.fbx (texturas en texturas/)
+[ 2271.5s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\forro_polar\forro_polar.blend
+[ 2271.5s] fase exportar terminada en 2s
+[ 2271.5s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 2279.9s] render 1 frente en 8s
+[ 2287.2s] render 2 derecha en 7s
+[ 2295.5s] render 3 atras en 8s
+[ 2302.8s] render 4 izquierda en 7s
+[ 2303.1s] lámina 360 guardada
+[ 2303.2s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\forro_polar\forro_polar.blend
+[ 2303.2s] fase render terminada en 32s
+[ 2304.5s] pesos Camiseta PBR: 61478 vértices; cadera 9688, columna 2606, pecho 13485, clavicula.L 1015, brazo.L 6209, antebrazo.L 8991, mano.L 1278, muslo.L 851, clavicula.R 845, brazo.R 5894, antebrazo.R 8395, mano.R 1312, muslo.R 909
+[ 2304.6s] pesos Cordones y adornos: 19470 vértices; cadera 3607, pecho 4089, mano.L 3849, muslo.L 2042, mano.R 3771, muslo.R 2112
+[ 2304.7s] pesos Cremallera: 8190 vértices; cadera 2161, columna 579, pecho 5450
+[ 2306.3s] exportado 10_forro_polar_rig.glb: 9.0 MB
+[ 2306.6s] exportado 10_forro_polar_rig.fbx
+[ 2306.7s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\forro_polar\forro_polar.blend
+[ 2306.7s] fase rig terminada en 3s
+[ 2306.7s] === listo

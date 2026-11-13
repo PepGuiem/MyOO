@@ -1,0 +1,38 @@
+[ 1435.6s] === fases: preparar, hornear, exportar, render, rig | vistas 360 | 07_cortavientos | Blender 5.2.3 LTS
+[ 1436.8s] importado: Tela 529120 tri., Mangas 241388 tri., Pespuntes 65940 tri.
+[ 1437.8s] atributos del punto en 1s
+[ 1446.4s] desdoblado UV: MINIMUM_STRETCH
+[ 1466.4s] UV: 955 islas
+[ 1466.8s] versión ligera: 120000 tri., UV en 25s, estiramiento: mediana de la desviación de área 0.034, 95% < 0.485, ocupación UV 57%
+[ 1470.5s] piezas: Puño izquierdo, Mangas, Manga derecha, Puño derecho, Espalda, Delantero derecho, Delantero izquierdo, Manga izquierda
+[ 1470.6s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\cortavientos\cortavientos.blend
+[ 1470.6s] fase preparar terminada en 35s
+[ 1470.6s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 1497.6s] horneado BaseColor (4096 px) en 27s
+[ 1524.1s] horneado Roughness (4096 px) en 27s
+[ 1552.4s] horneado Normal (4096 px) en 28s
+[ 1594.9s] horneado AO (4096 px) en 42s
+[ 1626.3s] horneado Height (4096 px) en 31s
+[ 1626.4s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\cortavientos\cortavientos.blend
+[ 1626.4s] fase hornear terminada en 156s
+[ 1628.0s] exportado 07_cortavientos_pbr.glb: 5.4 MB
+[ 1628.1s] exportado 07_cortavientos_pbr.fbx (texturas en texturas/)
+[ 1628.2s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\cortavientos\cortavientos.blend
+[ 1628.2s] fase exportar terminada en 2s
+[ 1628.2s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 1636.8s] render 1 frente en 9s
+[ 1644.2s] render 2 derecha en 7s
+[ 1652.7s] render 3 atras en 9s
+[ 1660.1s] render 4 izquierda en 7s
+[ 1660.5s] lámina 360 guardada
+[ 1660.6s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\cortavientos\cortavientos.blend
+[ 1660.6s] fase render terminada en 32s
+[ 1661.9s] pesos Camiseta PBR: 62956 vértices; cadera 11852, columna 1720, pecho 12994, clavicula.L 799, brazo.L 5516, antebrazo.L 7244, mano.L 2558, muslo.L 1708, clavicula.R 792, brazo.R 6866, antebrazo.R 6367, mano.R 2664, muslo.R 1876
+[ 1662.0s] pesos Cordones y adornos: 5154 vértices; cadera 2322, muslo.L 1396, muslo.R 1436
+[ 1662.0s] pesos Punteras y ojales: 6004 vértices; muslo.L 3002, muslo.R 3002
+[ 1662.1s] pesos Cremallera: 8200 vértices; cadera 2213, columna 548, pecho 5439
+[ 1663.7s] exportado 07_cortavientos_rig.glb: 9.0 MB
+[ 1664.0s] exportado 07_cortavientos_rig.fbx
+[ 1664.1s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\chaquetas\cortavientos\cortavientos.blend
+[ 1664.1s] fase rig terminada en 4s
+[ 1664.1s] === listo
