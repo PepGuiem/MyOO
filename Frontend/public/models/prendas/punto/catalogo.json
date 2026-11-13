@@ -1,0 +1,162 @@
+[
+ {
+  "archivo": "01_sudadera_cuello_redondo.glb",
+  "prenda": "Sudadera cuello redondo",
+  "original": {
+   "triangulos": 144586,
+   "bytes": 3525220
+  },
+  "alto": {
+   "triangulos": 79522,
+   "bytes": 486804
+  },
+  "lod": {
+   "triangulos": 16000,
+   "bytes": 117820
+  }
+ },
+ {
+  "archivo": "02_camiseta_manga_larga_bolsillo.glb",
+  "prenda": "Camiseta manga larga con bolsillo",
+  "original": {
+   "triangulos": 144768,
+   "bytes": 3532376
+  },
+  "alto": {
+   "triangulos": 79622,
+   "bytes": 465292
+  },
+  "lod": {
+   "triangulos": 16000,
+   "bytes": 111020
+  }
+ },
+ {
+  "archivo": "03_sudadera_capucha.glb",
+  "prenda": "Sudadera con capucha",
+  "original": {
+   "triangulos": 145276,
+   "bytes": 3549064
+  },
+  "alto": {
+   "triangulos": 79902,
+   "bytes": 491416
+  },
+  "lod": {
+   "triangulos": 15999,
+   "bytes": 118416
+  }
+ },
+ {
+  "archivo": "04_camiseta_manga_larga_raglan.glb",
+  "prenda": "Camiseta manga larga raglán",
+  "original": {
+   "triangulos": 144220,
+   "bytes": 3512692
+  },
+  "alto": {
+   "triangulos": 79320,
+   "bytes": 457724
+  },
+  "lod": {
+   "triangulos": 16000,
+   "bytes": 109360
+  }
+ },
+ {
+  "archivo": "05_jersey_cuello_alto.glb",
+  "prenda": "Jersey de cuello alto",
+  "original": {
+   "triangulos": 143544,
+   "bytes": 3488564
+  },
+  "alto": {
+   "triangulos": 78948,
+   "bytes": 470240
+  },
+  "lod": {
+   "triangulos": 16000,
+   "bytes": 111288
+  }
+ },
+ {
+  "archivo": "06_camiseta.glb",
+  "prenda": "Camiseta",
+  "original": {
+   "triangulos": 145144,
+   "bytes": 3545424
+  },
+  "alto": {
+   "triangulos": 79826,
+   "bytes": 446256
+  },
+  "lod": {
+   "triangulos": 16000,
+   "bytes": 109216
+  }
+ },
+ {
+  "archivo": "07_polo.glb",
+  "prenda": "Polo",
+  "original": {
+   "triangulos": 195610,
+   "bytes": 4821036
+  },
+  "alto": {
+   "triangulos": 107586,
+   "bytes": 617108
+  },
+  "lod": {
+   "triangulos": 16000,
+   "bytes": 119276
+  }
+ },
+ {
+  "archivo": "08_camiseta_oversize.glb",
+  "prenda": "Camiseta oversize",
+  "original": {
+   "triangulos": 145842,
+   "bytes": 3570528
+  },
+  "alto": {
+   "triangulos": 80212,
+   "bytes": 454280
+  },
+  "lod": {
+   "triangulos": 15998,
+   "bytes": 112888
+  }
+ },
+ {
+  "archivo": "09_camiseta_cuello_v.glb",
+  "prenda": "Camiseta cuello en V",
+  "original": {
+   "triangulos": 145344,
+   "bytes": 3553432
+  },
+  "alto": {
+   "triangulos": 79938,
+   "bytes": 443980
+  },
+  "lod": {
+   "triangulos": 16000,
+   "bytes": 108272
+  }
+ },
+ {
+  "archivo": "10_camiseta_tirantes.glb",
+  "prenda": "Camiseta de tirantes",
+  "original": {
+   "triangulos": 146338,
+   "bytes": 3588784
+  },
+  "alto": {
+   "triangulos": 80486,
+   "bytes": 431288
+  },
+  "lod": {
+   "triangulos": 16000,
+   "bytes": 108924
+  }
+ }
+]

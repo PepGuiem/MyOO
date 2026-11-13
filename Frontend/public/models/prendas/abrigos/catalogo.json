@@ -1,0 +1,142 @@
+[
+ {
+  "archivo": "01_gabardina.glb",
+  "prenda": "Gabardina",
+  "original": {
+   "triangulos": 577358,
+   "bytes": 13951420
+  },
+  "piezas": [
+   "body",
+   "button",
+   "hardware"
+  ],
+  "alto": {
+   "triangulos": 144338,
+   "bytes": 908764
+  },
+  "lod": {
+   "triangulos": 56964,
+   "bytes": 395200
+  }
+ },
+ {
+  "archivo": "02_abrigo_lana.glb",
+  "prenda": "Abrigo de lana",
+  "original": {
+   "triangulos": 555446,
+   "bytes": 13414156
+  },
+  "piezas": [
+   "body",
+   "button"
+  ],
+  "alto": {
+   "triangulos": 138860,
+   "bytes": 842908
+  },
+  "lod": {
+   "triangulos": 46546,
+   "bytes": 317724
+  }
+ },
+ {
+  "archivo": "03_abrigo_largo.glb",
+  "prenda": "Abrigo largo",
+  "original": {
+   "triangulos": 527408,
+   "bytes": 12745516
+  },
+  "alto": {
+   "triangulos": 131852,
+   "bytes": 787180
+  },
+  "lod": {
+   "triangulos": 43474,
+   "bytes": 295164
+  }
+ },
+ {
+  "archivo": "04_parka.glb",
+  "prenda": "Parka",
+  "original": {
+   "triangulos": 605786,
+   "bytes": 14661452
+  },
+  "piezas": [
+   "body",
+   "trim",
+   "zipper",
+   "hardware"
+  ],
+  "alto": {
+   "triangulos": 169960,
+   "bytes": 1033496
+  },
+  "lod": {
+   "triangulos": 44246,
+   "bytes": 307680
+  }
+ },
+ {
+  "archivo": "05_chaqueton.glb",
+  "prenda": "Chaquetón marinero",
+  "original": {
+   "triangulos": 557566,
+   "bytes": 13461384
+  },
+  "piezas": [
+   "body",
+   "button"
+  ],
+  "alto": {
+   "triangulos": 139390,
+   "bytes": 829996
+  },
+  "lod": {
+   "triangulos": 39218,
+   "bytes": 269084
+  }
+ },
+ {
+  "archivo": "06_trenca.glb",
+  "prenda": "Trenca",
+  "original": {
+   "triangulos": 604378,
+   "bytes": 14602908
+  },
+  "piezas": [
+   "body",
+   "button",
+   "trim"
+  ],
+  "alto": {
+   "triangulos": 151094,
+   "bytes": 907720
+  },
+  "lod": {
+   "triangulos": 45028,
+   "bytes": 307320
+  }
+ },
+ {
+  "archivo": "07_plumifero_largo.glb",
+  "prenda": "Plumífero largo",
+  "original": {
+   "triangulos": 552984,
+   "bytes": 13417364
+  },
+  "piezas": [
+   "body",
+   "zipper"
+  ],
+  "alto": {
+   "triangulos": 193102,
+   "bytes": 1236292
+  },
+  "lod": {
+   "triangulos": 95558,
+   "bytes": 638460
+  }
+ }
+]

@@ -1,0 +1,184 @@
+[
+ {
+  "archivo": "01_camiseta_tirantes.glb",
+  "prenda": "Camiseta de tirantes",
+  "original": {
+   "triangulos": 354144,
+   "bytes": 8571568
+  },
+  "alto": {
+   "triangulos": 88536,
+   "bytes": 458472
+  },
+  "lod": {
+   "triangulos": 20000,
+   "bytes": 128584
+  }
+ },
+ {
+  "archivo": "02_tirantes_canale.glb",
+  "prenda": "Camiseta de tirantes de canalé",
+  "original": {
+   "triangulos": 341806,
+   "bytes": 8277792
+  },
+  "alto": {
+   "triangulos": 85452,
+   "bytes": 542984
+  },
+  "lod": {
+   "triangulos": 23000,
+   "bytes": 165864
+  }
+ },
+ {
+  "archivo": "03_camiseta_muscle.glb",
+  "prenda": "Camiseta muscle",
+  "original": {
+   "triangulos": 384256,
+   "bytes": 9306780
+  },
+  "alto": {
+   "triangulos": 96064,
+   "bytes": 498164
+  },
+  "lod": {
+   "triangulos": 20000,
+   "bytes": 129924
+  }
+ },
+ {
+  "archivo": "04_polo.glb",
+  "prenda": "Polo",
+  "original": {
+   "triangulos": 579928,
+   "bytes": 14043052
+  },
+  "piezas": [
+   "body",
+   "button"
+  ],
+  "alto": {
+   "triangulos": 144982,
+   "bytes": 804764
+  },
+  "lod": {
+   "triangulos": 20242,
+   "bytes": 146664
+  }
+ },
+ {
+  "archivo": "05_body.glb",
+  "prenda": "Body",
+  "original": {
+   "triangulos": 519864,
+   "bytes": 12573712
+  },
+  "alto": {
+   "triangulos": 129966,
+   "bytes": 710136
+  },
+  "lod": {
+   "triangulos": 20000,
+   "bytes": 148256
+  }
+ },
+ {
+  "archivo": "06_corse.glb",
+  "prenda": "Corsé",
+  "original": {
+   "triangulos": 231434,
+   "bytes": 5597972
+  },
+  "piezas": [
+   "body",
+   "hardware",
+   "trim"
+  ],
+  "alto": {
+   "triangulos": 57858,
+   "bytes": 359588
+  },
+  "lod": {
+   "triangulos": 19998,
+   "bytes": 139532
+  }
+ },
+ {
+  "archivo": "07_top_halter.glb",
+  "prenda": "Top halter",
+  "original": {
+   "triangulos": 130204,
+   "bytes": 3179788
+  },
+  "piezas": [
+   "body",
+   "trim"
+  ],
+  "alto": {
+   "triangulos": 32550,
+   "bytes": 206512
+  },
+  "lod": {
+   "triangulos": 20000,
+   "bytes": 137776
+  }
+ },
+ {
+  "archivo": "08_top_bandeau.glb",
+  "prenda": "Top bandeau",
+  "original": {
+   "triangulos": 95404,
+   "bytes": 2326388
+  },
+  "alto": {
+   "triangulos": 23850,
+   "bytes": 152160
+  },
+  "lod": {
+   "triangulos": 20000,
+   "bytes": 129620
+  }
+ },
+ {
+  "archivo": "09_chaleco_vestir.glb",
+  "prenda": "Chaleco de vestir",
+  "original": {
+   "triangulos": 313126,
+   "bytes": 7634672
+  },
+  "piezas": [
+   "body",
+   "secondary",
+   "button"
+  ],
+  "alto": {
+   "triangulos": 78280,
+   "bytes": 458864
+  },
+  "lod": {
+   "triangulos": 20000,
+   "bytes": 144492
+  }
+ },
+ {
+  "archivo": "10_camisa_sin_mangas.glb",
+  "prenda": "Camisa sin mangas",
+  "original": {
+   "triangulos": 472224,
+   "bytes": 11463020
+  },
+  "piezas": [
+   "body",
+   "button"
+  ],
+  "alto": {
+   "triangulos": 118054,
+   "bytes": 633052
+  },
+  "lod": {
+   "triangulos": 20008,
+   "bytes": 138812
+  }
+ }
+]

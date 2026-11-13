@@ -1,0 +1,1072 @@
+// =============================================================================
+// Esquema de base de datos de MyOut (Prisma ORM 6 + PostgreSQL)
+// -----------------------------------------------------------------------------
+// - Cada `model` se convierte en una tabla.
+// - Los cambios en este archivo se aplican con migraciones:
+//     npx prisma migrate dev --name <descripcion-del-cambio>
+// - Reglas de propiedad: varias tablas guardan `userId` y usan CLAVES FORÁNEAS
+//   COMPUESTAS (por ejemplo [wardrobeId, userId]) para que la propia base de
+//   datos impida mezclar recursos de usuarios distintos.
+// =============================================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// -----------------------------------------------------------------------------
+// Enums
+// -----------------------------------------------------------------------------
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELED
+  EXPIRED
+}
+
+/// Recursos cuya cantidad limita el plan. Los límites son POR USUARIO en total.
+enum LimitedResource {
+  WARDROBES
+  WARDROBE_ITEMS
+  OUTFITS
+  /// Maniquíes personalizados con medidas reales.
+  MANNEQUINS
+}
+
+enum Season {
+  SPRING
+  SUMMER
+  AUTUMN
+  WINTER
+  ALL_SEASON
+}
+
+/// Categoría general de una prenda. El frontend la usa para colocar la prenda
+/// en el maniquí 3D (torso, piernas, pies...).
+/// Lo que el usuario hace con una propuesta del estilista (con eso aprende).
+enum StylistSignal {
+  LIKE
+  DISLIKE
+  SAVE
+  WEAR
+  ACCEPT_TIP
+  REJECT_TIP
+  SWAP
+}
+
+enum GarmentCategory {
+  TOP
+  BOTTOM
+  FULL_BODY
+  OUTERWEAR
+  FOOTWEAR
+  ACCESSORY
+}
+
+// -----------------------------------------------------------------------------
+// Usuarios
+// -----------------------------------------------------------------------------
+
+model User {
+  id           String   @id @default(uuid()) @db.Uuid
+  /// Se guarda siempre en minúsculas (lo normaliza el servicio de auth).
+  email        String   @unique @db.VarChar(254)
+  /// Cuándo se comprobó que el email es suyo (lo confirma Google o Apple).
+  /// El registro con contraseña no lo verifica: queda en null.
+  emailVerifiedAt DateTime?
+  /// Hash Argon2id. Nunca se devuelve en la API. Null si la cuenta se creó
+  /// con Google o Apple y aún no tiene contraseña.
+  passwordHash String?
+  displayName  String?  @db.VarChar(60)
+
+  // --- Perfil ---------------------------------------------------------------
+  /// Nombre de usuario único (@usuario), en minúsculas.
+  username        String?  @unique @db.VarChar(30)
+  bio             String?  @db.VarChar(300)
+  pronouns        String?  @db.VarChar(30)
+  location        String?  @db.VarChar(60)
+  website         String?  @db.VarChar(200)
+  /// @usuario de Instagram escrito a mano (sirve también sin conectar la cuenta).
+  instagramHandle String?  @db.VarChar(30)
+  /// Estilos con los que se identifica (lista cerrada, ver users/profile-options.ts).
+  styleTags       String[] @default([])
+  /// Colores favoritos en hexadecimal (#RRGGBB).
+  favoriteColors  String[] @default([])
+  sizeTop         String?  @db.VarChar(10)
+  sizeBottom      String?  @db.VarChar(10)
+  sizeShoes       String?  @db.VarChar(10)
+  /// Color de acento del perfil (#RRGGBB).
+  accentColor     String?  @db.VarChar(7)
+  /// Foto de perfil y portada: imágenes del propio usuario (tabla Asset).
+  avatarAssetId   String?  @unique @db.Uuid
+  coverAssetId    String?  @unique @db.Uuid
+
+  // --- Privacidad -----------------------------------------------------------
+  /// Cuenta privada: para seguirla hay que enviar una solicitud y que la acepte.
+  isPrivate       Boolean       @default(false)
+  /// Quién puede escribirle por chat.
+  messagePolicy   MessagePolicy @default(FOLLOWING)
+
+  // --- Administración --------------------------------------------------------
+  /// ADMIN solo se da con el comando `npm run admin:grant` (nunca por la API).
+  role            UserRole  @default(USER)
+  /// Baneo: desde cuándo, hasta cuándo (null = para siempre) y por qué.
+  bannedAt        DateTime?
+  bannedUntil     DateTime?
+  banReason       String?   @db.VarChar(300)
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  avatarAsset   Asset? @relation("UserAvatar", fields: [avatarAssetId], references: [id], onDelete: SetNull)
+  coverAsset    Asset? @relation("UserCover", fields: [coverAssetId], references: [id], onDelete: SetNull)
+
+  subscriptions Subscription[]
+  wardrobes     Wardrobe[]
+  wardrobeItems WardrobeItem[]
+  outfits       Outfit[]
+  calendarEntries CalendarEntry[]
+  wishlistSettings WishlistSettings?
+  assets        Asset[] @relation("UserAssets")
+  mannequins    Mannequin[]
+  stylistFeedback StylistFeedback[]
+  authAccounts  AuthAccount[]
+  oauthFlows    OAuthFlow[]
+
+  /// A quién sigue (y solicitudes que ha enviado).
+  following     Follow[] @relation("Follower")
+  /// Quién le sigue (y solicitudes que ha recibido).
+  followers     Follow[] @relation("Following")
+  blocking      Block[]  @relation("Blocker")
+  blockedBy     Block[]  @relation("Blocked")
+  conversationMembers ConversationMember[]
+  messages      Message[]
+  ideas         Idea[]
+  ideaVotes     IdeaVote[]
+  reportsMade   Report[]       @relation("Reporter")
+  notifications Notification[] @relation("NotificationUser")
+  activeDays    DailyActive[]
+}
+
+// -----------------------------------------------------------------------------
+// Administración: ideas, denuncias, novedades, notificaciones y registro
+// -----------------------------------------------------------------------------
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+enum IdeaCategory {
+  FEATURE
+  IMPROVEMENT
+  BUG
+  OTHER
+}
+
+enum IdeaStatus {
+  NEW
+  UNDER_REVIEW
+  PLANNED
+  IN_PROGRESS
+  DONE
+  DECLINED
+}
+
+/// Idea del tablón público. Los votos se cuentan en `voteCount` (se actualiza
+/// en la misma transacción que IdeaVote).
+model Idea {
+  id          String       @id @default(uuid()) @db.Uuid
+  /// null si su autor borró la cuenta (la idea se queda, anónima).
+  authorId    String?      @db.Uuid
+  title       String       @db.VarChar(120)
+  body        String       @db.VarChar(2000)
+  category    IdeaCategory @default(FEATURE)
+  status      IdeaStatus   @default(NEW)
+  /// Respuesta del equipo (admin).
+  adminReply  String?      @db.VarChar(2000)
+  repliedAt   DateTime?
+  pinned      Boolean      @default(false)
+  /// Oculta por un admin (spam, duplicada...): solo la ven su autor y los admins.
+  hidden      Boolean      @default(false)
+  duplicateOfId String?    @db.Uuid
+  voteCount   Int          @default(0)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  author User?      @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  votes  IdeaVote[]
+
+  @@index([hidden, pinned, voteCount])
+  @@index([hidden, createdAt])
+  @@index([authorId, createdAt])
+}
+
+model IdeaVote {
+  ideaId    String   @db.Uuid
+  userId    String   @db.Uuid
+  createdAt DateTime @default(now())
+
+  idea Idea @relation(fields: [ideaId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([ideaId, userId])
+  @@index([userId])
+}
+
+enum ReportTarget {
+  USER
+  MESSAGE
+  OUTFIT
+  IDEA
+}
+
+enum ReportReason {
+  SPAM
+  HARASSMENT
+  INAPPROPRIATE
+  IMPERSONATION
+  OTHER
+}
+
+enum ReportStatus {
+  OPEN
+  RESOLVED
+  DISMISSED
+}
+
+/// Denuncia de un usuario. Guarda una copia (snapshot) de lo denunciado: el
+/// admin no necesita entrar en la conversación y sirve aunque luego se borre.
+model Report {
+  id           String       @id @default(uuid()) @db.Uuid
+  reporterId   String?      @db.Uuid
+  targetType   ReportTarget
+  /// Id de lo denunciado (usuario, mensaje, outfit o idea).
+  targetId     String       @db.Uuid
+  /// Usuario responsable de lo denunciado (para ver todo lo de una persona).
+  targetUserId String?      @db.Uuid
+  reason       ReportReason
+  details      String?      @db.VarChar(1000)
+  snapshot     Json?
+  status       ReportStatus @default(OPEN)
+  resolution   String?      @db.VarChar(300)
+  resolvedById String?      @db.Uuid
+  resolvedAt   DateTime?
+  createdAt    DateTime     @default(now())
+
+  reporter User? @relation("Reporter", fields: [reporterId], references: [id], onDelete: SetNull)
+
+  /// Cada persona denuncia una vez la misma cosa.
+  @@unique([reporterId, targetType, targetId])
+  @@index([status, createdAt])
+  @@index([targetUserId])
+}
+
+enum ReleaseTag {
+  NEW
+  IMPROVED
+  FIXED
+}
+
+/// Novedad publicada por el equipo (página «Novedades»). Sin publishedAt es un borrador.
+model Release {
+  id          String       @id @default(uuid()) @db.Uuid
+  title       String       @db.VarChar(120)
+  version     String?      @db.VarChar(30)
+  body        String       @db.VarChar(8000)
+  tags        ReleaseTag[] @default([])
+  publishedAt DateTime?
+  authorId    String?      @db.Uuid
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@index([publishedAt])
+}
+
+enum NotificationType {
+  RELEASE
+  IDEA_STATUS
+  IDEA_REPLY
+  FOLLOW_REQUEST
+  NEW_FOLLOWER
+  FOLLOW_ACCEPTED
+  REPORT_UPDATE
+  /// Un artículo de la wishlist ha bajado del precio que querías.
+  PRICE_DROP
+}
+
+/// Aviso de la campanita.
+model Notification {
+  id        String           @id @default(uuid()) @db.Uuid
+  userId    String           @db.Uuid
+  type      NotificationType
+  title     String           @db.VarChar(160)
+  body      String?          @db.VarChar(500)
+  /// Ruta de la web a la que lleva (siempre interna: empieza por "/").
+  link      String?          @db.VarChar(200)
+  /// Quién lo provocó (si es una persona).
+  actorId   String?          @db.Uuid
+  readAt    DateTime?
+  createdAt DateTime         @default(now())
+
+  user User @relation("NotificationUser", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@index([userId, readAt])
+}
+
+/// Registro de lo que hacen los admins (quién, qué y cuándo).
+model AdminAction {
+  id           String   @id @default(uuid()) @db.Uuid
+  adminId      String?  @db.Uuid
+  action       String   @db.VarChar(40)
+  targetUserId String?  @db.Uuid
+  targetId     String?  @db.Uuid
+  details      Json?
+  createdAt    DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([targetUserId])
+}
+
+// -----------------------------------------------------------------------------
+// Red social: seguidores, bloqueos y chats
+// -----------------------------------------------------------------------------
+
+enum MessagePolicy {
+  /// Cualquiera (que no esté bloqueado).
+  EVERYONE
+  /// Solo las personas a las que sigue.
+  FOLLOWING
+  /// Nadie (puede seguir respondiendo a quien le escriba en un grupo).
+  NOBODY
+}
+
+enum FollowStatus {
+  /// Solicitud a una cuenta privada, sin aceptar.
+  PENDING
+  ACCEPTED
+}
+
+/// followerId sigue a followingId.
+model Follow {
+  followerId  String       @db.Uuid
+  followingId String       @db.Uuid
+  status      FollowStatus
+  createdAt   DateTime     @default(now())
+  acceptedAt  DateTime?
+
+  follower  User @relation("Follower", fields: [followerId], references: [id], onDelete: Cascade)
+  following User @relation("Following", fields: [followingId], references: [id], onDelete: Cascade)
+
+  @@id([followerId, followingId])
+  @@index([followingId, status, createdAt])
+  @@index([followerId, status, createdAt])
+}
+
+/// blockerId ha bloqueado a blockedId: no se ven, no se siguen y no se escriben.
+model Block {
+  blockerId String   @db.Uuid
+  blockedId String   @db.Uuid
+  createdAt DateTime @default(now())
+
+  blocker User @relation("Blocker", fields: [blockerId], references: [id], onDelete: Cascade)
+  blocked User @relation("Blocked", fields: [blockedId], references: [id], onDelete: Cascade)
+
+  @@id([blockerId, blockedId])
+  @@index([blockedId])
+}
+
+enum ConversationRole {
+  OWNER
+  ADMIN
+  MEMBER
+}
+
+enum MessageKind {
+  TEXT
+  /// Un outfit enviado (se guarda una copia para verlo aunque cambie o se borre).
+  OUTFIT
+  /// Aviso del sistema en grupos ("Ana ha añadido a Luis").
+  SYSTEM
+}
+
+/// Conversación 1 a 1 (isGroup = false) o de grupo.
+model Conversation {
+  id            String   @id @default(uuid()) @db.Uuid
+  isGroup       Boolean  @default(false)
+  title         String?  @db.VarChar(60)
+  /// Solo en 1 a 1: "<idMenor>:<idMayor>". Impide dos chats entre las mismas personas.
+  directKey     String?  @unique @db.VarChar(80)
+  createdAt     DateTime @default(now())
+  lastMessageAt DateTime @default(now())
+
+  members  ConversationMember[]
+  messages Message[]
+
+  @@index([lastMessageAt])
+}
+
+model ConversationMember {
+  conversationId String           @db.Uuid
+  userId         String           @db.Uuid
+  role           ConversationRole @default(MEMBER)
+  joinedAt       DateTime         @default(now())
+  /// Hasta cuándo ha leído (para "no leídos" y "Visto").
+  lastReadAt     DateTime?
+
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([conversationId, userId])
+  @@index([userId])
+}
+
+model Message {
+  id             String      @id @default(uuid()) @db.Uuid
+  conversationId String      @db.Uuid
+  /// null si el usuario borró su cuenta (o en avisos del sistema).
+  senderId       String?     @db.Uuid
+  kind           MessageKind @default(TEXT)
+  body           String?     @db.VarChar(2000)
+  /// Copia del outfit enviado (solo lo necesario para dibujarlo).
+  outfit         Json?
+  /// Borrado por su autor: se queda el hueco ("Mensaje eliminado").
+  deletedAt      DateTime?
+  createdAt      DateTime    @default(now())
+
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender       User?        @relation(fields: [senderId], references: [id], onDelete: SetNull)
+
+  @@index([conversationId, createdAt])
+}
+
+// -----------------------------------------------------------------------------
+// Inicio de sesión con Google y Apple, y cuentas conectadas (Instagram)
+// -----------------------------------------------------------------------------
+
+enum AuthProvider {
+  GOOGLE
+  APPLE
+  INSTAGRAM
+}
+
+/// Para qué se abrió un flujo OAuth.
+enum OAuthIntent {
+  /// Entrar o crear cuenta.
+  LOGIN
+  /// Conectar el proveedor a la cuenta con la que ya se ha entrado.
+  LINK
+  /// Confirmar la identidad antes de algo delicado (borrar la cuenta o
+  /// crear contraseña) cuando la cuenta no tiene contraseña.
+  REAUTH
+}
+
+/// Cuenta de un proveedor externo conectada a un usuario.
+model AuthAccount {
+  id                String       @id @default(uuid()) @db.Uuid
+  userId            String       @db.Uuid
+  provider          AuthProvider
+  /// Identificador del usuario en el proveedor ("sub" de Google/Apple,
+  /// id de Instagram). Es lo que identifica la cuenta, no el email.
+  providerAccountId String       @db.VarChar(255)
+  email             String?      @db.VarChar(254)
+  /// @usuario en el proveedor (Instagram).
+  username          String?      @db.VarChar(60)
+  /// Token de acceso CIFRADO (AES-256-GCM). Solo Instagram lo necesita para
+  /// leer el perfil y las publicaciones. Nunca se devuelve en la API.
+  accessTokenEnc    String?
+  tokenExpiresAt    DateTime?
+  tokenRefreshedAt  DateTime?
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  /// Una cuenta del proveedor solo puede estar conectada a un usuario...
+  @@unique([provider, providerAccountId])
+  /// ...y cada usuario conecta como mucho una cuenta de cada proveedor.
+  @@unique([userId, provider])
+}
+
+/// Flujo OAuth en curso (dura minutos). Guarda lo necesario para comprobar
+/// la vuelta del proveedor: el "state" (solo su hash), el nonce, el PKCE y a
+/// qué navegador pertenece (hash del valor de una cookie).
+model OAuthFlow {
+  id           String       @id @default(uuid()) @db.Uuid
+  stateHash    String       @unique @db.Char(64)
+  /// Hash del secreto de la cookie del navegador que empezó el flujo.
+  /// Vacío mientras un flujo preparado (LINK/REAUTH) no se ha abierto.
+  browserHash  String       @db.VarChar(64)
+  provider     AuthProvider
+  intent       OAuthIntent
+  /// Usuario que lo pidió (LINK y REAUTH).
+  userId       String?      @db.Uuid
+  nonce        String       @db.VarChar(64)
+  codeVerifier String?      @db.VarChar(128)
+  /// Cuándo volvió el proveedor (cada flujo se usa una sola vez).
+  claimedAt    DateTime?
+  /// Hash del código de un solo uso que recoge el frontend.
+  resultHash   String?      @unique @db.Char(64)
+  /// Identidad comprobada (y, para Instagram, el token ya cifrado).
+  outcome      Json?
+  /// Hash de la prueba de identidad de REAUTH (válida 5 minutos).
+  proofHash    String?      @unique @db.Char(64)
+  expiresAt    DateTime
+  createdAt    DateTime     @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([expiresAt])
+}
+
+// -----------------------------------------------------------------------------
+// Planes, límites y suscripciones
+// -----------------------------------------------------------------------------
+
+model Plan {
+  id          String   @id @default(uuid()) @db.Uuid
+  /// Identificador estable para código y seed: "FREE", "PREMIUM"...
+  code        String   @unique @db.VarChar(32)
+  name        String   @db.VarChar(60)
+  description String?  @db.VarChar(500)
+  /// Precio informativo en céntimos. No hay cobros reales.
+  priceCents  Int      @default(0)
+  currency    String   @default("EUR") @db.Char(3)
+  /// Plan que se aplica cuando el usuario NO tiene una suscripción activa.
+  /// Debe existir exactamente uno (lo garantiza el seed y lo comprueba el servicio).
+  isDefault   Boolean  @default(false)
+  /// Si es false, el plan deja de ofrecerse para nuevas suscripciones.
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  limits        PlanLimit[]
+  subscriptions Subscription[]
+}
+
+/// Límite de un plan para un tipo de recurso.
+/// Representación EXPLÍCITA de "ilimitado": `isUnlimited = true`
+/// (en ese caso `maxCount` se ignora). No usamos 0 ni null con doble sentido.
+/// Si un plan NO tiene fila para un recurso, se interpreta como límite 0
+/// (no se pueden crear recursos de ese tipo): es la opción más segura.
+model PlanLimit {
+  id          String          @id @default(uuid()) @db.Uuid
+  planId      String          @db.Uuid
+  resource    LimitedResource
+  isUnlimited Boolean         @default(false)
+  maxCount    Int             @default(0)
+
+  plan Plan @relation(fields: [planId], references: [id], onDelete: Cascade)
+
+  @@unique([planId, resource])
+}
+
+/// Historial de suscripciones. Al cambiar de plan NO se borra la anterior:
+/// se marca como CANCELED y se crea una nueva fila ACTIVE.
+model Subscription {
+  id         String             @id @default(uuid()) @db.Uuid
+  userId     String             @db.Uuid
+  planId     String             @db.Uuid
+  status     SubscriptionStatus @default(ACTIVE)
+  startedAt  DateTime           @default(now())
+  /// null = sin fecha de fin.
+  endsAt     DateTime?
+  canceledAt DateTime?
+  createdAt  DateTime           @default(now())
+  updatedAt  DateTime           @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  /// Restrict: no se puede borrar un plan con suscripciones (protege el historial).
+  plan Plan @relation(fields: [planId], references: [id], onDelete: Restrict)
+
+  @@index([userId, status])
+  @@index([planId])
+}
+
+// -----------------------------------------------------------------------------
+// Armarios y prendas
+// -----------------------------------------------------------------------------
+
+model Wardrobe {
+  id          String   @id @default(uuid()) @db.Uuid
+  userId      String   @db.Uuid
+  name        String   @db.VarChar(80)
+  description String?  @db.VarChar(500)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user  User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items WardrobeItem[]
+
+  /// Necesario para que WardrobeItem pueda referenciar [id, userId].
+  @@unique([id, userId])
+  /// Un usuario no puede tener dos armarios con el mismo nombre.
+  @@unique([userId, name])
+}
+
+model GarmentType {
+  id              String          @id @default(uuid()) @db.Uuid
+  /// Identificador estable: "T_SHIRT", "PANTS"...
+  code            String          @unique @db.VarChar(40)
+  name            String          @db.VarChar(60)
+  category        GarmentCategory
+  /// Qué modelo 3D procedural debe dibujar el frontend.
+  modelKey        String          @db.VarChar(40)
+  /// Describe los atributos específicos permitidos para este tipo
+  /// (ver src/garment-types/attribute-schema.ts). El backend valida
+  /// WardrobeItem.attributes contra este esquema.
+  attributeSchema Json            @default("{}")
+  sortOrder       Int             @default(0)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  items WardrobeItem[]
+}
+
+model WardrobeItem {
+  id            String   @id @default(uuid()) @db.Uuid
+  /// Propietario. Se duplica aquí para poder usar claves foráneas compuestas
+  /// y contar el límite de prendas por usuario de forma eficiente.
+  userId        String   @db.Uuid
+  wardrobeId    String   @db.Uuid
+  garmentTypeId String   @db.Uuid
+  name          String   @db.VarChar(80)
+  /// Color principal en formato #RRGGBB (se usa para pintar el modelo 3D).
+  color         String   @db.VarChar(7)
+  size          String?  @db.VarChar(20)
+  season        Season   @default(ALL_SEASON)
+  notes         String?  @db.VarChar(1000)
+  /// Referencia/URL a la imagen (las imágenes NO se guardan en la base de datos).
+  imageUrl      String?  @db.VarChar(2048)
+  /// URL de un modelo 3D real (.glb/.gltf). Si no hay, el frontend genera uno.
+  modelUrl      String?  @db.VarChar(2048)
+  /// Atributos variables según el tipo de prenda (validados en el backend).
+  attributes    Json     @default("{}")
+  /// Personalización: colores por componente, piezas y detalles colocados
+  /// (formato cerrado, ver src/customization/customization.ts).
+  customization Json     @default("{}")
+  /// Estilos de la prenda (claves de src/stylist/vocabulary.ts: casual,
+  /// streetwear, old_money...). Vacío: el estilista los deduce.
+  styles        String[] @default([])
+
+  // --- Dónde se compró (todo opcional; la marca va en attributes.brand) ---
+  /// Nombre comercial del producto ("Air Force 1 '07").
+  productName      String?   @db.VarChar(120)
+  storeName        String?   @db.VarChar(80)
+  /// store | online | marketplace | second_hand | gift | other
+  purchasePlatform String?   @db.VarChar(20)
+  /// Enlace a la página del producto (http/https). Solo lo pone el usuario.
+  productUrl       String?   @db.VarChar(2048)
+  /// Referencia o código del producto (SKU, modelo...).
+  productRef       String?   @db.VarChar(80)
+  purchasePrice    Decimal?  @db.Decimal(10, 2)
+  /// Moneda ISO 4217 ("EUR").
+  currency         String?   @db.VarChar(3)
+  purchaseDate     DateTime? @db.Date
+
+  // --- WISHLIST (todo null para las prendas del armario) ---
+  /// Si no es null, la prenda está en la WISHLIST: todavía no es tuya. Las
+  /// listas del armario, el estilista, la analítica y los límites del plan
+  /// solo cuentan las prendas con wishlistStatus = null.
+  wishlistStatus   WishlistStatus?
+  wishlistCategory WishlistCategory?
+  /// Último precio registrado (a mano o, en el futuro, por un servicio de seguimiento).
+  currentPrice     Decimal?  @db.Decimal(10, 2)
+  /// Avisar cuando el precio baje de esto.
+  targetPrice      Decimal?  @db.Decimal(10, 2)
+  /// Quiere que se siga su precio automáticamente (cuando haya un servicio).
+  trackPrice       Boolean   @default(false)
+  /// Foto subida por el usuario (Asset). Alternativa: imageUrl.
+  photoAssetId     String?   @db.Uuid
+  /// Cuándo pasó de la wishlist al armario (comprado).
+  fromWishlistAt   DateTime?
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  /// Clave foránea COMPUESTA: el armario debe pertenecer al MISMO usuario.
+  wardrobe    Wardrobe     @relation(fields: [wardrobeId, userId], references: [id, userId], onDelete: Cascade)
+  garmentType GarmentType  @relation(fields: [garmentTypeId], references: [id], onDelete: Restrict)
+  outfitItems OutfitItem[]
+  prices      WishlistPrice[]
+  /// Ficha de SNEAKER COLLECTION (solo zapatillas que el usuario ha fichado).
+  sneaker     SneakerDetails?
+
+  @@unique([id, userId])
+  @@index([userId, createdAt])
+  @@index([userId, wishlistStatus])
+  @@index([wardrobeId])
+  @@index([garmentTypeId])
+}
+
+// -----------------------------------------------------------------------------
+// Archivos subidos (imágenes para logos, estampados y parches)
+// -----------------------------------------------------------------------------
+
+/// Imagen subida por un usuario. El archivo NO está en la base de datos: aquí
+/// solo se guarda su clave en el almacenamiento (ver src/storage).
+model Asset {
+  id         String   @id @default(uuid()) @db.Uuid
+  userId     String   @db.Uuid
+  /// Clave en el almacenamiento, generada por el servidor ("assets/<uuid>").
+  storageKey String   @unique @db.VarChar(200)
+  /// Tipo detectado por el contenido real del archivo (no por la extensión).
+  mimeType   String   @db.VarChar(40)
+  sizeBytes  Int
+  width      Int
+  height     Int
+  /// Nombre original, solo informativo (recortado y sin rutas).
+  name       String   @db.VarChar(120)
+  createdAt  DateTime @default(now())
+
+  user User @relation("UserAssets", fields: [userId], references: [id], onDelete: Cascade)
+  /// Si es la foto de perfil o la portada de su dueño.
+  avatarOf User? @relation("UserAvatar")
+  coverOf  User? @relation("UserCover")
+
+  @@unique([id, userId])
+  @@index([userId, createdAt])
+}
+
+// -----------------------------------------------------------------------------
+// Outfits
+// -----------------------------------------------------------------------------
+
+model Outfit {
+  id          String   @id @default(uuid()) @db.Uuid
+  userId      String   @db.Uuid
+  name        String   @db.VarChar(80)
+  description String?  @db.VarChar(500)
+  occasion    String?  @db.VarChar(60)
+  season      Season?
+  /// Se ve en tu perfil (si tu perfil es visible para quien mira).
+  isShared    Boolean  @default(false)
+  sharedAt    DateTime?
+  /// Ocultado por un admin (moderación): ya no se ve en el perfil aunque esté compartido.
+  hiddenByAdmin Boolean @default(false)
+  /// Estilo del outfit (etiqueta para filtrar: streetwear, techwear...).
+  style       OutfitStyle?
+  /// Marcado como favorito por su dueño.
+  isFavorite  Boolean  @default(false)
+  /// Última nota de OUTFIT RATING (0-100) y su nivel (copia de la última
+  /// fila de OutfitRating, para listar y ordenar sin juntar tablas).
+  ratingScore Int?
+  ratingTier  RatingTier?
+  ratedAt     DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user    User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items   OutfitItem[]
+  ratings OutfitRating[]
+  calendarEntries CalendarEntry[]
+
+  @@unique([id, userId])
+  @@index([userId, createdAt])
+  @@index([userId, isShared, sharedAt])
+  @@index([userId, isFavorite])
+  @@index([userId, style])
+  @@index([userId, ratingScore])
+}
+
+/// Estilos de outfit. Los valores son estables (no renombrar): el frontend
+/// los traduce a sus etiquetas.
+enum OutfitStyle {
+  STREETWEAR
+  TECHWEAR
+  OLD_MONEY
+  CASUAL
+  SKATE
+  GRUNGE
+  Y2K
+  MINIMAL
+  TRAP
+  LUXURY_STREETWEAR
+}
+
+/// Tabla intermedia outfit <-> prenda. Ambas claves foráneas son compuestas
+/// con `userId`, así la base de datos impide meter en un outfit una prenda
+/// de otro usuario.
+/// Estado de un artículo de la wishlist.
+enum WishlistStatus {
+  /// Lo quiero
+  WANT
+  /// Ahorrando
+  SAVING
+  /// Pendiente de comprar
+  PENDING
+  /// Comprado (aún no pasado al armario)
+  PURCHASED
+}
+
+/// Categorías de la wishlist (para organizar; el 3D usa el tipo de prenda).
+enum WishlistCategory {
+  SNEAKERS
+  HOODIES
+  TSHIRTS
+  PANTS
+  JACKETS
+  ACCESSORIES
+  OTHER
+}
+
+/// De dónde salió un precio: a mano o de un servicio de seguimiento (futuro).
+enum PriceSource {
+  MANUAL
+  TRACKER
+}
+
+/// Historial de precios de un artículo de la wishlist. Nunca se inventa: o lo
+/// apunta el usuario o lo trae un servicio de seguimiento (cuando exista).
+model WishlistPrice {
+  id         String      @id @default(uuid()) @db.Uuid
+  userId     String      @db.Uuid
+  itemId     String      @db.Uuid
+  price      Decimal     @db.Decimal(10, 2)
+  currency   String      @db.VarChar(3)
+  source     PriceSource @default(MANUAL)
+  note       String?     @db.VarChar(200)
+  recordedAt DateTime    @default(now())
+
+  item WardrobeItem @relation(fields: [itemId, userId], references: [id, userId], onDelete: Cascade)
+
+  @@index([itemId, recordedAt])
+}
+
+/// Presupuesto de la wishlist de cada usuario.
+model WishlistSettings {
+  userId    String   @id @db.Uuid
+  /// Presupuesto objetivo (lo que quieres reunir).
+  budget    Decimal? @db.Decimal(10, 2)
+  /// Lo que llevas ahorrado.
+  saved     Decimal  @default(0) @db.Decimal(10, 2)
+  currency  String   @default("EUR") @db.VarChar(3)
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// -----------------------------------------------------------------------------
+// SNEAKER COLLECTION
+// -----------------------------------------------------------------------------
+
+/// Marcas de la colección (etiquetas de texto; OTHER lleva el nombre en brandName).
+enum SneakerBrand {
+  NIKE
+  JORDAN
+  ADIDAS
+  NEW_BALANCE
+  ASICS
+  PUMA
+  SALOMON
+  CONVERSE
+  VANS
+  OTHER
+}
+
+/// Estado de conservación de un par.
+enum SneakerCondition {
+  /// Sin estrenar (deadstock).
+  DEADSTOCK
+  LIKE_NEW
+  GOOD
+  WORN
+  BEAT
+}
+
+/// Ficha de coleccionista de una zapatilla. Va unida 1:1 a su prenda
+/// (WardrobeItem), que guarda la foto, talla, color, precio, fecha de compra
+/// y notas. Si la prenda está en la wishlist, es una zapatilla que quieres.
+model SneakerDetails {
+  itemId    String           @id @db.Uuid
+  userId    String           @db.Uuid
+  brand     SneakerBrand
+  /// Nombre de la marca cuando brand = OTHER.
+  brandName String?          @db.VarChar(40)
+  model     String           @db.VarChar(80)
+  colorway  String?          @db.VarChar(80)
+  condition SneakerCondition @default(GOOD)
+  /// Usos apuntados a mano. Los días del calendario marcados como usados se
+  /// suman aparte (no se guardan aquí para no contarlos dos veces).
+  wearCount Int              @default(0)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  /// Clave compuesta: la prenda tiene que ser del mismo usuario.
+  item WardrobeItem @relation(fields: [itemId, userId], references: [id, userId], onDelete: Cascade)
+
+  @@unique([itemId, userId])
+  @@index([userId, brand])
+}
+
+/// Tipo de evento especial de un día del calendario.
+enum CalendarEventKind {
+  BIRTHDAY
+  PARTY
+  WEDDING
+  DATE
+  INTERVIEW
+  TRIP
+  CONCERT
+  OTHER
+}
+
+/// OUTFIT CALENDAR: qué outfit te pones un día. Puede haber varios por día
+/// (p. ej. de día y para un evento por la noche). Si se borra el outfit, se
+/// borran sus días del calendario.
+model CalendarEntry {
+  id        String             @id @default(uuid()) @db.Uuid
+  userId    String             @db.Uuid
+  outfitId  String             @db.Uuid
+  /// Día (sin hora ni zona horaria).
+  date      DateTime           @db.Date
+  /// Nota personal para ese día.
+  note      String?            @db.VarChar(500)
+  /// Evento especial (opcional): «Boda de Ana», «Concierto»...
+  eventName String?            @db.VarChar(80)
+  eventKind CalendarEventKind?
+  /// Cuándo se marcó como usado (null: solo planificado).
+  wornAt    DateTime?
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  /// Clave compuesta: el outfit tiene que ser del mismo usuario.
+  outfit Outfit @relation(fields: [outfitId, userId], references: [id, userId], onDelete: Cascade)
+
+  @@index([userId, date])
+  @@index([outfitId, date])
+}
+
+/// Niveles de OUTFIT RATING (0-39, 40-59, 60-79, 80-94, 95-100).
+enum RatingTier {
+  BEGINNER
+  CASUAL
+  GOOD_STYLE
+  FASHION_KILLER
+  STREETWEAR_LEGEND
+}
+
+/// Qué hizo calcular la nota.
+enum RatingTrigger {
+  CREATE
+  UPDATE
+  MANUAL
+  /// Outfits antiguos que se puntúan la primera vez que se listan.
+  BACKFILL
+}
+
+/// Historial de notas de un outfit. Se guarda una fila cada vez que cambia lo
+/// que se puntúa (prendas, colores, estilo...) o el motor que puntúa.
+model OutfitRating {
+  id          String        @id @default(uuid()) @db.Uuid
+  userId      String        @db.Uuid
+  outfitId    String        @db.Uuid
+  total       Int
+  colors      Int
+  style       Int
+  balance     Int
+  details     Int
+  tier        RatingTier
+  /// Motor que la calculó («rules@1»; en el futuro, uno con IA).
+  engine      String        @db.VarChar(40)
+  trigger     RatingTrigger
+  /// Huella de lo puntuado: si no cambia, no se repite la fila.
+  fingerprint String        @db.VarChar(64)
+  /// Resultado completo (comprobaciones, comentarios, consejos, insignias).
+  report      Json          @default("{}")
+  createdAt   DateTime      @default(now())
+
+  outfit Outfit @relation(fields: [outfitId, userId], references: [id, userId], onDelete: Cascade)
+
+  @@index([outfitId, createdAt])
+  @@index([userId, createdAt])
+}
+
+model OutfitItem {
+  id             String @id @default(uuid()) @db.Uuid
+  userId         String @db.Uuid
+  outfitId       String @db.Uuid
+  wardrobeItemId String @db.Uuid
+  /// Orden de la prenda dentro del outfit (0, 1, 2...).
+  position       Int    @default(0)
+  /// Cómo se lleva en este outfit (por dentro, remangada...). Ver src/outfits/styling.ts.
+  styling        Json   @default("{}")
+
+  outfit       Outfit       @relation(fields: [outfitId, userId], references: [id, userId], onDelete: Cascade)
+  /// Si se borra una prenda, desaparece de los outfits que la usaban.
+  wardrobeItem WardrobeItem @relation(fields: [wardrobeItemId, userId], references: [id, userId], onDelete: Cascade)
+
+  /// La misma prenda no puede aparecer dos veces en el mismo outfit.
+  @@unique([outfitId, wardrobeItemId])
+  @@index([wardrobeItemId])
+}
+
+// -----------------------------------------------------------------------------
+// Maniquíes personalizados
+// -----------------------------------------------------------------------------
+
+/// Maniquí del usuario con sus medidas reales (cm). El frontend lo convierte en
+/// la silueta 3D (three/bodyMeasures.ts). Cuántos puede tener lo limita el plan
+/// (recurso MANNEQUINS).
+model Mannequin {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @db.Uuid
+  name      String   @db.VarChar(60)
+  /// "male" o "female": qué maniquí esculpido se usa (validado en el DTO).
+  sex       String   @db.VarChar(10)
+  /// { heightCm, shoulderCm, chestCm, waistCm, hipCm, armCm } validado en
+  /// src/mannequins/mannequin-measures.ts.
+  measures  Json
+  /// El maniquí que se usa por defecto en la cuenta (como mucho uno).
+  isDefault Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  /// Un usuario no puede tener dos maniquíes con el mismo nombre.
+  @@unique([userId, name])
+}
+
+/// Señales para el estilista: outfits que gustan, se guardan, se llevan o se
+/// rechazan, y consejos aceptados o descartados. Se usan las últimas (unas
+/// cientos) para personalizar las propuestas.
+model StylistFeedback {
+  id        String        @id @default(uuid()) @db.Uuid
+  userId    String        @db.Uuid
+  signal    StylistSignal
+  /// Prendas del outfit (o la prenda del consejo / la que se quitó).
+  itemIds   String[]      @db.Uuid
+  /// Tipo de consejo (roll_hem, add_accessory...), si la señal es de un consejo.
+  tipCode   String?       @db.VarChar(40)
+  style     String?       @db.VarChar(30)
+  occasion  String?       @db.VarChar(30)
+  createdAt DateTime      @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+}
+
+// -----------------------------------------------------------------------------
+// Monitor (admins)
+// -----------------------------------------------------------------------------
+
+/// Un usuario usó la app ese día (activos diarios, semanales y mensuales del
+/// monitor). El día se cuenta en hora de Madrid.
+model DailyActive {
+  day    DateTime @db.Date
+  userId String   @db.Uuid
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([day, userId])
+  @@index([userId])
+}

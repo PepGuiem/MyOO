@@ -1,0 +1,30 @@
+# PostgreSQL local para desarrollo y tests.
+# Uso:  docker compose up -d      (arranca en segundo plano)
+#       docker compose ps         (comprueba que está "healthy")
+#       docker compose down       (para el contenedor; los datos se CONSERVAN en el volumen)
+# ⚠️  `docker compose down -v` BORRA el volumen y todos los datos.
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: myout-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-myout}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-myout_local_password}
+      POSTGRES_DB: ${POSTGRES_DB:-myout_dev}
+    ports:
+      - '${POSTGRES_PORT:-5432}:5432'
+    volumes:
+      - myout_pgdata:/var/lib/postgresql/data
+      # Scripts que se ejecutan SOLO la primera vez (cuando el volumen está vacío).
+      - ./docker/initdb:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+volumes:
+  myout_pgdata:
+    name: myout_pgdata

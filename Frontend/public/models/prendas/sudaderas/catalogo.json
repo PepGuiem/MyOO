@@ -1,0 +1,159 @@
+[
+ {
+  "archivo": "01_sudadera_capucha.glb",
+  "prenda": "Sudadera con capucha",
+  "original": {
+   "triangulos": 555474,
+   "bytes": 13389164
+  },
+  "piezas": [
+   "body",
+   "trim",
+   "hardware"
+  ],
+  "alto": {
+   "triangulos": 138868,
+   "bytes": 819016
+  },
+  "lod": {
+   "triangulos": 27524,
+   "bytes": 192144
+  }
+ },
+ {
+  "archivo": "02_sudadera_capucha_oversize.glb",
+  "prenda": "Sudadera con capucha oversize",
+  "original": {
+   "triangulos": 555994,
+   "bytes": 13408508
+  },
+  "piezas": [
+   "body",
+   "trim",
+   "hardware"
+  ],
+  "alto": {
+   "triangulos": 138996,
+   "bytes": 834124
+  },
+  "lod": {
+   "triangulos": 34738,
+   "bytes": 239404
+  }
+ },
+ {
+  "archivo": "03_sudadera_capucha_crop.glb",
+  "prenda": "Sudadera con capucha crop",
+  "original": {
+   "triangulos": 556210,
+   "bytes": 13415912
+  },
+  "piezas": [
+   "body",
+   "trim",
+   "hardware"
+  ],
+  "alto": {
+   "triangulos": 139052,
+   "bytes": 806112
+  },
+  "lod": {
+   "triangulos": 20454,
+   "bytes": 146948
+  }
+ },
+ {
+  "archivo": "04_sudadera_cremallera.glb",
+  "prenda": "Sudadera con capucha y cremallera",
+  "original": {
+   "triangulos": 574502,
+   "bytes": 13882796
+  },
+  "piezas": [
+   "body",
+   "trim",
+   "hardware",
+   "zipper"
+  ],
+  "alto": {
+   "triangulos": 148010,
+   "bytes": 885464
+  },
+  "lod": {
+   "triangulos": 31116,
+   "bytes": 220504
+  }
+ },
+ {
+  "archivo": "05_sudadera_cuello_redondo.glb",
+  "prenda": "Sudadera de cuello redondo",
+  "original": {
+   "triangulos": 524856,
+   "bytes": 12654488
+  },
+  "alto": {
+   "triangulos": 131214,
+   "bytes": 761332
+  },
+  "lod": {
+   "triangulos": 23406,
+   "bytes": 163508
+  }
+ },
+ {
+  "archivo": "06_sudadera_media_cremallera.glb",
+  "prenda": "Sudadera de media cremallera",
+  "original": {
+   "triangulos": 535750,
+   "bytes": 12905860
+  },
+  "piezas": [
+   "body",
+   "zipper"
+  ],
+  "alto": {
+   "triangulos": 135368,
+   "bytes": 784624
+  },
+  "lod": {
+   "triangulos": 21938,
+   "bytes": 152520
+  }
+ },
+ {
+  "archivo": "07_sudadera_cuarto_cremallera.glb",
+  "prenda": "Sudadera de cuarto de cremallera",
+  "original": {
+   "triangulos": 535716,
+   "bytes": 12904428
+  },
+  "piezas": [
+   "body",
+   "zipper"
+  ],
+  "alto": {
+   "triangulos": 134008,
+   "bytes": 772104
+  },
+  "lod": {
+   "triangulos": 20160,
+   "bytes": 142172
+  }
+ },
+ {
+  "archivo": "08_sudadera_deportiva.glb",
+  "prenda": "Sudadera deportiva",
+  "original": {
+   "triangulos": 826702,
+   "bytes": 19982032
+  },
+  "alto": {
+   "triangulos": 206676,
+   "bytes": 1177660
+  },
+  "lod": {
+   "triangulos": 29128,
+   "bytes": 213396
+  }
+ }
+]

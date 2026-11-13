@@ -1,0 +1,162 @@
+[
+ {
+  "archivo": "01_camisa_formal.glb",
+  "prenda": "Camisa formal",
+  "original": {
+   "triangulos": 575574,
+   "bytes": 13919724
+  },
+  "piezas": [
+   "body",
+   "button"
+  ],
+  "alto": {
+   "triangulos": 143894,
+   "bytes": 795080
+  },
+  "lod": {
+   "triangulos": 19962,
+   "bytes": 138460
+  }
+ },
+ {
+  "archivo": "02_camisa_oxford.glb",
+  "prenda": "Camisa oxford",
+  "original": {
+   "triangulos": 577808,
+   "bytes": 13981740
+  },
+  "piezas": [
+   "body",
+   "button"
+  ],
+  "alto": {
+   "triangulos": 144452,
+   "bytes": 807720
+  },
+  "lod": {
+   "triangulos": 19970,
+   "bytes": 140808
+  }
+ },
+ {
+  "archivo": "03_camisa_oversize.glb",
+  "prenda": "Camisa oversize",
+  "original": {
+   "triangulos": 600446,
+   "bytes": 14551984
+  },
+  "piezas": [
+   "body",
+   "button"
+  ],
+  "alto": {
+   "triangulos": 150112,
+   "bytes": 848252
+  },
+  "lod": {
+   "triangulos": 19990,
+   "bytes": 144804
+  }
+ },
+ {
+  "archivo": "04_camisa_lino.glb",
+  "prenda": "Camisa de lino",
+  "original": {
+   "triangulos": 572262,
+   "bytes": 13863808
+  },
+  "piezas": [
+   "body",
+   "button"
+  ],
+  "alto": {
+   "triangulos": 143066,
+   "bytes": 814244
+  },
+  "lod": {
+   "triangulos": 20088,
+   "bytes": 146344
+  }
+ },
+ {
+  "archivo": "05_camisa_franela.glb",
+  "prenda": "Camisa de franela",
+  "original": {
+   "triangulos": 583268,
+   "bytes": 14115768
+  },
+  "piezas": [
+   "body",
+   "button"
+  ],
+  "alto": {
+   "triangulos": 145816,
+   "bytes": 829824
+  },
+  "lod": {
+   "triangulos": 19960,
+   "bytes": 143316
+  }
+ },
+ {
+  "archivo": "06_camisa_vaquera.glb",
+  "prenda": "Camisa vaquera",
+  "original": {
+   "triangulos": 586976,
+   "bytes": 14207908
+  },
+  "piezas": [
+   "body",
+   "hardware"
+  ],
+  "alto": {
+   "triangulos": 146744,
+   "bytes": 836796
+  },
+  "lod": {
+   "triangulos": 19998,
+   "bytes": 144444
+  }
+ },
+ {
+  "archivo": "07_camisa_cubana.glb",
+  "prenda": "Camisa cubana",
+  "original": {
+   "triangulos": 588346,
+   "bytes": 14259668
+  },
+  "piezas": [
+   "body",
+   "button"
+  ],
+  "alto": {
+   "triangulos": 147086,
+   "bytes": 806204
+  },
+  "lod": {
+   "triangulos": 20146,
+   "bytes": 145788
+  }
+ },
+ {
+  "archivo": "08_camisa_manga_corta.glb",
+  "prenda": "Camisa de manga corta",
+  "original": {
+   "triangulos": 571914,
+   "bytes": 13846068
+  },
+  "piezas": [
+   "body",
+   "button"
+  ],
+  "alto": {
+   "triangulos": 142978,
+   "bytes": 779516
+  },
+  "lod": {
+   "triangulos": 20094,
+   "bytes": 142056
+  }
+ }
+]

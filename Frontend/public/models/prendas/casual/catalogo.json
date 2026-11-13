@@ -1,0 +1,230 @@
+[
+ {
+  "archivo": "01_camisa_manga_corta.glb",
+  "prenda": "Camisa de manga corta",
+  "original": {
+   "triangulos": 295576,
+   "bytes": 7211912
+  },
+  "piezas": [
+   "body",
+   "button"
+  ],
+  "alto": {
+   "triangulos": 162566,
+   "bytes": 900560
+  },
+  "lod": {
+   "triangulos": 19996,
+   "bytes": 143848
+  }
+ },
+ {
+  "archivo": "02_camisa_manga_larga.glb",
+  "prenda": "Camisa de manga larga",
+  "original": {
+   "triangulos": 297198,
+   "bytes": 7242632
+  },
+  "piezas": [
+   "body",
+   "button"
+  ],
+  "alto": {
+   "triangulos": 163458,
+   "bytes": 906312
+  },
+  "lod": {
+   "triangulos": 19986,
+   "bytes": 140236
+  }
+ },
+ {
+  "archivo": "03_sobrecamisa.glb",
+  "prenda": "Sobrecamisa",
+  "original": {
+   "triangulos": 345844,
+   "bytes": 8468408
+  },
+  "piezas": [
+   "body",
+   "button"
+  ],
+  "alto": {
+   "triangulos": 190212,
+   "bytes": 1099508
+  },
+  "lod": {
+   "triangulos": 27810,
+   "bytes": 204768
+  }
+ },
+ {
+  "archivo": "04_parka.glb",
+  "prenda": "Parka con capucha de pelo",
+  "original": {
+   "triangulos": 326728,
+   "bytes": 7987892
+  },
+  "piezas": [
+   "body",
+   "trim",
+   "zipper",
+   "hardware"
+  ],
+  "alto": {
+   "triangulos": 186420,
+   "bytes": 1158188
+  },
+  "lod": {
+   "triangulos": 46804,
+   "bytes": 338136
+  }
+ },
+ {
+  "archivo": "05_chaqueta_chandal.glb",
+  "prenda": "Chaqueta de chándal",
+  "original": {
+   "triangulos": 282070,
+   "bytes": 6815244
+  },
+  "piezas": [
+   "body",
+   "trim",
+   "zipper"
+  ],
+  "alto": {
+   "triangulos": 155422,
+   "bytes": 903704
+  },
+  "lod": {
+   "triangulos": 20868,
+   "bytes": 145788
+  }
+ },
+ {
+  "archivo": "06_bufanda.glb",
+  "prenda": "Bufanda",
+  "original": {
+   "triangulos": 40016,
+   "bytes": 963484
+  },
+  "piezas": [
+   "body",
+   "trim"
+  ],
+  "alto": {
+   "triangulos": 22008,
+   "bytes": 138876
+  },
+  "lod": {
+   "triangulos": 19998,
+   "bytes": 127120
+  }
+ },
+ {
+  "archivo": "07_vaquero_recto.glb",
+  "prenda": "Vaquero recto",
+  "original": {
+   "triangulos": 248464,
+   "bytes": 6000932
+  },
+  "piezas": [
+   "body",
+   "hardware"
+  ],
+  "alto": {
+   "triangulos": 136654,
+   "bytes": 760384
+  },
+  "lod": {
+   "triangulos": 19998,
+   "bytes": 136440
+  }
+ },
+ {
+  "archivo": "08_zapatillas.glb",
+  "prenda": "sneaker",
+  "original": {
+   "triangulos": 94128,
+   "bytes": 2262500
+  },
+  "piezas": [
+   "body",
+   "lace",
+   "sole"
+  ],
+  "alto": {
+   "triangulos": 51770,
+   "bytes": 300156
+  },
+  "lod": {
+   "triangulos": 19998,
+   "bytes": 126336
+  }
+ },
+ {
+  "archivo": "09_botas_cordones.glb",
+  "prenda": "boot",
+  "original": {
+   "triangulos": 104000,
+   "bytes": 2500144
+  },
+  "piezas": [
+   "body",
+   "lace",
+   "hardware",
+   "sole"
+  ],
+  "alto": {
+   "triangulos": 57200,
+   "bytes": 355612
+  },
+  "lod": {
+   "triangulos": 20000,
+   "bytes": 134956
+  }
+ },
+ {
+  "archivo": "10_botas_chelsea.glb",
+  "prenda": "chelsea",
+  "original": {
+   "triangulos": 104000,
+   "bytes": 2499964
+  },
+  "piezas": [
+   "body",
+   "secondary",
+   "trim",
+   "sole"
+  ],
+  "alto": {
+   "triangulos": 57200,
+   "bytes": 337044
+  },
+  "lod": {
+   "triangulos": 20000,
+   "bytes": 130584
+  }
+ },
+ {
+  "archivo": "11_gorra.glb",
+  "prenda": "Gorra",
+  "original": {
+   "triangulos": 212784,
+   "bytes": 5109776
+  },
+  "piezas": [
+   "body",
+   "hardware"
+  ],
+  "alto": {
+   "triangulos": 117031,
+   "bytes": 644864
+  },
+  "lod": {
+   "triangulos": 20000,
+   "bytes": 127564
+  }
+ }
+]

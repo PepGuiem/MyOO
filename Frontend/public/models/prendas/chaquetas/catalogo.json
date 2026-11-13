@@ -1,0 +1,755 @@
+[
+ {
+  "archivo": "01_chaqueta_bomber.glb",
+  "prenda": "Bomber",
+  "original": {
+   "triangulos": 541138,
+   "bytes": 13070308
+  },
+  "piezas": [
+   "body",
+   "zipper"
+  ],
+  "alto": {
+   "triangulos": 138874,
+   "bytes": 867920
+  },
+  "lod": {
+   "triangulos": 46378,
+   "bytes": 320896
+  }
+ },
+ {
+  "archivo": "01_chaqueta_bomber_abierta.glb",
+  "prenda": "Bomber (abierta)",
+  "original": {
+   "triangulos": 546640,
+   "bytes": 13197196
+  },
+  "piezas": [
+   "body",
+   "zipper"
+  ],
+  "alto": {
+   "triangulos": 144642,
+   "bytes": 898636
+  },
+  "lod": {
+   "triangulos": 43704,
+   "bytes": 302912
+  }
+ },
+ {
+  "archivo": "01_chaqueta_bomber_botones.glb",
+  "prenda": "Bomber (botones)",
+  "original": {
+   "triangulos": 536846,
+   "bytes": 12939824
+  },
+  "piezas": [
+   "body",
+   "hardware"
+  ],
+  "alto": {
+   "triangulos": 134210,
+   "bytes": 834860
+  },
+  "lod": {
+   "triangulos": 45018,
+   "bytes": 309172
+  }
+ },
+ {
+  "archivo": "02_chaqueta_varsity.glb",
+  "prenda": "Chaqueta varsity",
+  "original": {
+   "triangulos": 804880,
+   "bytes": 19956288
+  },
+  "piezas": [
+   "body",
+   "secondary",
+   "trim",
+   "hardware"
+  ],
+  "alto": {
+   "triangulos": 216970,
+   "bytes": 1464140
+  },
+  "lod": {
+   "triangulos": 73816,
+   "bytes": 619416
+  }
+ },
+ {
+  "archivo": "02_chaqueta_varsity_abierta.glb",
+  "prenda": "Chaqueta varsity (abierta)",
+  "original": {
+   "triangulos": 777330,
+   "bytes": 19290356
+  },
+  "piezas": [
+   "body",
+   "secondary",
+   "trim",
+   "hardware"
+  ],
+  "alto": {
+   "triangulos": 208940,
+   "bytes": 1409628
+  },
+  "lod": {
+   "triangulos": 71118,
+   "bytes": 597084
+  }
+ },
+ {
+  "archivo": "02_chaqueta_varsity_cremallera.glb",
+  "prenda": "Chaqueta varsity (cremallera)",
+  "original": {
+   "triangulos": 807840,
+   "bytes": 20049980
+  },
+  "piezas": [
+   "body",
+   "secondary",
+   "trim",
+   "zipper"
+  ],
+  "alto": {
+   "triangulos": 221316,
+   "bytes": 1492900
+  },
+  "lod": {
+   "triangulos": 75100,
+   "bytes": 629504
+  }
+ },
+ {
+  "archivo": "03_chaqueta_vaquera.glb",
+  "prenda": "Chaqueta vaquera",
+  "original": {
+   "triangulos": 599130,
+   "bytes": 14501912
+  },
+  "piezas": [
+   "body",
+   "hardware"
+  ],
+  "alto": {
+   "triangulos": 149782,
+   "bytes": 873192
+  },
+  "lod": {
+   "triangulos": 24918,
+   "bytes": 177484
+  }
+ },
+ {
+  "archivo": "03_chaqueta_vaquera_abierta.glb",
+  "prenda": "Chaqueta vaquera (abierta)",
+  "original": {
+   "triangulos": 599004,
+   "bytes": 14520220
+  },
+  "piezas": [
+   "body",
+   "hardware"
+  ],
+  "alto": {
+   "triangulos": 149750,
+   "bytes": 880000
+  },
+  "lod": {
+   "triangulos": 25920,
+   "bytes": 187560
+  }
+ },
+ {
+  "archivo": "03_chaqueta_vaquera_cremallera.glb",
+  "prenda": "Chaqueta vaquera (cremallera)",
+  "original": {
+   "triangulos": 600976,
+   "bytes": 14571908
+  },
+  "piezas": [
+   "body",
+   "zipper",
+   "hardware"
+  ],
+  "alto": {
+   "triangulos": 153202,
+   "bytes": 899068
+  },
+  "lod": {
+   "triangulos": 26292,
+   "bytes": 189868
+  }
+ },
+ {
+  "archivo": "04_chaqueta_piel.glb",
+  "prenda": "Chaqueta de piel",
+  "original": {
+   "triangulos": 543350,
+   "bytes": 13123628
+  },
+  "piezas": [
+   "body",
+   "zipper",
+   "hardware"
+  ],
+  "alto": {
+   "triangulos": 139804,
+   "bytes": 813264
+  },
+  "lod": {
+   "triangulos": 22904,
+   "bytes": 161420
+  }
+ },
+ {
+  "archivo": "04_chaqueta_piel_abierta.glb",
+  "prenda": "Chaqueta de piel (abierta)",
+  "original": {
+   "triangulos": 549290,
+   "bytes": 13261844
+  },
+  "piezas": [
+   "body",
+   "zipper",
+   "hardware"
+  ],
+  "alto": {
+   "triangulos": 145868,
+   "bytes": 850204
+  },
+  "lod": {
+   "triangulos": 23332,
+   "bytes": 164916
+  }
+ },
+ {
+  "archivo": "04_chaqueta_piel_botones.glb",
+  "prenda": "Chaqueta de piel (botones)",
+  "original": {
+   "triangulos": 537970,
+   "bytes": 12963728
+  },
+  "piezas": [
+   "body",
+   "hardware"
+  ],
+  "alto": {
+   "triangulos": 134492,
+   "bytes": 775048
+  },
+  "lod": {
+   "triangulos": 20814,
+   "bytes": 144988
+  }
+ },
+ {
+  "archivo": "05_chaqueta_biker.glb",
+  "prenda": "Chaqueta biker",
+  "original": {
+   "triangulos": 606802,
+   "bytes": 14698144
+  },
+  "piezas": [
+   "body",
+   "zipper",
+   "hardware"
+  ],
+  "alto": {
+   "triangulos": 153758,
+   "bytes": 918264
+  },
+  "lod": {
+   "triangulos": 33566,
+   "bytes": 243240
+  }
+ },
+ {
+  "archivo": "05_chaqueta_biker_abierta.glb",
+  "prenda": "Chaqueta biker (abierta)",
+  "original": {
+   "triangulos": 613256,
+   "bytes": 14867988
+  },
+  "piezas": [
+   "body",
+   "zipper",
+   "hardware"
+  ],
+  "alto": {
+   "triangulos": 158356,
+   "bytes": 937424
+  },
+  "lod": {
+   "triangulos": 30072,
+   "bytes": 219752
+  }
+ },
+ {
+  "archivo": "05_chaqueta_biker_botones.glb",
+  "prenda": "Chaqueta biker (botones)",
+  "original": {
+   "triangulos": 606950,
+   "bytes": 14700048
+  },
+  "piezas": [
+   "body",
+   "hardware"
+  ],
+  "alto": {
+   "triangulos": 151738,
+   "bytes": 894184
+  },
+  "lod": {
+   "triangulos": 29056,
+   "bytes": 209784
+  }
+ },
+ {
+  "archivo": "06_plumifero.glb",
+  "prenda": "Plumífero",
+  "original": {
+   "triangulos": 544240,
+   "bytes": 13162720
+  },
+  "piezas": [
+   "body",
+   "zipper"
+  ],
+  "alto": {
+   "triangulos": 143448,
+   "bytes": 923884
+  },
+  "lod": {
+   "triangulos": 71830,
+   "bytes": 484156
+  }
+ },
+ {
+  "archivo": "06_plumifero_abierta.glb",
+  "prenda": "Plumífero (abierta)",
+  "original": {
+   "triangulos": 551086,
+   "bytes": 13325344
+  },
+  "piezas": [
+   "body",
+   "zipper"
+  ],
+  "alto": {
+   "triangulos": 147202,
+   "bytes": 947148
+  },
+  "lod": {
+   "triangulos": 70338,
+   "bytes": 475096
+  }
+ },
+ {
+  "archivo": "06_plumifero_botones.glb",
+  "prenda": "Plumífero (botones)",
+  "original": {
+   "triangulos": 538438,
+   "bytes": 12991148
+  },
+  "piezas": [
+   "body",
+   "hardware"
+  ],
+  "alto": {
+   "triangulos": 137594,
+   "bytes": 882180
+  },
+  "lod": {
+   "triangulos": 70460,
+   "bytes": 472200
+  }
+ },
+ {
+  "archivo": "07_cortavientos.glb",
+  "prenda": "Cortavientos",
+  "original": {
+   "triangulos": 809204,
+   "bytes": 19597596
+  },
+  "piezas": [
+   "body",
+   "secondary",
+   "zipper",
+   "trim",
+   "hardware"
+  ],
+  "alto": {
+   "triangulos": 206942,
+   "bytes": 1170236
+  },
+  "lod": {
+   "triangulos": 23922,
+   "bytes": 181724
+  }
+ },
+ {
+  "archivo": "07_cortavientos_abierta.glb",
+  "prenda": "Cortavientos (abierta)",
+  "original": {
+   "triangulos": 809182,
+   "bytes": 19588064
+  },
+  "piezas": [
+   "body",
+   "secondary",
+   "zipper",
+   "trim",
+   "hardware"
+  ],
+  "alto": {
+   "triangulos": 212026,
+   "bytes": 1200356
+  },
+  "lod": {
+   "triangulos": 24632,
+   "bytes": 185524
+  }
+ },
+ {
+  "archivo": "07_cortavientos_botones.glb",
+  "prenda": "Cortavientos (botones)",
+  "original": {
+   "triangulos": 803272,
+   "bytes": 19420604
+  },
+  "piezas": [
+   "body",
+   "secondary",
+   "hardware",
+   "trim"
+  ],
+  "alto": {
+   "triangulos": 200816,
+   "bytes": 1123656
+  },
+  "lod": {
+   "triangulos": 21512,
+   "bytes": 162656
+  }
+ },
+ {
+  "archivo": "08_chaqueta_chandal.glb",
+  "prenda": "Chaqueta de chándal",
+  "original": {
+   "triangulos": 573532,
+   "bytes": 14042768
+  },
+  "piezas": [
+   "body",
+   "trim",
+   "zipper"
+  ],
+  "alto": {
+   "triangulos": 147942,
+   "bytes": 917036
+  },
+  "lod": {
+   "triangulos": 33552,
+   "bytes": 250240
+  }
+ },
+ {
+  "archivo": "08_chaqueta_chandal_abierta.glb",
+  "prenda": "Chaqueta de chándal (abierta)",
+  "original": {
+   "triangulos": 581052,
+   "bytes": 14220432
+  },
+  "piezas": [
+   "body",
+   "trim",
+   "zipper"
+  ],
+  "alto": {
+   "triangulos": 154858,
+   "bytes": 956860
+  },
+  "lod": {
+   "triangulos": 32526,
+   "bytes": 243156
+  }
+ },
+ {
+  "archivo": "08_chaqueta_chandal_botones.glb",
+  "prenda": "Chaqueta de chándal (botones)",
+  "original": {
+   "triangulos": 567054,
+   "bytes": 13856408
+  },
+  "piezas": [
+   "body",
+   "trim",
+   "hardware"
+  ],
+  "alto": {
+   "triangulos": 141760,
+   "bytes": 877520
+  },
+  "lod": {
+   "triangulos": 31190,
+   "bytes": 233496
+  }
+ },
+ {
+  "archivo": "09_chaqueta_coach.glb",
+  "prenda": "Chaqueta coach",
+  "original": {
+   "triangulos": 608758,
+   "bytes": 14740816
+  },
+  "piezas": [
+   "body",
+   "hardware",
+   "trim"
+  ],
+  "alto": {
+   "triangulos": 152188,
+   "bytes": 878292
+  },
+  "lod": {
+   "triangulos": 20060,
+   "bytes": 148828
+  }
+ },
+ {
+  "archivo": "09_chaqueta_coach_abierta.glb",
+  "prenda": "Chaqueta coach (abierta)",
+  "original": {
+   "triangulos": 609864,
+   "bytes": 14794288
+  },
+  "piezas": [
+   "body",
+   "hardware",
+   "trim"
+  ],
+  "alto": {
+   "triangulos": 152464,
+   "bytes": 883896
+  },
+  "lod": {
+   "triangulos": 20062,
+   "bytes": 151176
+  }
+ },
+ {
+  "archivo": "09_chaqueta_coach_cremallera.glb",
+  "prenda": "Chaqueta coach (cremallera)",
+  "original": {
+   "triangulos": 615970,
+   "bytes": 14944500
+  },
+  "piezas": [
+   "body",
+   "zipper",
+   "trim",
+   "hardware"
+  ],
+  "alto": {
+   "triangulos": 157800,
+   "bytes": 918852
+  },
+  "lod": {
+   "triangulos": 21292,
+   "bytes": 160520
+  }
+ },
+ {
+  "archivo": "10_forro_polar.glb",
+  "prenda": "Forro polar",
+  "original": {
+   "triangulos": 572868,
+   "bytes": 13963868
+  },
+  "piezas": [
+   "body",
+   "trim",
+   "zipper"
+  ],
+  "alto": {
+   "triangulos": 148934,
+   "bytes": 868916
+  },
+  "lod": {
+   "triangulos": 26590,
+   "bytes": 200760
+  }
+ },
+ {
+  "archivo": "10_forro_polar_abierta.glb",
+  "prenda": "Forro polar (abierta)",
+  "original": {
+   "triangulos": 578142,
+   "bytes": 14079764
+  },
+  "piezas": [
+   "body",
+   "trim",
+   "zipper"
+  ],
+  "alto": {
+   "triangulos": 155894,
+   "bytes": 911560
+  },
+  "lod": {
+   "triangulos": 27316,
+   "bytes": 204688
+  }
+ },
+ {
+  "archivo": "10_forro_polar_botones.glb",
+  "prenda": "Forro polar (botones)",
+  "original": {
+   "triangulos": 565980,
+   "bytes": 13768540
+  },
+  "piezas": [
+   "body",
+   "trim",
+   "hardware"
+  ],
+  "alto": {
+   "triangulos": 142698,
+   "bytes": 827252
+  },
+  "lod": {
+   "triangulos": 25394,
+   "bytes": 191500
+  }
+ },
+ {
+  "archivo": "11_chaqueta_utility.glb",
+  "prenda": "Chaqueta utility",
+  "original": {
+   "triangulos": 571618,
+   "bytes": 13778560
+  },
+  "piezas": [
+   "body",
+   "hardware",
+   "trim"
+  ],
+  "alto": {
+   "triangulos": 142902,
+   "bytes": 843340
+  },
+  "lod": {
+   "triangulos": 27066,
+   "bytes": 191008
+  }
+ },
+ {
+  "archivo": "11_chaqueta_utility_abierta.glb",
+  "prenda": "Chaqueta utility (abierta)",
+  "original": {
+   "triangulos": 576866,
+   "bytes": 13938996
+  },
+  "piezas": [
+   "body",
+   "hardware",
+   "trim"
+  ],
+  "alto": {
+   "triangulos": 144214,
+   "bytes": 859104
+  },
+  "lod": {
+   "triangulos": 29042,
+   "bytes": 207088
+  }
+ },
+ {
+  "archivo": "11_chaqueta_utility_cremallera.glb",
+  "prenda": "Chaqueta utility (cremallera)",
+  "original": {
+   "triangulos": 578840,
+   "bytes": 13987864
+  },
+  "piezas": [
+   "body",
+   "zipper",
+   "hardware",
+   "trim"
+  ],
+  "alto": {
+   "triangulos": 149538,
+   "bytes": 891944
+  },
+  "lod": {
+   "triangulos": 29830,
+   "bytes": 211312
+  }
+ },
+ {
+  "archivo": "12_chaleco_acolchado.glb",
+  "prenda": "Chaleco acolchado",
+  "original": {
+   "triangulos": 519052,
+   "bytes": 12577304
+  },
+  "piezas": [
+   "body",
+   "zipper"
+  ],
+  "alto": {
+   "triangulos": 134022,
+   "bytes": 855268
+  },
+  "lod": {
+   "triangulos": 42716,
+   "bytes": 301648
+  }
+ },
+ {
+  "archivo": "12_chaleco_acolchado_abierta.glb",
+  "prenda": "Chaleco acolchado (abierta)",
+  "original": {
+   "triangulos": 469118,
+   "bytes": 11373584
+  },
+  "piezas": [
+   "body",
+   "zipper"
+  ],
+  "alto": {
+   "triangulos": 126644,
+   "bytes": 803008
+  },
+  "lod": {
+   "triangulos": 38724,
+   "bytes": 270880
+  }
+ },
+ {
+  "archivo": "12_chaleco_acolchado_botones.glb",
+  "prenda": "Chaleco acolchado (botones)",
+  "original": {
+   "triangulos": 512342,
+   "bytes": 12381036
+  },
+  "piezas": [
+   "body",
+   "hardware"
+  ],
+  "alto": {
+   "triangulos": 128084,
+   "bytes": 800252
+  },
+  "lod": {
+   "triangulos": 38940,
+   "bytes": 269060
+  }
+ }
+]

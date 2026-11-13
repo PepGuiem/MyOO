@@ -1,0 +1,83 @@
+[
+ {
+  "archivo": "01_americana.glb",
+  "prenda": "Americana",
+  "original": {
+   "triangulos": 550798,
+   "bytes": 13298484
+  },
+  "piezas": [
+   "body",
+   "button"
+  ],
+  "alto": {
+   "triangulos": 137700,
+   "bytes": 824036
+  },
+  "lod": {
+   "triangulos": 34126,
+   "bytes": 239660
+  }
+ },
+ {
+  "archivo": "02_americana_cruzada.glb",
+  "prenda": "Americana cruzada",
+  "original": {
+   "triangulos": 572592,
+   "bytes": 13823720
+  },
+  "piezas": [
+   "body",
+   "button"
+  ],
+  "alto": {
+   "triangulos": 143148,
+   "bytes": 862768
+  },
+  "lod": {
+   "triangulos": 37260,
+   "bytes": 260856
+  }
+ },
+ {
+  "archivo": "03_chaqueta_traje.glb",
+  "prenda": "Chaqueta de traje",
+  "original": {
+   "triangulos": 550082,
+   "bytes": 13278868
+  },
+  "piezas": [
+   "body",
+   "button"
+  ],
+  "alto": {
+   "triangulos": 137520,
+   "bytes": 825084
+  },
+  "lod": {
+   "triangulos": 33970,
+   "bytes": 238832
+  }
+ },
+ {
+  "archivo": "04_chaleco_traje.glb",
+  "prenda": "Chaleco de traje cruzado",
+  "original": {
+   "triangulos": 309632,
+   "bytes": 7549392
+  },
+  "piezas": [
+   "body",
+   "secondary",
+   "button"
+  ],
+  "alto": {
+   "triangulos": 77408,
+   "bytes": 466256
+  },
+  "lod": {
+   "triangulos": 21108,
+   "bytes": 153540
+  }
+ }
+]

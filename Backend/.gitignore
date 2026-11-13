@@ -1,0 +1,26 @@
+# Dependencias y compilación
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+
+# Archivos subidos por los usuarios (almacenamiento local de desarrollo)
+storage/
+storage-test/
+
+# Secretos y configuración local (NUNCA se suben al repositorio)
+.env
+.env.*
+!.env.example
+!.env.test.example
+# Claves privadas (p. ej. la .p8 de Apple)
+*.p8
+*.pem
+
+# Sistema / editores
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.log

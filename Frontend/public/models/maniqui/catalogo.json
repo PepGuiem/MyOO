@@ -1,0 +1,82 @@
+[
+ {
+  "archivo": "cabeza.glb",
+  "prenda": "Cabeza de maniquí",
+  "original": {
+   "triangulos": 90000,
+   "bytes": 2161244
+  },
+  "alto": {
+   "triangulos": 49500,
+   "bytes": 246624
+  },
+  "lod": {
+   "triangulos": 30000,
+   "bytes": 157232
+  }
+ },
+ {
+  "archivo": "cabeza_f.glb",
+  "prenda": "Cabeza de maniquí femenina",
+  "original": {
+   "triangulos": 90000,
+   "bytes": 2161264
+  },
+  "alto": {
+   "triangulos": 49500,
+   "bytes": 259564
+  },
+  "lod": {
+   "triangulos": 30000,
+   "bytes": 165616
+  }
+ },
+ {
+  "archivo": "cuerpo.glb",
+  "prenda": "Cuerpo de maniquí",
+  "original": {
+   "triangulos": 159999,
+   "bytes": 3844576
+  },
+  "alto": {
+   "triangulos": 87998,
+   "bytes": 438600
+  },
+  "lod": {
+   "triangulos": 29999,
+   "bytes": 164176
+  }
+ },
+ {
+  "archivo": "cuerpo_f.glb",
+  "prenda": "Cuerpo de maniquí femenino",
+  "original": {
+   "triangulos": 159999,
+   "bytes": 3844424
+  },
+  "alto": {
+   "triangulos": 87998,
+   "bytes": 438172
+  },
+  "lod": {
+   "triangulos": 29999,
+   "bytes": 163708
+  }
+ },
+ {
+  "archivo": "mano.glb",
+  "prenda": "Mano de maniquí",
+  "original": {
+   "triangulos": 30000,
+   "bytes": 723300
+  },
+  "alto": {
+   "triangulos": 16500,
+   "bytes": 98704
+  },
+  "lod": {
+   "triangulos": 16500,
+   "bytes": 98704
+  }
+ }
+]

@@ -1,0 +1,118 @@
+[
+ {
+  "archivo": "01_jersey_cuello_redondo.glb",
+  "prenda": "Jersey de cuello redondo",
+  "original": {
+   "triangulos": 524730,
+   "bytes": 12651244
+  },
+  "alto": {
+   "triangulos": 131182,
+   "bytes": 791440
+  },
+  "lod": {
+   "triangulos": 37366,
+   "bytes": 258304
+  }
+ },
+ {
+  "archivo": "02_jersey_pico.glb",
+  "prenda": "Jersey de pico",
+  "original": {
+   "triangulos": 525304,
+   "bytes": 12671028
+  },
+  "alto": {
+   "triangulos": 131326,
+   "bytes": 795352
+  },
+  "lod": {
+   "triangulos": 36440,
+   "bytes": 253612
+  }
+ },
+ {
+  "archivo": "03_jersey_cuello_alto.glb",
+  "prenda": "Jersey de cuello alto",
+  "original": {
+   "triangulos": 523746,
+   "bytes": 12615936
+  },
+  "alto": {
+   "triangulos": 130936,
+   "bytes": 799312
+  },
+  "lod": {
+   "triangulos": 37544,
+   "bytes": 256480
+  }
+ },
+ {
+  "archivo": "04_cardigan.glb",
+  "prenda": "Cárdigan de punto",
+  "original": {
+   "triangulos": 541250,
+   "bytes": 13076824
+  },
+  "piezas": [
+   "body",
+   "button"
+  ],
+  "alto": {
+   "triangulos": 135312,
+   "bytes": 831276
+  },
+  "lod": {
+   "triangulos": 41887,
+   "bytes": 291868
+  }
+ },
+ {
+  "archivo": "05_jersey_ochos.glb",
+  "prenda": "Jersey de ochos",
+  "original": {
+   "triangulos": 524752,
+   "bytes": 12652108
+  },
+  "alto": {
+   "triangulos": 170624,
+   "bytes": 1116924
+  },
+  "lod": {
+   "triangulos": 98090,
+   "bytes": 666640
+  }
+ },
+ {
+  "archivo": "06_jersey_oversize.glb",
+  "prenda": "Jersey oversize de punto grueso",
+  "original": {
+   "triangulos": 525330,
+   "bytes": 12672256
+  },
+  "alto": {
+   "triangulos": 131332,
+   "bytes": 810672
+  },
+  "lod": {
+   "triangulos": 46480,
+   "bytes": 320532
+  }
+ },
+ {
+  "archivo": "07_chaleco_punto.glb",
+  "prenda": "Chaleco de punto",
+  "original": {
+   "triangulos": 426124,
+   "bytes": 10299872
+  },
+  "alto": {
+   "triangulos": 106530,
+   "bytes": 638844
+  },
+  "lod": {
+   "triangulos": 22464,
+   "bytes": 165620
+  }
+ }
+]

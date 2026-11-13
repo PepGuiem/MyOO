@@ -1,0 +1,290 @@
+[
+ {
+  "archivo": "01_camiseta.glb",
+  "prenda": "Camiseta",
+  "original": {
+   "triangulos": 144890,
+   "bytes": 3536836
+  },
+  "alto": {
+   "triangulos": 79690,
+   "bytes": 445116
+  },
+  "lod": {
+   "triangulos": 16000,
+   "bytes": 109020
+  }
+ },
+ {
+  "archivo": "02_camiseta_manga_larga.glb",
+  "prenda": "Camiseta manga larga",
+  "original": {
+   "triangulos": 144034,
+   "bytes": 3506028
+  },
+  "alto": {
+   "triangulos": 79218,
+   "bytes": 453604
+  },
+  "lod": {
+   "triangulos": 16000,
+   "bytes": 108956
+  }
+ },
+ {
+  "archivo": "03_camiseta_larga.glb",
+  "prenda": "Camiseta larga",
+  "original": {
+   "triangulos": 145906,
+   "bytes": 3572844
+  },
+  "alto": {
+   "triangulos": 80246,
+   "bytes": 453068
+  },
+  "lod": {
+   "triangulos": 16000,
+   "bytes": 110864
+  }
+ },
+ {
+  "archivo": "04_camiseta_sin_mangas.glb",
+  "prenda": "Camiseta sin mangas",
+  "original": {
+   "triangulos": 145282,
+   "bytes": 3550956
+  },
+  "alto": {
+   "triangulos": 79904,
+   "bytes": 436528
+  },
+  "lod": {
+   "triangulos": 16000,
+   "bytes": 110600
+  }
+ },
+ {
+  "archivo": "05_sudadera_capucha.glb",
+  "prenda": "Sudadera con capucha y media cremallera",
+  "original": {
+   "triangulos": 157552,
+   "bytes": 3846568
+  },
+  "alto": {
+   "triangulos": 86652,
+   "bytes": 532656
+  },
+  "lod": {
+   "triangulos": 16000,
+   "bytes": 118076
+  }
+ },
+ {
+  "archivo": "06_anorak.glb",
+  "prenda": "Anorak",
+  "original": {
+   "triangulos": 144354,
+   "bytes": 3515584
+  },
+  "alto": {
+   "triangulos": 79392,
+   "bytes": 485892
+  },
+  "lod": {
+   "triangulos": 16000,
+   "bytes": 116760
+  }
+ },
+ {
+  "archivo": "07_chaqueta_capucha.glb",
+  "prenda": "Chaqueta con capucha",
+  "original": {
+   "triangulos": 147976,
+   "bytes": 3645808
+  },
+  "alto": {
+   "triangulos": 81378,
+   "bytes": 482932
+  },
+  "lod": {
+   "triangulos": 16000,
+   "bytes": 115148
+  }
+ },
+ {
+  "archivo": "08_bomber.glb",
+  "prenda": "Bomber",
+  "original": {
+   "triangulos": 146848,
+   "bytes": 3606880
+  },
+  "alto": {
+   "triangulos": 84636,
+   "bytes": 554824
+  },
+  "lod": {
+   "triangulos": 32388,
+   "bytes": 229556
+  }
+ },
+ {
+  "archivo": "09_camisa.glb",
+  "prenda": "Camisa",
+  "original": {
+   "triangulos": 198602,
+   "bytes": 4916256
+  },
+  "alto": {
+   "triangulos": 109230,
+   "bytes": 638328
+  },
+  "lod": {
+   "triangulos": 16000,
+   "bytes": 119804
+  }
+ },
+ {
+  "archivo": "10_mallas_cortas.glb",
+  "prenda": "Mallas cortas",
+  "original": {
+   "triangulos": 142706,
+   "bytes": 3458428
+  },
+  "alto": {
+   "triangulos": 78488,
+   "bytes": 422084
+  },
+  "lod": {
+   "triangulos": 16000,
+   "bytes": 103608
+  }
+ },
+ {
+  "archivo": "11_slip.glb",
+  "prenda": "Slip",
+  "original": {
+   "triangulos": 90784,
+   "bytes": 2226968
+  },
+  "alto": {
+   "triangulos": 49930,
+   "bytes": 290400
+  },
+  "lod": {
+   "triangulos": 16000,
+   "bytes": 111816
+  }
+ },
+ {
+  "archivo": "12_boxer_corto.glb",
+  "prenda": "Bóxer corto",
+  "original": {
+   "triangulos": 142986,
+   "bytes": 3468572
+  },
+  "alto": {
+   "triangulos": 78642,
+   "bytes": 425952
+  },
+  "lod": {
+   "triangulos": 16000,
+   "bytes": 108296
+  }
+ },
+ {
+  "archivo": "13_boxer_largo.glb",
+  "prenda": "Bóxer largo",
+  "original": {
+   "triangulos": 142962,
+   "bytes": 3467780
+  },
+  "alto": {
+   "triangulos": 78628,
+   "bytes": 423108
+  },
+  "lod": {
+   "triangulos": 16000,
+   "bytes": 104796
+  }
+ },
+ {
+  "archivo": "14_jogger.glb",
+  "prenda": "Jogger",
+  "original": {
+   "triangulos": 154920,
+   "bytes": 3753692
+  },
+  "alto": {
+   "triangulos": 85206,
+   "bytes": 522536
+  },
+  "lod": {
+   "triangulos": 15998,
+   "bytes": 114224
+  }
+ },
+ {
+  "archivo": "15_pantalon_cargo.glb",
+  "prenda": "Pantalón cargo",
+  "original": {
+   "triangulos": 144474,
+   "bytes": 3519324
+  },
+  "alto": {
+   "triangulos": 79456,
+   "bytes": 507468
+  },
+  "lod": {
+   "triangulos": 18244,
+   "bytes": 134180
+  }
+ },
+ {
+  "archivo": "16_pantalon_slim.glb",
+  "prenda": "Pantalón slim",
+  "original": {
+   "triangulos": 143456,
+   "bytes": 3484184
+  },
+  "alto": {
+   "triangulos": 78898,
+   "bytes": 465504
+  },
+  "lod": {
+   "triangulos": 15996,
+   "bytes": 110704
+  }
+ },
+ {
+  "archivo": "17_bermuda_cargo.glb",
+  "prenda": "Bermuda cargo",
+  "original": {
+   "triangulos": 147512,
+   "bytes": 3625300
+  },
+  "alto": {
+   "triangulos": 81112,
+   "bytes": 500936
+  },
+  "lod": {
+   "triangulos": 16000,
+   "bytes": 117200
+  }
+ },
+ {
+  "archivo": "18_gorra.glb",
+  "prenda": "Gorra",
+  "original": {
+   "triangulos": 61076,
+   "bytes": 1495260
+  },
+  "alto": {
+   "triangulos": 33592,
+   "bytes": 199356
+  },
+  "lod": {
+   "triangulos": 16000,
+   "bytes": 102796
+  }
+ }
+]

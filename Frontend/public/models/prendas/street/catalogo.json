@@ -1,0 +1,583 @@
+[
+ {
+  "archivo": "01_sudadera_oversize.glb",
+  "prenda": "Sudadera oversize con capucha",
+  "original": {
+   "triangulos": 277008,
+   "bytes": 6723508
+  },
+  "piezas": [
+   "body",
+   "trim",
+   "hardware"
+  ],
+  "alto": {
+   "triangulos": 152354,
+   "bytes": 912788
+  },
+  "lod": {
+   "triangulos": 36854,
+   "bytes": 257036
+  }
+ },
+ {
+  "archivo": "02_plumifero_corto.glb",
+  "prenda": "Plumífero corto",
+  "original": {
+   "triangulos": 258856,
+   "bytes": 6274492
+  },
+  "piezas": [
+   "body",
+   "zipper"
+  ],
+  "alto": {
+   "triangulos": 142370,
+   "bytes": 909648
+  },
+  "lod": {
+   "triangulos": 61442,
+   "bytes": 414092
+  }
+ },
+ {
+  "archivo": "03_chaleco_acolchado.glb",
+  "prenda": "Chaleco acolchado",
+  "original": {
+   "triangulos": 261658,
+   "bytes": 6369956
+  },
+  "piezas": [
+   "body",
+   "zipper"
+  ],
+  "alto": {
+   "triangulos": 143910,
+   "bytes": 909348
+  },
+  "lod": {
+   "triangulos": 39768,
+   "bytes": 282004
+  }
+ },
+ {
+  "archivo": "04_cargo_baggy.glb",
+  "prenda": "Cargo baggy",
+  "original": {
+   "triangulos": 256232,
+   "bytes": 6247980
+  },
+  "piezas": [
+   "body",
+   "hardware"
+  ],
+  "alto": {
+   "triangulos": 140924,
+   "bytes": 864264
+  },
+  "lod": {
+   "triangulos": 37262,
+   "bytes": 269708
+  }
+ },
+ {
+  "archivo": "05_shorts_baloncesto.glb",
+  "prenda": "Pantalón corto de baloncesto",
+  "original": {
+   "triangulos": 287362,
+   "bytes": 6962520
+  },
+  "piezas": [
+   "body",
+   "trim"
+  ],
+  "alto": {
+   "triangulos": 165562,
+   "bytes": 912788
+  },
+  "lod": {
+   "triangulos": 48570,
+   "bytes": 271292
+  }
+ },
+ {
+  "archivo": "06_zapatillas_altas.glb",
+  "prenda": "high_top",
+  "original": {
+   "triangulos": 144164,
+   "bytes": 3464408
+  },
+  "piezas": [
+   "body",
+   "lace",
+   "secondary",
+   "sole"
+  ],
+  "alto": {
+   "triangulos": 79944,
+   "bytes": 474024
+  },
+  "lod": {
+   "triangulos": 20650,
+   "bytes": 138856
+  }
+ },
+ {
+  "archivo": "07_gorro.glb",
+  "prenda": "Gorro",
+  "original": {
+   "triangulos": 66000,
+   "bytes": 1586144
+  },
+  "piezas": [
+   "body",
+   "trim"
+  ],
+  "alto": {
+   "triangulos": 36298,
+   "bytes": 225304
+  },
+  "lod": {
+   "triangulos": 20000,
+   "bytes": 129992
+  }
+ },
+ {
+  "archivo": "08_chaqueta_varsity.glb",
+  "prenda": "Chaqueta varsity",
+  "original": {
+   "triangulos": 531346,
+   "bytes": 12894148
+  },
+  "piezas": [
+   "body",
+   "secondary",
+   "trim",
+   "hardware"
+  ],
+  "alto": {
+   "triangulos": 292238,
+   "bytes": 1654296
+  },
+  "lod": {
+   "triangulos": 43380,
+   "bytes": 311192
+  }
+ },
+ {
+  "archivo": "09_cortavientos.glb",
+  "prenda": "Cortavientos",
+  "original": {
+   "triangulos": 505458,
+   "bytes": 12255548
+  },
+  "piezas": [
+   "body",
+   "secondary",
+   "zipper"
+  ],
+  "alto": {
+   "triangulos": 278002,
+   "bytes": 1497164
+  },
+  "lod": {
+   "triangulos": 22248,
+   "bytes": 158784
+  }
+ },
+ {
+  "archivo": "10_pantalon_paracaidas.glb",
+  "prenda": "Pantalón paracaídas",
+  "original": {
+   "triangulos": 263822,
+   "bytes": 6372576
+  },
+  "piezas": [
+   "body",
+   "trim",
+   "hardware"
+  ],
+  "alto": {
+   "triangulos": 145100,
+   "bytes": 847980
+  },
+  "lod": {
+   "triangulos": 19998,
+   "bytes": 142068
+  }
+ },
+ {
+  "archivo": "11_gorra_trucker.glb",
+  "prenda": "Gorra trucker",
+  "original": {
+   "triangulos": 273255,
+   "bytes": 6562624
+  },
+  "piezas": [
+   "body",
+   "secondary",
+   "hardware"
+  ],
+  "alto": {
+   "triangulos": 150290,
+   "bytes": 803360
+  },
+  "lod": {
+   "triangulos": 19999,
+   "bytes": 128852
+  }
+ },
+ {
+  "archivo": "12_gorra_snapback.glb",
+  "prenda": "Gorra snapback",
+  "original": {
+   "triangulos": 213243,
+   "bytes": 5127208
+  },
+  "piezas": [
+   "body",
+   "hardware"
+  ],
+  "alto": {
+   "triangulos": 117283,
+   "bytes": 645372
+  },
+  "lod": {
+   "triangulos": 19998,
+   "bytes": 128344
+  }
+ },
+ {
+  "archivo": "13_gorra_cinco_paneles.glb",
+  "prenda": "Gorra cinco paneles",
+  "original": {
+   "triangulos": 213455,
+   "bytes": 5127816
+  },
+  "piezas": [
+   "body",
+   "hardware"
+  ],
+  "alto": {
+   "triangulos": 117399,
+   "bytes": 644952
+  },
+  "lod": {
+   "triangulos": 20000,
+   "bytes": 127444
+  }
+ },
+ {
+  "archivo": "14_gorro_pescador.glb",
+  "prenda": "Gorro de pescador",
+  "original": {
+   "triangulos": 180000,
+   "bytes": 4321236
+  },
+  "alto": {
+   "triangulos": 99000,
+   "bytes": 550744
+  },
+  "lod": {
+   "triangulos": 20000,
+   "bytes": 124872
+  }
+ },
+ {
+  "archivo": "15_zapatillas_skate.glb",
+  "prenda": "Zapatillas de skate",
+  "original": {
+   "triangulos": 114820,
+   "bytes": 2761640
+  },
+  "piezas": [
+   "body",
+   "lace",
+   "secondary",
+   "sole"
+  ],
+  "alto": {
+   "triangulos": 63458,
+   "bytes": 379056
+  },
+  "lod": {
+   "triangulos": 20121,
+   "bytes": 133728
+  }
+ },
+ {
+  "archivo": "16_zapatillas_chunky.glb",
+  "prenda": "Zapatillas chunky",
+  "original": {
+   "triangulos": 115756,
+   "bytes": 2782368
+  },
+  "piezas": [
+   "body",
+   "lace",
+   "secondary",
+   "sole"
+  ],
+  "alto": {
+   "triangulos": 63692,
+   "bytes": 374508
+  },
+  "lod": {
+   "triangulos": 20010,
+   "bytes": 130268
+  }
+ },
+ {
+  "archivo": "17_zapatillas_running.glb",
+  "prenda": "Zapatillas running",
+  "original": {
+   "triangulos": 107856,
+   "bytes": 2592964
+  },
+  "piezas": [
+   "body",
+   "lace",
+   "secondary",
+   "sole"
+  ],
+  "alto": {
+   "triangulos": 59320,
+   "bytes": 351844
+  },
+  "lod": {
+   "triangulos": 19994,
+   "bytes": 131024
+  }
+ },
+ {
+  "archivo": "18_zapatillas_slip_on.glb",
+  "prenda": "Zapatillas slip-on",
+  "original": {
+   "triangulos": 92000,
+   "bytes": 2212196
+  },
+  "piezas": [
+   "body",
+   "secondary",
+   "sole"
+  ],
+  "alto": {
+   "triangulos": 50600,
+   "bytes": 296832
+  },
+  "lod": {
+   "triangulos": 19999,
+   "bytes": 128264
+  }
+ },
+ {
+  "archivo": "19_vaquero_baggy.glb",
+  "prenda": "Vaquero baggy",
+  "original": {
+   "triangulos": 700428,
+   "bytes": 16864140
+  },
+  "piezas": [
+   "body",
+   "hardware",
+   "trim"
+  ],
+  "alto": {
+   "triangulos": 175106,
+   "bytes": 1004172
+  },
+  "lod": {
+   "triangulos": 40786,
+   "bytes": 266456
+  }
+ },
+ {
+  "archivo": "20_vaquero_clasico.glb",
+  "prenda": "Vaquero clásico",
+  "original": {
+   "triangulos": 682270,
+   "bytes": 16419676
+  },
+  "piezas": [
+   "body",
+   "hardware",
+   "trim"
+  ],
+  "alto": {
+   "triangulos": 170566,
+   "bytes": 931312
+  },
+  "lod": {
+   "triangulos": 40856,
+   "bytes": 257704
+  }
+ },
+ {
+  "archivo": "21_vaquero_skinny.glb",
+  "prenda": "Vaquero skinny",
+  "original": {
+   "triangulos": 533282,
+   "bytes": 12834348
+  },
+  "piezas": [
+   "body",
+   "hardware",
+   "trim"
+  ],
+  "alto": {
+   "triangulos": 133320,
+   "bytes": 736948
+  },
+  "lod": {
+   "triangulos": 40650,
+   "bytes": 252484
+  }
+ },
+ {
+  "archivo": "22_vaquero_slim.glb",
+  "prenda": "Vaquero slim",
+  "original": {
+   "triangulos": 599168,
+   "bytes": 14419404
+  },
+  "piezas": [
+   "body",
+   "hardware",
+   "trim"
+  ],
+  "alto": {
+   "triangulos": 149790,
+   "bytes": 819940
+  },
+  "lod": {
+   "triangulos": 40754,
+   "bytes": 254232
+  }
+ },
+ {
+  "archivo": "23_vaquero_recto.glb",
+  "prenda": "Vaquero recto",
+  "original": {
+   "triangulos": 698294,
+   "bytes": 16805844
+  },
+  "piezas": [
+   "body",
+   "hardware",
+   "trim"
+  ],
+  "alto": {
+   "triangulos": 174572,
+   "bytes": 955812
+  },
+  "lod": {
+   "triangulos": 40872,
+   "bytes": 258652
+  }
+ },
+ {
+  "archivo": "24_vaquero_wide_leg.glb",
+  "prenda": "Vaquero wide leg",
+  "original": {
+   "triangulos": 700810,
+   "bytes": 16877108
+  },
+  "piezas": [
+   "body",
+   "hardware",
+   "trim"
+  ],
+  "alto": {
+   "triangulos": 175202,
+   "bytes": 948624
+  },
+  "lod": {
+   "triangulos": 40782,
+   "bytes": 256600
+  }
+ },
+ {
+  "archivo": "25_vaquero_flare.glb",
+  "prenda": "Vaquero de campana",
+  "original": {
+   "triangulos": 698698,
+   "bytes": 16821048
+  },
+  "piezas": [
+   "body",
+   "hardware",
+   "trim"
+  ],
+  "alto": {
+   "triangulos": 174674,
+   "bytes": 955840
+  },
+  "lod": {
+   "triangulos": 40876,
+   "bytes": 257860
+  }
+ },
+ {
+  "archivo": "26_vaquero_bootcut.glb",
+  "prenda": "Vaquero bootcut",
+  "original": {
+   "triangulos": 672946,
+   "bytes": 16199152
+  },
+  "piezas": [
+   "body",
+   "hardware",
+   "trim"
+  ],
+  "alto": {
+   "triangulos": 168236,
+   "bytes": 922968
+  },
+  "lod": {
+   "triangulos": 40846,
+   "bytes": 257956
+  }
+ },
+ {
+  "archivo": "27_vaquero_mom.glb",
+  "prenda": "Mom jeans",
+  "original": {
+   "triangulos": 697812,
+   "bytes": 16788964
+  },
+  "piezas": [
+   "body",
+   "hardware",
+   "trim"
+  ],
+  "alto": {
+   "triangulos": 174452,
+   "bytes": 936572
+  },
+  "lod": {
+   "triangulos": 40874,
+   "bytes": 254604
+  }
+ },
+ {
+  "archivo": "28_vaquero_boyfriend.glb",
+  "prenda": "Vaquero boyfriend",
+  "original": {
+   "triangulos": 700012,
+   "bytes": 16849364
+  },
+  "piezas": [
+   "body",
+   "hardware",
+   "trim"
+  ],
+  "alto": {
+   "triangulos": 175002,
+   "bytes": 973988
+  },
+  "lod": {
+   "triangulos": 40786,
+   "bytes": 265104
+  }
+ }
+]

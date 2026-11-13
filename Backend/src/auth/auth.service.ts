@@ -1,0 +1,105 @@
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
+import { Prisma } from '@prisma/client';
+import { banSelect, bannedError, isBanned } from '../common/ban';
+import type { AppConfig } from '../config/env.validation';
+import type { JwtPayload } from '../common/types/authenticated-user';
+import { PrismaService } from '../prisma/prisma.service';
+import { loadProfile, type ProfileView } from '../users/profile';
+import { LoginDto } from './dto/login.dto';
+import { RegisterDto } from './dto/register.dto';
+import { PasswordService } from './password.service';
+
+export interface AuthResponse {
+  accessToken: string;
+  tokenType: 'Bearer';
+  /** Segundos hasta que el token caduca. */
+  expiresIn: number;
+  user: ProfileView;
+}
+
+@Injectable()
+export class AuthService {
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly jwt: JwtService,
+    private readonly passwords: PasswordService,
+    private readonly config: ConfigService<AppConfig, true>,
+  ) {}
+
+  async register(dto: RegisterDto): Promise<AuthResponse> {
+    const passwordHash = await this.passwords.hash(dto.password);
+    try {
+      // No se crea suscripción: sin suscripción activa se aplica el plan por
+      // defecto (FREE). Ver PlansService.getEffectivePlan().
+      const user = await this.prisma.user.create({
+        data: {
+          email: dto.email,
+          passwordHash,
+          displayName: dto.displayName ?? null,
+        },
+        select: { id: true },
+      });
+      return this.issue(user.id);
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2002'
+      ) {
+        throw new ConflictException('Email is already registered');
+      }
+      throw error;
+    }
+  }
+
+  async login(dto: LoginDto): Promise<AuthResponse> {
+    const user = await this.prisma.user.findUnique({
+      where: { email: dto.email },
+      select: { id: true, passwordHash: true },
+    });
+
+    // Sin usuario, o cuenta creada con Google/Apple que aún no tiene
+    // contraseña: mismo mensaje y mismo tiempo de respuesta que una
+    // contraseña incorrecta (no revelamos qué emails existen).
+    if (!user || user.passwordHash === null) {
+      await this.passwords.verifyDummy(dto.password);
+      throw new UnauthorizedException('Invalid email or password');
+    }
+
+    const valid = await this.passwords.verify(user.passwordHash, dto.password);
+    if (!valid) {
+      throw new UnauthorizedException('Invalid email or password');
+    }
+    return this.issue(user.id);
+  }
+
+  /**
+   * Firma un token de acceso para el usuario y devuelve su perfil (sin el
+   * hash de la contraseña). Lo usan el registro, el login y el login con
+   * Google/Apple.
+   */
+  async issue(userId: string): Promise<AuthResponse> {
+    // Una cuenta baneada no recibe token (ni con contraseña ni con Google/Apple).
+    const ban = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: banSelect,
+    });
+    if (ban && isBanned(ban)) throw bannedError(ban);
+    const user = await loadProfile(this.prisma, userId);
+    if (!user) throw new NotFoundException('User not found');
+    const payload: JwtPayload = { sub: user.id, email: user.email };
+    const accessToken = await this.jwt.signAsync(payload);
+    return {
+      accessToken,
+      tokenType: 'Bearer',
+      expiresIn: this.config.get('JWT_EXPIRES_IN_SECONDS', { infer: true }),
+      user,
+    };
+  }
+}

@@ -1,0 +1,186 @@
+[
+ {
+  "archivo": "01_camiseta_clasica.glb",
+  "prenda": "Camiseta clásica",
+  "original": {
+   "triangulos": 510646,
+   "bytes": 12316864
+  },
+  "alto": {
+   "triangulos": 127662,
+   "bytes": 675676
+  },
+  "lod": {
+   "triangulos": 20000,
+   "bytes": 131904
+  }
+ },
+ {
+  "archivo": "02_camiseta_oversize.glb",
+  "prenda": "Camiseta oversize",
+  "original": {
+   "triangulos": 526402,
+   "bytes": 12711544
+  },
+  "alto": {
+   "triangulos": 131600,
+   "bytes": 700112
+  },
+  "lod": {
+   "triangulos": 20000,
+   "bytes": 134216
+  }
+ },
+ {
+  "archivo": "03_camiseta_slim.glb",
+  "prenda": "Camiseta slim",
+  "original": {
+   "triangulos": 452028,
+   "bytes": 10899820
+  },
+  "alto": {
+   "triangulos": 113006,
+   "bytes": 595588
+  },
+  "lod": {
+   "triangulos": 20000,
+   "bytes": 128928
+  }
+ },
+ {
+  "archivo": "04_camiseta_boxy.glb",
+  "prenda": "Camiseta boxy",
+  "original": {
+   "triangulos": 502574,
+   "bytes": 12138124
+  },
+  "alto": {
+   "triangulos": 125644,
+   "bytes": 665572
+  },
+  "lod": {
+   "triangulos": 20000,
+   "bytes": 133992
+  }
+ },
+ {
+  "archivo": "05_camiseta_crop.glb",
+  "prenda": "Camiseta crop",
+  "original": {
+   "triangulos": 335776,
+   "bytes": 8119464
+  },
+  "alto": {
+   "triangulos": 83944,
+   "bytes": 458868
+  },
+  "lod": {
+   "triangulos": 20000,
+   "bytes": 129620
+  }
+ },
+ {
+  "archivo": "06_camiseta_longline.glb",
+  "prenda": "Camiseta longline",
+  "original": {
+   "triangulos": 525328,
+   "bytes": 12672736
+  },
+  "alto": {
+   "triangulos": 131332,
+   "bytes": 703828
+  },
+  "lod": {
+   "triangulos": 20000,
+   "bytes": 134520
+  }
+ },
+ {
+  "archivo": "07_baby_tee.glb",
+  "prenda": "Baby tee",
+  "original": {
+   "triangulos": 310544,
+   "bytes": 7506616
+  },
+  "alto": {
+   "triangulos": 77636,
+   "bytes": 422488
+  },
+  "lod": {
+   "triangulos": 20000,
+   "bytes": 128036
+  }
+ },
+ {
+  "archivo": "08_camiseta_raglan.glb",
+  "prenda": "Camiseta raglán",
+  "original": {
+   "triangulos": 637022,
+   "bytes": 15418564
+  },
+  "piezas": [
+   "body",
+   "secondary"
+  ],
+  "alto": {
+   "triangulos": 159256,
+   "bytes": 862108
+  },
+  "lod": {
+   "triangulos": 19998,
+   "bytes": 141336
+  }
+ },
+ {
+  "archivo": "09_camiseta_pico.glb",
+  "prenda": "Camiseta cuello pico",
+  "original": {
+   "triangulos": 502928,
+   "bytes": 12136748
+  },
+  "alto": {
+   "triangulos": 125732,
+   "bytes": 668920
+  },
+  "lod": {
+   "triangulos": 20000,
+   "bytes": 133348
+  }
+ },
+ {
+  "archivo": "10_camiseta_henley.glb",
+  "prenda": "Camiseta henley",
+  "original": {
+   "triangulos": 528392,
+   "bytes": 12744688
+  },
+  "piezas": [
+   "body",
+   "button"
+  ],
+  "alto": {
+   "triangulos": 132098,
+   "bytes": 701964
+  },
+  "lod": {
+   "triangulos": 20254,
+   "bytes": 135364
+  }
+ },
+ {
+  "archivo": "11_camiseta_manga_larga.glb",
+  "prenda": "Camiseta de manga larga",
+  "original": {
+   "triangulos": 524384,
+   "bytes": 12638664
+  },
+  "alto": {
+   "triangulos": 131096,
+   "bytes": 715924
+  },
+  "lod": {
+   "triangulos": 20000,
+   "bytes": 132784
+  }
+ }
+]
