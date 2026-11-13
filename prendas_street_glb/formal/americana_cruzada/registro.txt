@@ -1,0 +1,36 @@
+[  220.0s] === fases: preparar, hornear, exportar, render, rig | vistas 360 | 02_americana_cruzada | Blender 5.2.3 LTS
+[  221.0s] importado: Tela 526960 tri., Pespuntes 56880 tri.
+[  221.7s] atributos del punto en 1s
+[  229.6s] desdoblado UV: MINIMUM_STRETCH
+[  232.0s] UV: 1005 islas
+[  232.3s] versión ligera: 119999 tri., UV en 8s, estiramiento: mediana de la desviación de área 0.043, 95% < 0.464, ocupación UV 1%
+[  236.0s] piezas: Manga izquierda, Manga derecha, Delantero derecho, Espalda, Bolsillos, Cuello, Delantero izquierdo
+[  236.1s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\formal\americana_cruzada\americana_cruzada.blend
+[  236.1s] fase preparar terminada en 16s
+[  236.1s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  259.1s] horneado BaseColor (4096 px) en 23s
+[  279.3s] horneado Roughness (4096 px) en 20s
+[  302.1s] horneado Normal (4096 px) en 23s
+[  326.3s] horneado AO (4096 px) en 24s
+[  352.5s] horneado Height (4096 px) en 26s
+[  352.6s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\formal\americana_cruzada\americana_cruzada.blend
+[  352.7s] fase hornear terminada en 117s
+[  354.2s] exportado 02_americana_cruzada_pbr.glb: 5.2 MB
+[  354.4s] exportado 02_americana_cruzada_pbr.fbx (texturas en texturas/)
+[  354.5s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\formal\americana_cruzada\americana_cruzada.blend
+[  354.5s] fase exportar terminada en 2s
+[  354.5s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  363.6s] render 1 frente en 9s
+[  371.8s] render 2 derecha en 8s
+[  379.9s] render 3 atras en 8s
+[  387.7s] render 4 izquierda en 8s
+[  388.1s] lámina 360 guardada
+[  388.1s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\formal\americana_cruzada\americana_cruzada.blend
+[  388.1s] fase render terminada en 34s
+[  389.6s] pesos Camiseta PBR: 61560 vértices; cadera 13743, columna 4524, pecho 14783, clavicula.L 862, brazo.L 5400, antebrazo.L 6294, mano.L 1472, muslo.L 1540, clavicula.R 701, brazo.R 4627, antebrazo.R 4813, mano.R 1387, muslo.R 1414
+[  389.8s] pesos Botones: 22732 vértices; cadera 14920, antebrazo.L 2783, mano.L 1171, antebrazo.R 2748, mano.R 1110
+[  391.0s] exportado 02_americana_cruzada_rig.glb: 8.1 MB
+[  391.3s] exportado 02_americana_cruzada_rig.fbx
+[  391.4s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\formal\americana_cruzada\americana_cruzada.blend
+[  391.4s] fase rig terminada en 3s
+[  391.4s] === listo

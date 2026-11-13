@@ -1,0 +1,36 @@
+[    0.0s] === fases: preparar, hornear, exportar, render, rig | vistas 360 | 01_americana | Blender 5.2.3 LTS
+[    1.1s] importado: Tela 526640 tri., Pespuntes 56160 tri.
+[    1.8s] atributos del punto en 1s
+[    9.9s] desdoblado UV: MINIMUM_STRETCH
+[   27.8s] UV: 943 islas
+[   28.3s] versión ligera: 119999 tri., UV en 24s, estiramiento: mediana de la desviación de área 0.039, 95% < 0.343, ocupación UV 55%
+[   32.3s] piezas: Manga izquierda, Manga derecha, Delantero derecho, Espalda, Bolsillos, Cuello, Delantero izquierdo
+[   32.3s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\formal\americana\americana.blend
+[   32.3s] fase preparar terminada en 32s
+[   32.4s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[   60.5s] horneado BaseColor (4096 px) en 28s
+[   85.7s] horneado Roughness (4096 px) en 25s
+[  112.9s] horneado Normal (4096 px) en 27s
+[  152.2s] horneado AO (4096 px) en 39s
+[  181.1s] horneado Height (4096 px) en 29s
+[  181.2s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\formal\americana\americana.blend
+[  181.2s] fase hornear terminada en 149s
+[  183.1s] exportado 01_americana_pbr.glb: 5.3 MB
+[  183.4s] exportado 01_americana_pbr.fbx (texturas en texturas/)
+[  183.4s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\formal\americana\americana.blend
+[  183.4s] fase exportar terminada en 2s
+[  183.4s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  192.1s] render 1 frente en 9s
+[  199.7s] render 2 derecha en 8s
+[  208.2s] render 3 atras en 8s
+[  216.0s] render 4 izquierda en 8s
+[  216.4s] lámina 360 guardada
+[  216.5s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\formal\americana\americana.blend
+[  216.5s] fase render terminada en 33s
+[  217.9s] pesos Camiseta PBR: 61478 vértices; cadera 13262, columna 5074, pecho 14484, clavicula.L 830, brazo.L 5733, antebrazo.L 5701, mano.L 1484, muslo.L 1309, clavicula.R 686, brazo.R 4514, antebrazo.R 5763, mano.R 1367, muslo.R 1271
+[  217.9s] pesos Botones: 12019 vértices; cadera 4190, antebrazo.L 2722, mano.L 1195, antebrazo.R 2777, mano.R 1135
+[  219.6s] exportado 01_americana_rig.glb: 8.8 MB
+[  219.9s] exportado 01_americana_rig.fbx
+[  220.0s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\formal\americana\americana.blend
+[  220.0s] fase rig terminada en 4s
+[  220.0s] === listo

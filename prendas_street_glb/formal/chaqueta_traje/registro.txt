@@ -1,0 +1,36 @@
+[  391.4s] === fases: preparar, hornear, exportar, render, rig | vistas 360 | 03_chaqueta_traje | Blender 5.2.3 LTS
+[  392.4s] importado: Tela 526490 tri., Pespuntes 54360 tri.
+[  393.1s] atributos del punto en 1s
+[  400.8s] desdoblado UV: MINIMUM_STRETCH
+[  421.7s] UV: 941 islas
+[  422.0s] versión ligera: 120000 tri., UV en 26s, estiramiento: mediana de la desviación de área 0.038, 95% < 0.325, ocupación UV 54%
+[  425.8s] piezas: Manga izquierda, Manga derecha, Delantero derecho, Espalda, Bolsillos, Cuello, Delantero izquierdo
+[  425.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\formal\chaqueta_traje\chaqueta_traje.blend
+[  425.9s] fase preparar terminada en 34s
+[  425.9s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  454.2s] horneado BaseColor (4096 px) en 28s
+[  480.1s] horneado Roughness (4096 px) en 26s
+[  507.9s] horneado Normal (4096 px) en 28s
+[  551.4s] horneado AO (4096 px) en 44s
+[  581.7s] horneado Height (4096 px) en 30s
+[  581.8s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\formal\chaqueta_traje\chaqueta_traje.blend
+[  581.8s] fase hornear terminada en 156s
+[  583.7s] exportado 03_chaqueta_traje_pbr.glb: 5.3 MB
+[  583.8s] exportado 03_chaqueta_traje_pbr.fbx (texturas en texturas/)
+[  583.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\formal\chaqueta_traje\chaqueta_traje.blend
+[  583.9s] fase exportar terminada en 2s
+[  583.9s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  593.8s] render 1 frente en 10s
+[  602.2s] render 2 derecha en 8s
+[  611.3s] render 3 atras en 9s
+[  619.2s] render 4 izquierda en 8s
+[  619.6s] lámina 360 guardada
+[  619.7s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\formal\chaqueta_traje\chaqueta_traje.blend
+[  619.7s] fase render terminada en 36s
+[  621.2s] pesos Camiseta PBR: 61373 vértices; cadera 14598, columna 5041, pecho 13532, clavicula.L 814, brazo.L 5605, antebrazo.L 4895, mano.L 1440, muslo.L 1414, clavicula.R 681, brazo.R 5994, antebrazo.R 4674, mano.R 1348, muslo.R 1337
+[  621.2s] pesos Botones: 11736 vértices; cadera 3876, antebrazo.L 2677, mano.L 1279, antebrazo.R 2718, mano.R 1186
+[  623.1s] exportado 03_chaqueta_traje_rig.glb: 9.0 MB
+[  623.3s] exportado 03_chaqueta_traje_rig.fbx
+[  623.4s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\formal\chaqueta_traje\chaqueta_traje.blend
+[  623.4s] fase rig terminada en 4s
+[  623.4s] === listo

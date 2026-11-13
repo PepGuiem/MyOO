@@ -1,0 +1,44 @@
+[    0.0s] === fases: preparar, hornear, exportar, render | vistas 360 | 01_jersey_cuello_redondo | Blender 5.2.3 LTS
+[    0.9s] importado: Tela 524730 tri., Pespuntes 16380 tri.
+[    1.7s] atributos del punto en 1s
+[    9.3s] desdoblado UV: MINIMUM_STRETCH
+[   29.8s] UV: 530 islas
+[   30.2s] versión ligera: 119999 tri., UV en 26s, estiramiento: mediana de la desviación de área 0.044, 95% < 0.490, ocupación UV 58%
+[   34.0s] piezas: Puño izquierdo, Puño derecho, Manga derecha, Delantero, Espalda, Cintura, Cuello, Manga izquierda
+[   34.1s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\jerseis\jersey_cuello_redondo\jersey_cuello_redondo.blend
+[   34.1s] fase preparar terminada en 34s
+[   34.2s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[   61.5s] horneado BaseColor (4096 px) en 27s
+[   88.2s] horneado Roughness (4096 px) en 27s
+[  116.8s] horneado Normal (4096 px) en 29s
+[  159.7s] horneado AO (4096 px) en 43s
+[  188.8s] horneado Height (4096 px) en 29s
+[  188.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\jerseis\jersey_cuello_redondo\jersey_cuello_redondo.blend
+[  188.9s] fase hornear terminada en 155s
+[  190.8s] exportado 01_jersey_cuello_redondo_pbr.glb: 5.1 MB
+[  191.0s] exportado 01_jersey_cuello_redondo_pbr.fbx (texturas en texturas/)
+[  191.0s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\jerseis\jersey_cuello_redondo\jersey_cuello_redondo.blend
+[  191.0s] fase exportar terminada en 2s
+[  191.0s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  199.5s] render 1 frente en 8s
+[  206.9s] render 2 derecha en 7s
+[  215.1s] render 3 atras en 8s
+[  222.4s] render 4 izquierda en 7s
+[  222.8s] lámina 360 guardada
+[  222.8s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\jerseis\jersey_cuello_redondo\jersey_cuello_redondo.blend
+[  222.8s] fase render terminada en 32s
+[  222.8s] === listo
+[    0.0s] === fases: rig | vistas 360 | 01_jersey_cuello_redondo | Blender 5.2.3 LTS
+[    0.9s] pesos Camiseta PBR: 61899 vértices, 61899 sin peso de calor (al hueso más cercano)
+[    3.2s] exportado 01_jersey_cuello_redondo_rig.glb: 10.7 MB
+[    3.4s] exportado 01_jersey_cuello_redondo_rig.fbx
+[    3.5s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\jerseis\jersey_cuello_redondo\jersey_cuello_redondo.blend
+[    3.5s] fase rig terminada en 3s
+[    3.5s] === listo
+[    0.0s] === fases: rig | vistas 360 | 01_jersey_cuello_redondo | Blender 5.2.3 LTS
+[    2.1s] pesos Camiseta PBR: 61899 vértices; cadera 12065, columna 2213, pecho 11000, clavicula.L 793, brazo.L 5038, antebrazo.L 7254, mano.L 1921, muslo.L 3847, clavicula.R 630, brazo.R 3791, antebrazo.R 7507, mano.R 1907, muslo.R 3933
+[    4.4s] exportado 01_jersey_cuello_redondo_rig.glb: 10.7 MB
+[    4.7s] exportado 01_jersey_cuello_redondo_rig.fbx
+[    4.7s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\jerseis\jersey_cuello_redondo\jersey_cuello_redondo.blend
+[    4.7s] fase rig terminada en 5s
+[    4.7s] === listo

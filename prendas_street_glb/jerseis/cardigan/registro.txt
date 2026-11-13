@@ -1,0 +1,46 @@
+[  663.2s] === fases: preparar, hornear, exportar, render | vistas 360 | 04_cardigan | Blender 5.2.3 LTS
+[  664.0s] importado: Tela 527184 tri., Pespuntes 26400 tri.
+[  664.6s] atributos del punto en 1s
+[  671.6s] desdoblado UV: MINIMUM_STRETCH
+[  695.0s] UV: 826 islas
+[  695.3s] versión ligera: 120000 tri., UV en 28s, estiramiento: mediana de la desviación de área 0.037, 95% < 0.354, ocupación UV 57%
+[  699.4s] piezas: Puño izquierdo, Puño derecho, Manga derecha, Delantero, Espalda, Cintura, Cuello, Tapeta, Manga izquierda
+[  699.4s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\jerseis\cardigan\cardigan.blend
+[  699.4s] fase preparar terminada en 36s
+[  699.4s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  729.3s] horneado BaseColor (4096 px) en 30s
+[  758.4s] horneado Roughness (4096 px) en 29s
+[  789.9s] horneado Normal (4096 px) en 31s
+[  835.4s] horneado AO (4096 px) en 46s
+[  867.9s] horneado Height (4096 px) en 32s
+[  868.0s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\jerseis\cardigan\cardigan.blend
+[  868.0s] fase hornear terminada en 169s
+[  869.8s] exportado 04_cardigan_pbr.glb: 5.8 MB
+[  869.9s] exportado 04_cardigan_pbr.fbx (texturas en texturas/)
+[  869.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\jerseis\cardigan\cardigan.blend
+[  869.9s] fase exportar terminada en 2s
+[  869.9s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  879.2s] render 1 frente en 9s
+[  886.8s] render 2 derecha en 8s
+[  895.7s] render 3 atras en 9s
+[  903.4s] render 4 izquierda en 8s
+[  903.8s] lámina 360 guardada
+[  903.8s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\jerseis\cardigan\cardigan.blend
+[  903.8s] fase render terminada en 34s
+[  903.8s] === listo
+[   11.2s] === fases: rig | vistas 360 | 04_cardigan | Blender 5.2.3 LTS
+[   12.0s] pesos Camiseta PBR: 62113 vértices, 62113 sin peso de calor (al hueso más cercano)
+[   12.2s] pesos Botones: 7000 vértices, 0 sin peso de calor (al hueso más cercano)
+[   14.0s] exportado 04_cardigan_rig.glb: 12.1 MB
+[   14.2s] exportado 04_cardigan_rig.fbx
+[   14.3s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\jerseis\cardigan\cardigan.blend
+[   14.3s] fase rig terminada en 3s
+[   14.3s] === listo
+[   12.7s] === fases: rig | vistas 360 | 04_cardigan | Blender 5.2.3 LTS
+[   14.4s] pesos Camiseta PBR: 62113 vértices; cadera 11400, columna 2570, pecho 9911, clavicula.L 787, brazo.L 5883, antebrazo.L 7666, mano.L 2002, muslo.L 3898, clavicula.R 643, brazo.R 4810, antebrazo.R 6528, mano.R 1971, muslo.R 4044
+[   14.4s] pesos Botones: 7000 vértices; cadera 5620, columna 1380
+[   16.4s] exportado 04_cardigan_rig.glb: 12.1 MB
+[   16.7s] exportado 04_cardigan_rig.fbx
+[   16.7s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\jerseis\cardigan\cardigan.blend
+[   16.7s] fase rig terminada en 4s
+[   16.7s] === listo

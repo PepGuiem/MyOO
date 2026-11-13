@@ -1,0 +1,44 @@
+[  448.4s] === fases: preparar, hornear, exportar, render | vistas 360 | 03_jersey_cuello_alto | Blender 5.2.3 LTS
+[  449.1s] importado: Tela 523746 tri., Pespuntes 20580 tri.
+[  449.8s] atributos del punto en 1s
+[  456.8s] desdoblado UV: MINIMUM_STRETCH
+[  477.5s] UV: 458 islas
+[  477.8s] versión ligera: 120000 tri., UV en 26s, estiramiento: mediana de la desviación de área 0.035, 95% < 0.210, ocupación UV 51%
+[  481.7s] piezas: Puño izquierdo, Puño derecho, Manga derecha, Delantero, Espalda, Cintura, Cuello, Manga izquierda
+[  481.7s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\jerseis\jersey_cuello_alto\jersey_cuello_alto.blend
+[  481.7s] fase preparar terminada en 33s
+[  481.7s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  508.2s] horneado BaseColor (4096 px) en 26s
+[  534.1s] horneado Roughness (4096 px) en 26s
+[  562.0s] horneado Normal (4096 px) en 28s
+[  602.2s] horneado AO (4096 px) en 40s
+[  630.9s] horneado Height (4096 px) en 29s
+[  631.0s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\jerseis\jersey_cuello_alto\jersey_cuello_alto.blend
+[  631.0s] fase hornear terminada en 149s
+[  632.7s] exportado 03_jersey_cuello_alto_pbr.glb: 4.9 MB
+[  632.8s] exportado 03_jersey_cuello_alto_pbr.fbx (texturas en texturas/)
+[  632.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\jerseis\jersey_cuello_alto\jersey_cuello_alto.blend
+[  632.9s] fase exportar terminada en 2s
+[  632.9s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  640.6s] render 1 frente en 8s
+[  647.8s] render 2 derecha en 7s
+[  655.5s] render 3 atras en 8s
+[  662.7s] render 4 izquierda en 7s
+[  663.1s] lámina 360 guardada
+[  663.2s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\jerseis\jersey_cuello_alto\jersey_cuello_alto.blend
+[  663.2s] fase render terminada en 30s
+[  663.2s] === listo
+[    6.6s] === fases: rig | vistas 360 | 03_jersey_cuello_alto | Blender 5.2.3 LTS
+[    8.9s] pesos Camiseta PBR: 61493 vértices, 0 sin peso de calor (al hueso más cercano)
+[   10.8s] exportado 03_jersey_cuello_alto_rig.glb: 9.7 MB
+[   11.1s] exportado 03_jersey_cuello_alto_rig.fbx
+[   11.2s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\jerseis\jersey_cuello_alto\jersey_cuello_alto.blend
+[   11.2s] fase rig terminada en 4s
+[   11.2s] === listo
+[    8.9s] === fases: rig | vistas 360 | 03_jersey_cuello_alto | Blender 5.2.3 LTS
+[   10.5s] pesos Camiseta PBR: 61493 vértices; cadera 10816, columna 2154, pecho 14476, cuello 702, clavicula.L 718, brazo.L 4726, antebrazo.L 6657, mano.L 2061, muslo.L 3385, clavicula.R 605, brazo.R 3399, antebrazo.R 6463, mano.R 2016, muslo.R 3315
+[   12.5s] exportado 03_jersey_cuello_alto_rig.glb: 9.7 MB
+[   12.7s] exportado 03_jersey_cuello_alto_rig.fbx
+[   12.7s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\jerseis\jersey_cuello_alto\jersey_cuello_alto.blend
+[   12.7s] fase rig terminada en 4s
+[   12.7s] === listo

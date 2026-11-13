@@ -1,0 +1,44 @@
+[ 1128.7s] === fases: preparar, hornear, exportar, render | vistas 360 | 06_jersey_oversize | Blender 5.2.3 LTS
+[ 1129.4s] importado: Tela 525328 tri., Pespuntes 19620 tri.
+[ 1130.1s] atributos del punto en 1s
+[ 1137.3s] desdoblado UV: MINIMUM_STRETCH
+[ 1159.1s] UV: 691 islas
+[ 1159.5s] versión ligera: 120000 tri., UV en 27s, estiramiento: mediana de la desviación de área 0.047, 95% < 0.532, ocupación UV 59%
+[ 1163.4s] piezas: Puño izquierdo, Puño derecho, Manga derecha, Delantero, Espalda, Cintura, Cuello, Manga izquierda
+[ 1163.4s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\jerseis\jersey_oversize\jersey_oversize.blend
+[ 1163.4s] fase preparar terminada en 35s
+[ 1163.4s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 1190.9s] horneado BaseColor (4096 px) en 27s
+[ 1217.8s] horneado Roughness (4096 px) en 27s
+[ 1247.0s] horneado Normal (4096 px) en 29s
+[ 1290.0s] horneado AO (4096 px) en 43s
+[ 1319.4s] horneado Height (4096 px) en 29s
+[ 1319.5s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\jerseis\jersey_oversize\jersey_oversize.blend
+[ 1319.5s] fase hornear terminada en 156s
+[ 1321.3s] exportado 06_jersey_oversize_pbr.glb: 5.5 MB
+[ 1321.4s] exportado 06_jersey_oversize_pbr.fbx (texturas en texturas/)
+[ 1321.4s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\jerseis\jersey_oversize\jersey_oversize.blend
+[ 1321.4s] fase exportar terminada en 2s
+[ 1321.4s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 1330.9s] render 1 frente en 9s
+[ 1338.8s] render 2 derecha en 8s
+[ 1348.2s] render 3 atras en 9s
+[ 1356.2s] render 4 izquierda en 8s
+[ 1356.5s] lámina 360 guardada
+[ 1356.6s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\jerseis\jersey_oversize\jersey_oversize.blend
+[ 1356.6s] fase render terminada en 35s
+[ 1356.6s] === listo
+[   18.9s] === fases: rig | vistas 360 | 06_jersey_oversize | Blender 5.2.3 LTS
+[   19.7s] pesos Camiseta PBR: 62049 vértices, 62049 sin peso de calor (al hueso más cercano)
+[   21.5s] exportado 06_jersey_oversize_rig.glb: 11.5 MB
+[   21.7s] exportado 06_jersey_oversize_rig.fbx
+[   21.8s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\jerseis\jersey_oversize\jersey_oversize.blend
+[   21.8s] fase rig terminada en 3s
+[   21.8s] === listo
+[   20.6s] === fases: rig | vistas 360 | 06_jersey_oversize | Blender 5.2.3 LTS
+[   22.3s] pesos Camiseta PBR: 62049 vértices; cadera 9581, columna 1346, pecho 11050, clavicula.L 778, brazo.L 5048, antebrazo.L 7251, mano.L 2542, muslo.L 5299, clavicula.R 587, brazo.R 4698, antebrazo.R 6301, mano.R 2448, muslo.R 5120
+[   24.3s] exportado 06_jersey_oversize_rig.glb: 11.5 MB
+[   24.5s] exportado 06_jersey_oversize_rig.fbx
+[   24.6s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\jerseis\jersey_oversize\jersey_oversize.blend
+[   24.6s] fase rig terminada en 4s
+[   24.6s] === listo

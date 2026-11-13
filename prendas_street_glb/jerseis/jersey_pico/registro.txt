@@ -1,0 +1,44 @@
+[  222.8s] === fases: preparar, hornear, exportar, render | vistas 360 | 02_jersey_pico | Blender 5.2.3 LTS
+[  223.6s] importado: Tela 525304 tri., Pespuntes 20940 tri.
+[  224.3s] atributos del punto en 1s
+[  231.5s] desdoblado UV: MINIMUM_STRETCH
+[  253.0s] UV: 804 islas
+[  253.3s] versión ligera: 119999 tri., UV en 27s, estiramiento: mediana de la desviación de área 0.049, 95% < 0.680, ocupación UV 61%
+[  257.2s] piezas: Puño izquierdo, Puño derecho, Manga derecha, Delantero, Espalda, Cintura, Cuello, Manga izquierda
+[  257.3s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\jerseis\jersey_pico\jersey_pico.blend
+[  257.3s] fase preparar terminada en 34s
+[  257.3s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  284.7s] horneado BaseColor (4096 px) en 27s
+[  311.8s] horneado Roughness (4096 px) en 27s
+[  340.8s] horneado Normal (4096 px) en 29s
+[  384.8s] horneado AO (4096 px) en 44s
+[  414.6s] horneado Height (4096 px) en 30s
+[  414.7s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\jerseis\jersey_pico\jersey_pico.blend
+[  414.7s] fase hornear terminada en 157s
+[  416.5s] exportado 02_jersey_pico_pbr.glb: 5.3 MB
+[  416.6s] exportado 02_jersey_pico_pbr.fbx (texturas en texturas/)
+[  416.7s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\jerseis\jersey_pico\jersey_pico.blend
+[  416.7s] fase exportar terminada en 2s
+[  416.7s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  425.0s] render 1 frente en 8s
+[  432.3s] render 2 derecha en 7s
+[  440.6s] render 3 atras en 8s
+[  447.9s] render 4 izquierda en 7s
+[  448.3s] lámina 360 guardada
+[  448.4s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\jerseis\jersey_pico\jersey_pico.blend
+[  448.4s] fase render terminada en 32s
+[  448.4s] === listo
+[    3.5s] === fases: rig | vistas 360 | 02_jersey_pico | Blender 5.2.3 LTS
+[    4.4s] pesos Camiseta PBR: 62199 vértices, 62199 sin peso de calor (al hueso más cercano)
+[    6.3s] exportado 02_jersey_pico_rig.glb: 11.1 MB
+[    6.5s] exportado 02_jersey_pico_rig.fbx
+[    6.6s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\jerseis\jersey_pico\jersey_pico.blend
+[    6.6s] fase rig terminada en 3s
+[    6.6s] === listo
+[    4.7s] === fases: rig | vistas 360 | 02_jersey_pico | Blender 5.2.3 LTS
+[    6.6s] pesos Camiseta PBR: 62199 vértices; cadera 12109, columna 2599, pecho 11093, clavicula.L 777, brazo.L 4687, antebrazo.L 7594, mano.L 1910, muslo.L 3669, clavicula.R 651, brazo.R 4697, antebrazo.R 6669, mano.R 1908, muslo.R 3836
+[    8.6s] exportado 02_jersey_pico_rig.glb: 11.1 MB
+[    8.8s] exportado 02_jersey_pico_rig.fbx
+[    8.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\jerseis\jersey_pico\jersey_pico.blend
+[    8.9s] fase rig terminada en 4s
+[    8.9s] === listo

@@ -1,0 +1,31 @@
+[   0.0 s] Maniquí hombre, 1.78 m. Fases: exportar, modelar, render. Salida: C:\Users\Usuario\Documents\MyOut\prendas_casual_glb\maniqui\blender_360
+[   1.1 s] Cuerpo: piezas unidas, remallando a 2.0 mm…
+[   3.3 s] Cuerpo listo: 1,098,652 triángulos
+[   3.3 s] Cabeza: remallando…
+[   4.1 s] Cabeza lista: 588,340 triángulos
+[   4.2 s] Mano: remallando…
+[   4.4 s] Mano lista: 235,800 triángulos
+[   5.2 s] Exportado C:\Users\Usuario\Documents\MyOut\prendas_casual_glb\maniqui\blender_360\cuerpo_tienda.glb (1,098,652 triángulos, 26.4 MB)
+[  11.6 s] Exportado C:\Users\Usuario\Documents\MyOut\prendas_casual_glb\maniqui\blender_360\lod\cuerpo_tienda.glb (30,000 triángulos)
+[  11.9 s] Exportado C:\Users\Usuario\Documents\MyOut\prendas_casual_glb\maniqui\blender_360\cabeza_tienda.glb (588,340 triángulos, 14.1 MB)
+[  15.0 s] Exportado C:\Users\Usuario\Documents\MyOut\prendas_casual_glb\maniqui\blender_360\lod\cabeza_tienda.glb (10,000 triángulos)
+[  15.1 s] Exportado C:\Users\Usuario\Documents\MyOut\prendas_casual_glb\maniqui\blender_360\mano_tienda.glb (235,800 triángulos, 5.7 MB)
+[  16.1 s] Exportado C:\Users\Usuario\Documents\MyOut\prendas_casual_glb\maniqui\blender_360\lod\mano_tienda.glb (10,000 triángulos)
+[  16.3 s] Guardado C:\Users\Usuario\Documents\MyOut\prendas_casual_glb\maniqui\blender_360\maniqui_tienda.blend
+[  16.8 s] Malla cuerpo_tienda: cerrada
+[  17.1 s] Malla cabeza_tienda: cerrada
+[  17.2 s] Malla mano_tienda: cerrada
+[  17.2 s] Malla peana: cerrada
+[  17.2 s] Malla varilla: cerrada
+[  17.2 s] Render con GPU (OPTIX: NVIDIA GeForce RTX 4060)
+[  17.2 s] Ocultos durante el render: Cube, Light, Camera
+[  28.0 s] Vista 1/4: 0°
+[  38.8 s] Vista 2/4: 90°
+[  49.0 s] Vista 3/4: 180°
+[  59.7 s] Vista 4/4: 270°
+[  69.3 s] Vista ortográfica: frente
+[  79.0 s] Vista ortográfica: perfil
+[  89.2 s] Vista ortográfica: espalda
+[  99.2 s] Vista ortográfica: tres_cuartos
+[  99.4 s] Lámina: C:\Users\Usuario\Documents\MyOut\prendas_casual_glb\maniqui\blender_360\360\maniqui_360_lamina.jpg
+[  99.4 s] Terminado en 99 s

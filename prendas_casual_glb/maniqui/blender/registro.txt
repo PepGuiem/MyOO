@@ -1,0 +1,26 @@
+cuerpo_tienda importado: 159999 caras
+cuerpo_tienda reparado: quitadas 3 caras; bordes no cerrados: 0
+cuerpo_tienda remallado y suavizado: 471896 caras
+cuerpo_tienda listo: 253823 caras
+cabeza_tienda importado: 59999 caras
+cabeza_tienda reparado: quitadas 3 caras; bordes no cerrados: 0
+cabeza_tienda remallado y suavizado: 343094 caras
+cabeza_tienda listo: 82599 caras
+cuerpo_tienda_f importado: 160000 caras
+cuerpo_tienda_f reparado: quitadas 4 caras; bordes no cerrados: 0
+cuerpo_tienda_f remallado y suavizado: 473678 caras
+cuerpo_tienda_f listo: 254663 caras
+cabeza_tienda_f importado: 59999 caras
+cabeza_tienda_f reparado: quitadas 3 caras; bordes no cerrados: 0
+cabeza_tienda_f remallado y suavizado: 319982 caras
+cabeza_tienda_f listo: 82455 caras
+mano_tienda importado: 30000 caras
+mano_tienda reparado: quitadas 0 caras; bordes no cerrados: 0
+mano_tienda remallado y suavizado: 116394 caras
+mano_tienda listo: 35492 caras
+exportado cuerpo_tienda.glb
+exportado cabeza_tienda.glb
+exportado cuerpo_tienda_f.glb
+exportado cabeza_tienda_f.glb
+exportado mano_tienda.glb
+guardado maniqui_tienda.blend en C:\Users\Usuario\Documents\MyOut\prendas_casual_glb\maniqui

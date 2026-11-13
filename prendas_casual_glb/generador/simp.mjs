@@ -1,0 +1,23 @@
+// Simplificación con meshoptimizer (el de Frontend/node_modules, o MESHOPT_DIR).
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath, pathToFileURL } from 'url';
+const here = path.dirname(fileURLToPath(import.meta.url));
+const dirs = [process.env.MESHOPT_DIR, path.join(here, '../../Frontend/node_modules/meshoptimizer'), '/home/claude/glbtool/node_modules/meshoptimizer'].filter(Boolean);
+const dir = dirs.find((d) => fs.existsSync(path.join(d, 'meshopt_simplifier.module.js')));
+if (!dir) throw new Error('No encuentro meshoptimizer: instala las dependencias del Frontend o define MESHOPT_DIR');
+const { MeshoptSimplifier } = await import(pathToFileURL(path.join(dir, 'meshopt_simplifier.module.js')).href);
+const [inp, out] = process.argv.slice(2);
+const b = fs.readFileSync(inp);
+const dv = new DataView(b.buffer, b.byteOffset, b.byteLength);
+const nv = dv.getInt32(0, true), ni = dv.getInt32(4, true), target = dv.getInt32(8, true), err = dv.getFloat32(12, true), flags = dv.getInt32(16, true);
+let off = 20;
+const V = new Float32Array(b.buffer.slice(b.byteOffset + off, b.byteOffset + off + nv * 12)); off += nv * 12;
+const N = new Float32Array(b.buffer.slice(b.byteOffset + off, b.byteOffset + off + nv * 12)); off += nv * 12;
+const I = new Uint32Array(b.buffer.slice(b.byteOffset + off, b.byteOffset + off + ni * 4));
+await MeshoptSimplifier.ready;
+MeshoptSimplifier.useExperimentalFeatures = true;
+const fl = ['ErrorAbsolute']; if (flags & 1) fl.push('LockBorder');
+const [res] = MeshoptSimplifier.simplifyWithAttributes(I, V, 3, N, 3, [0.4, 0.4, 0.4], null, target, err, fl);
+const o = Buffer.alloc(4 + res.length * 4); o.writeUInt32LE(res.length, 0); Buffer.from(res.buffer, res.byteOffset, res.byteLength).copy(o, 4);
+fs.writeFileSync(out, o);

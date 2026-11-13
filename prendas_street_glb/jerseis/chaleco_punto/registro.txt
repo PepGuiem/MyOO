@@ -1,0 +1,44 @@
+[ 1356.6s] === fases: preparar, hornear, exportar, render | vistas 360 | 07_chaleco_punto | Blender 5.2.3 LTS
+[ 1357.2s] importado: Tela 426124 tri., Pespuntes 19020 tri.
+[ 1357.7s] atributos del punto en 1s
+[ 1364.5s] desdoblado UV: MINIMUM_STRETCH
+[ 1379.0s] UV: 751 islas
+[ 1379.3s] versión ligera: 119999 tri., UV en 20s, estiramiento: mediana de la desviación de área 0.051, 95% < 0.638, ocupación UV 60%
+[ 1381.9s] piezas: Cuello, Delantero, Espalda, Sisa, Cintura
+[ 1381.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\jerseis\chaleco_punto\chaleco_punto.blend
+[ 1381.9s] fase preparar terminada en 25s
+[ 1381.9s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 1401.8s] horneado BaseColor (4096 px) en 20s
+[ 1421.4s] horneado Roughness (4096 px) en 20s
+[ 1442.6s] horneado Normal (4096 px) en 21s
+[ 1476.3s] horneado AO (4096 px) en 34s
+[ 1497.0s] horneado Height (4096 px) en 21s
+[ 1497.1s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\jerseis\chaleco_punto\chaleco_punto.blend
+[ 1497.1s] fase hornear terminada en 115s
+[ 1498.9s] exportado 07_chaleco_punto_pbr.glb: 5.5 MB
+[ 1499.1s] exportado 07_chaleco_punto_pbr.fbx (texturas en texturas/)
+[ 1499.1s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\jerseis\chaleco_punto\chaleco_punto.blend
+[ 1499.1s] fase exportar terminada en 2s
+[ 1499.1s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 1507.0s] render 1 frente en 8s
+[ 1514.3s] render 2 derecha en 7s
+[ 1522.2s] render 3 atras en 8s
+[ 1529.5s] render 4 izquierda en 7s
+[ 1529.9s] lámina 360 guardada
+[ 1529.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\jerseis\chaleco_punto\chaleco_punto.blend
+[ 1529.9s] fase render terminada en 31s
+[ 1529.9s] === listo
+[   21.8s] === fases: rig | vistas 360 | 07_chaleco_punto | Blender 5.2.3 LTS
+[   22.5s] pesos Camiseta PBR: 62853 vértices, 62853 sin peso de calor (al hueso más cercano)
+[   24.4s] exportado 07_chaleco_punto_rig.glb: 11.0 MB
+[   24.6s] exportado 07_chaleco_punto_rig.fbx
+[   24.7s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\jerseis\chaleco_punto\chaleco_punto.blend
+[   24.7s] fase rig terminada en 3s
+[   24.7s] === listo
+[   24.6s] === fases: rig | vistas 360 | 07_chaleco_punto | Blender 5.2.3 LTS
+[   25.6s] pesos Camiseta PBR: 62853 vértices; cadera 21851, columna 4558, pecho 21683, clavicula.L 1368, brazo.L 448, muslo.L 5582, clavicula.R 1355, brazo.R 437, muslo.R 5571
+[   27.6s] exportado 07_chaleco_punto_rig.glb: 11.0 MB
+[   27.8s] exportado 07_chaleco_punto_rig.fbx
+[   27.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\jerseis\chaleco_punto\chaleco_punto.blend
+[   27.9s] fase rig terminada en 3s
+[   27.9s] === listo

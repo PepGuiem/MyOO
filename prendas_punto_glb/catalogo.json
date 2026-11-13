@@ -1,0 +1,72 @@
+[
+ {
+  "archivo": "01_sudadera_cuello_redondo.glb",
+  "prenda": "Sudadera cuello redondo",
+  "triangulos": 144586,
+  "vertices": 74541,
+  "mb": 3.53
+ },
+ {
+  "archivo": "02_camiseta_manga_larga_bolsillo.glb",
+  "prenda": "Camiseta manga larga con bolsillo",
+  "triangulos": 144768,
+  "vertices": 74746,
+  "mb": 3.53
+ },
+ {
+  "archivo": "03_sudadera_capucha.glb",
+  "prenda": "Sudadera con capucha",
+  "triangulos": 145276,
+  "vertices": 75190,
+  "mb": 3.55
+ },
+ {
+  "archivo": "04_camiseta_manga_larga_raglan.glb",
+  "prenda": "Camiseta manga larga raglán",
+  "triangulos": 144220,
+  "vertices": 74200,
+  "mb": 3.51
+ },
+ {
+  "archivo": "05_jersey_cuello_alto.glb",
+  "prenda": "Jersey de cuello alto",
+  "triangulos": 143544,
+  "vertices": 73535,
+  "mb": 3.49
+ },
+ {
+  "archivo": "06_camiseta.glb",
+  "prenda": "Camiseta",
+  "triangulos": 145144,
+  "vertices": 75107,
+  "mb": 3.55
+ },
+ {
+  "archivo": "07_polo.glb",
+  "prenda": "Polo",
+  "triangulos": 195610,
+  "vertices": 103025,
+  "mb": 4.82
+ },
+ {
+  "archivo": "08_camiseta_oversize.glb",
+  "prenda": "Camiseta oversize",
+  "triangulos": 145842,
+  "vertices": 75802,
+  "mb": 3.57
+ },
+ {
+  "archivo": "09_camiseta_cuello_v.glb",
+  "prenda": "Camiseta cuello en V",
+  "triangulos": 145344,
+  "vertices": 75338,
+  "mb": 3.55
+ },
+ {
+  "archivo": "10_camiseta_tirantes.glb",
+  "prenda": "Camiseta de tirantes",
+  "triangulos": 146338,
+  "vertices": 76314,
+  "mb": 3.59
+ }
+]

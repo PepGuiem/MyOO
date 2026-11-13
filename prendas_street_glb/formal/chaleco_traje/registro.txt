@@ -1,0 +1,36 @@
+[  623.4s] === fases: preparar, hornear, exportar, render, rig | vistas 360 | 04_chaleco_traje | Blender 5.2.3 LTS
+[  624.0s] importado: Tela 153854 tri., Mangas 143058 tri., Pespuntes 18240 tri.
+[  624.5s] atributos del punto en 0s
+[  631.2s] desdoblado UV: MINIMUM_STRETCH
+[  649.1s] UV: 750 islas
+[  649.5s] versión ligera: 119999 tri., UV en 24s, estiramiento: mediana de la desviación de área 0.036, 95% < 0.255, ocupación UV 53%
+[  650.4s] piezas: Cuello, Mangas, Bajo, Delantero, Espalda, Sisa
+[  650.5s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\formal\chaleco_traje\chaleco_traje.blend
+[  650.5s] fase preparar terminada en 27s
+[  650.5s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  677.4s] horneado BaseColor (4096 px) en 27s
+[  700.8s] horneado Roughness (4096 px) en 23s
+[  725.2s] horneado Normal (4096 px) en 24s
+[  760.8s] horneado AO (4096 px) en 36s
+[  784.8s] horneado Height (4096 px) en 24s
+[  784.8s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\formal\chaleco_traje\chaleco_traje.blend
+[  784.8s] fase hornear terminada en 134s
+[  786.6s] exportado 04_chaleco_traje_pbr.glb: 5.0 MB
+[  786.7s] exportado 04_chaleco_traje_pbr.fbx (texturas en texturas/)
+[  786.8s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\formal\chaleco_traje\chaleco_traje.blend
+[  786.8s] fase exportar terminada en 2s
+[  786.8s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  794.7s] render 1 frente en 8s
+[  802.2s] render 2 derecha en 7s
+[  809.8s] render 3 atras en 8s
+[  817.3s] render 4 izquierda en 7s
+[  817.6s] lámina 360 guardada
+[  817.7s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\formal\chaleco_traje\chaleco_traje.blend
+[  817.7s] fase render terminada en 31s
+[  818.6s] pesos Camiseta PBR: 63604 vértices; cadera 26360, columna 11677, pecho 21995, clavicula.L 1680, brazo.L 88, clavicula.R 1719, brazo.R 85
+[  818.6s] pesos Botones: 6324 vértices; cadera 6324
+[  820.3s] exportado 04_chaleco_traje_rig.glb: 8.4 MB
+[  820.6s] exportado 04_chaleco_traje_rig.fbx
+[  820.7s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\formal\chaleco_traje\chaleco_traje.blend
+[  820.7s] fase rig terminada en 3s
+[  820.7s] === listo

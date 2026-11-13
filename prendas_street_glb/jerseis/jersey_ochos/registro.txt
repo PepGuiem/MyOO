@@ -1,0 +1,44 @@
+[  903.8s] === fases: preparar, hornear, exportar, render | vistas 360 | 05_jersey_ochos | Blender 5.2.3 LTS
+[  904.6s] importado: Tela 524750 tri., Pespuntes 17880 tri.
+[  905.3s] atributos del punto en 1s
+[  912.8s] desdoblado UV: MINIMUM_STRETCH
+[  931.0s] UV: 524 islas
+[  931.4s] versión ligera: 120000 tri., UV en 24s, estiramiento: mediana de la desviación de área 0.106, 95% < 0.652, ocupación UV 59%
+[  935.2s] piezas: Puño izquierdo, Puño derecho, Manga derecha, Delantero, Espalda, Cintura, Cuello, Manga izquierda
+[  935.2s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\jerseis\jersey_ochos\jersey_ochos.blend
+[  935.2s] fase preparar terminada en 31s
+[  935.2s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  963.0s] horneado BaseColor (4096 px) en 28s
+[  990.2s] horneado Roughness (4096 px) en 27s
+[ 1019.4s] horneado Normal (4096 px) en 29s
+[ 1062.4s] horneado AO (4096 px) en 43s
+[ 1091.9s] horneado Height (4096 px) en 29s
+[ 1092.0s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\jerseis\jersey_ochos\jersey_ochos.blend
+[ 1092.0s] fase hornear terminada en 157s
+[ 1093.8s] exportado 05_jersey_ochos_pbr.glb: 5.8 MB
+[ 1093.9s] exportado 05_jersey_ochos_pbr.fbx (texturas en texturas/)
+[ 1093.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\jerseis\jersey_ochos\jersey_ochos.blend
+[ 1094.0s] fase exportar terminada en 2s
+[ 1094.0s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 1103.4s] render 1 frente en 9s
+[ 1111.1s] render 2 derecha en 8s
+[ 1120.4s] render 3 atras en 9s
+[ 1128.2s] render 4 izquierda en 8s
+[ 1128.6s] lámina 360 guardada
+[ 1128.7s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\jerseis\jersey_ochos\jersey_ochos.blend
+[ 1128.7s] fase render terminada en 35s
+[ 1128.7s] === listo
+[   14.3s] === fases: rig | vistas 360 | 05_jersey_ochos | Blender 5.2.3 LTS
+[   16.4s] pesos Camiseta PBR: 61511 vértices, 0 sin peso de calor (al hueso más cercano)
+[   18.5s] exportado 05_jersey_ochos_rig.glb: 12.0 MB
+[   18.8s] exportado 05_jersey_ochos_rig.fbx
+[   18.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\jerseis\jersey_ochos\jersey_ochos.blend
+[   18.9s] fase rig terminada en 4s
+[   18.9s] === listo
+[   16.7s] === fases: rig | vistas 360 | 05_jersey_ochos | Blender 5.2.3 LTS
+[   18.3s] pesos Camiseta PBR: 61511 vértices; cadera 19039, columna 5982, pecho 12762, clavicula.L 433, brazo.L 3886, antebrazo.L 4833, mano.L 949, muslo.L 2248, clavicula.R 341, brazo.R 3426, antebrazo.R 4299, mano.R 940, muslo.R 2373
+[   20.4s] exportado 05_jersey_ochos_rig.glb: 12.0 MB
+[   20.6s] exportado 05_jersey_ochos_rig.fbx
+[   20.6s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\jerseis\jersey_ochos\jersey_ochos.blend
+[   20.6s] fase rig terminada en 4s
+[   20.6s] === listo
