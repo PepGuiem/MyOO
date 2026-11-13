@@ -1,0 +1,39 @@
+[  248.2s] === fases: preparar, hornear, exportar, render | vistas 360 | 02_sudadera_capucha_oversize | Blender 5.2.3 LTS
+[  249.1s] importado: Tela 525146 tri., Pespuntes 42600 tri.
+[  249.8s] atributos del punto en 1s
+[  257.1s] desdoblado UV: MINIMUM_STRETCH
+[  284.8s] UV: 564 islas
+[  285.1s] versión ligera: 119999 tri., UV en 33s, estiramiento: mediana de la desviación de área 0.053, 95% < 0.545, ocupación UV 58%
+[  289.1s] piezas: Puño izquierdo, Puño derecho, Manga derecha, Delantero, Espalda, Capucha, Cintura, Cuello, Manga izquierda
+[  289.2s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\sudaderas\sudadera_capucha_oversize\sudadera_capucha_oversize.blend
+[  289.2s] fase preparar terminada en 41s
+[  289.2s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  319.7s] horneado BaseColor (4096 px) en 30s
+[  350.0s] horneado Roughness (4096 px) en 30s
+[  382.2s] horneado Normal (4096 px) en 32s
+[  428.5s] horneado AO (4096 px) en 46s
+[  461.6s] horneado Height (4096 px) en 33s
+[  461.6s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\sudaderas\sudadera_capucha_oversize\sudadera_capucha_oversize.blend
+[  461.6s] fase hornear terminada en 172s
+[  463.4s] exportado 02_sudadera_capucha_oversize_pbr.glb: 5.2 MB
+[  463.5s] exportado 02_sudadera_capucha_oversize_pbr.fbx (texturas en texturas/)
+[  463.6s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\sudaderas\sudadera_capucha_oversize\sudadera_capucha_oversize.blend
+[  463.6s] fase exportar terminada en 2s
+[  463.6s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  471.5s] render 1 frente en 8s
+[  479.0s] render 2 derecha en 8s
+[  486.8s] render 3 atras en 8s
+[  494.2s] render 4 izquierda en 7s
+[  494.6s] lámina 360 guardada
+[  494.6s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\sudaderas\sudadera_capucha_oversize\sudadera_capucha_oversize.blend
+[  494.6s] fase render terminada en 31s
+[  494.6s] === listo
+[   11.3s] === fases: rig | vistas 360 | 02_sudadera_capucha_oversize | Blender 5.2.3 LTS
+[   14.3s] pesos Camiseta PBR: 61732 vértices; cadera 12067, columna 1430, pecho 10361, clavicula.L 761, brazo.L 5360, antebrazo.L 6692, mano.L 2015, muslo.L 4873, clavicula.R 599, brazo.R 4090, antebrazo.R 7034, mano.R 1947, muslo.R 4503
+[   14.4s] pesos Cordones: 6004 vértices; pecho 6004
+[   14.5s] pesos Punteras y ojales: 9424 vértices; pecho 9424
+[   17.8s] exportado 02_sudadera_capucha_oversize_rig.glb: 9.8 MB
+[   18.5s] exportado 02_sudadera_capucha_oversize_rig.fbx
+[   18.8s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\sudaderas\sudadera_capucha_oversize\sudadera_capucha_oversize.blend
+[   18.8s] fase rig terminada en 7s
+[   18.8s] === listo

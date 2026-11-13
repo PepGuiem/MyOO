@@ -1,0 +1,36 @@
+[  541.7s] === fases: preparar, hornear, exportar, render, rig | vistas 360 | 04_polo | Blender 5.2.3 LTS
+[  542.7s] importado: Tela 575368 tri., Pespuntes 40140 tri.
+[  543.5s] atributos del punto en 1s
+[  552.0s] desdoblado UV: MINIMUM_STRETCH
+[  570.8s] UV: 1976 islas
+[  571.1s] versión ligera: 119998 tri., UV en 25s, estiramiento: mediana de la desviación de área 0.118, 95% < 0.932, ocupación UV 49%
+[  575.0s] piezas: Manga izquierda, Manga derecha, Delantero, Espalda, Bajo, Cuello
+[  575.1s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\polo\polo.blend
+[  575.1s] fase preparar terminada en 33s
+[  575.1s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  600.1s] horneado BaseColor (4096 px) en 25s
+[  623.9s] horneado Roughness (4096 px) en 24s
+[  648.8s] horneado Normal (4096 px) en 25s
+[  688.0s] horneado AO (4096 px) en 39s
+[  715.1s] horneado Height (4096 px) en 27s
+[  715.2s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\polo\polo.blend
+[  715.2s] fase hornear terminada en 140s
+[  717.0s] exportado 04_polo_pbr.glb: 5.1 MB
+[  717.2s] exportado 04_polo_pbr.fbx (texturas en texturas/)
+[  717.3s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\polo\polo.blend
+[  717.3s] fase exportar terminada en 2s
+[  717.3s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  726.2s] render 1 frente en 9s
+[  734.5s] render 2 derecha en 8s
+[  743.5s] render 3 atras en 9s
+[  751.5s] render 4 izquierda en 8s
+[  751.9s] lámina 360 guardada
+[  752.0s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\polo\polo.blend
+[  752.0s] fase render terminada en 35s
+[  753.2s] pesos Camiseta PBR: 63655 vértices; cadera 12229, columna 3772, pecho 21339, clavicula.L 1516, brazo.L 9419, muslo.L 2207, clavicula.R 1465, brazo.R 9477, muslo.R 2231
+[  753.2s] pesos Botones: 2262 vértices; pecho 2262
+[  755.1s] exportado 04_polo_rig.glb: 9.7 MB
+[  755.3s] exportado 04_polo_rig.fbx
+[  755.4s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\polo\polo.blend
+[  755.4s] fase rig terminada en 3s
+[  755.4s] === listo

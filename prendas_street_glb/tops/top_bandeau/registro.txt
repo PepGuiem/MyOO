@@ -1,0 +1,35 @@
+[ 1291.5s] === fases: preparar, hornear, exportar, render, rig | vistas 360 | 08_top_bandeau | Blender 5.2.3 LTS
+[ 1291.7s] importado: Tela 95404 tri., Pespuntes 38340 tri.
+[ 1291.9s] atributos del punto en 0s
+[ 1296.8s] desdoblado UV: MINIMUM_STRETCH
+[ 1303.5s] UV: 537 islas
+[ 1303.8s] versión ligera: 95404 tri., UV en 12s, estiramiento: mediana de la desviación de área 0.009, 95% < 0.074, ocupación UV 33%
+[ 1304.4s] piezas: Bajo, Cuello, Delantero, Espalda
+[ 1304.4s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\top_bandeau\top_bandeau.blend
+[ 1304.4s] fase preparar terminada en 13s
+[ 1304.4s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 1321.6s] horneado BaseColor (4096 px) en 17s
+[ 1337.7s] horneado Roughness (4096 px) en 16s
+[ 1355.1s] horneado Normal (4096 px) en 17s
+[ 1380.3s] horneado AO (4096 px) en 25s
+[ 1396.8s] horneado Height (4096 px) en 17s
+[ 1396.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\top_bandeau\top_bandeau.blend
+[ 1396.9s] fase hornear terminada en 92s
+[ 1398.5s] exportado 08_top_bandeau_pbr.glb: 3.2 MB
+[ 1398.6s] exportado 08_top_bandeau_pbr.fbx (texturas en texturas/)
+[ 1398.6s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\top_bandeau\top_bandeau.blend
+[ 1398.6s] fase exportar terminada en 2s
+[ 1398.6s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 1407.5s] render 1 frente en 9s
+[ 1415.2s] render 2 derecha en 8s
+[ 1423.7s] render 3 atras en 8s
+[ 1431.9s] render 4 izquierda en 8s
+[ 1432.3s] lámina 360 guardada
+[ 1432.4s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\top_bandeau\top_bandeau.blend
+[ 1432.4s] fase render terminada en 34s
+[ 1432.8s] pesos Camiseta PBR: 49182 vértices; columna 25432, pecho 18789, clavicula.L 809, brazo.L 1632, clavicula.R 836, brazo.R 1684
+[ 1434.5s] exportado 08_top_bandeau_rig.glb: 7.2 MB
+[ 1434.7s] exportado 08_top_bandeau_rig.fbx
+[ 1434.8s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\top_bandeau\top_bandeau.blend
+[ 1434.8s] fase rig terminada en 2s
+[ 1434.8s] === listo

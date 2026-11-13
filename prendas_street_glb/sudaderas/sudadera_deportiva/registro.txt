@@ -1,0 +1,37 @@
+[ 1599.4s] === fases: preparar, hornear, exportar, render | vistas 360 | 08_sudadera_deportiva | Blender 5.2.3 LTS
+[ 1600.7s] importado: Tela 826702 tri., Pespuntes 84060 tri.
+[ 1601.8s] atributos del punto en 1s
+[ 1611.2s] desdoblado UV: MINIMUM_STRETCH
+[ 1625.6s] UV: 1162 islas
+[ 1625.9s] versión ligera: 120000 tri., UV en 20s, estiramiento: mediana de la desviación de área 0.038, 95% < 0.267, ocupación UV 58%
+[ 1631.7s] piezas: Puño izquierdo, Manga derecha, Delantero, Espalda, Cintura, Cuello, Manga izquierda, Puño derecho
+[ 1631.8s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\sudaderas\sudadera_deportiva\sudadera_deportiva.blend
+[ 1631.8s] fase preparar terminada en 32s
+[ 1631.8s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 1659.6s] horneado BaseColor (4096 px) en 28s
+[ 1686.8s] horneado Roughness (4096 px) en 27s
+[ 1716.1s] horneado Normal (4096 px) en 29s
+[ 1759.8s] horneado AO (4096 px) en 44s
+[ 1791.8s] horneado Height (4096 px) en 32s
+[ 1791.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\sudaderas\sudadera_deportiva\sudadera_deportiva.blend
+[ 1791.9s] fase hornear terminada en 160s
+[ 1793.8s] exportado 08_sudadera_deportiva_pbr.glb: 5.0 MB
+[ 1793.9s] exportado 08_sudadera_deportiva_pbr.fbx (texturas en texturas/)
+[ 1794.0s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\sudaderas\sudadera_deportiva\sudadera_deportiva.blend
+[ 1794.0s] fase exportar terminada en 2s
+[ 1794.0s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 1803.2s] render 1 frente en 9s
+[ 1810.6s] render 2 derecha en 7s
+[ 1819.3s] render 3 atras en 9s
+[ 1826.7s] render 4 izquierda en 7s
+[ 1827.0s] lámina 360 guardada
+[ 1827.1s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\sudaderas\sudadera_deportiva\sudadera_deportiva.blend
+[ 1827.1s] fase render terminada en 33s
+[ 1827.1s] === listo
+[   51.9s] === fases: rig | vistas 360 | 08_sudadera_deportiva | Blender 5.2.3 LTS
+[   54.9s] pesos Camiseta PBR: 63244 vértices; cadera 10667, columna 1959, pecho 13486, clavicula.L 686, brazo.L 6084, antebrazo.L 7088, mano.L 1221, muslo.L 3454, clavicula.R 683, brazo.R 5652, antebrazo.R 6967, mano.R 1183, muslo.R 4114
+[   58.3s] exportado 08_sudadera_deportiva_rig.glb: 10.0 MB
+[   58.9s] exportado 08_sudadera_deportiva_rig.fbx
+[   59.1s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\sudaderas\sudadera_deportiva\sudadera_deportiva.blend
+[   59.1s] fase rig terminada en 7s
+[   59.1s] === listo

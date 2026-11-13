@@ -1,0 +1,36 @@
+[  234.1s] === fases: preparar, hornear, exportar, render, rig | vistas 360 | 02_abrigo_lana | Blender 5.2.3 LTS
+[  235.2s] importado: Tela 527130 tri., Pespuntes 64860 tri.
+[  235.9s] atributos del punto en 1s
+[  244.0s] desdoblado UV: MINIMUM_STRETCH
+[  259.3s] UV: 839 islas
+[  259.7s] versión ligera: 119999 tri., UV en 21s, estiramiento: mediana de la desviación de área 0.058, 95% < 0.392, ocupación UV 48%
+[  263.6s] piezas: Manga izquierda, Manga derecha, Delantero derecho, Espalda, Bolsillos, Cuello, Delantero izquierdo
+[  263.7s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\abrigos\abrigo_lana\abrigo_lana.blend
+[  263.7s] fase preparar terminada en 30s
+[  263.7s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  293.4s] horneado BaseColor (4096 px) en 30s
+[  321.4s] horneado Roughness (4096 px) en 28s
+[  351.8s] horneado Normal (4096 px) en 30s
+[  393.3s] horneado AO (4096 px) en 41s
+[  422.4s] horneado Height (4096 px) en 29s
+[  422.5s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\abrigos\abrigo_lana\abrigo_lana.blend
+[  422.5s] fase hornear terminada en 159s
+[  424.2s] exportado 02_abrigo_lana_pbr.glb: 5.4 MB
+[  424.4s] exportado 02_abrigo_lana_pbr.fbx (texturas en texturas/)
+[  424.5s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\abrigos\abrigo_lana\abrigo_lana.blend
+[  424.5s] fase exportar terminada en 2s
+[  424.5s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  434.0s] render 1 frente en 9s
+[  442.7s] render 2 derecha en 9s
+[  451.6s] render 3 atras en 9s
+[  459.9s] render 4 izquierda en 8s
+[  460.3s] lámina 360 guardada
+[  460.3s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\abrigos\abrigo_lana\abrigo_lana.blend
+[  460.3s] fase render terminada en 36s
+[  462.0s] pesos Camiseta PBR: 61388 vértices; cadera 9821, columna 3518, pecho 15464, clavicula.L 767, brazo.L 4991, antebrazo.L 6347, mano.L 1582, muslo.L 4536, clavicula.R 578, brazo.R 4056, antebrazo.R 4474, mano.R 1439, muslo.R 3815
+[  462.0s] pesos Botones: 14092 vértices; cadera 7436, columna 1158, antebrazo.L 1828, mano.L 934, antebrazo.R 1834, mano.R 902
+[  463.6s] exportado 02_abrigo_lana_rig.glb: 8.9 MB
+[  463.9s] exportado 02_abrigo_lana_rig.fbx
+[  464.0s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\abrigos\abrigo_lana\abrigo_lana.blend
+[  464.0s] fase rig terminada en 4s
+[  464.0s] === listo

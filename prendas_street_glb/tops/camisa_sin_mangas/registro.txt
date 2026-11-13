@@ -1,0 +1,36 @@
+[ 1637.8s] === fases: preparar, hornear, exportar, render, rig | vistas 360 | 10_camisa_sin_mangas | Blender 5.2.3 LTS
+[ 1638.7s] importado: Tela 463428 tri., Pespuntes 48180 tri.
+[ 1639.4s] atributos del punto en 1s
+[ 1647.8s] desdoblado UV: MINIMUM_STRETCH
+[ 1671.8s] UV: 2340 islas
+[ 1672.2s] versión ligera: 120000 tri., UV en 31s, estiramiento: mediana de la desviación de área 0.328, 95% < 0.960, ocupación UV 44%
+[ 1675.2s] piezas: Cuello, Delantero, Espalda, Sisa, Bajo
+[ 1675.2s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\camisa_sin_mangas\camisa_sin_mangas.blend
+[ 1675.2s] fase preparar terminada en 37s
+[ 1675.2s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 1697.0s] horneado BaseColor (4096 px) en 22s
+[ 1717.2s] horneado Roughness (4096 px) en 20s
+[ 1738.3s] horneado Normal (4096 px) en 21s
+[ 1771.1s] horneado AO (4096 px) en 33s
+[ 1794.3s] horneado Height (4096 px) en 23s
+[ 1794.4s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\camisa_sin_mangas\camisa_sin_mangas.blend
+[ 1794.4s] fase hornear terminada en 119s
+[ 1796.1s] exportado 10_camisa_sin_mangas_pbr.glb: 5.3 MB
+[ 1796.3s] exportado 10_camisa_sin_mangas_pbr.fbx (texturas en texturas/)
+[ 1796.3s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\camisa_sin_mangas\camisa_sin_mangas.blend
+[ 1796.3s] fase exportar terminada en 2s
+[ 1796.3s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 1805.5s] render 1 frente en 9s
+[ 1813.8s] render 2 derecha en 8s
+[ 1822.6s] render 3 atras en 9s
+[ 1830.6s] render 4 izquierda en 8s
+[ 1830.9s] lámina 360 guardada
+[ 1831.0s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\camisa_sin_mangas\camisa_sin_mangas.blend
+[ 1831.0s] fase render terminada en 35s
+[ 1831.9s] pesos Camiseta PBR: 64463 vértices; cadera 19580, columna 6067, pecho 29703, clavicula.L 625, muslo.L 4086, clavicula.R 602, muslo.R 3800
+[ 1831.9s] pesos Botones: 4356 vértices; cadera 2508, columna 1026, pecho 822
+[ 1833.6s] exportado 10_camisa_sin_mangas_rig.glb: 9.2 MB
+[ 1833.9s] exportado 10_camisa_sin_mangas_rig.fbx
+[ 1833.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\camisa_sin_mangas\camisa_sin_mangas.blend
+[ 1833.9s] fase rig terminada en 3s
+[ 1833.9s] === listo

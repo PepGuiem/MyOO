@@ -1,0 +1,40 @@
+[  695.4s] === fases: preparar, hornear, exportar, render | vistas 360 | 04_sudadera_cremallera | Blender 5.2.3 LTS
+[  696.3s] importado: Tela 527592 tri., Pespuntes 66120 tri.
+[  697.0s] atributos del punto en 1s
+[  704.1s] desdoblado UV: MINIMUM_STRETCH
+[  726.6s] UV: 683 islas
+[  726.9s] versión ligera: 120000 tri., UV en 27s, estiramiento: mediana de la desviación de área 0.037, 95% < 0.225, ocupación UV 59%
+[  731.0s] piezas: Puño izquierdo, Puño derecho, Manga derecha, Delantero, Espalda, Capucha, Cintura, Cuello, Manga izquierda
+[  731.0s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\sudaderas\sudadera_cremallera\sudadera_cremallera.blend
+[  731.0s] fase preparar terminada en 36s
+[  731.0s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  761.3s] horneado BaseColor (4096 px) en 30s
+[  790.9s] horneado Roughness (4096 px) en 30s
+[  822.7s] horneado Normal (4096 px) en 32s
+[  869.4s] horneado AO (4096 px) en 47s
+[  902.9s] horneado Height (4096 px) en 34s
+[  902.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\sudaderas\sudadera_cremallera\sudadera_cremallera.blend
+[  902.9s] fase hornear terminada en 172s
+[  904.8s] exportado 04_sudadera_cremallera_pbr.glb: 5.7 MB
+[  904.9s] exportado 04_sudadera_cremallera_pbr.fbx (texturas en texturas/)
+[  905.0s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\sudaderas\sudadera_cremallera\sudadera_cremallera.blend
+[  905.0s] fase exportar terminada en 2s
+[  905.0s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  914.1s] render 1 frente en 9s
+[  921.8s] render 2 derecha en 8s
+[  930.8s] render 3 atras en 9s
+[  938.5s] render 4 izquierda en 8s
+[  938.9s] lámina 360 guardada
+[  939.0s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\sudaderas\sudadera_cremallera\sudadera_cremallera.blend
+[  939.0s] fase render terminada en 34s
+[  939.0s] === listo
+[   25.0s] === fases: rig | vistas 360 | 04_sudadera_cremallera | Blender 5.2.3 LTS
+[   27.7s] pesos Camiseta PBR: 61665 vértices; cadera 13568, columna 2414, pecho 9777, clavicula.L 737, brazo.L 5339, antebrazo.L 6955, mano.L 1240, muslo.L 3966, clavicula.R 593, brazo.R 4957, antebrazo.R 7022, mano.R 1192, muslo.R 3905
+[   27.8s] pesos Cordones: 6004 vértices; pecho 6004
+[   27.9s] pesos Punteras y ojales: 9456 vértices; pecho 9456
+[   28.0s] pesos Cremallera: 8004 vértices; cadera 2736, columna 1102, pecho 4166
+[   31.3s] exportado 04_sudadera_cremallera_rig.glb: 11.0 MB
+[   32.2s] exportado 04_sudadera_cremallera_rig.fbx
+[   32.3s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\sudaderas\sudadera_cremallera\sudadera_cremallera.blend
+[   32.3s] fase rig terminada en 7s
+[   32.3s] === listo

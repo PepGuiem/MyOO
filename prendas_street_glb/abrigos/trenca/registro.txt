@@ -1,0 +1,37 @@
+[ 1165.9s] === fases: preparar, hornear, exportar, render, rig | vistas 360 | 06_trenca | Blender 5.2.3 LTS
+[ 1166.9s] importado: Tela 528296 tri., Pespuntes 69000 tri.
+[ 1167.7s] atributos del punto en 1s
+[ 1175.9s] desdoblado UV: MINIMUM_STRETCH
+[ 1202.4s] UV: 1290 islas
+[ 1202.7s] versión ligera: 119999 tri., UV en 32s, estiramiento: mediana de la desviación de área 0.133, 95% < 0.990, ocupación UV 58%
+[ 1206.6s] piezas: Manga izquierda, Manga derecha, Delantero derecho, Espalda, Capucha, Bolsillos, Delantero izquierdo
+[ 1206.7s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\abrigos\trenca\trenca.blend
+[ 1206.7s] fase preparar terminada en 41s
+[ 1206.7s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 1235.6s] horneado BaseColor (4096 px) en 29s
+[ 1262.9s] horneado Roughness (4096 px) en 27s
+[ 1292.1s] horneado Normal (4096 px) en 29s
+[ 1336.3s] horneado AO (4096 px) en 44s
+[ 1366.5s] horneado Height (4096 px) en 30s
+[ 1366.6s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\abrigos\trenca\trenca.blend
+[ 1366.6s] fase hornear terminada en 160s
+[ 1368.4s] exportado 06_trenca_pbr.glb: 6.4 MB
+[ 1368.6s] exportado 06_trenca_pbr.fbx (texturas en texturas/)
+[ 1368.7s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\abrigos\trenca\trenca.blend
+[ 1368.7s] fase exportar terminada en 2s
+[ 1368.7s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 1379.2s] render 1 frente en 11s
+[ 1388.1s] render 2 derecha en 9s
+[ 1398.3s] render 3 atras en 10s
+[ 1407.2s] render 4 izquierda en 9s
+[ 1407.6s] lámina 360 guardada
+[ 1407.7s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\abrigos\trenca\trenca.blend
+[ 1407.7s] fase render terminada en 39s
+[ 1409.1s] pesos Camiseta PBR: 61869 vértices; cadera 11565, columna 1227, pecho 14938, clavicula.L 1277, brazo.L 4314, antebrazo.L 6334, mano.L 1530, muslo.L 4401, clavicula.R 1097, brazo.R 5244, antebrazo.R 4985, mano.R 1436, muslo.R 3521
+[ 1409.2s] pesos Botones: 14036 vértices; cadera 8032, columna 3002, pecho 3002
+[ 1409.3s] pesos Cordones y adornos: 24008 vértices; cadera 12004, columna 6002, pecho 6002
+[ 1411.2s] exportado 06_trenca_rig.glb: 10.7 MB
+[ 1411.6s] exportado 06_trenca_rig.fbx
+[ 1411.6s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\abrigos\trenca\trenca.blend
+[ 1411.6s] fase rig terminada en 4s
+[ 1411.6s] === listo

@@ -1,0 +1,38 @@
+[ 1154.3s] === fases: preparar, hornear, exportar, render | vistas 360 | 06_sudadera_media_cremallera | Blender 5.2.3 LTS
+[ 1155.1s] importado: Tela 523826 tri., Pespuntes 46380 tri.
+[ 1155.8s] atributos del punto en 1s
+[ 1163.4s] desdoblado UV: MINIMUM_STRETCH
+[ 1190.1s] UV: 339 islas
+[ 1190.4s] versión ligera: 119999 tri., UV en 32s, estiramiento: mediana de la desviación de área 0.037, 95% < 0.400, ocupación UV 51%
+[ 1194.4s] piezas: Puño izquierdo, Puño derecho, Manga derecha, Delantero, Espalda, Cintura, Cuello, Manga izquierda
+[ 1194.4s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\sudaderas\sudadera_media_cremallera\sudadera_media_cremallera.blend
+[ 1194.4s] fase preparar terminada en 40s
+[ 1194.4s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 1221.7s] horneado BaseColor (4096 px) en 27s
+[ 1248.6s] horneado Roughness (4096 px) en 27s
+[ 1277.5s] horneado Normal (4096 px) en 29s
+[ 1318.3s] horneado AO (4096 px) en 41s
+[ 1347.4s] horneado Height (4096 px) en 29s
+[ 1347.4s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\sudaderas\sudadera_media_cremallera\sudadera_media_cremallera.blend
+[ 1347.4s] fase hornear terminada en 153s
+[ 1349.1s] exportado 06_sudadera_media_cremallera_pbr.glb: 4.6 MB
+[ 1349.2s] exportado 06_sudadera_media_cremallera_pbr.fbx (texturas en texturas/)
+[ 1349.3s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\sudaderas\sudadera_media_cremallera\sudadera_media_cremallera.blend
+[ 1349.3s] fase exportar terminada en 2s
+[ 1349.3s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 1357.5s] render 1 frente en 8s
+[ 1365.0s] render 2 derecha en 7s
+[ 1373.1s] render 3 atras en 8s
+[ 1380.5s] render 4 izquierda en 7s
+[ 1380.9s] lámina 360 guardada
+[ 1380.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\sudaderas\sudadera_media_cremallera\sudadera_media_cremallera.blend
+[ 1380.9s] fase render terminada en 32s
+[ 1380.9s] === listo
+[   38.8s] === fases: rig | vistas 360 | 06_sudadera_media_cremallera | Blender 5.2.3 LTS
+[   40.8s] pesos Camiseta PBR: 61212 vértices; cadera 10593, columna 2447, pecho 9948, clavicula.L 809, brazo.L 5433, antebrazo.L 7891, mano.L 1292, muslo.L 4386, clavicula.R 670, brazo.R 4929, antebrazo.R 7573, mano.R 1250, muslo.R 3991
+[   40.8s] pesos Cremallera: 5964 vértices; columna 757, pecho 5207
+[   43.5s] exportado 06_sudadera_media_cremallera_rig.glb: 8.6 MB
+[   44.4s] exportado 06_sudadera_media_cremallera_rig.fbx
+[   44.7s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\sudaderas\sudadera_media_cremallera\sudadera_media_cremallera.blend
+[   44.7s] fase rig terminada en 6s
+[   44.7s] === listo

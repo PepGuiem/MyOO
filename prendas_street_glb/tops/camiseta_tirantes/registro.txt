@@ -1,0 +1,35 @@
+[    0.0s] === fases: preparar, hornear, exportar, render, rig | vistas 360 | 01_camiseta_tirantes | Blender 5.2.3 LTS
+[    0.6s] importado: Tela 354144 tri., Pespuntes 19680 tri.
+[    1.1s] atributos del punto en 0s
+[    9.7s] desdoblado UV: MINIMUM_STRETCH
+[   17.6s] UV: 411 islas
+[   18.0s] versión ligera: 119999 tri., UV en 15s, estiramiento: mediana de la desviación de área 0.022, 95% < 0.404, ocupación UV 47%
+[   20.2s] piezas: Cuello, Delantero, Espalda, Bajo, Sisa
+[   20.2s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\camiseta_tirantes\camiseta_tirantes.blend
+[   20.2s] fase preparar terminada en 20s
+[   20.3s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[   42.1s] horneado BaseColor (4096 px) en 22s
+[   61.7s] horneado Roughness (4096 px) en 20s
+[   83.0s] horneado Normal (4096 px) en 21s
+[  115.6s] horneado AO (4096 px) en 33s
+[  137.0s] horneado Height (4096 px) en 21s
+[  137.1s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\camiseta_tirantes\camiseta_tirantes.blend
+[  137.1s] fase hornear terminada en 117s
+[  139.0s] exportado 01_camiseta_tirantes_pbr.glb: 4.5 MB
+[  139.3s] exportado 01_camiseta_tirantes_pbr.fbx (texturas en texturas/)
+[  139.3s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\camiseta_tirantes\camiseta_tirantes.blend
+[  139.3s] fase exportar terminada en 2s
+[  139.3s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  148.5s] render 1 frente en 9s
+[  156.4s] render 2 derecha en 8s
+[  165.3s] render 3 atras en 9s
+[  173.2s] render 4 izquierda en 8s
+[  173.6s] lámina 360 guardada
+[  173.6s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\camiseta_tirantes\camiseta_tirantes.blend
+[  173.6s] fase render terminada en 34s
+[  174.5s] pesos Camiseta PBR: 62548 vértices; cadera 25882, columna 9959, pecho 20269, muslo.L 3213, muslo.R 3225
+[  176.2s] exportado 01_camiseta_tirantes_rig.glb: 9.0 MB
+[  176.5s] exportado 01_camiseta_tirantes_rig.fbx
+[  176.5s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\camiseta_tirantes\camiseta_tirantes.blend
+[  176.5s] fase rig terminada en 3s
+[  176.5s] === listo

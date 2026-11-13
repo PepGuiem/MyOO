@@ -1,0 +1,36 @@
+[ 1411.6s] === fases: preparar, hornear, exportar, render, rig | vistas 360 | 07_plumifero_largo | Blender 5.2.3 LTS
+[ 1412.7s] importado: Tela 532006 tri., Pespuntes 88380 tri.
+[ 1413.6s] atributos del punto en 1s
+[ 1421.8s] desdoblado UV: MINIMUM_STRETCH
+[ 1438.7s] UV: 1302 islas
+[ 1439.0s] versión ligera: 120000 tri., UV en 23s, estiramiento: mediana de la desviación de área 0.065, 95% < 0.383, ocupación UV 56%
+[ 1443.6s] piezas: Puño izquierdo, Manga derecha, Puño derecho, Delantero derecho, Espalda, Capucha, Delantero izquierdo, Manga izquierda
+[ 1443.6s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\abrigos\plumifero_largo\plumifero_largo.blend
+[ 1443.6s] fase preparar terminada en 32s
+[ 1443.6s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 1474.8s] horneado BaseColor (4096 px) en 31s
+[ 1504.4s] horneado Roughness (4096 px) en 30s
+[ 1536.4s] horneado Normal (4096 px) en 32s
+[ 1584.5s] horneado AO (4096 px) en 48s
+[ 1618.3s] horneado Height (4096 px) en 34s
+[ 1618.4s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\abrigos\plumifero_largo\plumifero_largo.blend
+[ 1618.4s] fase hornear terminada en 175s
+[ 1620.2s] exportado 07_plumifero_largo_pbr.glb: 5.8 MB
+[ 1620.4s] exportado 07_plumifero_largo_pbr.fbx (texturas en texturas/)
+[ 1620.5s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\abrigos\plumifero_largo\plumifero_largo.blend
+[ 1620.5s] fase exportar terminada en 2s
+[ 1620.5s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 1630.2s] render 1 frente en 10s
+[ 1639.3s] render 2 derecha en 9s
+[ 1648.4s] render 3 atras en 9s
+[ 1657.4s] render 4 izquierda en 9s
+[ 1657.8s] lámina 360 guardada
+[ 1657.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\abrigos\plumifero_largo\plumifero_largo.blend
+[ 1657.9s] fase render terminada en 37s
+[ 1659.4s] pesos Camiseta PBR: 61561 vértices; cadera 11288, columna 1961, pecho 12089, clavicula.L 886, brazo.L 5047, antebrazo.L 5085, mano.L 629, muslo.L 7783, clavicula.R 772, brazo.R 4655, antebrazo.R 4360, mano.R 555, muslo.R 6451
+[ 1659.5s] pesos Cremallera: 10490 vértices; cadera 3103, columna 526, pecho 5000, muslo.L 918, muslo.R 943
+[ 1661.3s] exportado 07_plumifero_largo_rig.glb: 9.7 MB
+[ 1661.6s] exportado 07_plumifero_largo_rig.fbx
+[ 1661.6s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\abrigos\plumifero_largo\plumifero_largo.blend
+[ 1661.6s] fase rig terminada en 4s
+[ 1661.6s] === listo

@@ -1,0 +1,35 @@
+[  755.4s] === fases: preparar, hornear, exportar, render, rig | vistas 360 | 05_body | Blender 5.2.3 LTS
+[  756.4s] importado: Tela 519864 tri., Pespuntes 36480 tri.
+[  757.1s] atributos del punto en 1s
+[  765.8s] desdoblado UV: MINIMUM_STRETCH
+[  786.1s] UV: 1300 islas
+[  786.4s] versión ligera: 119999 tri., UV en 27s, estiramiento: mediana de la desviación de área 0.017, 95% < 0.124, ocupación UV 50%
+[  790.0s] piezas: Manga izquierda, Manga derecha, Delantero, Espalda, Bajo, Braguita, Cuello
+[  790.1s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\body\body.blend
+[  790.1s] fase preparar terminada en 35s
+[  790.1s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  816.1s] horneado BaseColor (4096 px) en 26s
+[  841.5s] horneado Roughness (4096 px) en 25s
+[  868.8s] horneado Normal (4096 px) en 27s
+[  909.4s] horneado AO (4096 px) en 41s
+[  938.5s] horneado Height (4096 px) en 29s
+[  938.6s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\body\body.blend
+[  938.6s] fase hornear terminada en 148s
+[  940.4s] exportado 05_body_pbr.glb: 4.8 MB
+[  940.5s] exportado 05_body_pbr.fbx (texturas en texturas/)
+[  940.6s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\body\body.blend
+[  940.6s] fase exportar terminada en 2s
+[  940.6s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  948.4s] render 1 frente en 8s
+[  956.4s] render 2 derecha en 8s
+[  963.9s] render 3 atras en 8s
+[  971.5s] render 4 izquierda en 8s
+[  971.9s] lámina 360 guardada
+[  972.0s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\body\body.blend
+[  972.0s] fase render terminada en 31s
+[  973.3s] pesos Camiseta PBR: 62893 vértices; cadera 17502, columna 3825, pecho 9980, clavicula.L 1240, brazo.L 7932, antebrazo.L 6681, mano.L 424, clavicula.R 1206, brazo.R 7874, antebrazo.R 5811, mano.R 418
+[  975.1s] exportado 05_body_rig.glb: 9.3 MB
+[  975.4s] exportado 05_body_rig.fbx
+[  975.4s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\body\body.blend
+[  975.4s] fase rig terminada en 3s
+[  975.4s] === listo

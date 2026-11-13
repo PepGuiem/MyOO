@@ -1,0 +1,36 @@
+[ 1152.7s] === fases: preparar, hornear, exportar, render, rig | vistas 360 | 07_top_halter | Blender 5.2.3 LTS
+[ 1153.0s] importado: Tela 112340 tri., Pespuntes 18480 tri.
+[ 1153.2s] atributos del punto en 0s
+[ 1160.5s] desdoblado UV: MINIMUM_STRETCH
+[ 1165.3s] UV: 958 islas
+[ 1165.6s] versión ligera: 112340 tri., UV en 12s, estiramiento: mediana de la desviación de área 0.013, 95% < 0.329, ocupación UV 25%
+[ 1166.2s] piezas: Delantero, Cuello, Bajo, Espalda
+[ 1166.2s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\top_halter\top_halter.blend
+[ 1166.2s] fase preparar terminada en 14s
+[ 1166.2s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 1182.5s] horneado BaseColor (4096 px) en 16s
+[ 1198.0s] horneado Roughness (4096 px) en 15s
+[ 1214.4s] horneado Normal (4096 px) en 16s
+[ 1237.3s] horneado AO (4096 px) en 23s
+[ 1252.9s] horneado Height (4096 px) en 16s
+[ 1253.0s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\top_halter\top_halter.blend
+[ 1253.0s] fase hornear terminada en 87s
+[ 1254.6s] exportado 07_top_halter_pbr.glb: 4.7 MB
+[ 1254.8s] exportado 07_top_halter_pbr.fbx (texturas en texturas/)
+[ 1254.8s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\top_halter\top_halter.blend
+[ 1254.8s] fase exportar terminada en 2s
+[ 1254.8s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 1264.0s] render 1 frente en 9s
+[ 1271.6s] render 2 derecha en 8s
+[ 1281.2s] render 3 atras en 10s
+[ 1288.5s] render 4 izquierda en 7s
+[ 1288.9s] lámina 360 guardada
+[ 1289.0s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\top_halter\top_halter.blend
+[ 1289.0s] fase render terminada en 34s
+[ 1289.4s] pesos Camiseta PBR: 58365 vértices; cadera 28807, columna 20000, pecho 9558
+[ 1289.5s] pesos Cordones y adornos: 8938 vértices; pecho 8938
+[ 1291.2s] exportado 07_top_halter_rig.glb: 8.5 MB
+[ 1291.4s] exportado 07_top_halter_rig.fbx
+[ 1291.4s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\top_halter\top_halter.blend
+[ 1291.5s] fase rig terminada en 2s
+[ 1291.5s] === listo

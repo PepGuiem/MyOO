@@ -1,0 +1,35 @@
+[  464.0s] === fases: preparar, hornear, exportar, render, rig | vistas 360 | 03_abrigo_largo | Blender 5.2.3 LTS
+[  464.9s] importado: Tela 527400 tri., Pespuntes 47160 tri.
+[  465.7s] atributos del punto en 1s
+[  473.8s] desdoblado UV: MINIMUM_STRETCH
+[  490.3s] UV: 834 islas
+[  490.7s] versión ligera: 119999 tri., UV en 22s, estiramiento: mediana de la desviación de área 0.072, 95% < 0.972, ocupación UV 57%
+[  494.6s] piezas: Manga izquierda, Manga derecha, Delantero derecho, Espalda, Cuello, Delantero izquierdo
+[  494.7s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\abrigos\abrigo_largo\abrigo_largo.blend
+[  494.7s] fase preparar terminada en 31s
+[  494.7s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  520.0s] horneado BaseColor (4096 px) en 25s
+[  544.3s] horneado Roughness (4096 px) en 24s
+[  569.9s] horneado Normal (4096 px) en 26s
+[  610.5s] horneado AO (4096 px) en 41s
+[  638.4s] horneado Height (4096 px) en 28s
+[  638.5s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\abrigos\abrigo_largo\abrigo_largo.blend
+[  638.5s] fase hornear terminada en 144s
+[  640.2s] exportado 03_abrigo_largo_pbr.glb: 5.0 MB
+[  640.4s] exportado 03_abrigo_largo_pbr.fbx (texturas en texturas/)
+[  640.4s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\abrigos\abrigo_largo\abrigo_largo.blend
+[  640.4s] fase exportar terminada en 2s
+[  640.4s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  651.1s] render 1 frente en 11s
+[  659.6s] render 2 derecha en 9s
+[  669.2s] render 3 atras en 10s
+[  677.8s] render 4 izquierda en 9s
+[  678.2s] lámina 360 guardada
+[  678.3s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\abrigos\abrigo_largo\abrigo_largo.blend
+[  678.3s] fase render terminada en 38s
+[  679.9s] pesos Camiseta PBR: 61479 vértices; cadera 7842, columna 2565, pecho 15334, clavicula.L 745, brazo.L 5594, antebrazo.L 5059, mano.L 1581, muslo.L 4008, pierna.L 1954, clavicula.R 595, brazo.R 5666, antebrazo.R 4406, mano.R 1429, muslo.R 3081, pierna.R 1620
+[  681.6s] exportado 03_abrigo_largo_rig.glb: 8.3 MB
+[  681.8s] exportado 03_abrigo_largo_rig.fbx
+[  681.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\abrigos\abrigo_largo\abrigo_largo.blend
+[  681.9s] fase rig terminada en 4s
+[  681.9s] === listo

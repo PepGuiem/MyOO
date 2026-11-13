@@ -1,0 +1,15 @@
+7509fb128b79b0a9eed6b47a397c9c32  Frontend/public/models/prendas/abrigos/01_gabardina.glb
+95bd0d93312172cb1586cbaaf8b03d0b  Frontend/public/models/prendas/abrigos/02_abrigo_lana.glb
+7e5911dc42dd3ad5238eb32874f8f1c1  Frontend/public/models/prendas/abrigos/03_abrigo_largo.glb
+fe255ce8f46bed85b494a538dd1f0236  Frontend/public/models/prendas/abrigos/04_parka.glb
+4f0c31876ecf4cb67a658d9ef331111a  Frontend/public/models/prendas/abrigos/05_chaqueton.glb
+8fe3a2c6471eb6eb7d539e962019057d  Frontend/public/models/prendas/abrigos/06_trenca.glb
+f8e4678f475ab552f57a0d6bb83d8187  Frontend/public/models/prendas/abrigos/07_plumifero_largo.glb
+bbc720788b29e9762a1daa16678b5124  Frontend/public/models/prendas/abrigos/catalogo.json
+420d362679e15026bb888f9c58d2e93b  Frontend/public/models/prendas/abrigos/lod/01_gabardina.glb
+aec4a40e57c2af489cde0bf7a942970a  Frontend/public/models/prendas/abrigos/lod/02_abrigo_lana.glb
+b5c01174bb404b906bf62842d1f1e91c  Frontend/public/models/prendas/abrigos/lod/03_abrigo_largo.glb
+221e5c12af124917ae37f9fd0ff8d682  Frontend/public/models/prendas/abrigos/lod/04_parka.glb
+f01f791b4f46dd0d4d3b86d4c58c8e62  Frontend/public/models/prendas/abrigos/lod/05_chaqueton.glb
+ef9646dbbebce47db7caf0bbec260ed5  Frontend/public/models/prendas/abrigos/lod/06_trenca.glb
+43621e5df360717dc457519473935ee2  Frontend/public/models/prendas/abrigos/lod/07_plumifero_largo.glb

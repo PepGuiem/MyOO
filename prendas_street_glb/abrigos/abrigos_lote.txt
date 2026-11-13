@@ -1,0 +1,7 @@
+01_gabardina: listo en 234s
+02_abrigo_lana: listo en 230s
+03_abrigo_largo: listo en 218s
+04_parka: listo en 279s
+05_chaqueton: listo en 205s
+06_trenca: listo en 246s
+07_plumifero_largo: listo en 250s

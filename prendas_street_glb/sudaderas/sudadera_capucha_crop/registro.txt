@@ -1,0 +1,39 @@
+[  494.6s] === fases: preparar, hornear, exportar, render | vistas 360 | 03_sudadera_capucha_crop | Blender 5.2.3 LTS
+[  495.4s] importado: Tela 525330 tri., Pespuntes 26880 tri.
+[  496.1s] atributos del punto en 1s
+[  503.5s] desdoblado UV: MINIMUM_STRETCH
+[  516.8s] UV: 759 islas
+[  517.2s] versión ligera: 120000 tri., UV en 19s, estiramiento: mediana de la desviación de área 0.028, 95% < 0.171, ocupación UV 58%
+[  520.5s] piezas: Manga izquierda, Manga derecha, Delantero, Espalda, Capucha, Cintura, Cuello
+[  520.6s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\sudaderas\sudadera_capucha_crop\sudadera_capucha_crop.blend
+[  520.6s] fase preparar terminada en 26s
+[  520.6s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  545.4s] horneado BaseColor (4096 px) en 25s
+[  569.4s] horneado Roughness (4096 px) en 24s
+[  595.5s] horneado Normal (4096 px) en 26s
+[  635.2s] horneado AO (4096 px) en 40s
+[  661.8s] horneado Height (4096 px) en 27s
+[  661.8s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\sudaderas\sudadera_capucha_crop\sudadera_capucha_crop.blend
+[  661.8s] fase hornear terminada en 141s
+[  663.6s] exportado 03_sudadera_capucha_crop_pbr.glb: 5.4 MB
+[  663.8s] exportado 03_sudadera_capucha_crop_pbr.fbx (texturas en texturas/)
+[  663.8s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\sudaderas\sudadera_capucha_crop\sudadera_capucha_crop.blend
+[  663.8s] fase exportar terminada en 2s
+[  663.8s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  672.2s] render 1 frente en 8s
+[  679.4s] render 2 derecha en 7s
+[  687.7s] render 3 atras en 8s
+[  695.0s] render 4 izquierda en 7s
+[  695.4s] lámina 360 guardada
+[  695.4s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\sudaderas\sudadera_capucha_crop\sudadera_capucha_crop.blend
+[  695.4s] fase render terminada en 32s
+[  695.4s] === listo
+[   18.8s] === fases: rig | vistas 360 | 03_sudadera_capucha_crop | Blender 5.2.3 LTS
+[   20.9s] pesos Camiseta PBR: 61700 vértices; cadera 14535, columna 4361, pecho 13854, clavicula.L 1013, brazo.L 6407, antebrazo.L 6690, clavicula.R 909, brazo.R 7371, antebrazo.R 6560
+[   20.9s] pesos Cordones: 6004 vértices; pecho 6004
+[   21.0s] pesos Punteras y ojales: 9444 vértices; pecho 9444
+[   24.2s] exportado 03_sudadera_capucha_crop_rig.glb: 10.5 MB
+[   24.9s] exportado 03_sudadera_capucha_crop_rig.fbx
+[   25.0s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\sudaderas\sudadera_capucha_crop\sudadera_capucha_crop.blend
+[   25.0s] fase rig terminada en 6s
+[   25.0s] === listo

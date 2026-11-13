@@ -1,0 +1,36 @@
+[ 1434.8s] === fases: preparar, hornear, exportar, render, rig | vistas 360 | 09_chaleco_vestir | Blender 5.2.3 LTS
+[ 1435.4s] importado: Tela 156938 tri., Mangas 145424 tri., Pespuntes 18540 tri.
+[ 1435.9s] atributos del punto en 0s
+[ 1443.3s] desdoblado UV: MINIMUM_STRETCH
+[ 1469.2s] UV: 708 islas
+[ 1469.5s] versión ligera: 120000 tri., UV en 32s, estiramiento: mediana de la desviación de área 0.029, 95% < 0.236, ocupación UV 48%
+[ 1470.5s] piezas: Cuello, Mangas, Bajo, Delantero, Espalda, Sisa
+[ 1470.5s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\chaleco_vestir\chaleco_vestir.blend
+[ 1470.5s] fase preparar terminada en 36s
+[ 1470.5s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 1493.7s] horneado BaseColor (4096 px) en 23s
+[ 1516.4s] horneado Roughness (4096 px) en 23s
+[ 1540.4s] horneado Normal (4096 px) en 24s
+[ 1576.3s] horneado AO (4096 px) en 36s
+[ 1599.9s] horneado Height (4096 px) en 24s
+[ 1600.0s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\chaleco_vestir\chaleco_vestir.blend
+[ 1600.0s] fase hornear terminada en 129s
+[ 1601.7s] exportado 09_chaleco_vestir_pbr.glb: 4.8 MB
+[ 1601.9s] exportado 09_chaleco_vestir_pbr.fbx (texturas en texturas/)
+[ 1601.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\chaleco_vestir\chaleco_vestir.blend
+[ 1601.9s] fase exportar terminada en 2s
+[ 1601.9s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 1610.5s] render 1 frente en 9s
+[ 1618.5s] render 2 derecha en 8s
+[ 1626.6s] render 3 atras en 8s
+[ 1634.5s] render 4 izquierda en 8s
+[ 1634.9s] lámina 360 guardada
+[ 1634.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\chaleco_vestir\chaleco_vestir.blend
+[ 1634.9s] fase render terminada en 33s
+[ 1635.8s] pesos Camiseta PBR: 63614 vértices; cadera 26741, columna 11258, pecho 21992, clavicula.L 1751, brazo.L 62, clavicula.R 1745, brazo.R 65
+[ 1635.9s] pesos Botones: 5352 vértices; cadera 5352
+[ 1637.5s] exportado 09_chaleco_vestir_rig.glb: 8.1 MB
+[ 1637.8s] exportado 09_chaleco_vestir_rig.fbx
+[ 1637.8s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\chaleco_vestir\chaleco_vestir.blend
+[ 1637.8s] fase rig terminada en 3s
+[ 1637.8s] === listo

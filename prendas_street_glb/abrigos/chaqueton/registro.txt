@@ -1,0 +1,36 @@
+[  960.4s] === fases: preparar, hornear, exportar, render, rig | vistas 360 | 05_chaqueton | Blender 5.2.3 LTS
+[  961.4s] importado: Tela 526746 tri., Pespuntes 42960 tri.
+[  962.1s] atributos del punto en 1s
+[  970.3s] desdoblado UV: MINIMUM_STRETCH
+[  985.3s] UV: 839 islas
+[  985.7s] versión ligera: 119999 tri., UV en 21s, estiramiento: mediana de la desviación de área 0.061, 95% < 0.894, ocupación UV 53%
+[  989.2s] piezas: Manga izquierda, Manga derecha, Delantero derecho, Espalda, Cuello, Delantero izquierdo
+[  989.3s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\abrigos\chaqueton\chaqueton.blend
+[  989.3s] fase preparar terminada en 29s
+[  989.3s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 1013.3s] horneado BaseColor (4096 px) en 24s
+[ 1035.8s] horneado Roughness (4096 px) en 22s
+[ 1061.1s] horneado Normal (4096 px) en 25s
+[ 1099.6s] horneado AO (4096 px) en 39s
+[ 1125.7s] horneado Height (4096 px) en 26s
+[ 1125.8s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\abrigos\chaqueton\chaqueton.blend
+[ 1125.8s] fase hornear terminada en 137s
+[ 1127.5s] exportado 05_chaqueton_pbr.glb: 5.4 MB
+[ 1127.7s] exportado 05_chaqueton_pbr.fbx (texturas en texturas/)
+[ 1127.8s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\abrigos\chaqueton\chaqueton.blend
+[ 1127.8s] fase exportar terminada en 2s
+[ 1127.8s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 1136.8s] render 1 frente en 9s
+[ 1145.0s] render 2 derecha en 8s
+[ 1153.6s] render 3 atras en 9s
+[ 1161.9s] render 4 izquierda en 8s
+[ 1162.3s] lámina 360 guardada
+[ 1162.3s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\abrigos\chaqueton\chaqueton.blend
+[ 1162.3s] fase render terminada en 35s
+[ 1163.8s] pesos Camiseta PBR: 61523 vértices; cadera 7857, columna 2132, pecho 17497, clavicula.L 1049, brazo.L 5866, antebrazo.L 6575, mano.L 1679, muslo.L 2691, clavicula.R 863, brazo.R 4605, antebrazo.R 6846, mano.R 1469, muslo.R 2394
+[ 1163.9s] pesos Botones: 15374 vértices; cadera 9088, columna 1172, pecho 5114
+[ 1165.5s] exportado 05_chaqueton_rig.glb: 8.8 MB
+[ 1165.8s] exportado 05_chaqueton_rig.fbx
+[ 1165.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\abrigos\chaqueton\chaqueton.blend
+[ 1165.9s] fase rig terminada en 4s
+[ 1165.9s] === listo

@@ -1,0 +1,35 @@
+[  359.8s] === fases: preparar, hornear, exportar, render, rig | vistas 360 | 03_camiseta_muscle | Blender 5.2.3 LTS
+[  360.4s] importado: Tela 384256 tri., Pespuntes 21300 tri.
+[  361.0s] atributos del punto en 1s
+[  369.0s] desdoblado UV: MINIMUM_STRETCH
+[  388.0s] UV: 560 islas
+[  388.3s] versión ligera: 120000 tri., UV en 26s, estiramiento: mediana de la desviación de área 0.021, 95% < 0.558, ocupación UV 42%
+[  390.7s] piezas: Cuello, Delantero, Espalda, Bajo, Sisa
+[  390.8s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\camiseta_muscle\camiseta_muscle.blend
+[  390.8s] fase preparar terminada en 31s
+[  390.8s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  411.9s] horneado BaseColor (4096 px) en 21s
+[  431.4s] horneado Roughness (4096 px) en 19s
+[  452.5s] horneado Normal (4096 px) en 21s
+[  484.4s] horneado AO (4096 px) en 32s
+[  506.0s] horneado Height (4096 px) en 22s
+[  506.1s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\camiseta_muscle\camiseta_muscle.blend
+[  506.1s] fase hornear terminada en 115s
+[  507.8s] exportado 03_camiseta_muscle_pbr.glb: 4.4 MB
+[  508.0s] exportado 03_camiseta_muscle_pbr.fbx (texturas en texturas/)
+[  508.0s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\camiseta_muscle\camiseta_muscle.blend
+[  508.0s] fase exportar terminada en 2s
+[  508.0s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  515.7s] render 1 frente en 8s
+[  523.3s] render 2 derecha en 8s
+[  530.9s] render 3 atras en 8s
+[  538.3s] render 4 izquierda en 7s
+[  538.7s] lámina 360 guardada
+[  538.8s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\camiseta_muscle\camiseta_muscle.blend
+[  538.8s] fase render terminada en 31s
+[  539.8s] pesos Camiseta PBR: 62985 vértices; cadera 24012, columna 8567, pecho 22260, clavicula.L 653, muslo.L 3372, clavicula.R 619, muslo.R 3502
+[  541.4s] exportado 03_camiseta_muscle_rig.glb: 8.2 MB
+[  541.6s] exportado 03_camiseta_muscle_rig.fbx
+[  541.7s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\camiseta_muscle\camiseta_muscle.blend
+[  541.7s] fase rig terminada en 3s
+[  541.7s] === listo

@@ -1,0 +1,37 @@
+[    0.0s] === fases: preparar, hornear, exportar, render, rig | vistas 360 | 01_gabardina | Blender 5.2.3 LTS
+[    1.2s] importado: Tela 528142 tri., Pespuntes 97140 tri.
+[    1.9s] atributos del punto en 1s
+[    9.9s] desdoblado UV: MINIMUM_STRETCH
+[   26.1s] UV: 932 islas
+[   26.5s] versión ligera: 120000 tri., UV en 22s, estiramiento: mediana de la desviación de área 0.081, 95% < 0.523, ocupación UV 57%
+[   30.0s] piezas: Manga izquierda, Manga derecha, Delantero derecho, Espalda, Cuello, Delantero izquierdo
+[   30.1s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\abrigos\gabardina\gabardina.blend
+[   30.1s] fase preparar terminada en 30s
+[   30.2s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[   53.9s] horneado BaseColor (4096 px) en 24s
+[   78.5s] horneado Roughness (4096 px) en 25s
+[  113.9s] horneado Normal (4096 px) en 35s
+[  152.9s] horneado AO (4096 px) en 39s
+[  186.7s] horneado Height (4096 px) en 34s
+[  186.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\abrigos\gabardina\gabardina.blend
+[  186.9s] fase hornear terminada en 157s
+[  189.3s] exportado 01_gabardina_pbr.glb: 6.1 MB
+[  189.6s] exportado 01_gabardina_pbr.fbx (texturas en texturas/)
+[  189.7s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\abrigos\gabardina\gabardina.blend
+[  189.7s] fase exportar terminada en 3s
+[  189.7s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  201.1s] render 1 frente en 11s
+[  210.5s] render 2 derecha en 9s
+[  220.9s] render 3 atras en 10s
+[  229.8s] render 4 izquierda en 9s
+[  230.1s] lámina 360 guardada
+[  230.2s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\abrigos\gabardina\gabardina.blend
+[  230.2s] fase render terminada en 41s
+[  231.7s] pesos Camiseta PBR: 61625 vértices; cadera 14322, columna 1682, pecho 15425, clavicula.L 700, brazo.L 4043, antebrazo.L 6030, mano.L 1321, muslo.L 4389, clavicula.R 451, brazo.R 3103, antebrazo.R 5716, mano.R 1132, muslo.R 3311
+[  231.8s] pesos Botones: 19173 vértices; cadera 13380, columna 1767, pecho 4026
+[  231.8s] pesos Punteras y ojales: 5378 vértices; cadera 4450, pecho 928
+[  233.7s] exportado 01_gabardina_rig.glb: 10.4 MB
+[  234.1s] exportado 01_gabardina_rig.fbx
+[  234.1s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\abrigos\gabardina\gabardina.blend
+[  234.1s] fase rig terminada en 4s
+[  234.1s] === listo

@@ -1,0 +1,833 @@
+00:00.031  color_management | Using OCIO=C:\Program Files\Blender Foundation\Blender 5.2\5.2\datafiles\colormanagement\config.ocio
+[camiseta] [    0.0s] === fases: preparar, hornear, exportar, render, rig | vistas 360 | 01_camiseta_tirantes | Blender 5.2.3 LTS
+16:26:54 | INFO: Data are loaded, start creating Blender stuff
+16:26:54 | INFO: Blender create Mesh node body
+16:26:55 | INFO: glTF import finished in 0.39s
+16:26:55 | INFO: Data are loaded, start creating Blender stuff
+16:26:55 | INFO: Blender create Mesh node stitch
+16:26:55 | INFO: glTF import finished in 0.02s
+C:\Users\Usuario\Documents\MyOut\prendas_street_glb\generador\blender_camiseta.py:272: DeprecationWarning: 'Material.use_nodes' is expected to be removed in Blender 6.0
+  mat.use_nodes = True
+[camiseta] [    0.6s] importado: Tela 354144 tri., Pespuntes 19680 tri.
+[camiseta] [    1.1s] atributos del punto en 0s
+[camiseta] [    9.7s] desdoblado UV: MINIMUM_STRETCH
+[camiseta] [   17.6s] UV: 411 islas
+[camiseta] [   18.0s] versión ligera: 119999 tri., UV en 15s, estiramiento: mediana de la desviación de área 0.022, 95% < 0.404, ocupación UV 47%
+[camiseta] [   20.2s] piezas: Cuello, Delantero, Espalda, Bajo, Sisa
+Info: Saved as "camiseta_tirantes.blend"
+[camiseta] [   20.2s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\camiseta_tirantes\camiseta_tirantes.blend
+[camiseta] [   20.2s] fase preparar terminada en 20s
+[camiseta] [   20.3s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+Info: Circular dependency for image "Camiseta_BaseColor" from object "Camiseta PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [   42.1s] horneado BaseColor (4096 px) en 22s
+Info: Circular dependency for image "Camiseta_Roughness" from object "Camiseta PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [   61.7s] horneado Roughness (4096 px) en 20s
+Info: Circular dependency for image "Camiseta_Normal" from object "Camiseta PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [   83.0s] horneado Normal (4096 px) en 21s
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [  115.6s] horneado AO (4096 px) en 33s
+Info: Circular dependency for image "Camiseta_Height" from object "Camiseta PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [  137.0s] horneado Height (4096 px) en 21s
+Info: Saved as "camiseta_tirantes.blend"
+[camiseta] [  137.1s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\camiseta_tirantes\camiseta_tirantes.blend
+[camiseta] [  137.1s] fase hornear terminada en 117s
+INFO Draco is available, use library at C:\Program Files\Blender Foundation\Blender 5.2\5.2\scripts\addons_core\io_scene_gltf2\bf_intern_draco_bridge.dll
+INFO MeshOptimizer is available, use library at C:\Program Files\Blender Foundation\Blender 5.2\5.2\scripts\addons_core\io_scene_gltf2\bf_intern_meshopt_bridge.dll
+16:29:12 | INFO: Starting glTF 2.0 export
+16:29:12 | INFO: Extracting primitive: Camiseta PBR.001
+16:29:13 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+16:29:13 | INFO: Primitives created: 1
+16:29:13 | INFO: Finished glTF 2.0 export in 0.7668328285217285 s
+
+[camiseta] [  139.0s] exportado 01_camiseta_tirantes_pbr.glb: 4.5 MB
+
+FBX export starting... 'C:\\Users\\Usuario\\Documents\\MyOut\\prendas_street_glb\\tops\\camiseta_tirantes\\01_camiseta_tirantes_pbr.fbx'
+export finished in 0.1472 sec.
+[camiseta] [  139.3s] exportado 01_camiseta_tirantes_pbr.fbx (texturas en texturas/)
+Info: Saved as "camiseta_tirantes.blend"
+[camiseta] [  139.3s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\camiseta_tirantes\camiseta_tirantes.blend
+[camiseta] [  139.3s] fase exportar terminada en 2s
+[camiseta] [  139.3s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+C:\Users\Usuario\Documents\MyOut\prendas_street_glb\generador\blender_camiseta.py:1195: DeprecationWarning: 'World.use_nodes' is expected to be removed in Blender 6.0
+  w.use_nodes = True
+02:30.391  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\camiseta_tirantes\render\360_1_frente.png'
+[camiseta] [  148.5s] render 1 frente en 9s
+02:38.281  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\camiseta_tirantes\render\360_2_derecha.png'
+[camiseta] [  156.4s] render 2 derecha en 8s
+02:47.266  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\camiseta_tirantes\render\360_3_atras.png'
+[camiseta] [  165.3s] render 3 atras en 9s
+02:55.109  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\camiseta_tirantes\render\360_4_izquierda.png'
+[camiseta] [  173.2s] render 4 izquierda en 8s
+[camiseta] [  173.6s] lámina 360 guardada
+Info: Saved as "camiseta_tirantes.blend"
+[camiseta] [  173.6s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\camiseta_tirantes\camiseta_tirantes.blend
+[camiseta] [  173.6s] fase render terminada en 34s
+[camiseta] [  174.5s] pesos Camiseta PBR: 62548 vértices; cadera 25882, columna 9959, pecho 20269, muslo.L 3213, muslo.R 3225
+16:29:49 | INFO: Starting glTF 2.0 export
+16:29:49 | INFO: Extracting primitive: Camiseta PBR.001
+16:29:49 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+16:29:50 | INFO: Primitives created: 1
+16:29:50 | INFO: Finished glTF 2.0 export in 1.780463457107544 s
+
+[camiseta] [  176.2s] exportado 01_camiseta_tirantes_rig.glb: 9.0 MB
+
+FBX export starting... 'C:\\Users\\Usuario\\Documents\\MyOut\\prendas_street_glb\\tops\\camiseta_tirantes\\01_camiseta_tirantes_rig.fbx'
+(bpy.data.armatures['Esqueleto'], 'POSE')
+export finished in 0.2405 sec.
+[camiseta] [  176.5s] exportado 01_camiseta_tirantes_rig.fbx
+Info: Saved as "camiseta_tirantes.blend"
+[camiseta] [  176.5s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\camiseta_tirantes\camiseta_tirantes.blend
+[camiseta] [  176.5s] fase rig terminada en 3s
+[camiseta] [  176.5s] === listo
+[camiseta] [  176.5s] === fases: preparar, hornear, exportar, render, rig | vistas 360 | 02_tirantes_canale | Blender 5.2.3 LTS
+16:29:51 | INFO: Data are loaded, start creating Blender stuff
+16:29:51 | INFO: Blender create Mesh node body
+16:29:51 | INFO: glTF import finished in 0.42s
+16:29:51 | INFO: Data are loaded, start creating Blender stuff
+16:29:51 | INFO: Blender create Mesh node stitch
+16:29:51 | INFO: glTF import finished in 0.02s
+[camiseta] [  177.1s] importado: Tela 341806 tri., Pespuntes 19560 tri.
+[camiseta] [  177.6s] atributos del punto en 0s
+[camiseta] [  185.7s] desdoblado UV: MINIMUM_STRETCH
+[camiseta] [  195.1s] UV: 421 islas
+[camiseta] [  195.5s] versión ligera: 119999 tri., UV en 16s, estiramiento: mediana de la desviación de área 0.022, 95% < 0.276, ocupación UV 48%
+[camiseta] [  197.7s] piezas: Cuello, Delantero, Espalda, Bajo, Sisa
+Info: Saved as "tirantes_canale.blend"
+[camiseta] [  197.7s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\tirantes_canale\tirantes_canale.blend
+[camiseta] [  197.7s] fase preparar terminada en 21s
+[camiseta] [  197.7s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+Info: Circular dependency for image "Camiseta_BaseColor" from object "Camiseta PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [  219.3s] horneado BaseColor (4096 px) en 22s
+Info: Circular dependency for image "Camiseta_Roughness" from object "Camiseta PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [  240.3s] horneado Roughness (4096 px) en 21s
+Info: Circular dependency for image "Camiseta_Normal" from object "Camiseta PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [  262.7s] horneado Normal (4096 px) en 22s
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [  296.7s] horneado AO (4096 px) en 34s
+Info: Circular dependency for image "Camiseta_Height" from object "Camiseta PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [  318.5s] horneado Height (4096 px) en 22s
+Info: Saved as "tirantes_canale.blend"
+[camiseta] [  318.5s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\tirantes_canale\tirantes_canale.blend
+[camiseta] [  318.5s] fase hornear terminada en 121s
+16:32:14 | INFO: Starting glTF 2.0 export
+16:32:14 | INFO: Extracting primitive: Camiseta PBR.001
+16:32:14 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+16:32:15 | INFO: Primitives created: 1
+16:32:15 | INFO: Finished glTF 2.0 export in 0.7875659465789795 s
+
+[camiseta] [  320.3s] exportado 02_tirantes_canale_pbr.glb: 4.9 MB
+
+FBX export starting... 'C:\\Users\\Usuario\\Documents\\MyOut\\prendas_street_glb\\tops\\tirantes_canale\\02_tirantes_canale_pbr.fbx'
+export finished in 0.1464 sec.
+[camiseta] [  320.5s] exportado 02_tirantes_canale_pbr.fbx (texturas en texturas/)
+Info: Saved as "tirantes_canale.blend"
+[camiseta] [  320.5s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\tirantes_canale\tirantes_canale.blend
+[camiseta] [  320.5s] fase exportar terminada en 2s
+[camiseta] [  320.5s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+05:32.484  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\tirantes_canale\render\360_1_frente.png'
+[camiseta] [  330.5s] render 1 frente en 10s
+05:40.906  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\tirantes_canale\render\360_2_derecha.png'
+[camiseta] [  339.0s] render 2 derecha en 8s
+05:50.047  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\tirantes_canale\render\360_3_atras.png'
+[camiseta] [  348.1s] render 3 atras en 9s
+05:58.359  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\tirantes_canale\render\360_4_izquierda.png'
+[camiseta] [  356.4s] render 4 izquierda en 8s
+[camiseta] [  356.8s] lámina 360 guardada
+Info: Saved as "tirantes_canale.blend"
+[camiseta] [  356.8s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\tirantes_canale\tirantes_canale.blend
+[camiseta] [  356.8s] fase render terminada en 36s
+[camiseta] [  357.6s] pesos Camiseta PBR: 62554 vértices; cadera 28895, columna 13091, pecho 16444, muslo.L 2071, muslo.R 2053
+16:32:52 | INFO: Starting glTF 2.0 export
+16:32:52 | INFO: Extracting primitive: Camiseta PBR.001
+16:32:53 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+16:32:54 | INFO: Primitives created: 1
+16:32:54 | INFO: Finished glTF 2.0 export in 1.8207314014434814 s
+
+[camiseta] [  359.4s] exportado 02_tirantes_canale_rig.glb: 8.9 MB
+
+FBX export starting... 'C:\\Users\\Usuario\\Documents\\MyOut\\prendas_street_glb\\tops\\tirantes_canale\\02_tirantes_canale_rig.fbx'
+(bpy.data.armatures['Esqueleto.001'], 'POSE')
+export finished in 0.2482 sec.
+[camiseta] [  359.7s] exportado 02_tirantes_canale_rig.fbx
+Info: Saved as "tirantes_canale.blend"
+[camiseta] [  359.7s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\tirantes_canale\tirantes_canale.blend
+[camiseta] [  359.7s] fase rig terminada en 3s
+[camiseta] [  359.7s] === listo
+[camiseta] [  359.8s] === fases: preparar, hornear, exportar, render, rig | vistas 360 | 03_camiseta_muscle | Blender 5.2.3 LTS
+16:32:54 | INFO: Data are loaded, start creating Blender stuff
+16:32:54 | INFO: Blender create Mesh node body
+16:32:54 | INFO: glTF import finished in 0.49s
+16:32:54 | INFO: Data are loaded, start creating Blender stuff
+16:32:54 | INFO: Blender create Mesh node stitch
+16:32:55 | INFO: glTF import finished in 0.03s
+[camiseta] [  360.4s] importado: Tela 384256 tri., Pespuntes 21300 tri.
+[camiseta] [  361.0s] atributos del punto en 1s
+[camiseta] [  369.0s] desdoblado UV: MINIMUM_STRETCH
+[camiseta] [  388.0s] UV: 560 islas
+[camiseta] [  388.3s] versión ligera: 120000 tri., UV en 26s, estiramiento: mediana de la desviación de área 0.021, 95% < 0.558, ocupación UV 42%
+[camiseta] [  390.7s] piezas: Cuello, Delantero, Espalda, Bajo, Sisa
+Info: Saved as "camiseta_muscle.blend"
+[camiseta] [  390.8s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\camiseta_muscle\camiseta_muscle.blend
+[camiseta] [  390.8s] fase preparar terminada en 31s
+[camiseta] [  390.8s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+Info: Circular dependency for image "Camiseta_BaseColor" from object "Camiseta PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [  411.9s] horneado BaseColor (4096 px) en 21s
+Info: Circular dependency for image "Camiseta_Roughness" from object "Camiseta PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [  431.4s] horneado Roughness (4096 px) en 19s
+Info: Circular dependency for image "Camiseta_Normal" from object "Camiseta PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [  452.5s] horneado Normal (4096 px) en 21s
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [  484.4s] horneado AO (4096 px) en 32s
+Info: Circular dependency for image "Camiseta_Height" from object "Camiseta PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [  506.0s] horneado Height (4096 px) en 22s
+Info: Saved as "camiseta_muscle.blend"
+[camiseta] [  506.1s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\camiseta_muscle\camiseta_muscle.blend
+[camiseta] [  506.1s] fase hornear terminada en 115s
+16:35:21 | INFO: Starting glTF 2.0 export
+16:35:21 | INFO: Extracting primitive: Camiseta PBR.001
+16:35:21 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+16:35:22 | INFO: Primitives created: 1
+16:35:22 | INFO: Finished glTF 2.0 export in 0.7520873546600342 s
+
+[camiseta] [  507.8s] exportado 03_camiseta_muscle_pbr.glb: 4.4 MB
+
+FBX export starting... 'C:\\Users\\Usuario\\Documents\\MyOut\\prendas_street_glb\\tops\\camiseta_muscle\\03_camiseta_muscle_pbr.fbx'
+export finished in 0.1441 sec.
+[camiseta] [  508.0s] exportado 03_camiseta_muscle_pbr.fbx (texturas en texturas/)
+Info: Saved as "camiseta_muscle.blend"
+[camiseta] [  508.0s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\camiseta_muscle\camiseta_muscle.blend
+[camiseta] [  508.0s] fase exportar terminada en 2s
+[camiseta] [  508.0s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+08:37.625  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\camiseta_muscle\render\360_1_frente.png'
+[camiseta] [  515.7s] render 1 frente en 8s
+08:45.281  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\camiseta_muscle\render\360_2_derecha.png'
+[camiseta] [  523.3s] render 2 derecha en 8s
+08:52.891  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\camiseta_muscle\render\360_3_atras.png'
+[camiseta] [  530.9s] render 3 atras en 8s
+09:00.281  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\camiseta_muscle\render\360_4_izquierda.png'
+[camiseta] [  538.3s] render 4 izquierda en 7s
+[camiseta] [  538.7s] lámina 360 guardada
+Info: Saved as "camiseta_muscle.blend"
+[camiseta] [  538.8s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\camiseta_muscle\camiseta_muscle.blend
+[camiseta] [  538.8s] fase render terminada en 31s
+[camiseta] [  539.8s] pesos Camiseta PBR: 62985 vértices; cadera 24012, columna 8567, pecho 22260, clavicula.L 653, muslo.L 3372, clavicula.R 619, muslo.R 3502
+16:35:54 | INFO: Starting glTF 2.0 export
+16:35:54 | INFO: Extracting primitive: Camiseta PBR.001
+16:35:55 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+16:35:56 | INFO: Primitives created: 1
+16:35:56 | INFO: Finished glTF 2.0 export in 1.6345477104187012 s
+
+[camiseta] [  541.4s] exportado 03_camiseta_muscle_rig.glb: 8.2 MB
+
+FBX export starting... 'C:\\Users\\Usuario\\Documents\\MyOut\\prendas_street_glb\\tops\\camiseta_muscle\\03_camiseta_muscle_rig.fbx'
+(bpy.data.armatures['Esqueleto.002'], 'POSE')
+export finished in 0.2495 sec.
+[camiseta] [  541.6s] exportado 03_camiseta_muscle_rig.fbx
+Info: Saved as "camiseta_muscle.blend"
+[camiseta] [  541.7s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\camiseta_muscle\camiseta_muscle.blend
+[camiseta] [  541.7s] fase rig terminada en 3s
+[camiseta] [  541.7s] === listo
+[camiseta] [  541.7s] === fases: preparar, hornear, exportar, render, rig | vistas 360 | 04_polo | Blender 5.2.3 LTS
+16:35:56 | INFO: Data are loaded, start creating Blender stuff
+16:35:56 | INFO: Blender create Mesh node body
+16:35:57 | INFO: Blender create Mesh node button
+16:35:57 | INFO: glTF import finished in 0.68s
+16:35:57 | INFO: Data are loaded, start creating Blender stuff
+16:35:57 | INFO: Blender create Mesh node stitch
+16:35:57 | INFO: glTF import finished in 0.04s
+[camiseta] [  542.7s] importado: Tela 575368 tri., Pespuntes 40140 tri.
+[camiseta] [  543.5s] atributos del punto en 1s
+[camiseta] [  552.0s] desdoblado UV: MINIMUM_STRETCH
+[camiseta] [  570.8s] UV: 1976 islas
+[camiseta] [  571.1s] versión ligera: 119998 tri., UV en 25s, estiramiento: mediana de la desviación de área 0.118, 95% < 0.932, ocupación UV 49%
+[camiseta] [  575.0s] piezas: Manga izquierda, Manga derecha, Delantero, Espalda, Bajo, Cuello
+Info: Saved as "polo.blend"
+[camiseta] [  575.1s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\polo\polo.blend
+[camiseta] [  575.1s] fase preparar terminada en 33s
+[camiseta] [  575.1s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+Info: Circular dependency for image "Camiseta_BaseColor" from object "Camiseta PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [  600.1s] horneado BaseColor (4096 px) en 25s
+Info: Circular dependency for image "Camiseta_Roughness" from object "Camiseta PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [  623.9s] horneado Roughness (4096 px) en 24s
+Info: Circular dependency for image "Camiseta_Normal" from object "Camiseta PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [  648.8s] horneado Normal (4096 px) en 25s
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [  688.0s] horneado AO (4096 px) en 39s
+Info: Circular dependency for image "Camiseta_Height" from object "Camiseta PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [  715.1s] horneado Height (4096 px) en 27s
+Info: Saved as "polo.blend"
+[camiseta] [  715.2s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\polo\polo.blend
+[camiseta] [  715.2s] fase hornear terminada en 140s
+16:38:50 | INFO: Starting glTF 2.0 export
+16:38:50 | INFO: Extracting primitive: Botones
+16:38:50 | INFO: Primitives created: 1
+16:38:51 | INFO: Extracting primitive: Camiseta PBR.001
+16:38:51 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+16:38:51 | INFO: Primitives created: 1
+16:38:51 | INFO: Finished glTF 2.0 export in 0.7884845733642578 s
+
+[camiseta] [  717.0s] exportado 04_polo_pbr.glb: 5.1 MB
+
+FBX export starting... 'C:\\Users\\Usuario\\Documents\\MyOut\\prendas_street_glb\\tops\\polo\\04_polo_pbr.fbx'
+export finished in 0.1603 sec.
+[camiseta] [  717.2s] exportado 04_polo_pbr.fbx (texturas en texturas/)
+Info: Saved as "polo.blend"
+[camiseta] [  717.3s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\polo\polo.blend
+[camiseta] [  717.3s] fase exportar terminada en 2s
+[camiseta] [  717.3s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+12:08.156  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\polo\render\360_1_frente.png'
+[camiseta] [  726.2s] render 1 frente en 9s
+12:16.500  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\polo\render\360_2_derecha.png'
+[camiseta] [  734.5s] render 2 derecha en 8s
+12:25.422  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\polo\render\360_3_atras.png'
+[camiseta] [  743.5s] render 3 atras en 9s
+12:33.500  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\polo\render\360_4_izquierda.png'
+[camiseta] [  751.5s] render 4 izquierda en 8s
+[camiseta] [  751.9s] lámina 360 guardada
+Info: Saved as "polo.blend"
+[camiseta] [  752.0s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\polo\polo.blend
+[camiseta] [  752.0s] fase render terminada en 35s
+[camiseta] [  753.2s] pesos Camiseta PBR: 63655 vértices; cadera 12229, columna 3772, pecho 21339, clavicula.L 1516, brazo.L 9419, muslo.L 2207, clavicula.R 1465, brazo.R 9477, muslo.R 2231
+[camiseta] [  753.2s] pesos Botones: 2262 vértices; pecho 2262
+16:39:27 | INFO: Starting glTF 2.0 export
+16:39:27 | INFO: Extracting primitive: Botones
+16:39:27 | INFO: Primitives created: 1
+16:39:27 | INFO: Extracting primitive: Camiseta PBR.001
+16:39:28 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+16:39:29 | INFO: Primitives created: 1
+16:39:29 | INFO: Finished glTF 2.0 export in 1.8764772415161133 s
+
+[camiseta] [  755.1s] exportado 04_polo_rig.glb: 9.7 MB
+
+FBX export starting... 'C:\\Users\\Usuario\\Documents\\MyOut\\prendas_street_glb\\tops\\polo\\04_polo_rig.fbx'
+(bpy.data.armatures['Esqueleto.003'], 'POSE')
+(bpy.data.armatures['Esqueleto.003'], 'POSE')
+export finished in 0.2458 sec.
+[camiseta] [  755.3s] exportado 04_polo_rig.fbx
+Info: Saved as "polo.blend"
+[camiseta] [  755.4s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\polo\polo.blend
+[camiseta] [  755.4s] fase rig terminada en 3s
+[camiseta] [  755.4s] === listo
+[camiseta] [  755.4s] === fases: preparar, hornear, exportar, render, rig | vistas 360 | 05_body | Blender 5.2.3 LTS
+16:39:30 | INFO: Data are loaded, start creating Blender stuff
+16:39:30 | INFO: Blender create Mesh node body
+16:39:30 | INFO: glTF import finished in 0.71s
+16:39:30 | INFO: Data are loaded, start creating Blender stuff
+16:39:30 | INFO: Blender create Mesh node stitch
+16:39:30 | INFO: glTF import finished in 0.04s
+[camiseta] [  756.4s] importado: Tela 519864 tri., Pespuntes 36480 tri.
+[camiseta] [  757.1s] atributos del punto en 1s
+[camiseta] [  765.8s] desdoblado UV: MINIMUM_STRETCH
+[camiseta] [  786.1s] UV: 1300 islas
+[camiseta] [  786.4s] versión ligera: 119999 tri., UV en 27s, estiramiento: mediana de la desviación de área 0.017, 95% < 0.124, ocupación UV 50%
+[camiseta] [  790.0s] piezas: Manga izquierda, Manga derecha, Delantero, Espalda, Bajo, Braguita, Cuello
+Info: Saved as "body.blend"
+[camiseta] [  790.1s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\body\body.blend
+[camiseta] [  790.1s] fase preparar terminada en 35s
+[camiseta] [  790.1s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+Info: Circular dependency for image "Camiseta_BaseColor" from object "Camiseta PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [  816.1s] horneado BaseColor (4096 px) en 26s
+Info: Circular dependency for image "Camiseta_Roughness" from object "Camiseta PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [  841.5s] horneado Roughness (4096 px) en 25s
+Info: Circular dependency for image "Camiseta_Normal" from object "Camiseta PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [  868.8s] horneado Normal (4096 px) en 27s
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [  909.4s] horneado AO (4096 px) en 41s
+Info: Circular dependency for image "Camiseta_Height" from object "Camiseta PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [  938.5s] horneado Height (4096 px) en 29s
+Info: Saved as "body.blend"
+[camiseta] [  938.6s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\body\body.blend
+[camiseta] [  938.6s] fase hornear terminada en 148s
+16:42:34 | INFO: Starting glTF 2.0 export
+16:42:34 | INFO: Extracting primitive: Camiseta PBR.001
+16:42:34 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+16:42:35 | INFO: Primitives created: 1
+16:42:35 | INFO: Finished glTF 2.0 export in 0.7368175983428955 s
+
+[camiseta] [  940.4s] exportado 05_body_pbr.glb: 4.8 MB
+
+FBX export starting... 'C:\\Users\\Usuario\\Documents\\MyOut\\prendas_street_glb\\tops\\body\\05_body_pbr.fbx'
+export finished in 0.1429 sec.
+[camiseta] [  940.5s] exportado 05_body_pbr.fbx (texturas en texturas/)
+Info: Saved as "body.blend"
+[camiseta] [  940.6s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\body\body.blend
+[camiseta] [  940.6s] fase exportar terminada en 2s
+[camiseta] [  940.6s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+15:50.406  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\body\render\360_1_frente.png'
+[camiseta] [  948.4s] render 1 frente en 8s
+15:58.328  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\body\render\360_2_derecha.png'
+[camiseta] [  956.4s] render 2 derecha en 8s
+16:05.859  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\body\render\360_3_atras.png'
+[camiseta] [  963.9s] render 3 atras en 8s
+16:13.438  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\body\render\360_4_izquierda.png'
+[camiseta] [  971.5s] render 4 izquierda en 8s
+[camiseta] [  971.9s] lámina 360 guardada
+Info: Saved as "body.blend"
+[camiseta] [  972.0s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\body\body.blend
+[camiseta] [  972.0s] fase render terminada en 31s
+[camiseta] [  973.3s] pesos Camiseta PBR: 62893 vértices; cadera 17502, columna 3825, pecho 9980, clavicula.L 1240, brazo.L 7932, antebrazo.L 6681, mano.L 424, clavicula.R 1206, brazo.R 7874, antebrazo.R 5811, mano.R 418
+16:43:07 | INFO: Starting glTF 2.0 export
+16:43:07 | INFO: Extracting primitive: Camiseta PBR.001
+16:43:08 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+16:43:09 | INFO: Primitives created: 1
+16:43:09 | INFO: Finished glTF 2.0 export in 1.8708827495574951 s
+
+[camiseta] [  975.1s] exportado 05_body_rig.glb: 9.3 MB
+
+FBX export starting... 'C:\\Users\\Usuario\\Documents\\MyOut\\prendas_street_glb\\tops\\body\\05_body_rig.fbx'
+(bpy.data.armatures['Esqueleto.004'], 'POSE')
+export finished in 0.2306 sec.
+[camiseta] [  975.4s] exportado 05_body_rig.fbx
+Info: Saved as "body.blend"
+[camiseta] [  975.4s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\body\body.blend
+[camiseta] [  975.4s] fase rig terminada en 3s
+[camiseta] [  975.4s] === listo
+[camiseta] [  975.4s] === fases: preparar, hornear, exportar, render, rig | vistas 360 | 06_corse | Blender 5.2.3 LTS
+16:43:10 | INFO: Data are loaded, start creating Blender stuff
+16:43:10 | INFO: Blender create Mesh node body
+16:43:10 | INFO: Blender create Mesh node hardware
+16:43:10 | INFO: Blender create Mesh node trim
+16:43:10 | INFO: glTF import finished in 0.27s
+16:43:10 | INFO: Data are loaded, start creating Blender stuff
+16:43:10 | INFO: Blender create Mesh node stitch
+16:43:10 | INFO: glTF import finished in 0.03s
+[camiseta] [  975.8s] importado: Tela 179346 tri., Pespuntes 24000 tri.
+[camiseta] [  976.1s] atributos del punto en 0s
+[camiseta] [  982.5s] desdoblado UV: MINIMUM_STRETCH
+[camiseta] [ 1001.3s] UV: 591 islas
+[camiseta] [ 1001.7s] versión ligera: 120000 tri., UV en 25s, estiramiento: mediana de la desviación de área 0.019, 95% < 0.223, ocupación UV 41%
+[camiseta] [ 1002.9s] piezas: Bajo, Cuello, Copas, Delantero, Espalda
+Info: Saved as "corse.blend"
+[camiseta] [ 1003.0s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\corse\corse.blend
+[camiseta] [ 1003.0s] fase preparar terminada en 28s
+[camiseta] [ 1003.0s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+Info: Circular dependency for image "Camiseta_BaseColor" from object "Camiseta PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [ 1023.1s] horneado BaseColor (4096 px) en 20s
+Info: Circular dependency for image "Camiseta_Roughness" from object "Camiseta PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [ 1041.6s] horneado Roughness (4096 px) en 18s
+Info: Circular dependency for image "Camiseta_Normal" from object "Camiseta PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [ 1061.7s] horneado Normal (4096 px) en 20s
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [ 1091.7s] horneado AO (4096 px) en 30s
+Info: Circular dependency for image "Camiseta_Height" from object "Camiseta PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [ 1111.8s] horneado Height (4096 px) en 20s
+Info: Saved as "corse.blend"
+[camiseta] [ 1111.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\corse\corse.blend
+[camiseta] [ 1111.9s] fase hornear terminada en 109s
+16:45:27 | INFO: Starting glTF 2.0 export
+16:45:27 | INFO: Extracting primitive: Camiseta PBR.001
+16:45:27 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+16:45:28 | INFO: Primitives created: 1
+16:45:28 | INFO: Extracting primitive: Cordones y adornos
+16:45:28 | INFO: Primitives created: 1
+16:45:28 | INFO: Extracting primitive: Punteras y ojales
+16:45:28 | INFO: Primitives created: 1
+16:45:28 | INFO: Finished glTF 2.0 export in 0.7550766468048096 s
+
+[camiseta] [ 1113.5s] exportado 06_corse_pbr.glb: 5.5 MB
+
+FBX export starting... 'C:\\Users\\Usuario\\Documents\\MyOut\\prendas_street_glb\\tops\\corse\\06_corse_pbr.fbx'
+export finished in 0.1593 sec.
+[camiseta] [ 1113.7s] exportado 06_corse_pbr.fbx (texturas en texturas/)
+Info: Saved as "corse.blend"
+[camiseta] [ 1113.7s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\corse\corse.blend
+[camiseta] [ 1113.7s] fase exportar terminada en 2s
+[camiseta] [ 1113.7s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+18:45.359  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\corse\render\360_1_frente.png'
+[camiseta] [ 1123.4s] render 1 frente en 10s
+18:53.656  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\corse\render\360_2_derecha.png'
+[camiseta] [ 1131.7s] render 2 derecha en 8s
+19:03.281  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\corse\render\360_3_atras.png'
+[camiseta] [ 1141.3s] render 3 atras en 10s
+19:11.516  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\corse\render\360_4_izquierda.png'
+[camiseta] [ 1149.5s] render 4 izquierda en 8s
+[camiseta] [ 1149.9s] lámina 360 guardada
+Info: Saved as "corse.blend"
+[camiseta] [ 1149.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\corse\corse.blend
+[camiseta] [ 1149.9s] fase render terminada en 36s
+[camiseta] [ 1150.4s] pesos Camiseta PBR: 61616 vértices; cadera 31635, columna 22069, pecho 6549, brazo.L 657, brazo.R 706
+[camiseta] [ 1150.5s] pesos Cordones y adornos: 6002 vértices; cadera 1581, columna 4421
+[camiseta] [ 1150.7s] pesos Punteras y ojales: 20044 vértices; cadera 11128, columna 8916
+16:46:05 | INFO: Starting glTF 2.0 export
+16:46:05 | INFO: Extracting primitive: Camiseta PBR.001
+16:46:06 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+16:46:06 | INFO: Primitives created: 1
+16:46:06 | INFO: Extracting primitive: Cordones y adornos
+16:46:06 | INFO: Primitives created: 1
+16:46:06 | INFO: Extracting primitive: Punteras y ojales
+16:46:07 | INFO: Primitives created: 1
+16:46:07 | INFO: Finished glTF 2.0 export in 1.6727757453918457 s
+
+[camiseta] [ 1152.3s] exportado 06_corse_rig.glb: 8.8 MB
+
+FBX export starting... 'C:\\Users\\Usuario\\Documents\\MyOut\\prendas_street_glb\\tops\\corse\\06_corse_rig.fbx'
+(bpy.data.armatures['Esqueleto.005'], 'POSE')
+(bpy.data.armatures['Esqueleto.005'], 'POSE')
+(bpy.data.armatures['Esqueleto.005'], 'POSE')
+export finished in 0.3239 sec.
+[camiseta] [ 1152.7s] exportado 06_corse_rig.fbx
+Info: Saved as "corse.blend"
+[camiseta] [ 1152.7s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\corse\corse.blend
+[camiseta] [ 1152.7s] fase rig terminada en 3s
+[camiseta] [ 1152.7s] === listo
+[camiseta] [ 1152.7s] === fases: preparar, hornear, exportar, render, rig | vistas 360 | 07_top_halter | Blender 5.2.3 LTS
+16:46:07 | INFO: Data are loaded, start creating Blender stuff
+16:46:07 | INFO: Blender create Mesh node body
+16:46:07 | INFO: Blender create Mesh node trim
+16:46:07 | INFO: glTF import finished in 0.19s
+16:46:07 | INFO: Data are loaded, start creating Blender stuff
+16:46:07 | INFO: Blender create Mesh node stitch
+16:46:07 | INFO: glTF import finished in 0.02s
+[camiseta] [ 1153.0s] importado: Tela 112340 tri., Pespuntes 18480 tri.
+[camiseta] [ 1153.2s] atributos del punto en 0s
+[camiseta] [ 1160.5s] desdoblado UV: MINIMUM_STRETCH
+[camiseta] [ 1165.3s] UV: 958 islas
+[camiseta] [ 1165.6s] versión ligera: 112340 tri., UV en 12s, estiramiento: mediana de la desviación de área 0.013, 95% < 0.329, ocupación UV 25%
+[camiseta] [ 1166.2s] piezas: Delantero, Cuello, Bajo, Espalda
+Info: Saved as "top_halter.blend"
+[camiseta] [ 1166.2s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\top_halter\top_halter.blend
+[camiseta] [ 1166.2s] fase preparar terminada en 14s
+[camiseta] [ 1166.2s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+Info: Circular dependency for image "Camiseta_BaseColor" from object "Camiseta PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [ 1182.5s] horneado BaseColor (4096 px) en 16s
+Info: Circular dependency for image "Camiseta_Roughness" from object "Camiseta PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [ 1198.0s] horneado Roughness (4096 px) en 15s
+Info: Circular dependency for image "Camiseta_Normal" from object "Camiseta PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [ 1214.4s] horneado Normal (4096 px) en 16s
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [ 1237.3s] horneado AO (4096 px) en 23s
+Info: Circular dependency for image "Camiseta_Height" from object "Camiseta PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [ 1252.9s] horneado Height (4096 px) en 16s
+Info: Saved as "top_halter.blend"
+[camiseta] [ 1253.0s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\top_halter\top_halter.blend
+[camiseta] [ 1253.0s] fase hornear terminada en 87s
+16:47:48 | INFO: Starting glTF 2.0 export
+16:47:48 | INFO: Extracting primitive: Camiseta PBR.001
+16:47:48 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+16:47:49 | INFO: Primitives created: 1
+16:47:49 | INFO: Extracting primitive: Cordones y adornos
+16:47:49 | INFO: Primitives created: 1
+16:47:49 | INFO: Finished glTF 2.0 export in 0.7216806411743164 s
+
+[camiseta] [ 1254.6s] exportado 07_top_halter_pbr.glb: 4.7 MB
+
+FBX export starting... 'C:\\Users\\Usuario\\Documents\\MyOut\\prendas_street_glb\\tops\\top_halter\\07_top_halter_pbr.fbx'
+export finished in 0.1296 sec.
+[camiseta] [ 1254.8s] exportado 07_top_halter_pbr.fbx (texturas en texturas/)
+Info: Saved as "top_halter.blend"
+[camiseta] [ 1254.8s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\top_halter\top_halter.blend
+[camiseta] [ 1254.8s] fase exportar terminada en 2s
+[camiseta] [ 1254.8s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+21:06.016  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\top_halter\render\360_1_frente.png'
+[camiseta] [ 1264.0s] render 1 frente en 9s
+21:13.625  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\top_halter\render\360_2_derecha.png'
+[camiseta] [ 1271.6s] render 2 derecha en 8s
+21:23.156  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\top_halter\render\360_3_atras.png'
+[camiseta] [ 1281.2s] render 3 atras en 10s
+21:30.500  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\top_halter\render\360_4_izquierda.png'
+[camiseta] [ 1288.5s] render 4 izquierda en 7s
+[camiseta] [ 1288.9s] lámina 360 guardada
+Info: Saved as "top_halter.blend"
+[camiseta] [ 1289.0s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\top_halter\top_halter.blend
+[camiseta] [ 1289.0s] fase render terminada en 34s
+[camiseta] [ 1289.4s] pesos Camiseta PBR: 58365 vértices; cadera 28807, columna 20000, pecho 9558
+[camiseta] [ 1289.5s] pesos Cordones y adornos: 8938 vértices; pecho 8938
+16:48:24 | INFO: Starting glTF 2.0 export
+16:48:24 | INFO: Extracting primitive: Camiseta PBR.001
+16:48:25 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+16:48:25 | INFO: Primitives created: 1
+16:48:25 | INFO: Extracting primitive: Cordones y adornos
+16:48:25 | INFO: Primitives created: 1
+16:48:25 | INFO: Finished glTF 2.0 export in 1.670827865600586 s
+
+[camiseta] [ 1291.2s] exportado 07_top_halter_rig.glb: 8.5 MB
+
+FBX export starting... 'C:\\Users\\Usuario\\Documents\\MyOut\\prendas_street_glb\\tops\\top_halter\\07_top_halter_rig.fbx'
+(bpy.data.armatures['Esqueleto.006'], 'POSE')
+(bpy.data.armatures['Esqueleto.006'], 'POSE')
+export finished in 0.2507 sec.
+[camiseta] [ 1291.4s] exportado 07_top_halter_rig.fbx
+Info: Saved as "top_halter.blend"
+[camiseta] [ 1291.4s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\top_halter\top_halter.blend
+[camiseta] [ 1291.5s] fase rig terminada en 2s
+[camiseta] [ 1291.5s] === listo
+[camiseta] [ 1291.5s] === fases: preparar, hornear, exportar, render, rig | vistas 360 | 08_top_bandeau | Blender 5.2.3 LTS
+16:48:26 | INFO: Data are loaded, start creating Blender stuff
+16:48:26 | INFO: Blender create Mesh node body
+16:48:26 | INFO: glTF import finished in 0.11s
+16:48:26 | INFO: Data are loaded, start creating Blender stuff
+16:48:26 | INFO: Blender create Mesh node stitch
+16:48:26 | INFO: glTF import finished in 0.04s
+[camiseta] [ 1291.7s] importado: Tela 95404 tri., Pespuntes 38340 tri.
+[camiseta] [ 1291.9s] atributos del punto en 0s
+[camiseta] [ 1296.8s] desdoblado UV: MINIMUM_STRETCH
+[camiseta] [ 1303.5s] UV: 537 islas
+[camiseta] [ 1303.8s] versión ligera: 95404 tri., UV en 12s, estiramiento: mediana de la desviación de área 0.009, 95% < 0.074, ocupación UV 33%
+[camiseta] [ 1304.4s] piezas: Bajo, Cuello, Delantero, Espalda
+Info: Saved as "top_bandeau.blend"
+[camiseta] [ 1304.4s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\top_bandeau\top_bandeau.blend
+[camiseta] [ 1304.4s] fase preparar terminada en 13s
+[camiseta] [ 1304.4s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+Info: Circular dependency for image "Camiseta_BaseColor" from object "Camiseta PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [ 1321.6s] horneado BaseColor (4096 px) en 17s
+Info: Circular dependency for image "Camiseta_Roughness" from object "Camiseta PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [ 1337.7s] horneado Roughness (4096 px) en 16s
+Info: Circular dependency for image "Camiseta_Normal" from object "Camiseta PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [ 1355.1s] horneado Normal (4096 px) en 17s
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [ 1380.3s] horneado AO (4096 px) en 25s
+Info: Circular dependency for image "Camiseta_Height" from object "Camiseta PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [ 1396.8s] horneado Height (4096 px) en 17s
+Info: Saved as "top_bandeau.blend"
+[camiseta] [ 1396.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\top_bandeau\top_bandeau.blend
+[camiseta] [ 1396.9s] fase hornear terminada en 92s
+16:50:12 | INFO: Starting glTF 2.0 export
+16:50:12 | INFO: Extracting primitive: Camiseta PBR.001
+16:50:12 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+16:50:13 | INFO: Primitives created: 1
+16:50:13 | INFO: Finished glTF 2.0 export in 0.6708426475524902 s
+
+[camiseta] [ 1398.5s] exportado 08_top_bandeau_pbr.glb: 3.2 MB
+
+FBX export starting... 'C:\\Users\\Usuario\\Documents\\MyOut\\prendas_street_glb\\tops\\top_bandeau\\08_top_bandeau_pbr.fbx'
+export finished in 0.1050 sec.
+[camiseta] [ 1398.6s] exportado 08_top_bandeau_pbr.fbx (texturas en texturas/)
+Info: Saved as "top_bandeau.blend"
+[camiseta] [ 1398.6s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\top_bandeau\top_bandeau.blend
+[camiseta] [ 1398.6s] fase exportar terminada en 2s
+[camiseta] [ 1398.6s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+23:29.516  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\top_bandeau\render\360_1_frente.png'
+[camiseta] [ 1407.5s] render 1 frente en 9s
+23:37.141  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\top_bandeau\render\360_2_derecha.png'
+[camiseta] [ 1415.2s] render 2 derecha en 8s
+23:45.641  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\top_bandeau\render\360_3_atras.png'
+[camiseta] [ 1423.7s] render 3 atras en 8s
+23:53.891  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\top_bandeau\render\360_4_izquierda.png'
+[camiseta] [ 1431.9s] render 4 izquierda en 8s
+[camiseta] [ 1432.3s] lámina 360 guardada
+Info: Saved as "top_bandeau.blend"
+[camiseta] [ 1432.4s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\top_bandeau\top_bandeau.blend
+[camiseta] [ 1432.4s] fase render terminada en 34s
+[camiseta] [ 1432.8s] pesos Camiseta PBR: 49182 vértices; columna 25432, pecho 18789, clavicula.L 809, brazo.L 1632, clavicula.R 836, brazo.R 1684
+16:50:47 | INFO: Starting glTF 2.0 export
+16:50:47 | INFO: Extracting primitive: Camiseta PBR.001
+16:50:48 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+16:50:49 | INFO: Primitives created: 1
+16:50:49 | INFO: Finished glTF 2.0 export in 1.7147319316864014 s
+
+[camiseta] [ 1434.5s] exportado 08_top_bandeau_rig.glb: 7.2 MB
+
+FBX export starting... 'C:\\Users\\Usuario\\Documents\\MyOut\\prendas_street_glb\\tops\\top_bandeau\\08_top_bandeau_rig.fbx'
+(bpy.data.armatures['Esqueleto.007'], 'POSE')
+export finished in 0.2114 sec.
+[camiseta] [ 1434.7s] exportado 08_top_bandeau_rig.fbx
+Info: Saved as "top_bandeau.blend"
+[camiseta] [ 1434.8s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\top_bandeau\top_bandeau.blend
+[camiseta] [ 1434.8s] fase rig terminada en 2s
+[camiseta] [ 1434.8s] === listo
+[camiseta] [ 1434.8s] === fases: preparar, hornear, exportar, render, rig | vistas 360 | 09_chaleco_vestir | Blender 5.2.3 LTS
+16:50:49 | INFO: Data are loaded, start creating Blender stuff
+16:50:49 | INFO: Blender create Mesh node body
+16:50:49 | INFO: Blender create Mesh node secondary
+16:50:49 | INFO: Blender create Mesh node button
+16:50:49 | INFO: glTF import finished in 0.43s
+16:50:49 | INFO: Data are loaded, start creating Blender stuff
+16:50:49 | INFO: Blender create Mesh node stitch
+16:50:50 | INFO: glTF import finished in 0.03s
+[camiseta] [ 1435.4s] importado: Tela 156938 tri., Mangas 145424 tri., Pespuntes 18540 tri.
+[camiseta] [ 1435.9s] atributos del punto en 0s
+[camiseta] [ 1443.3s] desdoblado UV: MINIMUM_STRETCH
+[camiseta] [ 1469.2s] UV: 708 islas
+[camiseta] [ 1469.5s] versión ligera: 120000 tri., UV en 32s, estiramiento: mediana de la desviación de área 0.029, 95% < 0.236, ocupación UV 48%
+[camiseta] [ 1470.5s] piezas: Cuello, Mangas, Bajo, Delantero, Espalda, Sisa
+Info: Saved as "chaleco_vestir.blend"
+[camiseta] [ 1470.5s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\chaleco_vestir\chaleco_vestir.blend
+[camiseta] [ 1470.5s] fase preparar terminada en 36s
+[camiseta] [ 1470.5s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+Info: Circular dependency for image "Camiseta_BaseColor" from object "Camiseta PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [ 1493.7s] horneado BaseColor (4096 px) en 23s
+Info: Circular dependency for image "Camiseta_Roughness" from object "Camiseta PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [ 1516.4s] horneado Roughness (4096 px) en 23s
+Info: Circular dependency for image "Camiseta_Normal" from object "Camiseta PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [ 1540.4s] horneado Normal (4096 px) en 24s
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [ 1576.3s] horneado AO (4096 px) en 36s
+Info: Circular dependency for image "Camiseta_Height" from object "Camiseta PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [ 1599.9s] horneado Height (4096 px) en 24s
+Info: Saved as "chaleco_vestir.blend"
+[camiseta] [ 1600.0s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\chaleco_vestir\chaleco_vestir.blend
+[camiseta] [ 1600.0s] fase hornear terminada en 129s
+16:53:35 | INFO: Starting glTF 2.0 export
+16:53:35 | INFO: Extracting primitive: Botones
+16:53:35 | INFO: Primitives created: 1
+16:53:35 | INFO: Extracting primitive: Camiseta PBR.001
+16:53:35 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+16:53:36 | INFO: Primitives created: 1
+16:53:36 | INFO: Finished glTF 2.0 export in 0.7486612796783447 s
+
+[camiseta] [ 1601.7s] exportado 09_chaleco_vestir_pbr.glb: 4.8 MB
+
+FBX export starting... 'C:\\Users\\Usuario\\Documents\\MyOut\\prendas_street_glb\\tops\\chaleco_vestir\\09_chaleco_vestir_pbr.fbx'
+export finished in 0.1520 sec.
+[camiseta] [ 1601.9s] exportado 09_chaleco_vestir_pbr.fbx (texturas en texturas/)
+Info: Saved as "chaleco_vestir.blend"
+[camiseta] [ 1601.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\chaleco_vestir\chaleco_vestir.blend
+[camiseta] [ 1601.9s] fase exportar terminada en 2s
+[camiseta] [ 1601.9s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+26:52.500  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\chaleco_vestir\render\360_1_frente.png'
+[camiseta] [ 1610.5s] render 1 frente en 9s
+27:00.484  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\chaleco_vestir\render\360_2_derecha.png'
+[camiseta] [ 1618.5s] render 2 derecha en 8s
+27:08.594  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\chaleco_vestir\render\360_3_atras.png'
+[camiseta] [ 1626.6s] render 3 atras en 8s
+27:16.469  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\chaleco_vestir\render\360_4_izquierda.png'
+[camiseta] [ 1634.5s] render 4 izquierda en 8s
+[camiseta] [ 1634.9s] lámina 360 guardada
+Info: Saved as "chaleco_vestir.blend"
+[camiseta] [ 1634.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\chaleco_vestir\chaleco_vestir.blend
+[camiseta] [ 1634.9s] fase render terminada en 33s
+[camiseta] [ 1635.8s] pesos Camiseta PBR: 63614 vértices; cadera 26741, columna 11258, pecho 21992, clavicula.L 1751, brazo.L 62, clavicula.R 1745, brazo.R 65
+[camiseta] [ 1635.9s] pesos Botones: 5352 vértices; cadera 5352
+16:54:10 | INFO: Starting glTF 2.0 export
+16:54:10 | INFO: Extracting primitive: Botones
+16:54:10 | INFO: Primitives created: 1
+16:54:10 | INFO: Extracting primitive: Camiseta PBR.001
+16:54:11 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+16:54:12 | INFO: Primitives created: 1
+16:54:12 | INFO: Finished glTF 2.0 export in 1.642404556274414 s
+
+[camiseta] [ 1637.5s] exportado 09_chaleco_vestir_rig.glb: 8.1 MB
+
+FBX export starting... 'C:\\Users\\Usuario\\Documents\\MyOut\\prendas_street_glb\\tops\\chaleco_vestir\\09_chaleco_vestir_rig.fbx'
+(bpy.data.armatures['Esqueleto.008'], 'POSE')
+(bpy.data.armatures['Esqueleto.008'], 'POSE')
+export finished in 0.2657 sec.
+[camiseta] [ 1637.8s] exportado 09_chaleco_vestir_rig.fbx
+Info: Saved as "chaleco_vestir.blend"
+[camiseta] [ 1637.8s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\chaleco_vestir\chaleco_vestir.blend
+[camiseta] [ 1637.8s] fase rig terminada en 3s
+[camiseta] [ 1637.8s] === listo
+[camiseta] [ 1637.8s] === fases: preparar, hornear, exportar, render, rig | vistas 360 | 10_camisa_sin_mangas | Blender 5.2.3 LTS
+16:54:12 | INFO: Data are loaded, start creating Blender stuff
+16:54:12 | INFO: Blender create Mesh node body
+16:54:13 | INFO: Blender create Mesh node button
+16:54:13 | INFO: glTF import finished in 0.58s
+16:54:13 | INFO: Data are loaded, start creating Blender stuff
+16:54:13 | INFO: Blender create Mesh node stitch
+16:54:13 | INFO: glTF import finished in 0.06s
+[camiseta] [ 1638.7s] importado: Tela 463428 tri., Pespuntes 48180 tri.
+[camiseta] [ 1639.4s] atributos del punto en 1s
+[camiseta] [ 1647.8s] desdoblado UV: MINIMUM_STRETCH
+[camiseta] [ 1671.8s] UV: 2340 islas
+[camiseta] [ 1672.2s] versión ligera: 120000 tri., UV en 31s, estiramiento: mediana de la desviación de área 0.328, 95% < 0.960, ocupación UV 44%
+[camiseta] [ 1675.2s] piezas: Cuello, Delantero, Espalda, Sisa, Bajo
+Info: Saved as "camisa_sin_mangas.blend"
+[camiseta] [ 1675.2s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\camisa_sin_mangas\camisa_sin_mangas.blend
+[camiseta] [ 1675.2s] fase preparar terminada en 37s
+[camiseta] [ 1675.2s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+Info: Circular dependency for image "Camiseta_BaseColor" from object "Camiseta PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [ 1697.0s] horneado BaseColor (4096 px) en 22s
+Info: Circular dependency for image "Camiseta_Roughness" from object "Camiseta PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [ 1717.2s] horneado Roughness (4096 px) en 20s
+Info: Circular dependency for image "Camiseta_Normal" from object "Camiseta PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [ 1738.3s] horneado Normal (4096 px) en 21s
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [ 1771.1s] horneado AO (4096 px) en 33s
+Info: Circular dependency for image "Camiseta_Height" from object "Camiseta PBR"
+Info: Baking map saved to internal image, save it externally or pack it
+[camiseta] [ 1794.3s] horneado Height (4096 px) en 23s
+Info: Saved as "camisa_sin_mangas.blend"
+[camiseta] [ 1794.4s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\camisa_sin_mangas\camisa_sin_mangas.blend
+[camiseta] [ 1794.4s] fase hornear terminada en 119s
+16:56:50 | INFO: Starting glTF 2.0 export
+16:56:50 | INFO: Extracting primitive: Botones
+16:56:50 | INFO: Primitives created: 1
+16:56:50 | INFO: Extracting primitive: Camiseta PBR.001
+16:56:50 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+16:56:50 | INFO: Primitives created: 1
+16:56:50 | INFO: Finished glTF 2.0 export in 0.7347385883331299 s
+
+[camiseta] [ 1796.1s] exportado 10_camisa_sin_mangas_pbr.glb: 5.3 MB
+
+FBX export starting... 'C:\\Users\\Usuario\\Documents\\MyOut\\prendas_street_glb\\tops\\camisa_sin_mangas\\10_camisa_sin_mangas_pbr.fbx'
+export finished in 0.1569 sec.
+[camiseta] [ 1796.3s] exportado 10_camisa_sin_mangas_pbr.fbx (texturas en texturas/)
+Info: Saved as "camisa_sin_mangas.blend"
+[camiseta] [ 1796.3s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\camisa_sin_mangas\camisa_sin_mangas.blend
+[camiseta] [ 1796.3s] fase exportar terminada en 2s
+[camiseta] [ 1796.3s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+30:07.500  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\camisa_sin_mangas\render\360_1_frente.png'
+[camiseta] [ 1805.5s] render 1 frente en 9s
+30:15.844  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\camisa_sin_mangas\render\360_2_derecha.png'
+[camiseta] [ 1813.8s] render 2 derecha en 8s
+30:24.578  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\camisa_sin_mangas\render\360_3_atras.png'
+[camiseta] [ 1822.6s] render 3 atras en 9s
+30:32.547  render           | Saved: 'C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\camisa_sin_mangas\render\360_4_izquierda.png'
+[camiseta] [ 1830.6s] render 4 izquierda en 8s
+[camiseta] [ 1830.9s] lámina 360 guardada
+Info: Saved as "camisa_sin_mangas.blend"
+[camiseta] [ 1831.0s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\camisa_sin_mangas\camisa_sin_mangas.blend
+[camiseta] [ 1831.0s] fase render terminada en 35s
+[camiseta] [ 1831.9s] pesos Camiseta PBR: 64463 vértices; cadera 19580, columna 6067, pecho 29703, clavicula.L 625, muslo.L 4086, clavicula.R 602, muslo.R 3800
+[camiseta] [ 1831.9s] pesos Botones: 4356 vértices; cadera 2508, columna 1026, pecho 822
+16:57:26 | INFO: Starting glTF 2.0 export
+16:57:26 | INFO: Extracting primitive: Botones
+16:57:26 | INFO: Primitives created: 1
+16:57:26 | INFO: Extracting primitive: Camiseta PBR.001
+16:57:27 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+16:57:28 | INFO: Primitives created: 1
+16:57:28 | INFO: Finished glTF 2.0 export in 1.696723222732544 s
+
+[camiseta] [ 1833.6s] exportado 10_camisa_sin_mangas_rig.glb: 9.2 MB
+
+FBX export starting... 'C:\\Users\\Usuario\\Documents\\MyOut\\prendas_street_glb\\tops\\camisa_sin_mangas\\10_camisa_sin_mangas_rig.fbx'
+(bpy.data.armatures['Esqueleto.009'], 'POSE')
+(bpy.data.armatures['Esqueleto.009'], 'POSE')
+export finished in 0.2674 sec.
+[camiseta] [ 1833.9s] exportado 10_camisa_sin_mangas_rig.fbx
+Info: Saved as "camisa_sin_mangas.blend"
+[camiseta] [ 1833.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\camisa_sin_mangas\camisa_sin_mangas.blend
+[camiseta] [ 1833.9s] fase rig terminada en 3s
+[camiseta] [ 1833.9s] === listo
+Blender 5.2.3 LTS (hash e13b728c6880 built 2026-10-22 01:37:16)
+
+Blender quit

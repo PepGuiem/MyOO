@@ -1,0 +1,37 @@
+[  975.4s] === fases: preparar, hornear, exportar, render, rig | vistas 360 | 06_corse | Blender 5.2.3 LTS
+[  975.8s] importado: Tela 179346 tri., Pespuntes 24000 tri.
+[  976.1s] atributos del punto en 0s
+[  982.5s] desdoblado UV: MINIMUM_STRETCH
+[ 1001.3s] UV: 591 islas
+[ 1001.7s] versión ligera: 120000 tri., UV en 25s, estiramiento: mediana de la desviación de área 0.019, 95% < 0.223, ocupación UV 41%
+[ 1002.9s] piezas: Bajo, Cuello, Copas, Delantero, Espalda
+[ 1003.0s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\corse\corse.blend
+[ 1003.0s] fase preparar terminada en 28s
+[ 1003.0s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 1023.1s] horneado BaseColor (4096 px) en 20s
+[ 1041.6s] horneado Roughness (4096 px) en 18s
+[ 1061.7s] horneado Normal (4096 px) en 20s
+[ 1091.7s] horneado AO (4096 px) en 30s
+[ 1111.8s] horneado Height (4096 px) en 20s
+[ 1111.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\corse\corse.blend
+[ 1111.9s] fase hornear terminada en 109s
+[ 1113.5s] exportado 06_corse_pbr.glb: 5.5 MB
+[ 1113.7s] exportado 06_corse_pbr.fbx (texturas en texturas/)
+[ 1113.7s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\corse\corse.blend
+[ 1113.7s] fase exportar terminada en 2s
+[ 1113.7s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 1123.4s] render 1 frente en 10s
+[ 1131.7s] render 2 derecha en 8s
+[ 1141.3s] render 3 atras en 10s
+[ 1149.5s] render 4 izquierda en 8s
+[ 1149.9s] lámina 360 guardada
+[ 1149.9s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\corse\corse.blend
+[ 1149.9s] fase render terminada en 36s
+[ 1150.4s] pesos Camiseta PBR: 61616 vértices; cadera 31635, columna 22069, pecho 6549, brazo.L 657, brazo.R 706
+[ 1150.5s] pesos Cordones y adornos: 6002 vértices; cadera 1581, columna 4421
+[ 1150.7s] pesos Punteras y ojales: 20044 vértices; cadera 11128, columna 8916
+[ 1152.3s] exportado 06_corse_rig.glb: 8.8 MB
+[ 1152.7s] exportado 06_corse_rig.fbx
+[ 1152.7s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\tops\corse\corse.blend
+[ 1152.7s] fase rig terminada en 3s
+[ 1152.7s] === listo

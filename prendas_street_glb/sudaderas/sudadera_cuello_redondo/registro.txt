@@ -1,0 +1,37 @@
+[  939.0s] === fases: preparar, hornear, exportar, render | vistas 360 | 05_sudadera_cuello_redondo | Blender 5.2.3 LTS
+[  939.8s] importado: Tela 524856 tri., Pespuntes 50040 tri.
+[  940.4s] atributos del punto en 1s
+[  947.7s] desdoblado UV: MINIMUM_STRETCH
+[  960.5s] UV: 607 islas
+[  960.8s] versión ligera: 119999 tri., UV en 18s, estiramiento: mediana de la desviación de área 0.036, 95% < 0.225, ocupación UV 54%
+[  964.7s] piezas: Puño izquierdo, Puño derecho, Manga derecha, Delantero, Espalda, Cintura, Cuello, Manga izquierda
+[  964.7s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\sudaderas\sudadera_cuello_redondo\sudadera_cuello_redondo.blend
+[  964.7s] fase preparar terminada en 26s
+[  964.7s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[  991.7s] horneado BaseColor (4096 px) en 27s
+[ 1018.3s] horneado Roughness (4096 px) en 27s
+[ 1046.8s] horneado Normal (4096 px) en 29s
+[ 1088.5s] horneado AO (4096 px) en 42s
+[ 1118.0s] horneado Height (4096 px) en 29s
+[ 1118.0s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\sudaderas\sudadera_cuello_redondo\sudadera_cuello_redondo.blend
+[ 1118.1s] fase hornear terminada en 153s
+[ 1119.8s] exportado 05_sudadera_cuello_redondo_pbr.glb: 4.7 MB
+[ 1119.9s] exportado 05_sudadera_cuello_redondo_pbr.fbx (texturas en texturas/)
+[ 1120.0s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\sudaderas\sudadera_cuello_redondo\sudadera_cuello_redondo.blend
+[ 1120.0s] fase exportar terminada en 2s
+[ 1120.0s] Cycles en GPU: OPTIX NVIDIA GeForce RTX 4060
+[ 1129.1s] render 1 frente en 9s
+[ 1136.9s] render 2 derecha en 8s
+[ 1146.2s] render 3 atras en 9s
+[ 1153.9s] render 4 izquierda en 8s
+[ 1154.2s] lámina 360 guardada
+[ 1154.3s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\sudaderas\sudadera_cuello_redondo\sudadera_cuello_redondo.blend
+[ 1154.3s] fase render terminada en 34s
+[ 1154.3s] === listo
+[   32.3s] === fases: rig | vistas 360 | 05_sudadera_cuello_redondo | Blender 5.2.3 LTS
+[   35.4s] pesos Camiseta PBR: 61757 vértices; cadera 11535, columna 2505, pecho 10943, clavicula.L 811, brazo.L 5505, antebrazo.L 7638, mano.L 1292, muslo.L 4106, clavicula.R 647, brazo.R 4980, antebrazo.R 6546, mano.R 1257, muslo.R 3992
+[   38.3s] exportado 05_sudadera_cuello_redondo_rig.glb: 9.3 MB
+[   38.7s] exportado 05_sudadera_cuello_redondo_rig.fbx
+[   38.8s] guardado C:\Users\Usuario\Documents\MyOut\prendas_street_glb\sudaderas\sudadera_cuello_redondo\sudadera_cuello_redondo.blend
+[   38.8s] fase rig terminada en 6s
+[   38.8s] === listo
