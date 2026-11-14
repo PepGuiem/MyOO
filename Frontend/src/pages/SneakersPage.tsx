@@ -2,7 +2,6 @@ import { useCallback, useEffect, useMemo, useState, type CSSProperties } from 'r
 import { sneakersApi } from '../api/endpoints';
 import type { Sneaker, SneakerBrand, SneakerCondition, SneakerStats, WardrobeItem } from '../api/types';
 import { ErrorNote } from '../components/ErrorNote';
-import { NeonScene } from '../components/fx/NeonScene';
 import { SoundToggle } from '../components/fx/SoundToggle';
 import { SprayLoader } from '../components/fx/SprayLoader';
 import { useToast } from '../components/fx/Toast';
@@ -14,6 +13,7 @@ import { SneakerDashboard } from '../components/sneakers/SneakerDashboard';
 import { SneakerForm, type SneakerFormMode } from '../components/sneakers/SneakerForm';
 import { CountUp } from '../components/street/Street';
 import { play } from '../lib/sfx';
+import { withTransition } from '../lib/motion';
 import { BRAND_LABEL, CONDITION, SNEAKER_BRANDS, SNEAKER_CONDITIONS, SNEAKER_SORTS, sortSizes, sortSneakers, type SneakerSort } from '../lib/sneakers';
 
 type Tab = 'owned' | 'wish' | 'stats';
@@ -120,8 +120,10 @@ export function SneakersPage() {
   function switchTab(t: Tab) {
     if (t === tab) return;
     play('click');
-    clearFilters();
-    setTab(t);
+    withTransition(() => {
+      clearFilters();
+      setTab(t);
+    });
   }
 
   function onSaved(s: Sneaker, created: boolean) {
@@ -172,7 +174,6 @@ export function SneakersPage() {
 
   return (
     <section className="page snk">
-      <NeonScene />
       <span className="snk-spot" aria-hidden="true" />
 
       <header className="fits-hero snk-hero">
@@ -305,7 +306,7 @@ export function SneakersPage() {
                     aria-pressed={brand === b}
                     onClick={() => {
                       play('click');
-                      setBrand(brand === b ? null : b);
+                      withTransition(() => setBrand(brand === b ? null : b));
                     }}
                   >
                     {BRAND_LABEL[b]} <span className="count">{brandCount.get(b)}</span>
@@ -347,7 +348,7 @@ export function SneakersPage() {
                       aria-pressed={sort === o.id}
                       onClick={() => {
                         play('click');
-                        setSort(o.id);
+                        withTransition(() => setSort(o.id));
                       }}
                     >
                       {o.label}
@@ -367,7 +368,7 @@ export function SneakersPage() {
                       title={`${name} (${c.count})`}
                       onClick={() => {
                         play('click');
-                        setColor(color === name ? null : name);
+                        withTransition(() => setColor(color === name ? null : name));
                       }}
                     >
                       <i style={{ background: c.hex }} aria-hidden="true" />
@@ -385,7 +386,7 @@ export function SneakersPage() {
                       title={CONDITION[c].hint}
                       onClick={() => {
                         play('click');
-                        setCondition(condition === c ? null : c);
+                        withTransition(() => setCondition(condition === c ? null : c));
                       }}
                     >
                       <span className="snk-cond-dots" aria-hidden="true">

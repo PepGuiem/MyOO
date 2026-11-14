@@ -4,7 +4,6 @@ import { wishlistApi } from '../api/endpoints';
 import type { WishlistItem, WishlistStatus } from '../api/types';
 import { ErrorNote } from '../components/ErrorNote';
 import { ConfirmDialog } from '../components/fx/ConfirmDialog';
-import { NeonScene } from '../components/fx/NeonScene';
 import { SprayLoader } from '../components/fx/SprayLoader';
 import { useToast } from '../components/fx/Toast';
 import { Icon } from '../components/Icon';
@@ -15,6 +14,7 @@ import { WishForm } from '../components/wishlist/WishForm';
 import { hasPhoto, WishMedia } from '../components/wishlist/WishMedia';
 import { play } from '../lib/sfx';
 import { atTarget, brandOf, hostOf, money, num, todayKey, WISH_CATEGORY, WISH_STATUS, WISH_STATUSES } from '../lib/wishlist';
+import { LOCALE_TAG } from '../i18n';
 
 /**
  * Ficha de un deseo: foto o modelo 3D, estado, precios (historial y apuntar
@@ -61,7 +61,6 @@ export function WishItemPage() {
   if (!item) {
     return (
       <section className="page wl wl-item">
-        <NeonScene />
         <Link to="/wishlist" className="wl-back">
           <Icon name="back" size={14} /> Wishlist
         </Link>
@@ -116,7 +115,6 @@ export function WishItemPage() {
 
   return (
     <section className={`page wl wl-item is-${item.wishlistStatus.toLowerCase()}`} style={{ '--st': st.color, '--sw': item.color } as CSSProperties}>
-      <NeonScene />
       <Link to="/wishlist" className="wl-back">
         <Icon name="back" size={14} /> Wishlist
       </Link>
@@ -178,7 +176,7 @@ export function WishItemPage() {
                   <Icon name={t.direction === 'down' ? 'trendDown' : 'trendUp'} size={12} />
                   {t.direction === 'down' ? '−' : '+'}
                   {money(Math.abs(t.diff), cur)} ({t.pct > 0 ? '+' : '−'}
-                  {Math.abs(t.pct).toLocaleString('es-ES')} %)
+                  {Math.abs(t.pct).toLocaleString(LOCALE_TAG)} %)
                 </span>
               )}
             </div>
@@ -382,7 +380,7 @@ function PricesPanel({ item, currency, onChange }: { item: WishlistItem; currenc
             const diff = prev && prev.currency === p.currency ? Number(p.price) - Number(prev.price) : 0;
             return (
               <li key={p.id} className={fresh === p.id ? 'is-fresh' : ''} style={{ '--i': i } as CSSProperties}>
-                <span className="wl-history-date">{new Date(p.recordedAt).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+                <span className="wl-history-date">{new Date(p.recordedAt).toLocaleDateString(LOCALE_TAG, { day: 'numeric', month: 'short', year: 'numeric' })}</span>
                 <b>{money(p.price, p.currency)}</b>
                 {diff !== 0 ? (
                   <span className={`wl-trend is-${diff < 0 ? 'down' : 'up'}`}>
@@ -396,7 +394,7 @@ function PricesPanel({ item, currency, onChange }: { item: WishlistItem; currenc
                   {p.note ?? ''}
                   {p.source === 'TRACKER' && <em> · seguimiento</em>}
                 </span>
-                <button type="button" className="icon-btn" aria-label={`Borrar el precio del ${new Date(p.recordedAt).toLocaleDateString('es-ES')}`} title="Borrar" onClick={() => void removePrice(p.id)}>
+                <button type="button" className="icon-btn" aria-label={`Borrar el precio del ${new Date(p.recordedAt).toLocaleDateString(LOCALE_TAG)}`} title="Borrar" onClick={() => void removePrice(p.id)}>
                   <Icon name="close" size={12} />
                 </button>
               </li>

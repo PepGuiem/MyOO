@@ -21,7 +21,11 @@ import {
 import { PlansService } from '../plans/plans.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateWardrobeItemDto } from './dto/create-wardrobe-item.dto';
-import { ListWardrobeItemsQueryDto } from './dto/list-wardrobe-items-query.dto';
+import {
+  ItemSort,
+  ListWardrobeItemsQueryDto,
+} from './dto/list-wardrobe-items-query.dto';
+import { brandKey, brandOf, colorGroup, computeFacets } from './item-facets';
 import { UpdateWardrobeItemDto } from './dto/update-wardrobe-item.dto';
 
 export const wardrobeItemSelect = {
@@ -46,6 +50,7 @@ export const wardrobeItemSelect = {
   purchaseDate: true,
   wishlistStatus: true,
   photoAssetId: true,
+  isFavorite: true,
   /** Ficha de SNEAKER COLLECTION (null si no es una zapatilla fichada). */
   sneaker: {
     select: {
@@ -96,6 +101,14 @@ function purchaseData(
   };
 }
 
+/** Orden de los listados (el id desempata para que la paginación sea estable). */
+const ORDER: Record<ItemSort, Prisma.WardrobeItemOrderByWithRelationInput[]> = {
+  newest: [{ createdAt: 'desc' }, { id: 'asc' }],
+  oldest: [{ createdAt: 'asc' }, { id: 'asc' }],
+  name: [{ name: 'asc' }, { id: 'asc' }],
+  favorites: [{ isFavorite: 'desc' }, { createdAt: 'desc' }, { id: 'asc' }],
+};
+
 @Injectable()
 export class WardrobeItemsService {
   constructor(
@@ -122,17 +135,81 @@ export class WardrobeItemsService {
       name: query.search
         ? { contains: query.search, mode: 'insensitive' }
         : undefined,
+      isFavorite: query.favorite,
     };
+    // Marca y grupo de color se calculan en el código (la marca vive en un
+    // JSON y el grupo sale del color exacto): primero se buscan las prendas
+    // que cumplen el resto de filtros y luego se paginan solo las que encajan.
+    if (query.brand || query.color) {
+      const wanted = query.brand ? brandKey(query.brand) : null;
+      const candidates = await this.prisma.wardrobeItem.findMany({
+        where,
+        select: {
+          id: true,
+          color: true,
+          attributes: true,
+          sneaker: { select: { brand: true, brandName: true } },
+        },
+      });
+      where.id = {
+        in: candidates
+          .filter((c) => {
+            if (query.color && colorGroup(c.color) !== query.color)
+              return false;
+            if (wanted) {
+              const b = brandOf(c);
+              if (!b || brandKey(b) !== wanted) return false;
+            }
+            return true;
+          })
+          .map((c) => c.id),
+      };
+    }
     const [rows, total] = await this.prisma.$transaction([
       this.prisma.wardrobeItem.findMany({
         where,
         select: wardrobeItemSelect,
-        orderBy: [{ createdAt: 'desc' }, { id: 'asc' }],
+        orderBy: ORDER[query.sort ?? 'newest'],
         ...toSkipTake(query.page, query.pageSize),
       }),
       this.prisma.wardrobeItem.count({ where }),
     ]);
     return paginate(rows, total, query.page, query.pageSize);
+  }
+
+  /**
+   * Resumen del armario (o de uno de sus armarios): total, favoritas,
+   * categorías, tipos, marcas, colores, temporadas y última prenda añadida.
+   * Solo prendas del armario (no las de la wishlist).
+   */
+  async facets(userId: string, wardrobeId?: string) {
+    const rows = await this.prisma.wardrobeItem.findMany({
+      where: { userId, wishlistStatus: null, wardrobeId },
+      select: {
+        id: true,
+        name: true,
+        color: true,
+        season: true,
+        attributes: true,
+        isFavorite: true,
+        createdAt: true,
+        garmentType: {
+          select: { id: true, code: true, name: true, category: true },
+        },
+        sneaker: { select: { brand: true, brandName: true } },
+      },
+    });
+    return computeFacets(rows);
+  }
+
+  /** Marca o desmarca una prenda como favorita (solo las propias). */
+  async setFavorite(userId: string, id: string, isFavorite: boolean) {
+    const res = await this.prisma.wardrobeItem.updateMany({
+      where: { id, userId },
+      data: { isFavorite },
+    });
+    if (res.count === 0) throw new NotFoundException('Wardrobe item not found');
+    return { id, isFavorite };
   }
 
   async findOne(userId: string, id: string) {

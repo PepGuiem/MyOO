@@ -1,5 +1,6 @@
 import type { IconName } from '../components/Icon';
 import type { WishlistCategory, WishlistItem, WishlistSort, WishlistStatus } from '../api/types';
+import { LOCALE_TAG } from '../i18n';
 
 /**
  * WISHLIST: textos, iconos y colores de estados y categorías, y formato de
@@ -42,7 +43,7 @@ export function money(value: number | string | null | undefined, currency: strin
   if (!Number.isFinite(n)) return '—';
   const cur = currency || 'EUR';
   try {
-    return new Intl.NumberFormat('es-ES', {
+    return new Intl.NumberFormat(LOCALE_TAG, {
       style: 'currency',
       currency: cur,
       maximumFractionDigits: opts.compact && Number.isInteger(n) ? 0 : 2,

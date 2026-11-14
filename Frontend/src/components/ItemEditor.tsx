@@ -22,6 +22,7 @@ import { ErrorNote } from './ErrorNote';
 import { Modal } from './Modal';
 import { Select } from './Select';
 import { Busy } from './Spinner';
+import { t } from '../i18n';
 
 const PALETTE = ['#E8E8E8', '#8E8E93', '#2E2E33', '#151517', '#2B3445', '#8FA6C1', '#C8B79A', '#3B2F2A', '#5F6B52', '#8C3B3B'];
 
@@ -194,7 +195,7 @@ export function ItemEditor({ item, wardrobes, garmentTypes, defaultWardrobeId, o
       if (!reading) {
         setPhoto({
           status: 'error',
-          message: 'No encuentro una prenda clara en la foto. Prueba con la prenda entera, de frente y sobre un fondo liso que contraste.',
+          message: t('No encuentro una prenda clara en la foto. Prueba con la prenda entera, de frente y sobre un fondo liso que contraste.'),
         });
         return;
       }
@@ -211,7 +212,7 @@ export function ItemEditor({ item, wardrobes, garmentTypes, defaultWardrobeId, o
       setAttributes((prev) => ({ ...Object.fromEntries(Object.entries(prev).filter(([k]) => k in schema && k !== 'closure')), ...next }));
       setColor(g.color);
       const notes = [...g.notes];
-      if (!found && g.modelKey) notes.push('Ese tipo de prenda no está en tu catálogo: elige el tipo a mano.');
+      if (!found && g.modelKey) notes.push(t('Ese tipo de prenda no está en tu catálogo: elige el tipo a mano.'));
       const pattern = target?.customizationOptions?.options.includes('pattern') ? patternFromPhoto(g, target.modelKey) : null;
       // Los gráficos se guardan como imágenes tuyas para poder usarlos en 3D
       const placed: PhotoPlacement['graphics'] = [];
@@ -224,7 +225,7 @@ export function ItemEditor({ item, wardrobes, garmentTypes, defaultWardrobeId, o
           uploadFailed = true;
         }
       }
-      if (uploadFailed) notes.push('Algún gráfico no se pudo guardar (¿has llegado al límite de imágenes?): puedes añadirlo después.');
+      if (uploadFailed) notes.push(t('Algún gráfico no se pudo guardar (¿has llegado al límite de imágenes?): puedes añadirlo después.'));
       setCustomization((prev) => {
         const nextC: Customization = { ...prev, details: (prev.details ?? []).filter((d) => !d.id.startsWith('ph')) };
         if (pattern) nextC.pattern = pattern;
@@ -237,7 +238,7 @@ export function ItemEditor({ item, wardrobes, garmentTypes, defaultWardrobeId, o
       }
       setPhoto({ status: 'done', thumbnail: reading.thumbnail, notes });
     } catch {
-      setPhoto({ status: 'error', message: 'No se ha podido leer la imagen. Prueba con una foto JPG o PNG.' });
+      setPhoto({ status: 'error', message: t('No se ha podido leer la imagen. Prueba con una foto JPG o PNG.') });
     }
   }
 
@@ -248,19 +249,19 @@ export function ItemEditor({ item, wardrobes, garmentTypes, defaultWardrobeId, o
   }
 
   return (
-    <Modal title={item ? 'Editar prenda' : 'Nueva prenda'} onClose={onClose} wide className="dialog-editor">
+    <Modal title={item ? t('Editar prenda') : t('Nueva prenda')} onClose={onClose} wide className="dialog-editor">
       <form className="editor" onSubmit={submit}>
         <div className="editor-stage" aria-hidden="true">
           {preview && <GarmentViewer garment={preview} place={placement} onPlaced={onPlaced} />}
-          <p className="stage-hint">Arrastra para girar</p>
+          <p className="stage-hint">{t('Arrastra para girar')}</p>
         </div>
 
         <div className="editor-fields">
           <section className="field photo-box" aria-labelledby="photo-title">
             <div className="photo-head">
-              <span id="photo-title" className="details-title">Desde una foto</span>
+              <span id="photo-title" className="details-title">{t('Desde una foto')}</span>
               <label className="btn btn-small photo-pick">
-                {photo?.status === 'reading' ? <Busy text="Leyendo la foto…" /> : photo ? 'Usar otra foto' : 'Elegir foto'}
+                {photo?.status === 'reading' ? <Busy text={t('Leyendo la foto…')} /> : photo ? t('Usar otra foto') : t('Elegir foto')}
                 <input
                   type="file"
                   accept="image/*"
@@ -276,33 +277,31 @@ export function ItemEditor({ item, wardrobes, garmentTypes, defaultWardrobeId, o
             </div>
             {!photo && (
               <p className="muted small">
-                Haz o sube una foto de la prenda entera, de frente y sobre un fondo liso: se reconocen el tipo, las mangas,
-                el cierre, el color, las rayas o cuadros y los logos o estampados, y se pasan al modelo 3D. La foto no sale de
-                tu dispositivo; solo se guardan los gráficos recortados.
+                {t('Haz o sube una foto de la prenda entera, de frente y sobre un fondo liso: se reconocen el tipo, las mangas, el cierre, el color, las rayas o cuadros y los logos o estampados, y se pasan al modelo 3D. La foto no sale de tu dispositivo; solo se guardan los gráficos recortados.')}
               </p>
             )}
             {photo?.status === 'error' && <p className="note small">{photo.message}</p>}
             {photo?.status === 'done' && (
               <div className="photo-result">
-                {photo.thumbnail && <img src={photo.thumbnail} alt="Prenda recortada de la foto" />}
+                {photo.thumbnail && <img src={photo.thumbnail} alt={t('Prenda recortada de la foto')} />}
                 <ul className="small">
                   {photo.notes?.map((n) => (
                     <li key={n}>{n}</li>
                   ))}
-                  <li className="muted">Revisa el tipo y los detalles: cambia lo que no cuadre antes de guardar.</li>
+                  <li className="muted">{t('Revisa el tipo y los detalles: cambia lo que no cuadre antes de guardar.')}</li>
                 </ul>
               </div>
             )}
           </section>
 
           <label className="field">
-            <span>Nombre</span>
+            <span>{t('Nombre')}</span>
             <input required maxLength={80} value={name} onChange={(e) => setName(e.target.value)} />
           </label>
 
           <div className="row">
             <div className="field">
-              <span id="item-type">Tipo</span>
+              <span id="item-type">{t('Tipo')}</span>
               <Select
                 labelledBy="item-type"
                 value={typeId}
@@ -311,13 +310,13 @@ export function ItemEditor({ item, wardrobes, garmentTypes, defaultWardrobeId, o
               />
             </div>
             <div className="field">
-              <span id="item-wardrobe">Armario</span>
+              <span id="item-wardrobe">{t('Armario')}</span>
               <Select labelledBy="item-wardrobe" value={wardrobeId} options={wardrobes.map((w) => ({ value: w.id, label: w.name }))} onChange={setWardrobeId} />
             </div>
           </div>
 
           <fieldset className="field">
-            <legend>Color</legend>
+            <legend>{t('Color')}</legend>
             <div className="color-row">
               {PALETTE.map((c) => (
                 <button
@@ -334,14 +333,14 @@ export function ItemEditor({ item, wardrobes, garmentTypes, defaultWardrobeId, o
                 type="color"
                 value={/^#[0-9a-fA-F]{6}$/.test(color) ? color : '#8E8E93'}
                 onChange={(e) => setColor(e.target.value.toUpperCase())}
-                aria-label="Elegir otro color"
+                aria-label={t('Elegir otro color')}
               />
               <input
                 className="hex-input"
                 value={color}
                 maxLength={7}
                 onChange={(e) => setColor(e.target.value)}
-                aria-label="Código de color"
+                aria-label={t('Código de color')}
                 pattern="#[0-9a-fA-F]{6}"
               />
             </div>
@@ -349,18 +348,18 @@ export function ItemEditor({ item, wardrobes, garmentTypes, defaultWardrobeId, o
 
           <div className="row">
             <label className="field">
-              <span>Talla</span>
+              <span>{t('Talla')}</span>
               <input maxLength={20} value={size} onChange={(e) => setSize(e.target.value)} />
             </label>
             <div className="field">
-              <span id="item-season">Temporada</span>
+              <span id="item-season">{t('Temporada')}</span>
               <Select labelledBy="item-season" value={season} options={SEASONS.map((s) => ({ value: s, label: SEASON_LABEL[s] }))} onChange={(v) => setSeason(v as Season)} />
             </div>
           </div>
 
           {fields.length > 0 && (
             <fieldset className="field attrs">
-              <legend>Detalles de {type?.name.toLowerCase()}</legend>
+              <legend>{t('Detalles de {toLowerCase}', { toLowerCase: type?.name.toLowerCase() })}</legend>
               <div className="attrs-grid">
                 {fields.map(([key, field]) => (
                   <AttributeInput key={key} name={key} field={field} value={attributes[key]} onChange={(v) => setAttr(key, v)} />
@@ -370,8 +369,8 @@ export function ItemEditor({ item, wardrobes, garmentTypes, defaultWardrobeId, o
           )}
 
           <fieldset className="field">
-            <legend>Estilo <small className="muted">(hasta {MAX_STYLES_PER_ITEM}; si no eliges, el estilista lo deduce)</small></legend>
-            <div className="chips chips-small" role="group" aria-label="Estilos de la prenda">
+            <legend>{t('Estilo')} <small className="muted">{t('(hasta {MAX_STYLES_PER_ITEM}; si no eliges, el estilista lo deduce)', { MAX_STYLES_PER_ITEM })}</small></legend>
+            <div className="chips chips-small" role="group" aria-label={t('Estilos de la prenda')}>
               {STYLE_TAGS.map((t) => {
                 const on = styles.includes(t.value);
                 return (
@@ -392,12 +391,12 @@ export function ItemEditor({ item, wardrobes, garmentTypes, defaultWardrobeId, o
 
           <details className="field purchase-box" open={hasPurchase}>
             <summary>
-              <span>Dónde lo compraste</span> <small className="muted">(opcional)</small>
+              <span>{t('Dónde lo compraste')}</span> <small className="muted">{t('(opcional)')}</small>
             </summary>
             <div className="attrs-grid purchase-fields">
               {brandField && (
                 <label className="field">
-                  <span>Marca</span>
+                  <span>{t('Marca')}</span>
                   <input
                     maxLength={brandField.type === 'string' ? brandField.maxLength : 60}
                     value={typeof attributes.brand === 'string' ? attributes.brand : ''}
@@ -406,48 +405,48 @@ export function ItemEditor({ item, wardrobes, garmentTypes, defaultWardrobeId, o
                 </label>
               )}
               <label className="field">
-                <span>Producto</span>
-                <input maxLength={120} placeholder="Nombre comercial" value={productName} onChange={(e) => setProductName(e.target.value)} />
+                <span>{t('Producto')}</span>
+                <input maxLength={120} placeholder={t('Nombre comercial')} value={productName} onChange={(e) => setProductName(e.target.value)} />
               </label>
               <label className="field">
-                <span>Tienda</span>
+                <span>{t('Tienda')}</span>
                 <input maxLength={80} value={storeName} onChange={(e) => setStoreName(e.target.value)} />
               </label>
               <div className="field">
-                <span id="item-platform">Dónde</span>
+                <span id="item-platform">{t('Dónde')}</span>
                 <Select
                   labelledBy="item-platform"
                   value={platform}
-                  options={[{ value: '', label: 'Sin especificar' }, ...PURCHASE_PLATFORMS]}
+                  options={[{ value: '', label: t('Sin especificar') }, ...PURCHASE_PLATFORMS]}
                   onChange={setPlatform}
                 />
               </div>
               <label className="field span-2">
-                <span>Enlace al producto</span>
+                <span>{t('Enlace al producto')}</span>
                 <input type="url" maxLength={2048} placeholder="https://" value={productUrl} onChange={(e) => setProductUrl(e.target.value)} />
               </label>
               <label className="field">
-                <span>Referencia</span>
-                <input maxLength={80} placeholder="SKU o modelo" value={productRef} onChange={(e) => setProductRef(e.target.value)} />
+                <span>{t('Referencia')}</span>
+                <input maxLength={80} placeholder={t('SKU o modelo')} value={productRef} onChange={(e) => setProductRef(e.target.value)} />
               </label>
               <label className="field">
-                <span>Fecha de compra</span>
+                <span>{t('Fecha de compra')}</span>
                 <input type="date" value={purchaseDate} max={new Date().toISOString().slice(0, 10)} onChange={(e) => setPurchaseDate(e.target.value)} />
               </label>
               <div className="field price-field">
-                <span id="item-price">Precio</span>
+                <span id="item-price">{t('Precio')}</span>
                 <div className="price-row">
                   <input
                     aria-labelledby="item-price"
                     inputMode="decimal"
                     pattern="\d{1,8}([.,]\d{1,2})?"
-                    title="Un número con dos decimales como mucho"
+                    title={t('Un número con dos decimales como mucho')}
                     placeholder="0,00"
                     value={price}
                     onChange={(e) => setPrice(e.target.value)}
                   />
                   <input
-                    aria-label="Moneda"
+                    aria-label={t('Moneda')}
                     className="currency-input"
                     maxLength={3}
                     pattern="[A-Za-z]{3}"
@@ -457,13 +456,13 @@ export function ItemEditor({ item, wardrobes, garmentTypes, defaultWardrobeId, o
                 </div>
               </div>
             </div>
-            <small className="muted purchase-note">Si no sabes de dónde es, déjalo vacío. El enlace solo lo ves tú (y quien quieras cuando lo publiques).</small>
+            <small className="muted purchase-note">{t('Si no sabes de dónde es, déjalo vacío. El enlace solo lo ves tú (y quien quieras cuando lo publiques).')}</small>
           </details>
 
           {(customization.details?.length ?? 0) > 0 && (
             <section className="field details-box" aria-labelledby="item-details-list">
               <span id="item-details-list" className="details-title">
-                Detalles de la prenda ({customization.details?.length})
+                {t('Detalles de la prenda ({n})', { n: customization.details?.length })}
               </span>
               <DetailList
                 details={customization.details ?? []}
@@ -472,44 +471,43 @@ export function ItemEditor({ item, wardrobes, garmentTypes, defaultWardrobeId, o
                   setCustomTouched(true);
                 }}
               />
-              <p className="muted small">Para moverlos, cambiar su tamaño o su color, usa «Personalizar» en la prenda.</p>
+              <p className="muted small">{t('Para moverlos, cambiar su tamaño o su color, usa «Personalizar» en la prenda.')}</p>
             </section>
           )}
 
           {!item && (
             <section className="field details-box" aria-labelledby="details-title">
-              <span id="details-title" className="details-title">Parches, bordados y estampados</span>
+              <span id="details-title" className="details-title">{t('Parches, bordados y estampados')}</span>
               <p className="muted small">
-                Coloca parches, bordados, estampados, texto o tus propios dibujos sobre la prenda en 3D, haciendo clic donde
-                van. Al pulsar el botón se guarda la prenda y se abre el editor de detalles.
+                {t('Coloca parches, bordados, estampados, texto o tus propios dibujos sobre la prenda en 3D, haciendo clic donde van. Al pulsar el botón se guarda la prenda y se abre el editor de detalles.')}
               </p>
               <button type="submit" className="btn" data-next="details" disabled={saving || !wardrobeId || !typeId}>
-                Añadir y poner detalles
+                {t('Añadir y poner detalles')}
               </button>
             </section>
           )}
 
           <label className="field">
-            <span>Notas</span>
+            <span>{t('Notas')}</span>
             <textarea rows={2} maxLength={1000} value={notes} onChange={(e) => setNotes(e.target.value)} />
           </label>
 
           <label className="field">
-            <span>URL de imagen (opcional)</span>
+            <span>{t('URL de imagen (opcional)')}</span>
             <input type="url" maxLength={2048} placeholder="https://" value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} />
           </label>
 
           <label className="field">
-            <span>Modelo 3D real (.glb o .gltf, opcional)</span>
+            <span>{t('Modelo 3D real (.glb o .gltf, opcional)')}</span>
             <input
               maxLength={2048}
               placeholder="https://…/prenda.glb o /models/prenda.glb"
               pattern="(https?://\S+|/(?!/)[\w\-.\/]+)\.(glb|gltf)(\?\S*)?"
-              title="Una URL http(s) o una ruta que empiece por / y termine en .glb o .gltf"
+              title={t('Una URL http(s) o una ruta que empiece por / y termine en .glb o .gltf')}
               value={modelUrl}
               onChange={(e) => setModelUrl(e.target.value)}
             />
-            <small className="muted">Si lo dejas vacío, el modelo 3D se genera automáticamente.</small>
+            <small className="muted">{t('Si lo dejas vacío, el modelo 3D se genera automáticamente.')}</small>
           </label>
 
           <ErrorNote error={error} />
@@ -517,15 +515,15 @@ export function ItemEditor({ item, wardrobes, garmentTypes, defaultWardrobeId, o
           <div className="actions">
             {item && (
               <button type="button" className="btn btn-danger" onClick={remove}>
-                {confirmDelete ? 'Confirmar: eliminar prenda' : 'Eliminar'}
+                {confirmDelete ? t('Confirmar: eliminar prenda') : t('Eliminar')}
               </button>
             )}
             <span className="spacer" />
             <button type="button" className="btn" onClick={onClose}>
-              Cancelar
+              {t('Cancelar')}
             </button>
             <button type="submit" className="btn btn-primary" disabled={saving || !wardrobeId || !typeId}>
-              {saving ? <Busy text="Guardando…" /> : item ? 'Guardar cambios' : 'Añadir prenda'}
+              {saving ? <Busy text={t('Guardando…')} /> : item ? t('Guardar cambios') : t('Añadir prenda')}
             </button>
           </div>
         </div>
@@ -554,7 +552,7 @@ function AttributeInput({
           <Select
             labelledBy={id}
             value={typeof value === 'string' ? value : ''}
-            options={[{ value: '', label: 'Sin especificar' }, ...field.options]}
+            options={[{ value: '', label: t('Sin especificar') }, ...field.options]}
             onChange={(v) => onChange(v || null)}
           />
         </div>

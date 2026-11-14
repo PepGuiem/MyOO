@@ -2,6 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState, t
 import { setBannedHandler, setUnauthorizedHandler, tokenStore, type BanInfo } from '../api/client';
 import { authApi, usersApi } from '../api/endpoints';
 import type { AuthResponse, User } from '../api/types';
+import { locale, syncLocale, toAccountLocale } from '../i18n';
 
 interface AuthState {
   user: User | null;
@@ -50,7 +51,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (!tokenStore.get()) return;
     usersApi
       .me()
-      .then(setUser)
+      .then((u) => {
+        // El idioma de la cuenta manda (si difiere, la página se recarga en ese idioma).
+        syncLocale(u.locale);
+        setUser(u);
+      })
       .catch(() => logout())
       .finally(() => setLoading(false));
   }, [logout]);
@@ -58,6 +63,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const handleAuth = useCallback((res: AuthResponse) => {
     tokenStore.set(res.accessToken);
     setBanned(null);
+    syncLocale(res.user.locale);
     setUser(res.user);
   }, []);
 
@@ -74,7 +80,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       loading,
       login: async (email, password) => handleAuth(await authApi.login({ email, password })),
       register: async (email, password, displayName) =>
-        handleAuth(await authApi.register({ email, password, displayName: displayName || undefined })),
+        handleAuth(await authApi.register({ email, password, displayName: displayName || undefined, locale: toAccountLocale(locale) })),
       logout,
       setUser,
       completeAuth: handleAuth,

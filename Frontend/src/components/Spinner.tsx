@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { t } from '../i18n';
 
 /**
  * Icono de carga: un arco que gira (color del texto). `size` en píxeles.
@@ -11,7 +12,7 @@ export function Spinner({ size = 16, label, className }: { size?: number; label?
         <circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" strokeOpacity="0.18" strokeWidth="2.5" />
         <path d="M12 2.5a9.5 9.5 0 0 1 9.5 9.5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
       </svg>
-      {label ? <span className="spinner-label">{label}</span> : <span className="visually-hidden">Cargando…</span>}
+      {label ? <span className="spinner-label">{label}</span> : <span className="visually-hidden">{t('Cargando…')}</span>}
     </span>
   );
 }
@@ -21,7 +22,7 @@ export function Spinner({ size = 16, label, className }: { size?: number; label?
  * pequeño retraso (lo que carga al momento no hace parpadear nada) y se
  * desvanece al terminar. No captura el ratón.
  */
-export function LoadingOverlay({ show, label = 'Cargando…', delay = 180, size = 34 }: { show: boolean; label?: string; delay?: number; size?: number }) {
+export function LoadingOverlay({ show, label = t('Cargando…'), delay = 180, size = 34 }: { show: boolean; label?: string; delay?: number; size?: number }) {
   const [visible, setVisible] = useState(false);
   useEffect(() => {
     if (!show) {

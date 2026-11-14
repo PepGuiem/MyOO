@@ -33,6 +33,7 @@ import { DetailList } from './DetailList';
 import { ColorRow } from './ColorRow';
 import { PatternEditor } from './PatternEditor';
 import { Select } from './Select';
+import { t } from '../i18n';
 
 export type CustomTab = 'colors' | 'parts' | 'details';
 type Tab = CustomTab;
@@ -99,7 +100,7 @@ export function CustomizationPanel({ options, value, onChange, selectedId, onSel
   const selected = details.find((d) => d.id === selectedId) ?? null;
 
   if (disabled) {
-    return <p className="muted small">Esta prenda usa un modelo 3D real (.glb): su personalización se hace en el propio archivo.</p>;
+    return <p className="muted small">{t('Esta prenda usa un modelo 3D real (.glb): su personalización se hace en el propio archivo.')}</p>;
   }
 
   const setColor = (slot: ColorSlot, c: string | null) =>
@@ -160,10 +161,10 @@ export function CustomizationPanel({ options, value, onChange, selectedId, onSel
 
   return (
     <div className="custom-panel">
-      <div className="segmented segmented-tabs" role="tablist" aria-label="Personalización">
-        {tabs.map((t) => (
-          <button key={t} type="button" role="tab" aria-selected={tab === t} aria-pressed={tab === t} onClick={() => setTab(t)}>
-            {t === 'colors' ? 'Colores' : t === 'parts' ? 'Piezas' : `Detalles${details.length ? ` (${details.length})` : ''}`}
+      <div className="segmented segmented-tabs" role="tablist" aria-label={t('Personalización')}>
+        {tabs.map((k) => (
+          <button key={k} type="button" role="tab" aria-selected={tab === k} aria-pressed={tab === k} onClick={() => setTab(k)}>
+            {k === 'colors' ? t('Colores') : k === 'parts' ? t('Piezas') : `Detalles${details.length ? ` (${details.length})` : ''}`}
           </button>
         ))}
       </div>
@@ -172,8 +173,8 @@ export function CustomizationPanel({ options, value, onChange, selectedId, onSel
       {library && (
         <p className="muted small">
           {library.colors.length
-            ? 'Esta prenda usa su modelo 3D: puedes cambiar el color de sus piezas (botones, cremallera, ribetes…) y el estampado de la tela, y añadir detalles encima.'
-            : 'Esta prenda usa su modelo 3D, de una sola pieza: costuras y bolsillos forman parte de la malla y toman el color de la prenda. Puedes elegir el estampado de la tela y añadir detalles encima (parches, bordados, botones…).'}
+            ? t('Esta prenda usa su modelo 3D: puedes cambiar el color de sus piezas (botones, cremallera, ribetes…) y el estampado de la tela, y añadir detalles encima.')
+            : t('Esta prenda usa su modelo 3D, de una sola pieza: costuras y bolsillos forman parte de la malla y toman el color de la prenda. Puedes elegir el estampado de la tela y añadir detalles encima (parches, bordados, botones…).')}
         </p>
       )}
 
@@ -191,34 +192,34 @@ export function CustomizationPanel({ options, value, onChange, selectedId, onSel
             />
           ))}
           {options.options.includes('metal') && metalParts && (
-            <SelectRow label="Acabado del metal" value={value.options?.metal} labels={METAL_LABEL} onChange={(v) => setOption('metal', v as MetalFinish | null)} />
+            <SelectRow label={t('Acabado del metal')} value={value.options?.metal} labels={METAL_LABEL} onChange={(v) => setOption('metal', v as MetalFinish | null)} />
           )}
           {!library && options.options.includes('buttonStyle') && (
-            <SelectRow label="Tipo de botón" value={value.options?.buttonStyle} labels={BUTTON_LABEL} onChange={(v) => setOption('buttonStyle', v as ButtonStyle | null)} />
+            <SelectRow label={t('Tipo de botón')} value={value.options?.buttonStyle} labels={BUTTON_LABEL} onChange={(v) => setOption('buttonStyle', v as ButtonStyle | null)} />
           )}
           {!library && options.options.includes('stitchStyle') && (
-            <SelectRow label="Pespunte" value={value.options?.stitchStyle} labels={STITCH_LABEL} onChange={(v) => setOption('stitchStyle', v as StitchStyle | null)} />
+            <SelectRow label={t('Pespunte')} value={value.options?.stitchStyle} labels={STITCH_LABEL} onChange={(v) => setOption('stitchStyle', v as StitchStyle | null)} />
           )}
         </div>
       )}
 
       {tab === 'parts' && (
         <div className="custom-section">
-          {partList.length === 0 && <p className="muted small">Este tipo de prenda no tiene piezas opcionales.</p>}
+          {partList.length === 0 && <p className="muted small">{t('Este tipo de prenda no tiene piezas opcionales.')}</p>}
           {partList.map((part) => {
             const current = value.parts?.[part.key];
             return (
               <div key={part.key} className="part-row">
                 <span>{part.label}</span>
                 <div className="segmented segmented-small" role="group" aria-label={part.label}>
-                  <button type="button" aria-pressed={current === undefined} onClick={() => setPart(part.key, null)} title={part.default === null ? 'Lo que lleve el estilo o corte elegido' : `Por defecto: ${part.default ? 'sí' : 'no'}`}>
-                    Auto
+                  <button type="button" aria-pressed={current === undefined} onClick={() => setPart(part.key, null)} title={part.default === null ? t('Lo que lleve el estilo o corte elegido') : t('Por defecto: {v}', { v: part.default ? t('sí') : t('no') })}>
+                    {t('Auto')}
                   </button>
                   <button type="button" aria-pressed={current === true} onClick={() => setPart(part.key, true)}>
-                    Sí
+                    {t('Sí')}
                   </button>
                   <button type="button" aria-pressed={current === false} onClick={() => setPart(part.key, false)}>
-                    No
+                    {t('No')}
                   </button>
                 </div>
               </div>
@@ -231,16 +232,16 @@ export function CustomizationPanel({ options, value, onChange, selectedId, onSel
         <div className="custom-section">
           {placement && (
             <p className="note placing-note" role="status">
-              {placement === 'move' ? 'Haz clic en la prenda donde quieras mover el detalle (o arrástralo directamente).' : `Haz clic en la prenda para colocar: ${DETAIL_KIND_LABEL[placement].toLowerCase()}.`}{' '}
+              {placement === 'move' ? t('Haz clic en la prenda donde quieras mover el detalle (o arrástralo directamente).') : t('Haz clic en la prenda para colocar: {toLowerCase}.', { toLowerCase: DETAIL_KIND_LABEL[placement].toLowerCase() })}{' '}
               <button type="button" className="btn-link" onClick={() => onPlacement(null)}>
-                Cancelar
+                {t('Cancelar')}
               </button>
             </p>
           )}
           {details.length > 0 ? (
             <>
               <p className="muted small">
-                {details.length} {details.length === 1 ? 'detalle' : 'detalles'}. Pulsa uno para editarlo (también puedes pulsarlo o arrastrarlo en la prenda).
+                {t('{n} {v}. Pulsa uno para editarlo (también puedes pulsarlo o arrastrarlo en la prenda).', { n: details.length, v: details.length === 1 ? t('detalle') : t('detalles') })}
               </p>
               <DetailList
                 details={details}
@@ -249,17 +250,17 @@ export function CustomizationPanel({ options, value, onChange, selectedId, onSel
                 onDuplicate={duplicateDetail}
                 onRemove={removeDetail}
                 canDuplicate={details.length < MAX_DETAILS}
-                label="Detalles colocados"
+                label={t('Detalles colocados')}
               />
             </>
           ) : (
-            !placement && <p className="muted small">Esta prenda aún no tiene detalles.</p>
+            !placement && <p className="muted small">{t('Esta prenda aún no tiene detalles.')}</p>
           )}
 
           {selected ? (
             <>
             <button type="button" className="btn-link detail-back" onClick={() => onSelect(null)}>
-              ← Añadir otro detalle
+              {t('← Añadir otro detalle')}
             </button>
             <DetailEditor
               detail={selected}
@@ -275,10 +276,10 @@ export function CustomizationPanel({ options, value, onChange, selectedId, onSel
                   <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
                     <path d="M10.8 2.2a1.6 1.6 0 0 1 2.3 0l.7.7a1.6 1.6 0 0 1 0 2.3l-7.6 7.6-3.4.9.9-3.4 7.1-7.1Z" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" />
                   </svg>
-                  Dibujar sobre la prenda
+                  {t('Dibujar sobre la prenda')}
                 </button>
               )}
-              <p className="muted small">Añade un detalle y colócalo haciendo clic sobre la prenda. Luego puedes arrastrarlo para cambiarlo de sitio.</p>
+              <p className="muted small">{t('Añade un detalle y colócalo haciendo clic sobre la prenda. Luego puedes arrastrarlo para cambiarlo de sitio.')}</p>
               <div className="kind-grid">
                 {PLACEABLE_KINDS.map((k) => (
                   <button key={k} type="button" className={`btn btn-small${placement === k ? ' is-active' : ''}`} disabled={details.length >= MAX_DETAILS} onClick={() => onPlacement(k)}>
@@ -286,7 +287,7 @@ export function CustomizationPanel({ options, value, onChange, selectedId, onSel
                   </button>
                 ))}
               </div>
-              {details.length >= MAX_DETAILS && <p className="muted small">Máximo {MAX_DETAILS} detalles por prenda.</p>}
+              {details.length >= MAX_DETAILS && <p className="muted small">{t('Máximo {MAX_DETAILS} detalles por prenda.', { MAX_DETAILS })}</p>}
             </>
           )}
         </div>
@@ -358,16 +359,16 @@ function DetailEditor({
     <div className="detail-editor">
       <h3 className="panel-subtitle">{DETAIL_KIND_LABEL[detail.kind]}</h3>
       <label className="field">
-        <span>Tamaño: {cm} cm</span>
+        <span>{t('Tamaño: {cm} cm', { cm })}</span>
         <input type="range" min={0.5} max={Math.max(maxCm, cm)} step={0.1} value={cm} onChange={(e) => onChange({ size: Number(e.target.value) / 100 })} />
       </label>
       <label className="field">
-        <span>Giro: {deg}°</span>
+        <span>{t('Giro: {deg}°', { deg })}</span>
         <input type="range" min={-180} max={180} step={1} value={deg} onChange={(e) => onChange({ rotation: (Number(e.target.value) * Math.PI) / 180 })} />
       </label>
       {showMainColor && (
         <ColorRow
-          label={cutout ? 'Color de las letras' : detail.kind === 'patch' ? 'Fondo' : 'Color'}
+          label={cutout ? t('Color de las letras') : detail.kind === 'patch' ? t('Fondo') : t('Color')}
           value={detail.color}
           onChange={(c) => c && onChange({ color: c.toUpperCase() })}
           required
@@ -375,10 +376,10 @@ function DetailEditor({
           onToggle={() => setOpenColor((k) => (k === 'main' ? null : 'main'))}
         />
       )}
-      {drawing && <p className="muted small">Dibujo a mano alzada: se estampa sobre la tela desde el ángulo en que lo dibujaste. Puedes moverlo, girarlo o cambiar su tamaño.</p>}
+      {drawing && <p className="muted small">{t('Dibujo a mano alzada: se estampa sobre la tela desde el ángulo en que lo dibujaste. Puedes moverlo, girarlo o cambiar su tamaño.')}</p>}
       {!cutout && ['patch', 'label', 'pin', 'pocket'].includes(detail.kind) && (
         <ColorRow
-          label={detail.kind === 'patch' ? 'Ribete y texto' : detail.kind === 'pocket' ? 'Pespunte' : 'Texto'}
+          label={detail.kind === 'patch' ? t('Ribete y texto') : detail.kind === 'pocket' ? t('Pespunte') : t('Texto')}
           value={detail.secondaryColor}
           onChange={(c) => onChange({ secondaryColor: c ? c.toUpperCase() : undefined })}
           open={openColor === 'second'}
@@ -387,43 +388,43 @@ function DetailEditor({
       )}
       {detail.kind === 'patch' && (
         <>
-          <SelectRow label="Forma" value={detail.shape} labels={DETAIL_SHAPE_LABEL} onChange={(v) => onChange({ shape: (v as DetailShape) ?? undefined })} allowAuto={false} />
+          <SelectRow label={t('Forma')} value={detail.shape} labels={DETAIL_SHAPE_LABEL} onChange={(v) => onChange({ shape: (v as DetailShape) ?? undefined })} allowAuto={false} />
           <p className="muted small">
             {cutout
-              ? 'Sin marco: el parche tiene la silueta de tu PNG (las zonas transparentes no se ven) o la de las letras.'
-              : 'Para un logo con fondo transparente sin marco alrededor, elige «Recortado (sin marco)».'}
+              ? t('Sin marco: el parche tiene la silueta de tu PNG (las zonas transparentes no se ven) o la de las letras.')
+              : t('Para un logo con fondo transparente sin marco alrededor, elige «Recortado (sin marco)».')}
           </p>
         </>
       )}
       {graphic && (
         <>
           <label className="field">
-            <span>Texto</span>
+            <span>{t('Texto')}</span>
             <input
               value={detail.text ?? ''}
               maxLength={40}
               disabled={!!detail.assetId}
-              placeholder={detail.assetId ? 'Con imagen no lleva texto' : 'Escribe el texto'}
+              placeholder={detail.assetId ? t('Con imagen no lleva texto') : t('Escribe el texto')}
               onChange={(e) => onChange({ text: e.target.value || undefined, font: e.target.value ? detail.font ?? 'sans' : undefined })}
             />
           </label>
           {detail.text && !detail.assetId && (
-            <SelectRow label="Letra" value={detail.font} labels={DETAIL_FONT_LABEL} onChange={(v) => onChange({ font: (v as DetailFont) ?? 'sans' })} allowAuto={false} />
+            <SelectRow label={t('Letra')} value={detail.font} labels={DETAIL_FONT_LABEL} onChange={(v) => onChange({ font: (v as DetailFont) ?? 'sans' })} allowAuto={false} />
           )}
           <div className="field">
-            <span>Imagen (logo o estampado)</span>
+            <span>{t('Imagen (logo o estampado)')}</span>
             <AssetPicker value={detail.assetId} onChange={(id) => onChange({ assetId: id, ...(id ? { text: undefined, font: undefined } : {}) })} />
           </div>
         </>
       )}
-      <p className="muted small">Arrastra el detalle sobre la prenda para moverlo, o pulsa «Mover» y haz clic donde quieras.</p>
+      <p className="muted small">{t('Arrastra el detalle sobre la prenda para moverlo, o pulsa «Mover» y haz clic donde quieras.')}</p>
       <div className="actions">
         <button type="button" className="btn btn-small" onClick={onMove}>
-          Mover
+          {t('Mover')}
         </button>
         <span className="spacer" />
         <button type="button" className="btn btn-small btn-danger" onClick={onRemove}>
-          Quitar
+          {t('Quitar')}
         </button>
       </div>
     </div>
@@ -448,7 +449,7 @@ function SelectRow({
   allowAuto?: boolean;
 }) {
   const id = useId();
-  const options = [...(allowAuto ? [{ value: '', label: 'Auto' }] : []), ...Object.entries(labels).map(([k, l]) => ({ value: k, label: l }))];
+  const options = [...(allowAuto ? [{ value: '', label: t('Auto') }] : []), ...Object.entries(labels).map(([k, l]) => ({ value: k, label: l }))];
   const compact = options.length <= 4 && options.every((o) => o.label.length <= 12);
   if (compact) {
     return (
@@ -456,7 +457,7 @@ function SelectRow({
         <span id={id}>{label}</span>
         <div className="segmented segmented-small segmented-fill" role="group" aria-labelledby={id}>
           {options.map((o) => (
-            <button key={o.value} type="button" aria-pressed={(value ?? '') === o.value} onClick={() => onChange(o.value || null)} title={o.value ? undefined : 'Automático (según la prenda)'}>
+            <button key={o.value} type="button" aria-pressed={(value ?? '') === o.value} onClick={() => onChange(o.value || null)} title={o.value ? undefined : t('Automático (según la prenda)')}>
               {o.label}
             </button>
           ))}
@@ -470,7 +471,7 @@ function SelectRow({
       <Select
         labelledBy={id}
         value={value ?? ''}
-        options={options.map((o) => (o.value ? o : { value: '', label: 'Automático (según la prenda)' }))}
+        options={options.map((o) => (o.value ? o : { value: '', label: t('Automático (según la prenda)') }))}
         onChange={(v) => onChange(v || null)}
       />
     </div>

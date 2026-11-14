@@ -19,9 +19,12 @@ import {
 } from './vocabulary';
 
 // ---------------------------------------------------------------- tipos
-export type Category = 'TOP' | 'BOTTOM' | 'FULL_BODY' | 'OUTERWEAR' | 'FOOTWEAR' | 'ACCESSORY';
-export type SeasonKey = 'SPRING' | 'SUMMER' | 'AUTUMN' | 'WINTER' | 'ALL_SEASON';
-export type Slot = 'top' | 'mid' | 'bottom' | 'full' | 'outer' | 'shoes' | 'head' | 'neck';
+export type Category =
+  'TOP' | 'BOTTOM' | 'FULL_BODY' | 'OUTERWEAR' | 'FOOTWEAR' | 'ACCESSORY';
+export type SeasonKey =
+  'SPRING' | 'SUMMER' | 'AUTUMN' | 'WINTER' | 'ALL_SEASON';
+export type Slot =
+  'top' | 'mid' | 'bottom' | 'full' | 'outer' | 'shoes' | 'head' | 'neck';
 
 export interface EngineItem {
   id: string;
@@ -49,7 +52,13 @@ export interface Preferences {
   usage: Record<string, number>;
 }
 
-export const EMPTY_PREFERENCES: Preferences = { item: {}, rejectedTips: {}, styles: {}, disliked: [], usage: {} };
+export const EMPTY_PREFERENCES: Preferences = {
+  item: {},
+  rejectedTips: {},
+  styles: {},
+  disliked: [],
+  usage: {},
+};
 
 export interface GenerateOptions {
   style?: StyleTag;
@@ -137,12 +146,33 @@ export function colorFamily(hex: string): ColorFamily {
 }
 
 const NAMED: [string, string][] = [
-  ['negro', '#111111'], ['blanco', '#F5F5F2'], ['gris claro', '#C8C8C8'], ['gris', '#8A8A8A'], ['gris oscuro', '#444444'],
-  ['crudo', '#EDE6D6'], ['beige', '#D8C3A0'], ['camel', '#B58450'], ['marrón', '#6B4423'], ['azul marino', '#1D2A44'],
-  ['azul', '#2F5DA8'], ['azul vaquero', '#4A6A98'], ['celeste', '#9EC3E6'], ['verde', '#3E8E41'], ['verde oliva', '#6B6B3A'],
-  ['caqui', '#A39A6B'], ['verde botella', '#1F4A33'], ['rojo', '#C0282D'], ['burdeos', '#6D1F2A'], ['rosa', '#E8A3B8'],
-  ['fucsia', '#D0307A'], ['naranja', '#E2762B'], ['mostaza', '#C9A227'], ['amarillo', '#F0D44A'], ['morado', '#6B3FA0'],
-  ['lila', '#B79CD6'], ['turquesa', '#2BB3B1'],
+  ['negro', '#111111'],
+  ['blanco', '#F5F5F2'],
+  ['gris claro', '#C8C8C8'],
+  ['gris', '#8A8A8A'],
+  ['gris oscuro', '#444444'],
+  ['crudo', '#EDE6D6'],
+  ['beige', '#D8C3A0'],
+  ['camel', '#B58450'],
+  ['marrón', '#6B4423'],
+  ['azul marino', '#1D2A44'],
+  ['azul', '#2F5DA8'],
+  ['azul vaquero', '#4A6A98'],
+  ['celeste', '#9EC3E6'],
+  ['verde', '#3E8E41'],
+  ['verde oliva', '#6B6B3A'],
+  ['caqui', '#A39A6B'],
+  ['verde botella', '#1F4A33'],
+  ['rojo', '#C0282D'],
+  ['burdeos', '#6D1F2A'],
+  ['rosa', '#E8A3B8'],
+  ['fucsia', '#D0307A'],
+  ['naranja', '#E2762B'],
+  ['mostaza', '#C9A227'],
+  ['amarillo', '#F0D44A'],
+  ['morado', '#6B3FA0'],
+  ['lila', '#B79CD6'],
+  ['turquesa', '#2BB3B1'],
 ];
 
 /** Nombre del color en castellano (el más parecido de una lista corta). */
@@ -154,7 +184,10 @@ export function colorName(hex: string): string {
     const b = rgb(h);
     // distancia «redmean»: se parece más a como vemos los colores que la euclídea
     const rm = (a[0] + b[0]) / 2;
-    const d = (2 + rm / 256) * (a[0] - b[0]) ** 2 + 4 * (a[1] - b[1]) ** 2 + (2 + (255 - rm) / 256) * (a[2] - b[2]) ** 2;
+    const d =
+      (2 + rm / 256) * (a[0] - b[0]) ** 2 +
+      4 * (a[1] - b[1]) ** 2 +
+      (2 + (255 - rm) / 256) * (a[2] - b[2]) ** 2;
     if (d < bd) {
       bd = d;
       best = name;
@@ -177,7 +210,8 @@ const hueDist = (a: number, b: number) => {
 const str = (a: Record<string, unknown>, k: string): string | undefined =>
   typeof a[k] === 'string' ? (a[k] as string) : undefined;
 
-const has = (s: string | undefined, re: RegExp) => !!s && re.test(s.toLowerCase());
+const has = (s: string | undefined, re: RegExp) =>
+  !!s && re.test(s.toLowerCase());
 
 /** Nivel de arreglo de 0 (chándal) a 1 (etiqueta). */
 export function formality(it: EngineItem): number {
@@ -187,11 +221,28 @@ export function formality(it: EngineItem): number {
   const mat = str(a, 'material');
   switch (it.modelKey) {
     case 'tshirt':
-      return str(a, 'neckline') === 'polo' ? 0.42 : str(a, 'sleeve') === 'sleeveless' ? 0.1 : 0.22;
+      return str(a, 'neckline') === 'polo'
+        ? 0.42
+        : str(a, 'sleeve') === 'sleeveless'
+          ? 0.1
+          : 0.22;
     case 'shirt':
-      return str(a, 'collar') === 'camp' ? 0.42 : str(a, 'collar') === 'mandarin' ? 0.55 : 0.64;
+      return str(a, 'collar') === 'camp'
+        ? 0.42
+        : str(a, 'collar') === 'mandarin'
+          ? 0.55
+          : 0.64;
     case 'top': {
-      const m: Record<string, number> = { waistcoat: 0.7, waistcoat_db: 0.8, corset: 0.55, bodysuit: 0.45, halter: 0.35, bandeau: 0.3, tank: 0.12, ribbed_tank: 0.12 };
+      const m: Record<string, number> = {
+        waistcoat: 0.7,
+        waistcoat_db: 0.8,
+        corset: 0.55,
+        bodysuit: 0.45,
+        halter: 0.35,
+        bandeau: 0.3,
+        tank: 0.12,
+        ribbed_tank: 0.12,
+      };
       return m[style ?? ''] ?? 0.2;
     }
     case 'sweater': {
@@ -216,28 +267,67 @@ export function formality(it: EngineItem): number {
     case 'shorts':
       return fit === 'cargo' ? 0.1 : 0.16;
     case 'skirt':
-      return str(a, 'fit') === 'pencil' ? 0.7 : str(a, 'length') === 'mini' ? 0.35 : 0.5;
+      return str(a, 'fit') === 'pencil'
+        ? 0.7
+        : str(a, 'length') === 'mini'
+          ? 0.35
+          : 0.5;
     case 'dress':
-      return str(a, 'fit') === 'tshirt' ? 0.3 : ['bodycon', 'slip', 'sheath', 'mermaid'].includes(str(a, 'fit') ?? '') ? 0.7 : 0.58;
+      return str(a, 'fit') === 'tshirt'
+        ? 0.3
+        : ['bodycon', 'slip', 'sheath', 'mermaid'].includes(str(a, 'fit') ?? '')
+          ? 0.7
+          : 0.58;
     case 'jacket': {
       const m: Record<string, number> = {
-        blazer: 0.85, blazer_db: 0.88, suit: 0.9, harrington: 0.5, biker: 0.45, bomber: 0.35, denim: 0.3, field: 0.42, overshirt: 0.42,
-        puffer: 0.25, windbreaker: 0.15, varsity: 0.2, anorak: 0.18, hooded: 0.18, track: 0.1, puffer_vest: 0.25,
-        leather: 0.5, coach: 0.15, fleece: 0.12,
+        blazer: 0.85,
+        blazer_db: 0.88,
+        suit: 0.9,
+        harrington: 0.5,
+        biker: 0.45,
+        bomber: 0.35,
+        denim: 0.3,
+        field: 0.42,
+        overshirt: 0.42,
+        puffer: 0.25,
+        windbreaker: 0.15,
+        varsity: 0.2,
+        anorak: 0.18,
+        hooded: 0.18,
+        track: 0.1,
+        puffer_vest: 0.25,
+        leather: 0.5,
+        coach: 0.15,
+        fleece: 0.12,
       };
       return m[style ?? ''] ?? 0.4;
     }
     case 'coat': {
       const m: Record<string, number> = {
-        overcoat: 0.88, wrap: 0.82, trench: 0.78, peacoat: 0.7, car_coat: 0.7, cape: 0.7, duffle: 0.5,
-        parka: 0.32, puffer: 0.28, raincoat: 0.3,
+        overcoat: 0.88,
+        wrap: 0.82,
+        trench: 0.78,
+        peacoat: 0.7,
+        car_coat: 0.7,
+        cape: 0.7,
+        duffle: 0.5,
+        parka: 0.32,
+        puffer: 0.28,
+        raincoat: 0.3,
       };
       return m[style ?? ''] ?? 0.6;
     }
     case 'sneakers':
       return style === 'court' ? 0.32 : style === 'running' ? 0.1 : 0.2;
     case 'boots': {
-      const m: Record<string, number> = { chelsea: 0.66, dress: 0.78, riding: 0.6, cowboy: 0.4, combat: 0.35, hiking: 0.2 };
+      const m: Record<string, number> = {
+        chelsea: 0.66,
+        dress: 0.78,
+        riding: 0.6,
+        cowboy: 0.4,
+        combat: 0.35,
+        hiking: 0.2,
+      };
       return m[style ?? ''] ?? 0.45;
     }
     case 'scarf':
@@ -264,7 +354,8 @@ export function inferStyles(it: EngineItem): StyleTag[] {
   const f = formality(it);
   switch (it.modelKey) {
     case 'top':
-      if (style === 'waistcoat' || style === 'waistcoat_db') add('smart_casual', 'old_money', 'vintage');
+      if (style === 'waistcoat' || style === 'waistcoat_db')
+        add('smart_casual', 'old_money', 'vintage');
       else if (style === 'corset') add('elegant', 'y2k');
       else if (style === 'bodysuit') add('minimalist', 'elegant');
       else if (style === 'halter' || style === 'bandeau') add('y2k', 'casual');
@@ -286,25 +377,31 @@ export function inferStyles(it: EngineItem): StyleTag[] {
       break;
     case 'sweater': {
       const n = str(a, 'neckline');
-      if (n === 'hoodie' || n === 'hoodie_zip') add('streetwear', 'casual', 'sporty');
+      if (n === 'hoodie' || n === 'hoodie_zip')
+        add('streetwear', 'casual', 'sporty');
       else if (n === 'athletic') add('sporty', 'vintage', 'casual');
-      else if (n === 'half_zip' || n === 'quarter_zip') add('sporty', 'casual', 'smart_casual');
+      else if (n === 'half_zip' || n === 'quarter_zip')
+        add('sporty', 'casual', 'smart_casual');
       else if (n === 'turtleneck') add('minimalist', 'elegant', 'old_money');
       else if (n === 'cardigan') add('vintage', 'old_money', 'smart_casual');
       else if (n === 'vest') add('old_money', 'vintage', 'smart_casual');
-      else if (str(a, 'knit') === 'cable') add('old_money', 'casual', 'vintage');
+      else if (str(a, 'knit') === 'cable')
+        add('old_money', 'casual', 'vintage');
       else add('casual', 'old_money', 'smart_casual');
       break;
     }
     case 'pants':
       if (['jogger', 'parachute'].includes(fit)) add('sporty', 'streetwear');
-      else if (['cargo', 'baggy', 'oversized'].includes(fit)) add('streetwear', 'y2k');
+      else if (['cargo', 'baggy', 'oversized'].includes(fit))
+        add('streetwear', 'y2k');
       else if (['flare', 'bootcut'].includes(fit)) add('vintage', 'y2k');
-      else if (['mom', 'boyfriend', 'barrel'].includes(fit)) add('vintage', 'casual');
+      else if (['mom', 'boyfriend', 'barrel'].includes(fit))
+        add('vintage', 'casual');
       else if (has(mat, /vaquer|denim|tejan/) || !mat) add('casual');
       if (f >= 0.5) add('smart_casual', 'old_money');
       if (f >= 0.75) add('formal', 'elegant');
-      if (['slim', 'straight', 'regular', 'tapered'].includes(fit)) add('minimalist');
+      if (['slim', 'straight', 'regular', 'tapered'].includes(fit))
+        add('minimalist');
       if (str(a, 'rise') === 'low') add('y2k');
       break;
     case 'shorts':
@@ -322,11 +419,15 @@ export function inferStyles(it: EngineItem): StyleTag[] {
       if (fit === 'shirt' || fit === 'a_line') add('smart_casual');
       break;
     case 'jacket':
-      if (style === 'blazer' || style === 'blazer_db' || style === 'suit') add('formal', 'smart_casual', 'old_money', 'elegant');
-      else if (['bomber', 'puffer', 'puffer_vest', 'hooded'].includes(style)) add('streetwear', 'casual');
+      if (style === 'blazer' || style === 'blazer_db' || style === 'suit')
+        add('formal', 'smart_casual', 'old_money', 'elegant');
+      else if (['bomber', 'puffer', 'puffer_vest', 'hooded'].includes(style))
+        add('streetwear', 'casual');
       else if (style === 'varsity') add('streetwear', 'vintage');
-      else if (['windbreaker', 'anorak', 'track'].includes(style)) add('sporty', 'streetwear');
-      else if (style === 'biker' || style === 'leather') add('streetwear', 'casual');
+      else if (['windbreaker', 'anorak', 'track'].includes(style))
+        add('sporty', 'streetwear');
+      else if (style === 'biker' || style === 'leather')
+        add('streetwear', 'casual');
       else if (style === 'coach') add('streetwear', 'sporty');
       else if (style === 'fleece') add('casual', 'sporty');
       else if (style === 'denim') add('casual', 'vintage');
@@ -334,7 +435,11 @@ export function inferStyles(it: EngineItem): StyleTag[] {
       else add('casual', 'smart_casual');
       break;
     case 'coat':
-      if (['overcoat', 'wrap', 'trench', 'peacoat', 'car_coat', 'cape'].includes(style))
+      if (
+        ['overcoat', 'wrap', 'trench', 'peacoat', 'car_coat', 'cape'].includes(
+          style,
+        )
+      )
         add('old_money', 'elegant', 'minimalist', 'formal');
       else if (style === 'duffle') add('vintage', 'old_money');
       else add('casual', 'streetwear');
@@ -347,7 +452,8 @@ export function inferStyles(it: EngineItem): StyleTag[] {
       if (style === 'skate' || style === 'high_top') add('vintage');
       break;
     case 'boots':
-      if (style === 'chelsea' || style === 'dress') add('smart_casual', 'elegant', 'old_money');
+      if (style === 'chelsea' || style === 'dress')
+        add('smart_casual', 'elegant', 'old_money');
       else if (style === 'combat') add('streetwear', 'casual');
       else if (style === 'cowboy') add('vintage');
       else add('casual');
@@ -376,29 +482,51 @@ function warmth(it: EngineItem): number {
   const a = it.attributes;
   switch (it.modelKey) {
     case 'coat':
-      return str(a, 'style') === 'raincoat' || str(a, 'style') === 'trench' ? 2 : 3;
+      return str(a, 'style') === 'raincoat' || str(a, 'style') === 'trench'
+        ? 2
+        : 3;
     case 'jacket': {
       const s = str(a, 'style');
       if (s === 'puffer') return 3;
-      if (s === 'windbreaker' || s === 'track' || s === 'puffer_vest' || s === 'coach') return 1;
+      if (
+        s === 'windbreaker' ||
+        s === 'track' ||
+        s === 'puffer_vest' ||
+        s === 'coach'
+      )
+        return 1;
       if (s === 'fleece') return 1.5;
       return 2;
     }
     case 'sweater':
       if (str(a, 'neckline') === 'vest') return 1;
-      return str(a, 'knit') === 'chunky' || str(a, 'knit') === 'cable' ? 2.5 : 2;
+      return str(a, 'knit') === 'chunky' || str(a, 'knit') === 'cable'
+        ? 2.5
+        : 2;
     case 'shirt':
       return str(a, 'sleeve') === 'short' ? 0 : 1;
     case 'tshirt':
-      return str(a, 'sleeve') === 'sleeveless' ? -1 : str(a, 'sleeve') === 'long' || str(a, 'sleeve') === 'raglan' ? 0.6 : 0;
+      return str(a, 'sleeve') === 'sleeveless'
+        ? -1
+        : str(a, 'sleeve') === 'long' || str(a, 'sleeve') === 'raglan'
+          ? 0.6
+          : 0;
     case 'top':
-      return ['bodysuit', 'waistcoat', 'waistcoat_db'].includes(str(a, 'style') ?? '') ? 0.5 : -1;
+      return ['bodysuit', 'waistcoat', 'waistcoat_db'].includes(
+        str(a, 'style') ?? '',
+      )
+        ? 0.5
+        : -1;
     case 'shorts':
       return -1;
     case 'skirt':
       return str(a, 'length') === 'mini' ? -1 : 0;
     case 'dress':
-      return str(a, 'sleeve') === 'long' ? 0.5 : str(a, 'length') === 'mini' ? -1 : 0;
+      return str(a, 'sleeve') === 'long'
+        ? 0.5
+        : str(a, 'length') === 'mini'
+          ? -1
+          : 0;
     case 'pants':
       return has(str(a, 'material'), /lino|linen/) ? 0.3 : 1;
     case 'boots':
@@ -409,12 +537,24 @@ function warmth(it: EngineItem): number {
 }
 
 const isWaterproof = (it: EngineItem) =>
-  it.attributes.waterproof === true || ['raincoat', 'trench', 'parka'].includes(str(it.attributes, 'style') ?? '');
+  it.attributes.waterproof === true ||
+  ['raincoat', 'trench', 'parka'].includes(str(it.attributes, 'style') ?? '');
 
-const SEASON_FROM_WEATHER: Record<Weather, SeasonKey> = { cold: 'WINTER', cool: 'AUTUMN', mild: 'SPRING', hot: 'SUMMER' };
+const SEASON_FROM_WEATHER: Record<Weather, SeasonKey> = {
+  cold: 'WINTER',
+  cool: 'AUTUMN',
+  mild: 'SPRING',
+  hot: 'SUMMER',
+};
 
 function seasonPenalty(it: EngineItem, season?: SeasonKey): number {
-  if (!season || season === 'ALL_SEASON' || it.season === 'ALL_SEASON' || it.season === season) return 0;
+  if (
+    !season ||
+    season === 'ALL_SEASON' ||
+    it.season === 'ALL_SEASON' ||
+    it.season === season
+  )
+    return 0;
   const opposite = (a: SeasonKey, b: SeasonKey) =>
     (a === 'SUMMER' && b === 'WINTER') || (a === 'WINTER' && b === 'SUMMER');
   return opposite(it.season, season) ? 0.7 : 0.15;
@@ -458,26 +598,39 @@ interface ColorVerdict {
 }
 
 /** Ropa que se ve (sin accesorios para el color, que pueden ser el toque). */
-const clothes = (set: EngineItem[]) => set.filter((i) => i.category !== 'ACCESSORY');
+const clothes = (set: EngineItem[]) =>
+  set.filter((i) => i.category !== 'ACCESSORY');
 
-export function judgeColors(set: EngineItem[], style?: StyleTag, occasion?: Occasion): ColorVerdict {
+export function judgeColors(
+  set: EngineItem[],
+  style?: StyleTag,
+  occasion?: Occasion,
+): ColorVerdict {
   const items = clothes(set);
   const accentItems = items.filter((i) => colorFamily(i.color) === 'color');
   // agrupa los acentos por tono (±28°)
   const groups: { h: number; color: string }[] = [];
   for (const it of accentItems) {
     const h = hexToHsl(it.color).h;
-    if (!groups.some((g) => hueDist(g.h, h) < 28)) groups.push({ h, color: it.color });
+    if (!groups.some((g) => hueDist(g.h, h) < 28))
+      groups.push({ h, color: it.color });
   }
-  const bold = style === 'streetwear' || style === 'y2k' || occasion === 'party';
+  const bold =
+    style === 'streetwear' || style === 'y2k' || occasion === 'party';
   let score: number;
   let kind: ColorVerdict['kind'];
   if (groups.length === 0) {
     score = 0.7;
     kind = 'neutral';
   } else if (groups.length === 1) {
-    score = accentItems.length >= 2 && accentItems.length === items.length ? 0.85 : 0.95;
-    kind = accentItems.length >= 2 && accentItems.length === items.length ? 'mono' : 'accent';
+    score =
+      accentItems.length >= 2 && accentItems.length === items.length
+        ? 0.85
+        : 0.95;
+    kind =
+      accentItems.length >= 2 && accentItems.length === items.length
+        ? 'mono'
+        : 'accent';
   } else if (groups.length === 2) {
     const d = hueDist(groups[0].h, groups[1].h);
     if (d < 45) {
@@ -505,7 +658,10 @@ export function judgeColors(set: EngineItem[], style?: StyleTag, occasion?: Occa
     if (dl > 0.2) {
       contrast = 'high';
       score += 0.12;
-    } else if (dl < 0.1 && (hueDist(a.h, b.h) < 25 || (a.s < 0.15 && b.s < 0.15))) {
+    } else if (
+      dl < 0.1 &&
+      (hueDist(a.h, b.h) < 25 || (a.s < 0.15 && b.s < 0.15))
+    ) {
       contrast = 'tonal';
       score += style === 'minimalist' ? 0.2 : 0.04;
       if (kind === 'neutral' && style === 'minimalist') kind = 'mono';
@@ -514,8 +670,13 @@ export function judgeColors(set: EngineItem[], style?: StyleTag, occasion?: Occa
       score -= 0.08;
     }
   }
-  if ((style === 'old_money' || style === 'minimalist') && groups.length > 0) score -= 0.15 * groups.length;
-  if (style === 'old_money' && items.some((i) => colorFamily(i.color) === 'earth')) score += 0.08;
+  if ((style === 'old_money' || style === 'minimalist') && groups.length > 0)
+    score -= 0.15 * groups.length;
+  if (
+    style === 'old_money' &&
+    items.some((i) => colorFamily(i.color) === 'earth')
+  )
+    score += 0.08;
   return { score, kind, accents: groups.map((g) => g.color), contrast };
 }
 
@@ -536,16 +697,26 @@ function judge(set: EngineItem[], ctx: Ctx, jitter: number): Judgement {
   const fs = core.map(formality);
   const mean = fs.reduce((a, b) => a + b, 0) / Math.max(1, fs.length);
   const spread = fs.length ? Math.max(...fs) - Math.min(...fs) : 0;
-  const fScore = 1 - 1.5 * Math.abs(mean - ctx.target) - 0.9 * Math.max(0, spread - 0.38);
+  const fScore =
+    1 - 1.5 * Math.abs(mean - ctx.target) - 0.9 * Math.max(0, spread - 0.38);
 
   // estilo: cuántas prendas «son» del estilo (u ocasión) pedido
-  const wanted: string[] = ctx.style ? [ctx.style] : ctx.occasion ? [...OCCASIONS[ctx.occasion].styles] : [];
-  const styleItems = wanted.length ? core.filter((i) => wanted.some((w) => stylesOf(i).has(w))) : [];
-  const sScore = wanted.length ? styleItems.length / Math.max(1, core.length) : 0.5;
+  const wanted: string[] = ctx.style
+    ? [ctx.style]
+    : ctx.occasion
+      ? [...OCCASIONS[ctx.occasion].styles]
+      : [];
+  const styleItems = wanted.length
+    ? core.filter((i) => wanted.some((w) => stylesOf(i).has(w)))
+    : [];
+  const sScore = wanted.length
+    ? styleItems.length / Math.max(1, core.length)
+    : 0.5;
 
   // tiempo y temporada
   let wScore = 0;
-  const season = ctx.season ?? (ctx.weather ? SEASON_FROM_WEATHER[ctx.weather] : undefined);
+  const season =
+    ctx.season ?? (ctx.weather ? SEASON_FROM_WEATHER[ctx.weather] : undefined);
   for (const it of set) wScore -= seasonPenalty(it, season);
   const outer = set.filter((i) => slotOf(i) === 'outer');
   const heat = set.reduce((acc, i) => acc + warmth(i), 0);
@@ -554,11 +725,20 @@ function judge(set: EngineItem[], ctx: Ctx, jitter: number): Judgement {
     wScore += Math.min(0.4, 0.06 * heat);
     if (set.some((i) => warmth(i) < 0)) wScore -= 0.6;
   } else if (ctx.weather === 'cool') {
-    if (!outer.length && !set.some((i) => i.modelKey === 'sweater')) wScore -= 0.3;
+    if (!outer.length && !set.some((i) => i.modelKey === 'sweater'))
+      wScore -= 0.3;
     if (set.some((i) => i.modelKey === 'shorts')) wScore -= 0.3;
   } else if (ctx.weather === 'hot') {
     if (outer.length) wScore -= 0.8;
-    if (set.some((i) => i.modelKey === 'sweater' || i.modelKey === 'beanie' || i.modelKey === 'scarf')) wScore -= 0.7;
+    if (
+      set.some(
+        (i) =>
+          i.modelKey === 'sweater' ||
+          i.modelKey === 'beanie' ||
+          i.modelKey === 'scarf',
+      )
+    )
+      wScore -= 0.7;
     if (set.some((i) => i.modelKey === 'boots')) wScore -= 0.2;
     wScore -= Math.max(0, heat - 1.5) * 0.12;
   } else if (ctx.weather === 'mild') {
@@ -567,20 +747,44 @@ function judge(set: EngineItem[], ctx: Ctx, jitter: number): Judgement {
 
   // estampados: uno es protagonista; dos compiten
   const patterned = clothes(set).filter((i) => i.patterned).length;
-  const pScore = patterned > 1 ? -(patterned - 1) * (ctx.style === 'streetwear' || ctx.style === 'y2k' ? 0.15 : 0.35) : 0;
+  const pScore =
+    patterned > 1
+      ? -(patterned - 1) *
+        (ctx.style === 'streetwear' || ctx.style === 'y2k' ? 0.15 : 0.35)
+      : 0;
 
   // aprendizaje: afinidad por prenda, estilos que gustan y conjuntos rechazados
   let prefScore = 0;
-  for (const it of set) prefScore += 0.04 * clamp(ctx.prefs.item[it.id] ?? 0, -5, 5);
-  if (ctx.prefs.disliked.includes(setKey(set.map((i) => i.id)))) prefScore -= 1.5;
-  if (ctx.style) prefScore += 0.02 * clamp(ctx.prefs.styles[ctx.style] ?? 0, -5, 5);
+  for (const it of set)
+    prefScore += 0.04 * clamp(ctx.prefs.item[it.id] ?? 0, -5, 5);
+  if (ctx.prefs.disliked.includes(setKey(set.map((i) => i.id))))
+    prefScore -= 1.5;
+  if (ctx.style)
+    prefScore += 0.02 * clamp(ctx.prefs.styles[ctx.style] ?? 0, -5, 5);
 
   // descubrir: prendas que casi no salen en tus outfits
-  const rare = set.filter((i) => (ctx.prefs.usage[i.id] ?? 0) === 0 && slotOf(i) !== 'shoes');
+  const rare = set.filter(
+    (i) => (ctx.prefs.usage[i.id] ?? 0) === 0 && slotOf(i) !== 'shoes',
+  );
   const rScore = ctx.discover ? 0.12 * rare.length : 0;
 
-  const total = 1.2 * color.score + 1.0 * fScore + 1.1 * sScore + wScore + pScore + prefScore + rScore + jitter;
-  return { total, color, formalityMean: mean, formalitySpread: spread, styleItems, rare };
+  const total =
+    1.2 * color.score +
+    1.0 * fScore +
+    1.1 * sScore +
+    wScore +
+    pScore +
+    prefScore +
+    rScore +
+    jitter;
+  return {
+    total,
+    color,
+    formalityMean: mean,
+    formalitySpread: spread,
+    styleItems,
+    rare,
+  };
 }
 
 const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v));
@@ -651,7 +855,8 @@ export function generateOutfits(
   const lockedFull = lockedIn('full');
   const wantsPair = lockedIn('top') || lockedIn('bottom');
   if (!lockedFull) {
-    for (const t of top('top', 14)) for (const b of top('bottom', 12)) bases.push([t, b]);
+    for (const t of top('top', 14))
+      for (const b of top('bottom', 12)) bases.push([t, b]);
   }
   if (!wantsPair) for (const d of top('full', 8)) bases.push([d]);
   if (!bases.length) return [];
@@ -663,9 +868,16 @@ export function generateOutfits(
 
   const outers = top('outer', 8);
   const shoes = top('shoes', 8);
-  const heads = ctx.weather === 'hot' ? by('head').filter((i) => i.modelKey !== 'beanie') : top('head', 6);
-  const necks = ctx.weather === 'cold' || ctx.weather === 'cool' ? top('neck', 4) : [];
-  const mids = ctx.weather === 'cold' || ctx.weather === 'cool' ? by('top').filter((i) => i.modelKey === 'sweater') : [];
+  const heads =
+    ctx.weather === 'hot'
+      ? by('head').filter((i) => i.modelKey !== 'beanie')
+      : top('head', 6);
+  const necks =
+    ctx.weather === 'cold' || ctx.weather === 'cool' ? top('neck', 4) : [];
+  const mids =
+    ctx.weather === 'cold' || ctx.weather === 'cool'
+      ? by('top').filter((i) => i.modelKey === 'sweater')
+      : [];
 
   const complete = (base: EngineItem[]): EngineItem[] => {
     let set = [...base];
@@ -689,9 +901,15 @@ export function generateOutfits(
       set = lockedMid ? [...set, lockedMid] : best(mids, true);
     }
     const lockedOuter = lockedIn('outer');
-    set = lockedOuter ? [...set, lockedOuter] : best(outers, ctx.weather !== 'cold');
+    set = lockedOuter
+      ? [...set, lockedOuter]
+      : best(outers, ctx.weather !== 'cold');
     const lockedShoes = lockedIn('shoes');
-    set = lockedShoes ? [...set, lockedShoes] : shoes.length ? best(shoes, false) : set;
+    set = lockedShoes
+      ? [...set, lockedShoes]
+      : shoes.length
+        ? best(shoes, false)
+        : set;
     const lockedHead = lockedIn('head');
     set = lockedHead ? [...set, lockedHead] : best(heads, true);
     const lockedNeck = lockedIn('neck');
@@ -715,7 +933,11 @@ export function generateOutfits(
       const key = setKey(c.set.map((i) => i.id));
       if (seen.has(key)) continue;
       const overlap = chosen.reduce(
-        (acc, o) => acc + c.set.filter((i) => o.set.includes(i) && slotOf(i) !== 'shoes').length / c.set.length,
+        (acc, o) =>
+          acc +
+          c.set.filter((i) => o.set.includes(i) && slotOf(i) !== 'shoes')
+            .length /
+            c.set.length,
         0,
       );
       const s = c.j.total - 0.9 * overlap;
@@ -734,15 +956,30 @@ export function generateOutfits(
 
 // ---------------------------------------------------------------- explicaciones y consejos
 const LEVEL = (f: number) =>
-  f < 0.22 ? 'muy informal' : f < 0.42 ? 'informal' : f < 0.62 ? 'smart casual' : f < 0.8 ? 'arreglado' : 'formal';
+  f < 0.22
+    ? 'muy informal'
+    : f < 0.42
+      ? 'informal'
+      : f < 0.62
+        ? 'smart casual'
+        : f < 0.8
+          ? 'arreglado'
+          : 'formal';
 
 const lower = (s: string) => s.charAt(0).toLowerCase() + s.slice(1);
 const names = (its: EngineItem[]) => {
   const n = its.map((i) => `«${i.name}»`);
-  return n.length <= 1 ? n.join('') : `${n.slice(0, -1).join(', ')} y ${n[n.length - 1]}`;
+  return n.length <= 1
+    ? n.join('')
+    : `${n.slice(0, -1).join(', ')} y ${n[n.length - 1]}`;
 };
 
-function describe(set: EngineItem[], j: Judgement, ctx: Ctx, pool: EngineItem[]): OutfitSuggestion {
+function describe(
+  set: EngineItem[],
+  j: Judgement,
+  ctx: Ctx,
+  pool: EngineItem[],
+): OutfitSuggestion {
   const reasons: string[] = [];
   const c = j.color;
   const neutrals = clothes(set)
@@ -751,44 +988,75 @@ function describe(set: EngineItem[], j: Judgement, ctx: Ctx, pool: EngineItem[])
   const uniq = [...new Set(neutrals)];
   switch (c.kind) {
     case 'neutral':
-      reasons.push(`Paleta neutra (${uniq.slice(0, 3).join(', ')}): limpia y fácil de combinar.`);
+      reasons.push(
+        `Paleta neutra (${uniq.slice(0, 3).join(', ')}): limpia y fácil de combinar.`,
+      );
       break;
     case 'accent':
-      reasons.push(`Base neutra con un toque de ${colorName(c.accents[0])}: el color destaca sin cargar el conjunto.`);
+      reasons.push(
+        `Base neutra con un toque de ${colorName(c.accents[0])}: el color destaca sin cargar el conjunto.`,
+      );
       break;
     case 'mono':
-      reasons.push(`Look en tonos de ${colorName(clothes(set)[0].color)}: un solo color alarga la silueta.`);
+      reasons.push(
+        `Look en tonos de ${colorName(clothes(set)[0].color)}: un solo color alarga la silueta.`,
+      );
       break;
     case 'analogous':
-      reasons.push(`${cap(colorName(c.accents[0]))} y ${colorName(c.accents[1])} son tonos vecinos: combinan de forma natural.`);
+      reasons.push(
+        `${cap(colorName(c.accents[0]))} y ${colorName(c.accents[1])} son tonos vecinos: combinan de forma natural.`,
+      );
       break;
     case 'complementary':
-      reasons.push(`${cap(colorName(c.accents[0]))} y ${colorName(c.accents[1])} son complementarios: un contraste con intención.`);
+      reasons.push(
+        `${cap(colorName(c.accents[0]))} y ${colorName(c.accents[1])} son complementarios: un contraste con intención.`,
+      );
       break;
     case 'busy':
-      reasons.push('Mucho color: funciona si quieres que el outfit llame la atención.');
+      reasons.push(
+        'Mucho color: funciona si quieres que el outfit llame la atención.',
+      );
       break;
   }
   if (c.contrast === 'high') {
     const t = set.find((i) => slotOf(i) === 'top');
     const b = set.find((i) => slotOf(i) === 'bottom');
-    if (t && b) reasons.push(`El contraste de luz entre ${lower(t.name)} y ${lower(b.name)} da equilibrio.`);
+    if (t && b)
+      reasons.push(
+        `El contraste de luz entre ${lower(t.name)} y ${lower(b.name)} da equilibrio.`,
+      );
   }
   if (j.formalitySpread < 0.3) {
-    const occ = ctx.occasion ? `, justo para ${lower(OCCASIONS[ctx.occasion].label)}` : '';
-    reasons.push(`Todas las prendas tienen el mismo nivel de arreglo (${LEVEL(j.formalityMean)})${occ}.`);
+    const occ = ctx.occasion
+      ? `, justo para ${lower(OCCASIONS[ctx.occasion].label)}`
+      : '';
+    reasons.push(
+      `Todas las prendas tienen el mismo nivel de arreglo (${LEVEL(j.formalityMean)})${occ}.`,
+    );
   } else if (ctx.occasion) {
-    reasons.push(`Mezcla prendas más y menos arregladas: buen punto para ${lower(OCCASIONS[ctx.occasion].label)}.`);
+    reasons.push(
+      `Mezcla prendas más y menos arregladas: buen punto para ${lower(OCCASIONS[ctx.occasion].label)}.`,
+    );
   }
   if (ctx.style && j.styleItems.length) {
-    reasons.push(`Estilo ${STYLE_TAGS[ctx.style].toLowerCase()}: ${names(j.styleItems.slice(0, 3))} son prendas clave.`);
+    reasons.push(
+      `Estilo ${STYLE_TAGS[ctx.style].toLowerCase()}: ${names(j.styleItems.slice(0, 3))} son prendas clave.`,
+    );
   }
   const outer = set.find((i) => slotOf(i) === 'outer');
-  if (ctx.weather === 'cold' && outer) reasons.push(`Para el frío: ${lower(outer.name)} y capas que abrigan.`);
-  if (ctx.weather === 'hot') reasons.push('Para el calor: prendas ligeras y sin capas.');
-  if (ctx.discover && j.rare.length) reasons.push(`Incluye ${names(j.rare.slice(0, 2))}, que aún no usas en ningún outfit.`);
+  if (ctx.weather === 'cold' && outer)
+    reasons.push(`Para el frío: ${lower(outer.name)} y capas que abrigan.`);
+  if (ctx.weather === 'hot')
+    reasons.push('Para el calor: prendas ligeras y sin capas.');
+  if (ctx.discover && j.rare.length)
+    reasons.push(
+      `Incluye ${names(j.rare.slice(0, 2))}, que aún no usas en ningún outfit.`,
+    );
 
-  const items: OutfitPick[] = set.map((it) => ({ itemId: it.id, slot: slotOf(it) as Slot }));
+  const items: OutfitPick[] = set.map((it) => ({
+    itemId: it.id,
+    slot: slotOf(it) as Slot,
+  }));
   const mid = set.filter((i) => slotOf(i) === 'top');
   if (mid.length === 2) {
     const sweater = mid.find((i) => i.modelKey === 'sweater');
@@ -801,20 +1069,39 @@ function describe(set: EngineItem[], j: Judgement, ctx: Ctx, pool: EngineItem[])
     score: Math.round(j.total * 100) / 100,
     reasons,
     tips: tipsFor(set, j, ctx, pool),
-    palette: clothes(set).map((i) => ({ color: i.color, name: colorName(i.color) })),
+    palette: clothes(set).map((i) => ({
+      color: i.color,
+      name: colorName(i.color),
+    })),
   };
 }
 
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
-const ROLLABLE_FITS = ['straight', 'regular', 'relaxed', 'wide', 'baggy', 'boyfriend', 'mom', 'barrel', 'oversized'];
+const ROLLABLE_FITS = [
+  'straight',
+  'regular',
+  'relaxed',
+  'wide',
+  'baggy',
+  'boyfriend',
+  'mom',
+  'barrel',
+  'oversized',
+];
 
 /** Consejos para un outfit: hasta 4, sin repetir los que el usuario suele rechazar. */
-export function tipsFor(set: EngineItem[], j: Judgement, ctx: Ctx, pool: EngineItem[]): Tip[] {
+export function tipsFor(
+  set: EngineItem[],
+  j: Judgement,
+  ctx: Ctx,
+  pool: EngineItem[],
+): Tip[] {
   const tips: Tip[] = [];
   const inSet = new Set(set.map((i) => i.id));
   const slot = (s: Slot) => set.find((i) => slotOf(i) === s);
-  const others = (s: Slot) => pool.filter((i) => slotOf(i) === s && !inSet.has(i.id));
+  const others = (s: Slot) =>
+    pool.filter((i) => slotOf(i) === s && !inSet.has(i.id));
   const score = (alt: EngineItem[]) => judge(alt, ctx, 0).total;
   const base = score(set);
   const push = (t: Tip) => {
@@ -823,7 +1110,12 @@ export function tipsFor(set: EngineItem[], j: Judgement, ctx: Ctx, pool: EngineI
   };
 
   if (j.color.score >= 0.85) {
-    push({ id: 'colors_work', code: 'colors_work', kind: 'praise', text: '¡Los colores funcionan genial juntos!' });
+    push({
+      id: 'colors_work',
+      code: 'colors_work',
+      kind: 'praise',
+      text: '¡Los colores funcionan genial juntos!',
+    });
   }
 
   // otro calzado que también funciona y cambia el aire
@@ -841,7 +1133,14 @@ export function tipsFor(set: EngineItem[], j: Judgement, ctx: Ctx, pool: EngineI
     }
   } else if (others('shoes').length) {
     const alt = bestAdd(set, others('shoes'), score);
-    if (alt) push({ id: `add_shoes:${alt.id}`, code: 'add_shoes', kind: 'add', text: `Ponle «${alt.name}» para cerrar el look.`, action: { type: 'add', itemId: alt.id } });
+    if (alt)
+      push({
+        id: `add_shoes:${alt.id}`,
+        code: 'add_shoes',
+        kind: 'add',
+        text: `Ponle «${alt.name}» para cerrar el look.`,
+        action: { type: 'add', itemId: alt.id },
+      });
   }
 
   // poco contraste: una pieza más oscura (o más clara) que lo levante
@@ -850,7 +1149,9 @@ export function tipsFor(set: EngineItem[], j: Judgement, ctx: Ctx, pool: EngineI
     const target = outer ?? slot('top');
     if (target) {
       const l0 = hexToHsl(target.color).l;
-      const cands = others(slotOf(target) as Slot).filter((i) => Math.abs(hexToHsl(i.color).l - l0) > 0.3);
+      const cands = others(slotOf(target) as Slot).filter(
+        (i) => Math.abs(hexToHsl(i.color).l - l0) > 0.3,
+      );
       const alt = bestSwap(set, target, cands, score);
       if (alt) {
         push({
@@ -866,7 +1167,11 @@ export function tipsFor(set: EngineItem[], j: Judgement, ctx: Ctx, pool: EngineI
 
   // accesorio
   if (!slot('head') && !slot('neck')) {
-    const acc = pool.filter((i) => i.category === 'ACCESSORY' && !(ctx.weather === 'hot' && i.modelKey !== 'cap'));
+    const acc = pool.filter(
+      (i) =>
+        i.category === 'ACCESSORY' &&
+        !(ctx.weather === 'hot' && i.modelKey !== 'cap'),
+    );
     if (acc.length) {
       const alt = bestAdd(set, acc, score);
       if (alt && ctx.occasion !== 'formal_event' && ctx.occasion !== 'work') {
@@ -892,20 +1197,43 @@ export function tipsFor(set: EngineItem[], j: Judgement, ctx: Ctx, pool: EngineI
   const bottom = slot('bottom');
   const casualish =
     ['casual', 'streetwear', 'vintage', 'y2k'].includes(ctx.style ?? '') ||
-    ['everyday', 'vacation', 'university', 'party'].includes(ctx.occasion ?? '') ||
+    ['everyday', 'vacation', 'university', 'party'].includes(
+      ctx.occasion ?? '',
+    ) ||
     (!ctx.style && !ctx.occasion);
-  if (bottom?.modelKey === 'pants' && ROLLABLE_FITS.includes(str(bottom.attributes, 'fit') ?? 'regular') && casualish && ctx.weather !== 'cold') {
+  if (
+    bottom?.modelKey === 'pants' &&
+    ROLLABLE_FITS.includes(str(bottom.attributes, 'fit') ?? 'regular') &&
+    casualish &&
+    ctx.weather !== 'cold'
+  ) {
     push({
       id: `roll_hem:${bottom.id}`,
       code: 'roll_hem',
       kind: 'styling',
       text: `Prueba a dar una vuelta a los bajos de «${bottom.name}» para un aire más relajado.`,
-      action: { type: 'styling', itemId: bottom.id, styling: { hem: 'cuffed' } },
+      action: {
+        type: 'styling',
+        itemId: bottom.id,
+        styling: { hem: 'cuffed' },
+      },
     });
   }
-  const topItem = set.find((i) => slotOf(i) === 'top' && (i.modelKey === 'shirt' || i.modelKey === 'tshirt'));
-  const dressy = ['smart_casual', 'old_money', 'formal', 'elegant', 'minimalist'].includes(ctx.style ?? '') || ['work', 'date', 'formal_event'].includes(ctx.occasion ?? '');
-  if (topItem && bottom && dressy && !set.some((i) => i.modelKey === 'sweater')) {
+  const topItem = set.find(
+    (i) =>
+      slotOf(i) === 'top' &&
+      (i.modelKey === 'shirt' || i.modelKey === 'tshirt'),
+  );
+  const dressy =
+    ['smart_casual', 'old_money', 'formal', 'elegant', 'minimalist'].includes(
+      ctx.style ?? '',
+    ) || ['work', 'date', 'formal_event'].includes(ctx.occasion ?? '');
+  if (
+    topItem &&
+    bottom &&
+    dressy &&
+    !set.some((i) => i.modelKey === 'sweater')
+  ) {
     push({
       id: `tuck_in:${topItem.id}`,
       code: 'tuck_in',
@@ -915,7 +1243,11 @@ export function tipsFor(set: EngineItem[], j: Judgement, ctx: Ctx, pool: EngineI
     });
   }
   const outer = slot('outer');
-  if (outer && (ctx.weather === 'mild' || ctx.weather === 'cool') && ['jacket', 'coat'].includes(outer.modelKey)) {
+  if (
+    outer &&
+    (ctx.weather === 'mild' || ctx.weather === 'cool') &&
+    ['jacket', 'coat'].includes(outer.modelKey)
+  ) {
     push({
       id: `open_front:${outer.id}`,
       code: 'open_front',
@@ -924,28 +1256,48 @@ export function tipsFor(set: EngineItem[], j: Judgement, ctx: Ctx, pool: EngineI
       action: { type: 'styling', itemId: outer.id, styling: { front: 'open' } },
     });
   }
-  const sleeved = set.find((i) => ['shirt', 'sweater'].includes(i.modelKey) && slotOf(i) === 'top');
+  const sleeved = set.find(
+    (i) => ['shirt', 'sweater'].includes(i.modelKey) && slotOf(i) === 'top',
+  );
   if (sleeved && ctx.weather === 'hot') {
     push({
       id: `roll_sleeves:${sleeved.id}`,
       code: 'roll_sleeves',
       kind: 'styling',
       text: `Remanga «${sleeved.name}»: más fresco y más desenfadado.`,
-      action: { type: 'styling', itemId: sleeved.id, styling: { sleeves: 'rolled' } },
+      action: {
+        type: 'styling',
+        itemId: sleeved.id,
+        styling: { sleeves: 'rolled' },
+      },
     });
   }
 
   // lo que falta en el armario para este tiempo
   if (ctx.weather === 'cold' && !pool.some((i) => slotOf(i) === 'outer')) {
-    push({ id: 'missing_coat', code: 'missing_coat', kind: 'missing', text: 'Para este frío te falta un abrigo en el armario.' });
+    push({
+      id: 'missing_coat',
+      code: 'missing_coat',
+      kind: 'missing',
+      text: 'Para este frío te falta un abrigo en el armario.',
+    });
   }
 
   // los consejos que el usuario ha rechazado alguna vez van al final
-  tips.sort((a, b) => (ctx.prefs.rejectedTips[a.code] ?? 0) - (ctx.prefs.rejectedTips[b.code] ?? 0));
+  tips.sort(
+    (a, b) =>
+      (ctx.prefs.rejectedTips[a.code] ?? 0) -
+      (ctx.prefs.rejectedTips[b.code] ?? 0),
+  );
   return tips.slice(0, 4);
 }
 
-function bestSwap(set: EngineItem[], from: EngineItem, cands: EngineItem[], score: (s: EngineItem[]) => number) {
+function bestSwap(
+  set: EngineItem[],
+  from: EngineItem,
+  cands: EngineItem[],
+  score: (s: EngineItem[]) => number,
+) {
   let best: { it: EngineItem; s: number } | undefined;
   for (const c of cands) {
     const s = score(set.map((i) => (i === from ? c : i)));
@@ -954,7 +1306,11 @@ function bestSwap(set: EngineItem[], from: EngineItem, cands: EngineItem[], scor
   return best;
 }
 
-function bestAdd(set: EngineItem[], cands: EngineItem[], score: (s: EngineItem[]) => number) {
+function bestAdd(
+  set: EngineItem[],
+  cands: EngineItem[],
+  score: (s: EngineItem[]) => number,
+) {
   let best: { it: EngineItem; s: number } | undefined;
   for (const c of cands) {
     const s = score([...set, c]);
@@ -981,35 +1337,129 @@ export function alternativesFor(
 ): Alternative[] {
   const ctx = makeCtx(opts, prefs);
   const byId = new Map(pool.map((i) => [i.id, i]));
-  const current = currentIds.map((id) => byId.get(id)).filter((i): i is EngineItem => !!i);
+  const current = currentIds
+    .map((id) => byId.get(id))
+    .filter((i): i is EngineItem => !!i);
   const target = byId.get(replaceId);
   if (!target) return [];
   const slot = slotOf(target);
   const others = current.filter((i) => i.id !== replaceId);
-  const cands = pool.filter((i) => slotOf(i) === slot && !currentIds.includes(i.id) && !(opts.excludeIds ?? []).includes(i.id));
+  const cands = pool.filter(
+    (i) =>
+      slotOf(i) === slot &&
+      !currentIds.includes(i.id) &&
+      !(opts.excludeIds ?? []).includes(i.id),
+  );
   return cands
     .map((c) => {
       const set = [...others, c];
       const j = judge(set, ctx, 0);
-      return { itemId: c.id, score: Math.round(j.total * 100) / 100, reason: shortReason(c, j, ctx) };
+      return {
+        itemId: c.id,
+        score: Math.round(j.total * 100) / 100,
+        reason: shortReason(c, j, ctx),
+      };
     })
     .sort((a, b) => b.score - a.score)
     .slice(0, limit);
 }
 
 function shortReason(it: EngineItem, j: Judgement, ctx: Ctx): string {
-  if (ctx.style && stylesOf(it).has(ctx.style)) return `Encaja con el estilo ${STYLE_TAGS[ctx.style].toLowerCase()}.`;
-  if (j.color.kind === 'accent') return `Aporta un toque de ${colorName(j.color.accents[0])}.`;
-  if (j.color.kind === 'neutral' || j.color.kind === 'mono') return `${cap(colorName(it.color))}: mantiene la paleta tranquila.`;
+  if (ctx.style && stylesOf(it).has(ctx.style))
+    return `Encaja con el estilo ${STYLE_TAGS[ctx.style].toLowerCase()}.`;
+  if (j.color.kind === 'accent')
+    return `Aporta un toque de ${colorName(j.color.accents[0])}.`;
+  if (j.color.kind === 'neutral' || j.color.kind === 'mono')
+    return `${cap(colorName(it.color))}: mantiene la paleta tranquila.`;
   if (j.color.contrast === 'high') return 'Da contraste con el resto.';
   return `Nivel de arreglo ${LEVEL(formality(it))}.`;
 }
 
 // ---------------------------------------------------------------- lo que le falta al armario
+/** Hueco del armario que cubriría la prenda sugerida. */
+export type SuggestSlot = 'top' | 'bottom' | 'shoes' | 'outer' | 'accessory';
+
 export interface Insight {
   code: string;
   priority: 1 | 2 | 3;
   text: string;
+  /**
+   * Prenda que lo resolvería (para mostrarla y llevarla a la wishlist) y lo
+   * que ganaría tu armario: combinaciones posibles antes y después de
+   * añadirla, contadas con tus prendas reales. Sin `gain` si no se puede contar
+   * (accesorios).
+   */
+  suggestion?: {
+    slot: SuggestSlot;
+    wishlistCategory:
+      'SNEAKERS' | 'TSHIRTS' | 'PANTS' | 'JACKETS' | 'ACCESSORIES';
+    color: string;
+    gain: { before: number; after: number } | null;
+  };
+}
+
+/** Prenda sugerida para cada aviso (las que no son una prenda no tienen). */
+const SUGGESTIONS: Record<
+  string,
+  {
+    slot: SuggestSlot;
+    wishlistCategory: NonNullable<Insight['suggestion']>['wishlistCategory'];
+    color: string;
+  }
+> = {
+  no_shoes: { slot: 'shoes', wishlistCategory: 'SNEAKERS', color: '#F2F2F2' },
+  neutral_shoes: {
+    slot: 'shoes',
+    wishlistCategory: 'SNEAKERS',
+    color: '#F2F2F2',
+  },
+  no_tops: { slot: 'top', wishlistCategory: 'TSHIRTS', color: '#F2F2F2' },
+  basic_tee: { slot: 'top', wishlistCategory: 'TSHIRTS', color: '#F2F2F2' },
+  no_bottoms: { slot: 'bottom', wishlistCategory: 'PANTS', color: '#4A6A98' },
+  more_bottoms: { slot: 'bottom', wishlistCategory: 'PANTS', color: '#4A6A98' },
+  no_outerwear: {
+    slot: 'outer',
+    wishlistCategory: 'JACKETS',
+    color: '#4A6A98',
+  },
+  no_coat: { slot: 'outer', wishlistCategory: 'JACKETS', color: '#8A8A8A' },
+  smart_piece: { slot: 'outer', wishlistCategory: 'JACKETS', color: '#1D2A44' },
+  no_accessory: {
+    slot: 'accessory',
+    wishlistCategory: 'ACCESSORIES',
+    color: '#111111',
+  },
+  add_color: { slot: 'top', wishlistCategory: 'TSHIRTS', color: '#C0282D' },
+  add_neutrals: { slot: 'top', wishlistCategory: 'TSHIRTS', color: '#8A8A8A' },
+};
+
+export interface SlotCounts {
+  top: number;
+  bottom: number;
+  full: number;
+  shoes: number;
+  outer: number;
+}
+
+/**
+ * Combinaciones posibles con estas prendas: (arriba × abajo + vestidos) ×
+ * calzado, con o sin una prenda de abrigo encima. Es un recuento (no mira
+ * colores ni estilos): sirve para comparar cuánto gana el armario.
+ */
+export function combinations(c: SlotCounts): number {
+  return (c.top * c.bottom + c.full) * c.shoes * (c.outer + 1);
+}
+
+/** Combinaciones antes y después de añadir una prenda en ese hueco. */
+export function slotGain(
+  c: SlotCounts,
+  slot: SuggestSlot,
+): { before: number; after: number } | null {
+  if (slot === 'accessory') return null;
+  return {
+    before: combinations(c),
+    after: combinations({ ...c, [slot]: c[slot] + 1 }),
+  };
 }
 
 export interface WardrobeAnalysis {
@@ -1021,12 +1471,21 @@ export interface WardrobeAnalysis {
     topColors: { name: string; count: number }[];
     styles: { style: string; label: string; count: number }[];
     unusedItemIds: string[];
+    /** Combinaciones posibles con lo que tienes (ver `combinations`). */
+    combinations: number;
   };
 }
 
-export function analyzeWardrobe(pool: EngineItem[], prefs: Preferences = EMPTY_PREFERENCES): WardrobeAnalysis {
+export function analyzeWardrobe(
+  pool: EngineItem[],
+  prefs: Preferences = EMPTY_PREFERENCES,
+): WardrobeAnalysis {
   const byCategory: Record<string, number> = {};
-  const families: Record<ColorFamily, number> = { neutral: 0, earth: 0, color: 0 };
+  const families: Record<ColorFamily, number> = {
+    neutral: 0,
+    earth: 0,
+    color: 0,
+  };
   const colors = new Map<string, number>();
   const styles = new Map<string, number>();
   for (const it of pool) {
@@ -1038,37 +1497,127 @@ export function analyzeWardrobe(pool: EngineItem[], prefs: Preferences = EMPTY_P
   }
   const count = (c: Category) => byCategory[c] ?? 0;
   const insights: Insight[] = [];
-  const add = (code: string, priority: 1 | 2 | 3, text: string) => insights.push({ code, priority, text });
+  const add = (code: string, priority: 1 | 2 | 3, text: string) =>
+    insights.push({ code, priority, text });
   const tops = count('TOP');
   const bottoms = pool.filter((i) => slotOf(i) === 'bottom').length;
   const shoes = pool.filter((i) => i.category === 'FOOTWEAR');
 
   if (!pool.length) {
-    add('empty', 1, 'Aún no hay prendas: añade unas cuantas y te propongo outfits con ellas.');
+    add(
+      'empty',
+      1,
+      'Aún no hay prendas: añade unas cuantas y te propongo outfits con ellas.',
+    );
   } else {
-    if (!shoes.length) add('no_shoes', 1, 'No tienes calzado en el armario: sin él no puedo cerrar ningún outfit.');
+    if (!shoes.length)
+      add(
+        'no_shoes',
+        1,
+        'No tienes calzado en el armario: sin él no puedo cerrar ningún outfit.',
+      );
     else if (!shoes.some((s) => colorFamily(s.color) === 'neutral'))
-      add('neutral_shoes', 2, 'Unas zapatillas blancas o negras combinan con casi todo lo que tienes.');
-    if (!tops) add('no_tops', 1, 'Te falta alguna parte de arriba: una camiseta básica es el punto de partida.');
-    if (!bottoms && !count('FULL_BODY')) add('no_bottoms', 1, 'Te falta un pantalón o una falda para poder montar outfits.');
+      add(
+        'neutral_shoes',
+        2,
+        'Unas zapatillas blancas o negras combinan con casi todo lo que tienes.',
+      );
+    if (!tops)
+      add(
+        'no_tops',
+        1,
+        'Te falta alguna parte de arriba: una camiseta básica es el punto de partida.',
+      );
+    if (!bottoms && !count('FULL_BODY'))
+      add(
+        'no_bottoms',
+        1,
+        'Te falta un pantalón o una falda para poder montar outfits.',
+      );
     if (tops >= 3 * Math.max(1, bottoms) && bottoms < 3)
-      add('more_bottoms', 2, `Tienes ${tops} partes de arriba y solo ${bottoms} de abajo: otro pantalón multiplicaría tus outfits.`);
-    if (!count('OUTERWEAR')) add('no_outerwear', 2, 'Una chaqueta ligera (vaquera, bomber o sobrecamisa) te serviría para entretiempo.');
-    if (!pool.some((i) => i.modelKey === 'coat') && pool.some((i) => i.season === 'WINTER' || i.season === 'AUTUMN'))
-      add('no_coat', 2, 'Para invierno te falta un abrigo: uno recto en gris, negro o camel va con todo.');
+      add(
+        'more_bottoms',
+        2,
+        `Tienes ${tops} partes de arriba y solo ${bottoms} de abajo: otro pantalón multiplicaría tus outfits.`,
+      );
+    if (!count('OUTERWEAR'))
+      add(
+        'no_outerwear',
+        2,
+        'Una chaqueta ligera (vaquera, bomber o sobrecamisa) te serviría para entretiempo.',
+      );
+    if (
+      !pool.some((i) => i.modelKey === 'coat') &&
+      pool.some((i) => i.season === 'WINTER' || i.season === 'AUTUMN')
+    )
+      add(
+        'no_coat',
+        2,
+        'Para invierno te falta un abrigo: uno recto en gris, negro o camel va con todo.',
+      );
     if (!pool.some((i) => formality(i) >= 0.6 && slotOf(i) !== 'shoes'))
-      add('smart_piece', 2, 'Una camisa o una americana te abriría outfits para el trabajo o una cita.');
-    if (!pool.some((i) => slotOf(i) === 'top' && colorFamily(i.color) === 'neutral' && i.modelKey === 'tshirt'))
-      add('basic_tee', 3, 'Una camiseta básica blanca, negra o gris es la prenda más versátil que puedes tener.');
-    if (!count('ACCESSORY')) add('no_accessory', 3, 'Sin accesorios: una gorra, un gorro o una bufanda le dan el toque final a un look.');
+      add(
+        'smart_piece',
+        2,
+        'Una camisa o una americana te abriría outfits para el trabajo o una cita.',
+      );
+    if (
+      !pool.some(
+        (i) =>
+          slotOf(i) === 'top' &&
+          colorFamily(i.color) === 'neutral' &&
+          i.modelKey === 'tshirt',
+      )
+    )
+      add(
+        'basic_tee',
+        3,
+        'Una camiseta básica blanca, negra o gris es la prenda más versátil que puedes tener.',
+      );
+    if (!count('ACCESSORY'))
+      add(
+        'no_accessory',
+        3,
+        'Sin accesorios: una gorra, un gorro o una bufanda le dan el toque final a un look.',
+      );
     if (pool.length >= 6 && families.color === 0)
-      add('add_color', 3, 'Casi todo es neutro: una prenda de color daría juego a tus outfits.');
+      add(
+        'add_color',
+        3,
+        'Casi todo es neutro: una prenda de color daría juego a tus outfits.',
+      );
     if (pool.length >= 6 && families.color > pool.length * 0.6)
-      add('add_neutrals', 3, 'Tienes mucho color: unos básicos neutros harían que todo combine más fácil.');
+      add(
+        'add_neutrals',
+        3,
+        'Tienes mucho color: unos básicos neutros harían que todo combine más fácil.',
+      );
   }
-  const unused = pool.filter((i) => (prefs.usage[i.id] ?? 0) === 0 && slotOf(i) !== null).map((i) => i.id);
+  const unused = pool
+    .filter((i) => (prefs.usage[i.id] ?? 0) === 0 && slotOf(i) !== null)
+    .map((i) => i.id);
   if (unused.length >= 3)
-    add('unused', 3, `Tienes ${unused.length} prendas que no usas en ningún outfit: prueba el modo «Descubrir».`);
+    add(
+      'unused',
+      3,
+      `Tienes ${unused.length} prendas que no usas en ningún outfit: prueba el modo «Descubrir».`,
+    );
+  const slots: SlotCounts = { top: 0, bottom: 0, full: 0, shoes: 0, outer: 0 };
+  for (const it of pool) {
+    const sl = slotOf(it);
+    if (
+      sl === 'top' ||
+      sl === 'bottom' ||
+      sl === 'full' ||
+      sl === 'shoes' ||
+      sl === 'outer'
+    )
+      slots[sl] += 1;
+  }
+  for (const ins of insights) {
+    const sug = SUGGESTIONS[ins.code];
+    if (sug) ins.suggestion = { ...sug, gain: slotGain(slots, sug.slot) };
+  }
   insights.sort((a, b) => a.priority - b.priority);
   return {
     insights,
@@ -1076,11 +1625,19 @@ export function analyzeWardrobe(pool: EngineItem[], prefs: Preferences = EMPTY_P
       total: pool.length,
       byCategory,
       colorFamilies: families,
-      topColors: [...colors.entries()].sort((a, b) => b[1] - a[1]).slice(0, 6).map(([name, c]) => ({ name, count: c })),
+      topColors: [...colors.entries()]
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 6)
+        .map(([name, c]) => ({ name, count: c })),
       styles: [...styles.entries()]
         .sort((a, b) => b[1] - a[1])
-        .map(([style, c]) => ({ style, label: STYLE_TAGS[style as StyleTag] ?? style, count: c })),
+        .map(([style, c]) => ({
+          style,
+          label: STYLE_TAGS[style as StyleTag] ?? style,
+          count: c,
+        })),
       unusedItemIds: unused,
+      combinations: combinations(slots),
     },
   };
 }

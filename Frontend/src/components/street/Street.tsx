@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type ElementType } from 'react';
+import { LOCALE_TAG, t } from '../../i18n';
 
 /**
  * Piezas "callejeras" del perfil: nombre pintado con spray, goteos, arte de
@@ -99,7 +100,7 @@ export function CoverArt({ seed, initials }: { seed: string; initials: string })
       ))}
       <g className="cover-stencil" transform="translate(1390 410) rotate(-2)">
         <text x="0" y="0" textAnchor="end">
-          MYOUT · {new Date().getFullYear()}
+          {t('MYOUT · {getFullYear}', { getFullYear: new Date().getFullYear() })}
         </text>
       </g>
       <path className="cover-arrow" d="M150 380c60-40 140-52 230-36m0 0-28-22m28 22-30 18" />
@@ -145,7 +146,7 @@ export function CountUp({ value, duration = 900, delay = 0 }: { value: number; d
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
   }, [value, duration, delay]);
-  return <>{new Intl.NumberFormat('es-ES').format(shown)}</>;
+  return <>{new Intl.NumberFormat(LOCALE_TAG).format(shown)}</>;
 }
 
 /** Giro "a mano" de cada pegatina, estable para la misma etiqueta. */

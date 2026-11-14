@@ -227,6 +227,15 @@ export class AssetsService {
         'This image is used by a garment. Remove it from the garment first.',
       );
     }
+    // ¿Es la foto de algún anuncio de Street Market?
+    const inListing = await this.prisma.listingPhoto.count({
+      where: { assetId: id, userId },
+    });
+    if (inListing > 0) {
+      throw new ConflictException(
+        'This image is used by a Street Market listing. Remove it from the listing first.',
+      );
+    }
 
     await this.prisma.asset.deleteMany({ where: { id, userId } });
     await this.storage.delete(asset.storageKey).catch(() => undefined);

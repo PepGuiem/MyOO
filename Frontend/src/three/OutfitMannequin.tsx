@@ -1,6 +1,6 @@
 import { ContactShadows, OrbitControls, PerspectiveCamera, View } from '@react-three/drei';
-import { Canvas } from '@react-three/fiber';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import * as THREE from 'three';
 import type { GarmentCategory, GarmentLike } from '../api/types';
 import { makeBody, type BodyShape } from './body';
@@ -179,16 +179,31 @@ export function OutfitView({
  * Escenario con el maniquí vestido. `distance`: lo lejos que empieza la
  * cámara (más cerca = maniquí más grande; el editor de maniquíes lo acerca).
  */
-export function OutfitStage({ garments, shape, distance = 4.6 }: { garments: GarmentLike[]; shape?: BodyShape; distance?: number }) {
+export function OutfitStage({
+  garments,
+  shape,
+  distance = 4.6,
+  rig,
+}: {
+  garments: GarmentLike[];
+  shape?: BodyShape;
+  distance?: number;
+  /** Control de cámara desde fuera (vistas, zoom y giro); opcional. */
+  rig?: StageRig;
+}) {
   const reduced =
     typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+  const spin = rig ? rig.spin : true;
   return (
     <LoadingScope label="Vistiendo el maniquí…">
     <Canvas shadows dpr={[1, 2]} camera={{ position: [0, EYE_Y + 0.12, distance], fov: 32 }} gl={{ alpha: true }} onCreated={setupRenderer}>
       <StudioLights shadows />
-      <group rotation={[0, -0.3, 0]}>
-        <Dressed garments={garments} shape={shape} motion={!reduced} detail="high" />
+      <group rotation={[0, BASE_TURN, 0]}>
+        <IdleSway active={!!rig && !spin && !reduced}>
+          <Dressed garments={garments} shape={shape} motion={!reduced} detail="high" />
+        </IdleSway>
       </group>
+      {rig && <CameraRig rig={rig} instant={!!reduced} />}
       <FloorPool />
       <ContactShadows position={[0, 0.002, 0]} opacity={0.7} scale={2.4} blur={2.2} far={1.2} color="#050506" />
       <OrbitControls
@@ -197,13 +212,113 @@ export function OutfitStage({ garments, shape, distance = 4.6 }: { garments: Gar
         minDistance={2}
         maxDistance={7}
         maxPolarAngle={Math.PI * 0.55}
-        autoRotate={!reduced}
+        autoRotate={!reduced && spin}
         autoRotateSpeed={0.6}
         makeDefault
       />
     </Canvas>
     </LoadingScope>
   );
+}
+
+/** Giro inicial del maniquí (de tres cuartos). */
+const BASE_TURN = -0.3;
+
+export type StageView = 'front' | 'side' | 'back';
+
+/**
+ * Mando de la cámara del escenario: `viewTick` y `zoomTick` cambian para
+ * pedir una vista (frente, lado o espalda) o un paso de zoom (`zoomDir`).
+ */
+export interface StageRig {
+  view: StageView | null;
+  viewTick: number;
+  zoomDir: 1 | -1 | 0;
+  zoomTick: number;
+  spin: boolean;
+}
+
+/** Ángulo de cámara (azimut) para ver el maniquí de frente, de lado o de espaldas. */
+const VIEW_ANGLE: Record<StageView, number> = {
+  front: BASE_TURN,
+  side: BASE_TURN + Math.PI / 2,
+  back: BASE_TURN + Math.PI,
+};
+
+/** Lo que usamos de OrbitControls (three-stdlib). */
+interface Orbit {
+  target: THREE.Vector3;
+  getAzimuthalAngle(): number;
+  setAzimuthalAngle(angle: number): void;
+  update(): boolean;
+  addEventListener(type: 'start', listener: () => void): void;
+  removeEventListener(type: 'start', listener: () => void): void;
+}
+
+/** Lleva la cámara con suavidad a la vista o al zoom pedidos. */
+function CameraRig({ rig, instant }: { rig: StageRig; instant: boolean }) {
+  const controls = useThree((s) => s.controls) as unknown as Orbit | null;
+  const camera = useThree((s) => s.camera);
+  const goal = useRef<{ az: number | null; dist: number | null }>({ az: null, dist: null });
+
+  useEffect(() => {
+    if (rig.view) goal.current.az = VIEW_ANGLE[rig.view];
+  }, [rig.view, rig.viewTick]);
+
+  // Si la persona arrastra o hace zoom, manda su gesto: se sueltan los destinos.
+  useEffect(() => {
+    if (!controls) return;
+    const stop = () => {
+      goal.current.az = null;
+      goal.current.dist = null;
+    };
+    controls.addEventListener('start', stop);
+    return () => controls.removeEventListener('start', stop);
+  }, [controls]);
+
+  useEffect(() => {
+    if (!controls || !rig.zoomDir) return;
+    const d = camera.position.distanceTo(controls.target);
+    goal.current.dist = Math.min(7, Math.max(2, d * (rig.zoomDir > 0 ? 0.8 : 1.25)));
+    // Solo cuando se pide un paso nuevo.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rig.zoomTick]);
+
+  useFrame((_, dt) => {
+    if (!controls) return;
+    const k = instant ? 1 : 1 - Math.exp(-dt * 7);
+    const g = goal.current;
+    if (g.az !== null) {
+      const cur = controls.getAzimuthalAngle();
+      const delta = Math.atan2(Math.sin(g.az - cur), Math.cos(g.az - cur));
+      if (Math.abs(delta) < 0.003) {
+        controls.setAzimuthalAngle(g.az);
+        g.az = null;
+      } else controls.setAzimuthalAngle(cur + delta * k);
+    }
+    if (g.dist !== null) {
+      const off = camera.position.clone().sub(controls.target);
+      const d = off.length();
+      const next = d + (g.dist - d) * k;
+      off.setLength(next);
+      camera.position.copy(controls.target).add(off);
+      controls.update();
+      if (Math.abs(next - g.dist) < 0.01) g.dist = null;
+    }
+  });
+  return null;
+}
+
+/** Balanceo muy suave del maniquí cuando no gira (como si respirara). */
+function IdleSway({ active, children }: { active: boolean; children: ReactNode }) {
+  const ref = useRef<THREE.Group>(null);
+  useFrame(({ clock }) => {
+    const g = ref.current;
+    if (!g) return;
+    const target = active ? Math.sin(clock.elapsedTime * 0.55) * 0.045 : 0;
+    g.rotation.y += (target - g.rotation.y) * 0.08;
+  });
+  return <group ref={ref}>{children}</group>;
 }
 
 /** Charco de luz en el suelo: ancla al maniquí (antes parecía flotar). */

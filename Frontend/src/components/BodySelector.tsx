@@ -4,10 +4,11 @@ import { mannequinSelectionId, useBodyShape } from '../lib/bodyPref';
 import { play } from '../lib/sfx';
 import { BODY_SHAPES, type BodyShape } from '../three/body';
 import { Icon } from './Icon';
+import { t } from '../i18n';
 
 const SEXES: { id: BodyShape['sex']; label: string }[] = [
-  { id: 'male', label: 'Hombre' },
-  { id: 'female', label: 'Mujer' },
+  { id: 'male', label: t('Hombre') },
+  { id: 'female', label: t('Mujer') },
 ];
 
 /**
@@ -34,14 +35,14 @@ export function BodySelector({ className = '' }: { className?: string }) {
   };
 
   return (
-    <div className={`body-selector ${className}`} role="group" aria-label="Maniquí">
-      <span className="body-selector-label">Maniquí</span>
+    <div className={`body-selector ${className}`} role="group" aria-label={t('Maniquí')}>
+      <span className="body-selector-label">{t('Maniquí')}</span>
 
       <div
         className={`sex-toggle${ownSelected ? ' is-off' : ''}`}
         data-sex={shape.sex}
         role="group"
-        aria-label="Hombre o mujer"
+        aria-label={t('Hombre o mujer')}
       >
         <span className="sex-thumb" aria-hidden="true" />
         {SEXES.map((s) => (
@@ -51,7 +52,7 @@ export function BodySelector({ className = '' }: { className?: string }) {
         ))}
       </div>
 
-      <div key={shape.sex} className="chips chips-small body-shapes" role="group" aria-label="Silueta genérica">
+      <div key={shape.sex} className="chips chips-small body-shapes" role="group" aria-label={t('Silueta genérica')}>
         {shapes.map((b, i) => (
           <button
             key={b.id}
@@ -68,7 +69,7 @@ export function BodySelector({ className = '' }: { className?: string }) {
       </div>
 
       {mannequins.length > 0 && (
-        <div className="chips chips-small" role="group" aria-label="Tus maniquíes">
+        <div className="chips chips-small" role="group" aria-label={t('Tus maniquíes')}>
           {mannequins.map((m) => {
             const id = mannequinSelectionId(m.id);
             return (
@@ -88,7 +89,7 @@ export function BodySelector({ className = '' }: { className?: string }) {
       )}
       <Link to="/maniquies" className="chip chip-measure">
         <Icon name={mannequins.length ? 'edit' : 'plus'} size={12} />
-        {mannequins.length ? 'Editar maniquíes' : 'Con tus medidas'}
+        {mannequins.length ? t('Editar maniquíes') : t('Con tus medidas')}
       </Link>
     </div>
   );

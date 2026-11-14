@@ -439,7 +439,10 @@ export class AdminService {
     const ideaIds = rows
       .filter((r) => r.targetType === ReportTarget.IDEA)
       .map((r) => r.targetId);
-    const [outfits, messages, ideas] = await Promise.all([
+    const listingIds = rows
+      .filter((r) => r.targetType === ReportTarget.LISTING)
+      .map((r) => r.targetId);
+    const [outfits, messages, ideas, listings] = await Promise.all([
       outfitIds.length
         ? this.prisma.outfit.findMany({
             where: { id: { in: outfitIds } },
@@ -458,6 +461,12 @@ export class AdminService {
             select: { id: true, hidden: true },
           })
         : [],
+      listingIds.length
+        ? this.prisma.listing.findMany({
+            where: { id: { in: listingIds } },
+            select: { id: true, hiddenByAdmin: true },
+          })
+        : [],
     ]);
     const state = new Map<string, 'hidden' | 'deleted' | 'visible'>();
     for (const o of outfits)
@@ -465,6 +474,8 @@ export class AdminService {
     for (const m of messages)
       state.set(m.id, m.deletedAt ? 'deleted' : 'visible');
     for (const i of ideas) state.set(i.id, i.hidden ? 'hidden' : 'visible');
+    for (const l of listings)
+      state.set(l.id, l.hiddenByAdmin ? 'hidden' : 'visible');
     return paginate(
       rows.map((r) => ({
         ...r,
@@ -545,6 +556,31 @@ export class AdminService {
           targetUserId: o.userId,
           targetId: id,
           details: { name: o.name },
+        },
+      }),
+    ]);
+    return { id, hiddenByAdmin: hidden };
+  }
+
+  /** STREET MARKET: oculta (o vuelve a enseñar) un anuncio. */
+  async setListingHidden(adminId: string, id: string, hidden: boolean) {
+    const l = await this.prisma.listing.findUnique({
+      where: { id },
+      select: { userId: true, title: true },
+    });
+    if (!l) throw new NotFoundException('Listing not found');
+    await this.prisma.$transaction([
+      this.prisma.listing.update({
+        where: { id },
+        data: { hiddenByAdmin: hidden },
+      }),
+      this.prisma.adminAction.create({
+        data: {
+          adminId,
+          action: hidden ? 'listing.hide' : 'listing.unhide',
+          targetUserId: l.userId,
+          targetId: id,
+          details: { title: l.title },
         },
       }),
     ]);

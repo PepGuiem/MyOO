@@ -6,6 +6,7 @@ import { money } from '../../lib/wishlist';
 import { BarRow } from '../analytics/Charts';
 import { Icon } from '../Icon';
 import { CountUp } from '../street/Street';
+import { LOCALE_TAG } from '../../i18n';
 
 /**
  * Dashboard de SNEAKER COLLECTION. Todo sale de tus pares, tus outfits
@@ -46,7 +47,7 @@ export function SneakerDashboard({ stats: s }: { stats: SneakerStats }) {
               ? ''
               : s.topBrand.tie > 1
                 ? `${s.topBrand.tie} marcas con ${s.topBrand.count} ${s.topBrand.count === 1 ? 'par' : 'pares'}`
-                : `${s.topBrand.count} ${s.topBrand.count === 1 ? 'par' : 'pares'} · ${s.topBrand.share.toLocaleString('es-ES')} %`}
+                : `${s.topBrand.count} ${s.topBrand.count === 1 ? 'par' : 'pares'} · ${s.topBrand.share.toLocaleString(LOCALE_TAG)} %`}
           </span>
         </div>
         <div className="snk-kpi" style={{ '--i': 2 } as CSSProperties}>
@@ -104,7 +105,7 @@ export function SneakerDashboard({ stats: s }: { stats: SneakerStats }) {
                 fill="var(--fx-bone)"
                 value={
                   <>
-                    {b.count} <small>{b.share.toLocaleString('es-ES')} %</small>
+                    {b.count} <small>{b.share.toLocaleString(LOCALE_TAG)} %</small>
                   </>
                 }
               />

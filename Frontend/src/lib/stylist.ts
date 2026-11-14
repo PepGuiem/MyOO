@@ -1,3 +1,4 @@
+import { LOCALE_TAG } from '../i18n';
 /**
  * Vocabulario del estilista (mismas claves que Backend/src/stylist/vocabulary.ts).
  */
@@ -61,7 +62,7 @@ export function formatMoney(amount: string | number | null, currency: string | n
   const n = typeof amount === 'number' ? amount : Number(amount);
   if (!Number.isFinite(n)) return null;
   try {
-    return new Intl.NumberFormat('es-ES', { style: 'currency', currency: currency || 'EUR' }).format(n);
+    return new Intl.NumberFormat(LOCALE_TAG, { style: 'currency', currency: currency || 'EUR' }).format(n);
   } catch {
     return `${n.toFixed(2)} ${currency ?? ''}`.trim();
   }

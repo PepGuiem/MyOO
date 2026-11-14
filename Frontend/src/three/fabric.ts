@@ -11,6 +11,7 @@
  */
 import * as THREE from 'three';
 import type { Attributes } from '../api/types';
+import { t } from '../i18n';
 
 export type FabricKind = 'jersey' | 'woven' | 'denim' | 'knit' | 'wool' | 'leather' | 'canvas' | 'nylon' | 'silk';
 
@@ -206,15 +207,15 @@ export const FABRIC_LOOK: Record<FabricKind, FabricLook> = {
 
 /** Nombre del aspecto de cada tejido (para la ficha de la prenda). */
 export const FABRIC_LABEL: Record<FabricKind, string> = {
-  jersey: 'Punto de algodón',
-  woven: 'Tejido plano',
-  denim: 'Vaquero (sarga)',
-  knit: 'Punto grueso',
-  wool: 'Paño de lana',
-  leather: 'Cuero',
-  canvas: 'Lona',
-  nylon: 'Nailon técnico',
-  silk: 'Seda / satén',
+  jersey: t('Punto de algodón'),
+  woven: t('Tejido plano'),
+  denim: t('Vaquero (sarga)'),
+  knit: t('Punto grueso'),
+  wool: t('Paño de lana'),
+  leather: t('Cuero'),
+  canvas: t('Lona'),
+  nylon: t('Nailon técnico'),
+  silk: t('Seda / satén'),
 };
 
 /** Tejido por defecto de cada prenda, que el atributo "material" puede cambiar. */

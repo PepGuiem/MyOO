@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import type { UserBrief } from '../../api/types';
 import { Icon } from '../Icon';
 import { PersonAvatar, personName, profilePath } from './PersonAvatar';
+import { t } from '../../i18n';
 
 /** Una persona en una lista: foto, nombre, @usuario y una acción a la derecha. */
 export function PersonRow({ person, action, sub }: { person: UserBrief; action?: ReactNode; sub?: ReactNode }) {
@@ -14,7 +15,7 @@ export function PersonRow({ person, action, sub }: { person: UserBrief; action?:
           <strong>
             {personName(person)}
             {person.isPrivate && (
-              <span className="lock" title="Cuenta privada">
+              <span className="lock" title={t('Cuenta privada')}>
                 <Icon name="lock" size={12} />
               </span>
             )}

@@ -4,12 +4,13 @@ import { analyticsApi } from '../api/endpoints';
 import type { GarmentCategory, OutfitStyle, StyleAnalytics } from '../api/types';
 import { BarRow, ColumnChart, OTHER, SERIES, StackedShare, type Series } from '../components/analytics/Charts';
 import { ErrorNote } from '../components/ErrorNote';
-import { NeonScene } from '../components/fx/NeonScene';
 import { SprayLoader } from '../components/fx/SprayLoader';
 import { Icon, type IconName } from '../components/Icon';
 import { CountUp, stickerTilt } from '../components/street/Street';
 import { OUTFIT_STYLES } from '../lib/outfitStyles';
 import { play } from '../lib/sfx';
+import { withTransition } from '../lib/motion';
+import { LOCALE_TAG } from '../i18n';
 
 const CATEGORY_LABEL: Record<GarmentCategory, string> = {
   TOP: 'Arriba',
@@ -81,7 +82,6 @@ export function AnalyticsPage() {
   if (!data) {
     return (
       <section className="page an">
-        <NeonScene />
         <AnHero onRefresh={load} loading={loading} stamp={stamp} />
         <ErrorNote error={error} />
         {!error && <SprayLoader label="Analizando tu armario…" />}
@@ -99,7 +99,6 @@ export function AnalyticsPage() {
 
   return (
     <section className="page an">
-      <NeonScene />
       <AnHero onRefresh={load} loading={loading} stamp={stamp} />
       <ErrorNote error={error} />
 
@@ -333,7 +332,7 @@ export function AnalyticsPage() {
                   aria-selected={period === 'weekly'}
                   onClick={() => {
                     play('click');
-                    setPeriod('weekly');
+                    withTransition(() => setPeriod('weekly'));
                   }}
                 >
                   Semanal
@@ -344,7 +343,7 @@ export function AnalyticsPage() {
                   aria-selected={period === 'monthly'}
                   onClick={() => {
                     play('click');
-                    setPeriod('monthly');
+                    withTransition(() => setPeriod('monthly'));
                   }}
                 >
                   Mensual
@@ -461,7 +460,7 @@ function AnHero({ onRefresh, loading, stamp }: { onRefresh: () => void; loading:
         </h1>
       </div>
       <div className="an-refresh">
-        {stamp && <small>Actualizado a las {stamp.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}</small>}
+        {stamp && <small>Actualizado a las {stamp.toLocaleTimeString(LOCALE_TAG, { hour: '2-digit', minute: '2-digit' })}</small>}
         <button
           type="button"
           className="btn btn-street btn-ghost"

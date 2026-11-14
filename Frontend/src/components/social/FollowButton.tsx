@@ -3,6 +3,7 @@ import { ApiError } from '../../api/client';
 import { peopleApi } from '../../api/endpoints';
 import type { FollowState } from '../../api/types';
 import { Busy } from '../Spinner';
+import { t } from '../../i18n';
 
 /**
  * Seguir / Solicitado / Siguiendo. En una cuenta privada, seguir envía una
@@ -41,14 +42,14 @@ export function FollowButton({
       }
       setConfirm(false);
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : 'No se ha podido.');
+      setError(err instanceof ApiError ? err.message : t('No se ha podido.'));
     } finally {
       setBusy(false);
     }
   }
 
   const label =
-    state === 'none' ? (followsYou ? 'Seguir también' : 'Seguir') : state === 'pending' ? 'Solicitado' : confirm ? 'Dejar de seguir' : 'Siguiendo';
+    state === 'none' ? (followsYou ? t('Seguir también') : t('Seguir')) : state === 'pending' ? t('Solicitado') : confirm ? t('Dejar de seguir') : t('Siguiendo');
   return (
     <span className="follow-btn-wrap">
       <button
@@ -56,7 +57,7 @@ export function FollowButton({
         className={`btn${small ? ' btn-small' : ''}${state === 'none' ? ' btn-primary' : ''}${confirm ? ' btn-danger' : ''}`}
         disabled={busy}
         aria-pressed={state !== 'none'}
-        title={state === 'pending' ? 'Pulsa para cancelar la solicitud' : undefined}
+        title={state === 'pending' ? t('Pulsa para cancelar la solicitud') : undefined}
         onClick={click}
       >
         {busy ? <Busy text="…" /> : label}

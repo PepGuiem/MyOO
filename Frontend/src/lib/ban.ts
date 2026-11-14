@@ -1,4 +1,5 @@
 import { ApiError, banInfo, type BanInfo } from '../api/client';
+import { LOCALE_TAG, t } from '../i18n';
 
 /** Si el error es "tu cuenta está suspendida", devuelve el motivo y la fecha. */
 export function banFromError(err: unknown): BanInfo | null {
@@ -9,7 +10,7 @@ export function banFromError(err: unknown): BanInfo | null {
 export function banMessage(ban: BanInfo): string {
   const until = ban.until ? new Date(ban.until) : null;
   const when = until
-    ? `hasta el ${until.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })} a las ${until.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}`
-    : 'hasta nuevo aviso';
-  return `Tu cuenta está suspendida ${when}.${ban.reason ? ` Motivo: ${ban.reason}` : ''}`;
+    ? t('hasta el {toLocaleDateString} a las {toLocaleTimeString}', { toLocaleDateString: until.toLocaleDateString(LOCALE_TAG, { day: 'numeric', month: 'long', year: 'numeric' }), toLocaleTimeString: until.toLocaleTimeString(LOCALE_TAG, { hour: '2-digit', minute: '2-digit' }) })
+    : t('hasta nuevo aviso');
+  return t('Tu cuenta está suspendida {when}.{v}', { when, v: ban.reason ? t(' Motivo: {reason}', { reason: ban.reason }) : '' });
 }

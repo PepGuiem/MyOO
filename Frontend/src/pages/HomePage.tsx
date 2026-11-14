@@ -1,18 +1,28 @@
-import { useEffect, useMemo, useState, type ReactNode } from 'react';
+import { useEffect, useMemo, useState, type CSSProperties, type ReactNode } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { itemsApi, outfitsApi } from '../api/endpoints';
 import type { GarmentCategory, Outfit, WardrobeItem } from '../api/types';
 import { useAuth } from '../auth/AuthContext';
 import { ErrorNote } from '../components/ErrorNote';
-import { Icon } from '../components/Icon';
-import { ItemTile } from '../components/ItemTile';
+import { Icon, type IconName } from '../components/Icon';
 import { useAppData } from '../components/Layout';
-import { TileSkeletons } from '../components/Skeleton';
+import { CountUp } from '../components/street/Street';
+import { GarmentCard, GarmentCardSkeletons } from '../components/wardrobe/GarmentCard';
 import { useBodyShape } from '../lib/bodyPref';
 import { CATEGORY_FILTERS, SEASON_LABEL, plural } from '../lib/labels';
 import { OutfitView } from '../three/OutfitMannequin';
 import { OutfitCard } from './OutfitsPage';
 import { FirstWardrobe } from './WardrobePage';
+import { LOCALE_TAG, t } from '../i18n';
+
+const CATEGORY_ICON: Record<GarmentCategory, IconName> = {
+  TOP: 'tshirt',
+  BOTTOM: 'pants',
+  FULL_BODY: 'dress',
+  OUTERWEAR: 'jacket',
+  FOOTWEAR: 'shoe',
+  ACCESSORY: 'cap',
+};
 
 const CATEGORIES = CATEGORY_FILTERS.filter((c): c is { value: GarmentCategory; label: string } => c.value !== null);
 
@@ -26,9 +36,9 @@ interface HomeData {
 
 function greeting(d: Date): string {
   const h = d.getHours();
-  if (h >= 6 && h < 14) return 'Buenos días';
-  if (h >= 14 && h < 21) return 'Buenas tardes';
-  return 'Buenas noches';
+  if (h >= 6 && h < 14) return t('Buenos días');
+  if (h >= 14 && h < 21) return t('Buenas tardes');
+  return t('Buenas noches');
 }
 
 /**
@@ -71,18 +81,20 @@ export function HomePage() {
   }, []);
 
   const now = useMemo(() => new Date(), []);
-  const today = now.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' });
+  const today = now.toLocaleDateString(LOCALE_TAG, { weekday: 'long', day: 'numeric', month: 'long' });
   const name = user?.displayName?.trim() || user?.email?.split('@')[0] || '';
   const loading = !data && !error;
   const outfit = data?.outfits.length ? data.outfits[featured % data.outfits.length] : null;
   const garments = useMemo(() => outfit?.items.map((i) => ({ ...i.wardrobeItem, styling: i.styling })) ?? [], [outfit]);
   const from = { state: { from: location.pathname } };
 
+  const title = greeting(now);
+
   if (wardrobes.length === 0 && data && data.itemTotal === 0) {
     return (
-      <section className="page home">
-        <HomeHead today={today} title={`${greeting(now)}${name ? `, ${name}` : ''}`} summary="Bienvenido a MyOut. Tres pasos para empezar:" />
-        <ol className="home-steps">
+      <section className="page home hm">
+        <HomeHead today={today} title={title} name={name} summary={t('Bienvenido a MyOut. Tres pasos para empezar:')} />
+        <ol className="home-steps hm-steps">
           <li className="is-current">
             <span className="step-n">1</span>
             <div>
@@ -92,15 +104,15 @@ export function HomePage() {
           <li>
             <span className="step-n">2</span>
             <div>
-              <h2>Añade tus prendas</h2>
-              <p className="muted">Cada prenda se ve en 3D con su color, corte y detalles.</p>
+              <h2>{t('Añade tus prendas')}</h2>
+              <p className="muted">{t('Cada prenda se ve en 3D con su color, corte y detalles.')}</p>
             </div>
           </li>
           <li>
             <span className="step-n">3</span>
             <div>
-              <h2>Combínalas en outfits</h2>
-              <p className="muted">Vístelas sobre el maniquí y decide cómo llevar cada una.</p>
+              <h2>{t('Combínalas en outfits')}</h2>
+              <p className="muted">{t('Vístelas sobre el maniquí y decide cómo llevar cada una.')}</p>
             </div>
           </li>
         </ol>
@@ -109,22 +121,23 @@ export function HomePage() {
   }
 
   const summary = data
-    ? `${plural(data.itemTotal, 'prenda', 'prendas')} en ${plural(wardrobes.length, 'armario', 'armarios')} y ${plural(data.outfitTotal, 'outfit', 'outfits')}.`
-    : 'Cargando tu armario…';
+    ? t('{plural} en {plural2} y {plural3}.', { plural: plural(data.itemTotal, 'prenda', 'prendas'), plural2: plural(wardrobes.length, 'armario', 'armarios'), plural3: plural(data.outfitTotal, 'outfit', 'outfits') })
+    : t('Cargando tu armario…');
 
   return (
-    <section className="page home">
+    <section className="page home hm">
       <HomeHead
         today={today}
-        title={`${greeting(now)}${name ? `, ${name}` : ''}`}
+        title={title}
+        name={name}
         summary={summary}
         actions={
           <>
-            <Link to="/armario?nueva=1" className="btn">
-              <Icon name="plus" size={14} /> Añadir prenda
+            <Link to="/armario?nueva=1" className="btn wd-btn-line">
+              <Icon name="plus" size={14} /> {t('Añadir prenda')}
             </Link>
-            <Link to="/outfits/new" className="btn btn-primary">
-              <Icon name="plus" size={14} /> Nuevo outfit
+            <Link to="/outfits/new" className="btn wd-add">
+              <Icon name="plus" size={15} /> <span>{t('Nuevo outfit')}</span>
             </Link>
           </>
         }
@@ -132,15 +145,52 @@ export function HomePage() {
 
       <ErrorNote error={error} />
 
-      <div className="home-hero">
-        <div className="hero-stage">
+      <ul className="wd-stats hm-stats" aria-label={t('Resumen')}>
+        <li style={{ '--i': 0 } as CSSProperties}>
+          <Icon name="tshirt" size={16} />
+          <Link to="/armario">
+            <strong>{data ? <CountUp value={data.itemTotal} /> : '–'}</strong>
+            <span>{t('Prendas')}</span>
+          </Link>
+        </li>
+        <li style={{ '--i': 1 } as CSSProperties}>
+          <Icon name="wardrobe" size={16} />
+          <Link to="/armario">
+            <strong>
+              <CountUp value={wardrobes.length} />
+            </strong>
+            <span>{t('Armarios')}</span>
+          </Link>
+        </li>
+        <li style={{ '--i': 2 } as CSSProperties}>
+          <Icon name="layers" size={16} />
+          <Link to="/outfits">
+            <strong>{data ? <CountUp value={data.outfitTotal} /> : '–'}</strong>
+            <span>{t('Outfits')}</span>
+          </Link>
+        </li>
+        <li className="hm-stats-cta" style={{ '--i': 3 } as CSSProperties}>
+          <Icon name="sparkles" size={16} />
+          <Link to="/estilista">
+            <strong>{t('¿Qué me pongo hoy?')}</strong>
+            <span>
+              {t('Pregunta al estilista')} <Icon name="forward" size={11} />
+            </span>
+          </Link>
+        </li>
+      </ul>
+
+      <div className="home-hero hm-hero">
+        <div className="hero-stage hm-stage">
+          <span className="hm-stage-beams" aria-hidden="true" />
+          <span className="hm-stage-floor" aria-hidden="true" />
           {outfit ? (
             <OutfitView key={outfit.id} className="hero-view" garments={garments} shape={shape} active speed={0.25} distance={4.2} />
           ) : (
             <OutfitView className="hero-view" garments={[]} shape={shape} active speed={0.25} distance={4.2} />
           )}
         </div>
-        <div className="hero-info">
+        <div className="hero-info hm-info">
           {loading ? (
             <>
               <span className="skeleton-line" style={{ width: '30%' }} />
@@ -149,39 +199,45 @@ export function HomePage() {
             </>
           ) : outfit ? (
             <>
-              <p className="eyebrow">{featured === 0 ? 'Tu último outfit' : 'Outfit'}</p>
-              <h2 className="hero-title">{outfit.name}</h2>
-              <p className="muted">
-                {[outfit.occasion, outfit.season ? SEASON_LABEL[outfit.season] : null, plural(garments.length, 'prenda', 'prendas')].filter(Boolean).join(' · ')}
+              <span className="wd-kicker hm-kicker">
+                <Icon name="layers" size={12} /> {featured === 0 ? t('Tu último outfit') : t('Outfit')}
+              </span>
+              <h2 key={outfit.id} className="hm-outfit-name">
+                {outfit.name}
+              </h2>
+              <p className="hm-outfit-meta">
+                {[outfit.occasion, outfit.season ? SEASON_LABEL[outfit.season] : null, plural(garments.length, t('prenda'), t('prendas'))].filter(Boolean).join(' · ')}
               </p>
-              <ul className="hero-items">
-                {outfit.items.map((i) => (
-                  <li key={i.wardrobeItem.id}>
-                    <span className="swatch" style={{ background: i.wardrobeItem.color }} aria-hidden="true" />
-                    <span className="hero-item-name">{i.wardrobeItem.name}</span>
-                    <span className="hero-item-type">{i.wardrobeItem.garmentType.name}</span>
+              <ul key={`l${outfit.id}`} className="hm-pieces">
+                {outfit.items.map((i, k) => (
+                  <li key={i.wardrobeItem.id} style={{ '--i': k } as CSSProperties}>
+                    <span className="wd-swatch" style={{ background: i.wardrobeItem.color }} aria-hidden="true" />
+                    <span className="hm-piece-name">{i.wardrobeItem.name}</span>
+                    <span className="hm-piece-type">{i.wardrobeItem.garmentType.name}</span>
                   </li>
                 ))}
               </ul>
-              <div className="actions">
-                <Link to={`/outfits/${outfit.id}`} className="btn">
-                  Abrir
+              <div className="hm-hero-actions">
+                <Link to={`/outfits/${outfit.id}`} className="btn wd-add">
+                  <Icon name="external" size={14} /> <span>{t('Abrir')}</span>
                 </Link>
                 {data && data.outfits.length > 1 && (
-                  <button type="button" className="btn btn-ghost" onClick={() => setFeatured((f) => f + 1)}>
-                    Ver otro
+                  <button type="button" className="btn wd-btn-line" onClick={() => setFeatured((f) => f + 1)}>
+                    <Icon name="shuffle" size={14} /> {t('Ver otro')}
                   </button>
                 )}
               </div>
             </>
           ) : (
             <>
-              <p className="eyebrow">Outfits</p>
-              <h2 className="hero-title">Viste el maniquí</h2>
-              <p className="muted">Combina prendas de tus armarios, elige cómo llevar cada una y guárdalas juntas.</p>
-              <div className="actions">
-                <Link to="/outfits/new" className="btn btn-primary">
-                  Crear el primero
+              <span className="wd-kicker hm-kicker">
+                <Icon name="layers" size={12} /> {t('Outfits')}
+              </span>
+              <h2 className="hm-outfit-name">{t('Viste el maniquí')}</h2>
+              <p className="hm-outfit-meta">{t('Combina prendas de tus armarios, elige cómo llevar cada una y guárdalas juntas.')}</p>
+              <div className="hm-hero-actions">
+                <Link to="/outfits/new" className="btn wd-add">
+                  <Icon name="plus" size={14} /> <span>{t('Crear el primero')}</span>
                 </Link>
               </div>
             </>
@@ -189,59 +245,54 @@ export function HomePage() {
         </div>
       </div>
 
-      <div className="stats" aria-label="Resumen">
-        <Link to="/armario" className="stat">
-          <span className="stat-n">{data ? data.itemTotal : '–'}</span>
-          <span className="stat-label">Prendas</span>
-        </Link>
-        <Link to="/armario" className="stat">
-          <span className="stat-n">{wardrobes.length}</span>
-          <span className="stat-label">Armarios</span>
-        </Link>
-        <Link to="/outfits" className="stat">
-          <span className="stat-n">{data ? data.outfitTotal : '–'}</span>
-          <span className="stat-label">Outfits</span>
-        </Link>
-      </div>
-
-      <HomeSection title="Añadido recientemente" link={{ to: '/armario', label: 'Ver armario' }}>
+      <HomeSection n="01" title={t('Añadido recientemente')} link={{ to: '/armario', label: t('Ver armario') }}>
         {data && data.items.length === 0 ? (
-          <div className="empty empty-inline">
-            <p>Aún no hay prendas.</p>
-            <Link to="/armario?nueva=1" className="btn btn-primary">
-              Añadir prenda
+          <div className="hm-none">
+            <Icon name="hanger" size={30} />
+            <p>{t('Aún no hay prendas.')}</p>
+            <Link to="/armario?nueva=1" className="btn wd-add">
+              <Icon name="plus" size={14} /> <span>{t('Añadir prenda')}</span>
             </Link>
           </div>
         ) : (
-          <div className="grid home-grid">
-            {loading && <TileSkeletons count={6} />}
-            {data?.items.slice(0, 6).map((item) => (
-              <ItemTile key={item.id} item={item} onOpen={() => navigate(`/items/${item.id}`, from)} />
+          <div className="wd-grid view-grid hm-grid">
+            {loading && <GarmentCardSkeletons count={6} />}
+            {data?.items.map((item, i) => (
+              <GarmentCard key={item.id} item={item} index={i} view="grid" onOpen={() => navigate(`/items/${item.id}`, from)} />
             ))}
           </div>
         )}
       </HomeSection>
 
-      <HomeSection title="Por categoría">
-        <div className="category-cards">
-          {CATEGORIES.map((c) => (
-            <Link key={c.value} to={`/armario?cat=${c.value}`} className={`category-card${data && !data.byCategory[c.value] ? ' is-empty' : ''}`}>
-              <span className="category-name">{c.label}</span>
-              <span className="category-count">{data ? data.byCategory[c.value] : '–'}</span>
+      <HomeSection n="02" title={t('Por categoría')}>
+        <div className="hm-cats">
+          {CATEGORIES.map((c, i) => (
+            <Link
+              key={c.value}
+              to={`/armario?cat=${c.value}`}
+              className={`hm-cat${data && !data.byCategory[c.value] ? ' is-empty' : ''}`}
+              style={{ '--i': i } as CSSProperties}
+            >
+              <span className="hm-cat-icon">
+                <Icon name={CATEGORY_ICON[c.value]} size={20} />
+              </span>
+              <span className="hm-cat-name">{c.label}</span>
+              <span className="hm-cat-count">{data ? data.byCategory[c.value] : '–'}</span>
             </Link>
           ))}
         </div>
       </HomeSection>
 
       {wardrobes.length > 0 && (
-        <HomeSection title="Tus armarios">
-          <ul className="wardrobe-cards">
+        <HomeSection n="03" title={t('Tus armarios')}>
+          <ul className="hm-wardrobes">
             {wardrobes.map((w) => (
               <li key={w.id}>
-                <Link to={`/armario?w=${w.id}`} className="wardrobe-card">
-                  <span className="wardrobe-card-name">{w.name}</span>
-                  <span className="muted small">{plural(w.itemCount, 'prenda', 'prendas')}</span>
-                  <Icon name="forward" className="wardrobe-card-arrow" />
+                <Link to={`/armario?w=${w.id}`}>
+                  <Icon name="wardrobe" size={18} />
+                  <span className="hm-wardrobe-name">{w.name}</span>
+                  <span className="hm-wardrobe-count">{plural(w.itemCount, t('prenda'), t('prendas'))}</span>
+                  <Icon name="forward" className="hm-arrow" />
                 </Link>
               </li>
             ))}
@@ -250,7 +301,7 @@ export function HomePage() {
       )}
 
       {data && data.outfits.length > 1 && (
-        <HomeSection title="Tus outfits" link={{ to: '/outfits', label: 'Ver todos' }}>
+        <HomeSection n="04" title={t('Tus outfits')} link={{ to: '/outfits', label: t('Ver todos') }}>
           <div className="grid grid-outfits home-grid">
             {data.outfits.slice(0, 4).map((o) => (
               <OutfitCard key={o.id} outfit={o} />
@@ -262,26 +313,39 @@ export function HomePage() {
   );
 }
 
-function HomeHead({ today, title, summary, actions }: { today: string; title: string; summary: string; actions?: ReactNode }) {
+function HomeHead({ today, title, name, summary, actions }: { today: string; title: string; name: string; summary: string; actions?: ReactNode }) {
+  const full = name ? `${title}, ${name}` : title;
   return (
-    <header className="page-head home-head">
-      <div>
-        <p className="eyebrow">{today}</p>
-        <h1>{title}</h1>
-        <p className="muted">{summary}</p>
+    <header className="hm-head">
+      <div className="hm-head-main">
+        <span className="wd-kicker">
+          <Icon name="bolt" size={12} /> {today}
+        </span>
+        <h1 className="wd-title hm-title" data-text={full} aria-label={full}>
+          {title}
+          {name && (
+            <>
+              , <em>{name}</em>
+            </>
+          )}
+        </h1>
+        <p className="hm-summary">{summary}</p>
       </div>
-      {actions && <div className="head-actions">{actions}</div>}
+      {actions && <div className="wd-head-actions">{actions}</div>}
     </header>
   );
 }
 
-function HomeSection({ title, link, children }: { title: string; link?: { to: string; label: string }; children: ReactNode }) {
+function HomeSection({ n, title, link, children }: { n: string; title: string; link?: { to: string; label: string }; children: ReactNode }) {
   return (
-    <section className="home-section">
-      <div className="section-head">
+    <section className="hm-section">
+      <div className="hm-section-head">
+        <span className="hm-section-n" aria-hidden="true">
+          {n}
+        </span>
         <h2>{title}</h2>
         {link && (
-          <Link to={link.to} className="section-link">
+          <Link to={link.to} className="hm-section-link">
             {link.label} <Icon name="forward" size={14} />
           </Link>
         )}

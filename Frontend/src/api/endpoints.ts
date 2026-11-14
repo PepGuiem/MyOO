@@ -1,5 +1,15 @@
 import { api, apiBaseUrl, fetchBlob, uploadFile } from './client';
 import type {
+  AccountLocale,
+  Battle,
+  BattleSide,
+  BattleSummary,
+  BattleTab,
+  Leaderboard,
+  Listing,
+  ListingInput,
+  MarketQuery,
+  MarketSummary,
   Asset,
   Mannequin,
   MannequinInput,
@@ -78,10 +88,14 @@ import type {
   Wardrobe,
   WardrobeItem,
   WardrobeItemInput,
+  ColorGroup,
+  ItemSort,
+  Season,
+  WardrobeFacets,
 } from './types';
 
 export const authApi = {
-  register: (body: { email: string; password: string; displayName?: string }) =>
+  register: (body: { email: string; password: string; displayName?: string; locale?: AccountLocale }) =>
     api<AuthResponse>('POST', '/auth/register', { body }),
   login: (body: { email: string; password: string }) =>
     api<AuthResponse>('POST', '/auth/login', { body }),
@@ -146,13 +160,27 @@ export interface ItemFilters {
   pageSize?: number;
   /** exclude (por defecto): solo lo que tienes. include: también la wishlist. only: solo la wishlist. */
   wishlist?: 'exclude' | 'include' | 'only';
+  garmentTypeId?: string;
+  season?: Season;
+  /** Marca (sin distinguir mayúsculas). */
+  brand?: string;
+  /** Grupo de color (negro, blanco, azul…). */
+  color?: ColorGroup;
+  /** Solo favoritas. */
+  favorite?: boolean;
+  sort?: ItemSort;
 }
 
 export const itemsApi = {
   list: (filters: ItemFilters = {}) =>
     api<Paginated<WardrobeItem>>('GET', '/wardrobe-items', {
-      query: { pageSize: 48, ...filters },
+      query: { pageSize: 48, ...filters, favorite: filters.favorite ? 'true' : undefined },
     }),
+  /** Resumen del armario (o de un armario): totales y valores para los filtros. */
+  facets: (wardrobeId?: string) => api<WardrobeFacets>('GET', '/wardrobe-items/facets', { query: { wardrobeId } }),
+  /** Marca o desmarca una prenda como favorita. */
+  setFavorite: (id: string, on: boolean) =>
+    api<{ id: string; isFavorite: boolean }>(on ? 'PUT' : 'DELETE', `/wardrobe-items/${id}/favorite`),
   /**
    * Descarga todas las páginas (para el selector de prendas de outfits).
    * `wishlist: 'include'` trae también las de la wishlist (marcadas con `wishlistStatus`).
@@ -398,6 +426,8 @@ export const adminApi = {
     api<{ id: string; status: ReportStatus }>('PATCH', `/admin/reports/${id}`, { body }),
   hideOutfit: (id: string, hidden: boolean) =>
     api<{ id: string; hiddenByAdmin: boolean }>(hidden ? 'POST' : 'DELETE', `/admin/outfits/${id}/hide`),
+  hideListing: (id: string, hidden: boolean) =>
+    api<{ id: string; hiddenByAdmin: boolean }>(hidden ? 'POST' : 'DELETE', `/admin/listings/${id}/hide`),
   deleteMessage: (id: string) => api<void>('DELETE', `/admin/messages/${id}`),
   releases: (page = 1) => api<Paginated<Release>>('GET', '/admin/releases', { query: { page } }),
   createRelease: (body: ReleaseInput) => api<Release>('POST', '/admin/releases', { body }),
@@ -415,4 +445,31 @@ export const monitorApi = {
   database: () => api<MonitorDatabase>('GET', '/admin/monitor/database'),
   activity: (days: 7 | 30 | 90) => api<MonitorActivity>('GET', '/admin/monitor/activity', { query: { days } }),
   feed: () => api<MonitorFeedItem[]>('GET', '/admin/monitor/feed'),
+};
+
+/** STREETWEAR BATTLES: retos 1 vs 1 entre outfits, votados por la comunidad. */
+export const battlesApi = {
+  list: (tab: BattleTab, page = 1) => api<Paginated<Battle>>('GET', '/battles', { query: { tab, page, pageSize: 12 } }),
+  summary: () => api<BattleSummary>('GET', '/battles/summary'),
+  leaderboard: () => api<Leaderboard>('GET', '/battles/leaderboard'),
+  get: (id: string) => api<Battle>('GET', `/battles/${id}`),
+  /** Sin `opponentId`, el reto queda abierto a cualquiera. */
+  create: (body: { outfitId: string; opponentId?: string; theme?: string | null }) => api<Battle>('POST', '/battles', { body }),
+  accept: (id: string, outfitId: string) => api<Battle>('POST', `/battles/${id}/accept`, { body: { outfitId } }),
+  decline: (id: string) => api<Battle>('POST', `/battles/${id}/decline`),
+  cancel: (id: string) => api<void>('DELETE', `/battles/${id}`),
+  vote: (id: string, side: BattleSide) => api<Battle>('POST', `/battles/${id}/vote`, { body: { side } }),
+};
+
+/** STREET MARKET: anuncios para vender o intercambiar; el trato se cierra por el chat. */
+export const marketApi = {
+  list: (q: MarketQuery) => api<Paginated<Listing>>('GET', '/market', { query: { pageSize: 24, ...q } }),
+  summary: () => api<MarketSummary>('GET', '/market/summary'),
+  get: (id: string) => api<Listing>('GET', `/market/${id}`),
+  create: (body: ListingInput) => api<Listing>('POST', '/market', { body }),
+  update: (id: string, body: ListingInput) => api<Listing>('PATCH', `/market/${id}`, { body }),
+  remove: (id: string) => api<void>('DELETE', `/market/${id}`),
+  favorite: (id: string, on: boolean) => api<{ isFavorite: boolean; favorites: number }>(on ? 'POST' : 'DELETE', `/market/${id}/favorite`),
+  contact: (id: string, message?: string | null) => api<{ conversationId: string }>('POST', `/market/${id}/contact`, { body: { message } }),
+  photo: (id: string, assetId: string) => fetchBlob(`/market/${id}/photos/${assetId}`),
 };

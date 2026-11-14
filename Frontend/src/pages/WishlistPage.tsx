@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { wishlistApi } from '../api/endpoints';
 import type { WishlistCategory, WishlistItem, WishlistSort, WishlistStatus, WishlistSummary } from '../api/types';
 import { ErrorNote } from '../components/ErrorNote';
-import { NeonScene } from '../components/fx/NeonScene';
 import { SoundToggle } from '../components/fx/SoundToggle';
 import { SprayLoader } from '../components/fx/SprayLoader';
 import { useToast } from '../components/fx/Toast';
@@ -15,6 +14,7 @@ import { PriceSpark } from '../components/wishlist/PriceChart';
 import { WishForm } from '../components/wishlist/WishForm';
 import { WishMedia } from '../components/wishlist/WishMedia';
 import { play } from '../lib/sfx';
+import { withTransition } from '../lib/motion';
 import { atTarget, brandOf, CURRENCIES, hostOf, money, num, WISH_CATEGORIES, WISH_CATEGORY, WISH_SORTS, WISH_STATUS, WISH_STATUSES } from '../lib/wishlist';
 
 function sortItems(items: WishlistItem[], sort: WishlistSort): WishlistItem[] {
@@ -153,7 +153,6 @@ export function WishlistPage() {
 
   return (
     <section className="page wl">
-      <NeonScene />
 
       <header className="fits-hero wl-hero">
         <div className="fits-title">
@@ -223,7 +222,7 @@ export function WishlistPage() {
                 style={{ '--st': WISH_STATUS[k].color } as CSSProperties}
                 onClick={() => {
                   play('click');
-                  setStatus(status === k ? 'ALL' : k);
+                  withTransition(() => setStatus(status === k ? 'ALL' : k));
                 }}
               >
                 <i className="wl-dot" aria-hidden="true" />
@@ -251,7 +250,7 @@ export function WishlistPage() {
                 aria-pressed={sort === o.id}
                 onClick={() => {
                   play('click');
-                  setSort(o.id);
+                  withTransition(() => setSort(o.id));
                 }}
               >
                 {o.label}
@@ -281,7 +280,7 @@ export function WishlistPage() {
               aria-pressed={category === c}
               onClick={() => {
                 play('click');
-                setCategory(category === c ? null : c);
+                withTransition(() => setCategory(category === c ? null : c));
               }}
             >
               <Icon name={WISH_CATEGORY[c].icon} size={15} /> {WISH_CATEGORY[c].label}

@@ -7,7 +7,6 @@ import { ErrorNote } from '../components/ErrorNote';
 import { ConfirmDialog } from '../components/fx/ConfirmDialog';
 import { CompareDialog } from '../components/rating/CompareDialog';
 import { ScoreRing, TierBadge } from '../components/rating/RatingGauge';
-import { NeonScene } from '../components/fx/NeonScene';
 import { SoundToggle } from '../components/fx/SoundToggle';
 import { SprayLoader } from '../components/fx/SprayLoader';
 import { useToast } from '../components/fx/Toast';
@@ -22,6 +21,7 @@ import { usePagedList } from '../lib/usePagedList';
 import { useTilt } from '../lib/useTilt';
 import { SLOT_BY_ID, slotOf } from '../lib/wardrobeSlots';
 import { OutfitView } from '../three/OutfitMannequin';
+import { t } from '../i18n';
 
 /** Outfits por tanda: cada uno es una escena 3D, mejor pocos y seguidos. */
 const PAGE_SIZE = 12;
@@ -32,10 +32,10 @@ type Tab = 'all' | 'fav';
 type Sort = 'new' | 'old' | 'name' | 'score';
 
 const SORTS: { id: Sort; label: string }[] = [
-  { id: 'new', label: 'Recientes' },
-  { id: 'old', label: 'Antiguos' },
+  { id: 'new', label: t('Recientes') },
+  { id: 'old', label: t('Antiguos') },
   { id: 'name', label: 'A–Z' },
-  { id: 'score', label: 'Nota' },
+  { id: 'score', label: t('Nota') },
 ];
 
 /** Cuántos outfits se pueden comparar a la vez. */
@@ -54,7 +54,7 @@ function useDebounced<T>(value: T, ms: number): T {
 }
 
 function errorText(err: unknown): string {
-  return err instanceof Error ? err.message : 'Algo ha fallado.';
+  return err instanceof Error ? err.message : t('Algo ha fallado.');
 }
 
 export function OutfitsPage() {
@@ -153,7 +153,7 @@ export function OutfitsPage() {
     setPicked((l) => {
       if (l.includes(id)) return l.filter((x) => x !== id);
       if (l.length >= MAX_COMPARE) {
-        toast.show(`Puedes comparar hasta ${MAX_COMPARE} outfits.`, { tone: 'info' });
+        toast.show(t('Puedes comparar hasta {MAX_COMPARE} outfits.', { MAX_COMPARE }), { tone: 'info' });
         return l;
       }
       return [...l, id];
@@ -213,10 +213,10 @@ export function OutfitsPage() {
         setFresh(copy.id);
       }
       refreshSummary();
-      toast.show(`Duplicado: «${copy.name}»`, {
+      toast.show(t('Duplicado: «{name}»', { name: copy.name }), {
         icon: 'copy',
         sound: 'spray',
-        action: { label: 'Editar', run: () => navigate(`/outfits/${copy.id}`) },
+        action: { label: t('Editar'), run: () => navigate(`/outfits/${copy.id}`) },
       });
     } catch (err) {
       toast.show(errorText(err), { tone: 'danger', sound: 'error' });
@@ -258,30 +258,29 @@ export function OutfitsPage() {
 
   return (
     <section className="page fits">
-      <NeonScene />
 
       <header className="fits-hero">
         <div className="fits-title">
           <span className="fits-kicker">
-            <span className="rec-dot" aria-hidden="true" /> Vestidor / {new Date().getFullYear()}
+            <span className="rec-dot" aria-hidden="true" /> {t('Vestidor / {getFullYear}', { getFullYear: new Date().getFullYear() })}
           </span>
-          <h1 className="fits-h1" data-text="Outfits">
-            Outfits
+          <h1 className="fits-h1" data-text={t('Outfits')}>
+            {t('Outfits')}
           </h1>
-          <p className="fits-sub">Combina, guarda y estrena. Tu ropa, tus reglas.</p>
+          <p className="fits-sub">{t('Combina, guarda y estrena. Tu ropa, tus reglas.')}</p>
         </div>
 
         <dl className="fits-stats">
           <div>
-            <dt>Fits</dt>
+            <dt>{t('Fits')}</dt>
             <dd>{grandTotal === null ? '—' : <CountUp value={grandTotal} />}</dd>
           </div>
           <div>
-            <dt>Favoritos</dt>
+            <dt>{t('Favoritos')}</dt>
             <dd>{summary ? <CountUp value={summary.favorites} delay={120} /> : '—'}</dd>
           </div>
           <div>
-            <dt>Estilos</dt>
+            <dt>{t('Estilos')}</dt>
             <dd>{summary ? <CountUp value={stylesUsed} delay={240} /> : '—'}</dd>
           </div>
         </dl>
@@ -289,7 +288,7 @@ export function OutfitsPage() {
         <div className="fits-actions">
           <SoundToggle />
           <Link to="/outfits/new" className="btn btn-primary btn-street btn-new" onClick={() => play('spray')}>
-            <Icon name="plus" size={16} /> Nuevo outfit
+            <Icon name="plus" size={16} /> {t('Nuevo outfit')}
           </Link>
         </div>
       </header>
@@ -298,7 +297,7 @@ export function OutfitsPage() {
 
       <div className="fits-filters" role="search">
         <div className="fits-row">
-          <div className={`tab-switch is-${tab}`} role="tablist" aria-label="Qué outfits ver">
+          <div className={`tab-switch is-${tab}`} role="tablist" aria-label={t('Qué outfits ver')}>
             <span className="tab-thumb" aria-hidden="true" />
             <button
               type="button"
@@ -309,7 +308,7 @@ export function OutfitsPage() {
                 setTab('all');
               }}
             >
-              <Icon name="grid" size={14} /> Todos
+              <Icon name="grid" size={14} /> {t('Todos')}
               {summary && <span className="count">{summary.total}</span>}
             </button>
             <button
@@ -321,7 +320,7 @@ export function OutfitsPage() {
                 setTab('fav');
               }}
             >
-              <Icon name="star" size={14} /> Favoritos
+              <Icon name="star" size={14} /> {t('Favoritos')}
               {summary && <span className="count">{summary.favorites}</span>}
             </button>
           </div>
@@ -330,19 +329,19 @@ export function OutfitsPage() {
             <Icon name="search" />
             <input
               type="search"
-              placeholder="Buscar outfit, ocasión…"
-              aria-label="Buscar outfit"
+              placeholder={t('Buscar outfit, ocasión…')}
+              aria-label={t('Buscar outfit')}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
             />
             {query && (
-              <button type="button" className="icon-btn" aria-label="Borrar búsqueda" onClick={() => setQuery('')}>
+              <button type="button" className="icon-btn" aria-label={t('Borrar búsqueda')} onClick={() => setQuery('')}>
                 <Icon name="close" size={14} />
               </button>
             )}
           </label>
 
-          <div className="sort-pills" role="group" aria-label="Orden">
+          <div className="sort-pills" role="group" aria-label={t('Orden')}>
             {SORTS.map((s) => (
               <button
                 key={s.id}
@@ -368,11 +367,11 @@ export function OutfitsPage() {
               else setComparing(true);
             }}
           >
-            <Icon name="compare" size={14} /> {comparing ? 'Salir de comparar' : 'Comparar'}
+            <Icon name="compare" size={14} /> {comparing ? t('Salir de comparar') : t('Comparar')}
           </button>
         </div>
 
-        <div className="style-rail" role="group" aria-label="Estilo">
+        <div className="style-rail" role="group" aria-label={t('Estilo')}>
           <button
             type="button"
             className={`style-chip style-chip-all${style === null ? ' is-active' : ''}`}
@@ -382,7 +381,7 @@ export function OutfitsPage() {
               setStyle(null);
             }}
           >
-            Todos los estilos
+            {t('Todos los estilos')}
           </button>
           {OUTFIT_STYLE_KEYS.map((k, i) => {
             const meta = OUTFIT_STYLES[k];
@@ -409,9 +408,9 @@ export function OutfitsPage() {
         </div>
 
         {sneakers.length > 0 && (
-          <div className="shoe-rail" role="group" aria-label="Con estas zapatillas">
+          <div className="shoe-rail" role="group" aria-label={t('Con estas zapatillas')}>
             <span className="shoe-rail-label">
-              <Icon name="shoe" size={14} /> Con
+              <Icon name="shoe" size={14} /> {t('Con')}
             </span>
             {sneakers.map((x) => (
               <button
@@ -440,20 +439,20 @@ export function OutfitsPage() {
       <div className="fits-status" aria-live="polite">
         {!firstLoad && (
           <span>
-            {filtered ? `${plural(total, 'resultado', 'resultados')}` : plural(total, 'outfit', 'outfits')}
+            {filtered ? `${plural(total, t('resultado'), t('resultados'))}` : plural(total, t('outfit'), t('outfits'))}
             {style && <span className="status-tag">{OUTFIT_STYLES[style].label}</span>}
-            {tab === 'fav' && <span className="status-tag">Favoritos</span>}
+            {tab === 'fav' && <span className="status-tag">{t('Favoritos')}</span>}
             {search && <span className="status-tag">«{search}»</span>}
             {shoe && (
               <span className="status-tag">
-                <Icon name="shoe" size={11} /> {sneakers.find((x) => x.id === shoe)?.sneaker.model ?? 'Zapatillas'}
+                <Icon name="shoe" size={11} /> {sneakers.find((x) => x.id === shoe)?.sneaker.model ?? t('Zapatillas')}
               </span>
             )}
           </span>
         )}
         {filtered && (
           <button type="button" className="link-btn" onClick={clearFilters}>
-            <Icon name="close" size={12} /> Quitar filtros
+            <Icon name="close" size={12} /> {t('Quitar filtros')}
           </button>
         )}
       </div>
@@ -461,22 +460,22 @@ export function OutfitsPage() {
       {outfits.length === 0 && <ErrorNote error={error} />}
 
       {firstLoad ? (
-        <SprayLoader label="Sacando tus outfits…" />
+        <SprayLoader label={t('Sacando tus outfits…')} />
       ) : !loading && !error && outfits.length === 0 ? (
         filtered ? (
           <div className="fits-empty is-filtered">
-            <span className="fits-empty-tag">Nada por aquí</span>
-            <p>Ningún outfit con estos filtros. Prueba con otro estilo o busca otra palabra.</p>
+            <span className="fits-empty-tag">{t('Nada por aquí')}</span>
+            <p>{t('Ningún outfit con estos filtros. Prueba con otro estilo o busca otra palabra.')}</p>
             <button type="button" className="btn btn-street" onClick={clearFilters}>
-              Ver todos
+              {t('Ver todos')}
             </button>
           </div>
         ) : (
           <div className="fits-empty">
-            <span className="fits-empty-tag">Pared en blanco</span>
-            <p>Todavía no tienes outfits. Entra al vestidor, combina prendas de tus armarios y guárdalas juntas.</p>
+            <span className="fits-empty-tag">{t('Pared en blanco')}</span>
+            <p>{t('Todavía no tienes outfits. Entra al vestidor, combina prendas de tus armarios y guárdalas juntas.')}</p>
             <Link to="/outfits/new" className="btn btn-primary btn-street btn-new">
-              <Icon name="plus" size={16} /> Crear el primero
+              <Icon name="plus" size={16} /> {t('Crear el primero')}
             </Link>
           </div>
         )
@@ -511,18 +510,18 @@ export function OutfitsPage() {
         error={outfits.length > 0 ? error : null}
         onMore={list.loadMore}
         count={outfits.length}
-        endLabel={total > PAGE_SIZE ? `Ya están los ${total}.` : undefined}
+        endLabel={total > PAGE_SIZE ? t('Ya están los {total}.', { total }) : undefined}
       />
 
       {comparing && (
-        <div className="compare-tray" role="region" aria-label="Comparar outfits">
+        <div className="compare-tray" role="region" aria-label={t('Comparar outfits')}>
           <span className="compare-slots" aria-hidden="true">
             {Array.from({ length: MAX_COMPARE }, (_, i) => (
               <i key={i} className={i < picked.length ? 'is-on' : ''} />
             ))}
           </span>
           <span className="compare-tray-text">
-            {picked.length < 2 ? `Elige ${2 - picked.length} más para comparar` : `${picked.length} elegidos`}
+            {picked.length < 2 ? t('Elige {v} más para comparar', { v: 2 - picked.length }) : `${picked.length} elegidos`}
           </span>
           <button
             type="button"
@@ -533,9 +532,9 @@ export function OutfitsPage() {
               setShowCompare(true);
             }}
           >
-            <Icon name="compare" size={14} /> Comparar
+            <Icon name="compare" size={14} /> {t('Comparar')}
           </button>
-          <button type="button" className="icon-btn" onClick={stopComparing} aria-label="Cancelar">
+          <button type="button" className="icon-btn" onClick={stopComparing} aria-label={t('Cancelar')}>
             <Icon name="close" />
           </button>
         </div>
@@ -551,14 +550,14 @@ export function OutfitsPage() {
 
       {confirm && (
         <ConfirmDialog
-          title={`¿Eliminar «${confirm.name}»?`}
-          confirmLabel="Eliminar outfit"
+          title={t('¿Eliminar «{name}»?', { name: confirm.name })}
+          confirmLabel={t('Eliminar outfit')}
           danger
           busy={deleting}
           onConfirm={removeConfirmed}
           onClose={() => setConfirm(null)}
         >
-          <p>Se borra el outfit, no las prendas: siguen en tus armarios.</p>
+          <p>{t('Se borra el outfit, no las prendas: siguen en tus armarios.')}</p>
         </ConfirmDialog>
       )}
     </section>
@@ -644,7 +643,7 @@ function FitCard({
         className="fit-stage"
         role="link"
         tabIndex={0}
-        aria-label={comparing ? `${picked ? 'Quitar de' : 'Añadir a'} la comparativa: ${outfit.name}` : `Abrir ${outfit.name}`}
+        aria-label={comparing ? t('{v} la comparativa: {name}', { v: picked ? t('Quitar de') : t('Añadir a'), name: outfit.name }) : `Abrir ${outfit.name}`}
         onClick={open}
         onKeyDown={(e) => e.key === 'Enter' && open()}
         onFocus={() => setActive(true)}
@@ -657,15 +656,15 @@ function FitCard({
         </span>
         <StyleSticker style={outfit.style} className="fit-sticker" />
         {outfit.hiddenByAdmin ? (
-          <span className="fit-flag is-warn" title="Un admin lo ha ocultado de tu perfil por una denuncia">
-            Oculto por moderación
+          <span className="fit-flag is-warn" title={t('Un admin lo ha ocultado de tu perfil por una denuncia')}>
+            {t('Oculto por moderación')}
           </span>
         ) : (
-          outfit.isShared && <span className="fit-flag">En tu perfil</span>
+          outfit.isShared && <span className="fit-flag">{t('En tu perfil')}</span>
         )}
         {wishCount > 0 && (
-          <span className="fit-wish" title="Lleva prendas de tu wishlist que todavía no tienes">
-            <Icon name="heart" size={11} /> {wishCount} por comprar
+          <span className="fit-wish" title={t('Lleva prendas de tu wishlist que todavía no tienes')}>
+            <Icon name="heart" size={11} /> {t('{wishCount} por comprar', { wishCount })}
           </span>
         )}
       </div>
@@ -680,8 +679,8 @@ function FitCard({
             type="button"
             className={`fav-btn${outfit.isFavorite ? ' is-on' : ''}`}
             aria-pressed={!!outfit.isFavorite}
-            aria-label={outfit.isFavorite ? 'Quitar de favoritos' : 'Marcar como favorito'}
-            title={outfit.isFavorite ? 'Quitar de favoritos' : 'Favorito'}
+            aria-label={outfit.isFavorite ? t('Quitar de favoritos') : t('Marcar como favorito')}
+            title={outfit.isFavorite ? t('Quitar de favoritos') : t('Favorito')}
             onClick={() => {
               if (!outfit.isFavorite) setBurst((b) => b + 1);
               onFavorite();
@@ -696,9 +695,9 @@ function FitCard({
           {meta && <span> · {meta}</span>}
         </p>
 
-        <ul className="fit-pieces" aria-label={plural(garments.length, 'prenda', 'prendas')}>
+        <ul className="fit-pieces" aria-label={plural(garments.length, t('prenda'), t('prendas'))}>
           {shown.map((g) => (
-            <li key={g.id} className={g.wishlistStatus ? 'is-wish' : undefined} title={`${g.name} · ${g.garmentType.name}${g.wishlistStatus ? ' · de tu wishlist' : ''}`}>
+            <li key={g.id} className={g.wishlistStatus ? 'is-wish' : undefined} title={`${g.name} · ${g.garmentType.name}${g.wishlistStatus ? t(' · de tu wishlist') : ''}`}>
               <span className="piece-swatch" style={{ background: g.color }} aria-hidden="true">
                 <Icon name={SLOT_BY_ID[slotOf(g)].icon} size={11} />
               </span>
@@ -711,16 +710,16 @@ function FitCard({
         {comparing ? (
           <div className="fit-actions is-compare">
             <button type="button" className={`fit-act fit-pick${picked ? ' is-on' : ''}`} aria-pressed={picked} onClick={onPick}>
-              <Icon name={picked ? 'check' : 'plus'} size={14} /> {picked ? 'Elegido' : 'Elegir para comparar'}
+              <Icon name={picked ? 'check' : 'plus'} size={14} /> {picked ? t('Elegido') : t('Elegir para comparar')}
             </button>
           </div>
         ) : (
         <div className="fit-actions">
           <button type="button" className="fit-act" onClick={open}>
-            <Icon name="edit" size={14} /> Editar
+            <Icon name="edit" size={14} /> {t('Editar')}
           </button>
           <button type="button" className="fit-act" onClick={onDuplicate} disabled={busy}>
-            <Icon name="copy" size={14} /> {busy ? 'Copiando…' : 'Duplicar'}
+            <Icon name="copy" size={14} /> {busy ? t('Copiando…') : t('Duplicar')}
           </button>
           <button type="button" className="fit-act is-danger" onClick={onDelete} aria-label={`Eliminar ${outfit.name}`}>
             <Icon name="trash" size={14} />
@@ -751,13 +750,13 @@ function Spotlight({ outfits, favorites }: { outfits: Outfit[]; favorites: boole
   };
 
   return (
-    <section className="spotlight" aria-label="Outfit destacado">
+    <section className="spotlight" aria-label={t('Outfit destacado')}>
       <div className="spot-stage">
         <span className="spot-beam" aria-hidden="true" />
         <OutfitView key={o.id} className="tile-view" garments={garments} shape={shape} active distance={3.6} speed={0.45} />
       </div>
       <div key={o.id} className="spot-info">
-        <span className="spot-label">{favorites ? 'Fit del día · de tus favoritos' : 'Lo último que has montado'}</span>
+        <span className="spot-label">{favorites ? t('Fit del día · de tus favoritos') : t('Lo último que has montado')}</span>
         <h2 className="spot-name">{o.name}</h2>
         <div className="spot-tags">
           {typeof o.ratingScore === 'number' && (
@@ -782,17 +781,17 @@ function Spotlight({ outfits, favorites }: { outfits: Outfit[]; favorites: boole
         </ul>
         <div className="spot-actions">
           <button type="button" className="btn btn-primary btn-street" onClick={() => navigate(`/outfits/${o.id}`)}>
-            Entrar al vestidor <Icon name="forward" size={14} />
+            {t('Entrar al vestidor')} <Icon name="forward" size={14} />
           </button>
           {outfits.length > 1 && (
             <span className="spot-nav">
-              <button type="button" className="icon-btn" onClick={() => go(-1)} aria-label="Anterior">
+              <button type="button" className="icon-btn" onClick={() => go(-1)} aria-label={t('Anterior')}>
                 <Icon name="back" />
               </button>
               <span className="spot-count">
                 {index + 1}/{outfits.length}
               </span>
-              <button type="button" className="icon-btn" onClick={() => go(1)} aria-label="Siguiente">
+              <button type="button" className="icon-btn" onClick={() => go(1)} aria-label={t('Siguiente')}>
                 <Icon name="forward" />
               </button>
             </span>
@@ -809,7 +808,7 @@ export function OutfitCard({ outfit, index = 0, distance }: { outfit: Outfit; in
   const navigate = useNavigate();
   const { shape } = useBodyShape();
   const garments = useDressed(outfit);
-  const meta = [outfit.occasion, outfit.season ? SEASON_LABEL[outfit.season] : null, plural(garments.length, 'prenda', 'prendas')]
+  const meta = [outfit.occasion, outfit.season ? SEASON_LABEL[outfit.season] : null, plural(garments.length, t('prenda'), t('prendas'))]
     .filter(Boolean)
     .join(', ');
 
@@ -833,11 +832,11 @@ export function OutfitCard({ outfit, index = 0, distance }: { outfit: Outfit; in
       <div className="tile-caption">
         <span className="tile-name">{outfit.name}</span>
         {outfit.hiddenByAdmin ? (
-          <span className="tile-badge is-warn" title="Un admin lo ha ocultado de tu perfil por una denuncia">
-            Oculto por moderación
+          <span className="tile-badge is-warn" title={t('Un admin lo ha ocultado de tu perfil por una denuncia')}>
+            {t('Oculto por moderación')}
           </span>
         ) : (
-          outfit.isShared && <span className="tile-badge">En tu perfil</span>
+          outfit.isShared && <span className="tile-badge">{t('En tu perfil')}</span>
         )}
       </div>
       <span className="tile-meta">{meta}</span>

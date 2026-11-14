@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { ErrorNote } from './ErrorNote';
 import { Spinner } from './Spinner';
+import { t } from '../i18n';
 
 /**
  * Marca invisible al final de una lista: cuando se acerca a la pantalla
@@ -40,12 +41,12 @@ export function InfiniteSentinel({
 
   return (
     <div ref={ref} className="infinite-end" aria-live="polite">
-      {loading && count > 0 && <Spinner size={18} label="Cargando más…" />}
+      {loading && count > 0 && <Spinner size={18} label={t('Cargando más…')} />}
       {error ? (
         <div className="infinite-error">
           <ErrorNote error={error} />
           <button type="button" className="btn btn-small" onClick={onMore}>
-            Reintentar
+            {t('Reintentar')}
           </button>
         </div>
       ) : null}
@@ -53,7 +54,7 @@ export function InfiniteSentinel({
       {/* Por si el navegador no tiene IntersectionObserver */}
       {hasMore && !loading && !error && typeof IntersectionObserver === 'undefined' && (
         <button type="button" className="btn" onClick={onMore}>
-          Cargar más
+          {t('Cargar más')}
         </button>
       )}
     </div>

@@ -1,5 +1,6 @@
 import type { GarmentCategory } from '../api/types';
 import type { IconName } from '../components/Icon';
+import { t } from '../i18n';
 
 /** Huecos del vestidor: cómo se agrupan las prendas para elegirlas. */
 export type SlotId = 'top' | 'outer' | 'bottom' | 'full' | 'shoes' | 'head' | 'acc';
@@ -12,13 +13,13 @@ export interface Slot {
 }
 
 export const SLOTS: Slot[] = [
-  { id: 'head', label: 'Gorras y gorros', short: 'Cabeza', icon: 'cap' },
-  { id: 'top', label: 'Camisetas y sudaderas', short: 'Arriba', icon: 'tshirt' },
-  { id: 'outer', label: 'Chaquetas y abrigos', short: 'Capa', icon: 'jacket' },
-  { id: 'full', label: 'Vestidos y monos', short: 'Vestido', icon: 'dress' },
-  { id: 'bottom', label: 'Pantalones y shorts', short: 'Abajo', icon: 'pants' },
-  { id: 'shoes', label: 'Zapatillas y calzado', short: 'Pies', icon: 'shoe' },
-  { id: 'acc', label: 'Bolsos y complementos', short: 'Extras', icon: 'bag' },
+  { id: 'head', label: t('Gorras y gorros'), short: t('Cabeza'), icon: 'cap' },
+  { id: 'top', label: t('Camisetas y sudaderas'), short: t('Arriba'), icon: 'tshirt' },
+  { id: 'outer', label: t('Chaquetas y abrigos'), short: t('Capa'), icon: 'jacket' },
+  { id: 'full', label: t('Vestidos y monos'), short: t('Vestido'), icon: 'dress' },
+  { id: 'bottom', label: t('Pantalones y shorts'), short: t('Abajo'), icon: 'pants' },
+  { id: 'shoes', label: t('Zapatillas y calzado'), short: t('Pies'), icon: 'shoe' },
+  { id: 'acc', label: t('Bolsos y complementos'), short: t('Extras'), icon: 'bag' },
 ];
 
 const HEAD_KEYS = new Set(['cap', 'beanie', 'hat', 'bucket']);

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent, type KeyboardEvent } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type FormEvent, type KeyboardEvent } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { ApiError } from '../api/client';
 import { chatApi, outfitsApi } from '../api/endpoints';
@@ -14,14 +14,15 @@ import { Busy, Spinner } from '../components/Spinner';
 import { useBodyShape } from '../lib/bodyPref';
 import { useRealtime, useRealtimeEvent } from '../lib/realtime';
 import { OutfitView } from '../three/OutfitMannequin';
+import { LOCALE_TAG, t } from '../i18n';
 
 const PAGE = 40;
 
 /** Nombre de una conversación: el título del grupo o la otra persona. */
 function convName(c: { isGroup: boolean; title: string | null; members: ConversationMember[] }, me: string): string {
-  if (c.isGroup) return c.title ?? 'Grupo';
+  if (c.isGroup) return c.title ?? t('Grupo');
   const other = c.members.find((m) => m.id !== me);
-  return other ? personName(other) : 'Solo tú';
+  return other ? personName(other) : t('Solo tú');
 }
 
 function timeLabel(iso: string): string {
@@ -29,29 +30,29 @@ function timeLabel(iso: string): string {
   const now = new Date();
   const sameDay = d.toDateString() === now.toDateString();
   return sameDay
-    ? d.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })
-    : d.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
+    ? d.toLocaleTimeString(LOCALE_TAG, { hour: '2-digit', minute: '2-digit' })
+    : d.toLocaleDateString(LOCALE_TAG, { day: 'numeric', month: 'short' });
 }
 
 /** Texto de un aviso del sistema en un grupo. */
 function systemText(m: ChatMessage, members: ConversationMember[], me: string): string {
-  const who = m.sender ? (m.sender.id === me ? 'Has' : `${personName(m.sender)} ha`) : 'Alguien ha';
-  const nameOf = (id: string) => (id === me ? 'ti' : personName(members.find((x) => x.id === id) ?? null).replace('Usuario eliminado', 'alguien'));
+  const who = m.sender ? (m.sender.id === me ? t('Has') : t('{name} ha', { name: personName(m.sender) })) : t('Alguien ha');
+  const nameOf = (id: string) => (id === me ? t('ti') : personName(members.find((x) => x.id === id) ?? null).replace(t('Usuario eliminado'), t('alguien')));
   const body = m.body ?? '';
-  if (body === 'created') return `${who} creado el grupo`;
-  if (body === 'renamed') return `${who} cambiado el nombre del grupo`;
-  if (body === 'left') return m.sender?.id === me ? 'Has salido del grupo' : `${personName(m.sender)} ha salido del grupo`;
-  if (body.startsWith('added:')) return `${who} añadido a ${nameOf(body.slice(6))}`;
-  if (body.startsWith('removed:')) return `${who} quitado a ${nameOf(body.slice(8))}`;
+  if (body === 'created') return t('{who} creado el grupo', { who });
+  if (body === 'renamed') return t('{who} cambiado el nombre del grupo', { who });
+  if (body === 'left') return m.sender?.id === me ? t('Has salido del grupo') : t('{personName} ha salido del grupo', { personName: personName(m.sender) });
+  if (body.startsWith('added:')) return t('{who} añadido a {nameOf}', { who, nameOf: nameOf(body.slice(6)) });
+  if (body.startsWith('removed:')) return t('{who} quitado a {nameOf}', { who, nameOf: nameOf(body.slice(8)) });
   return '';
 }
 
 function preview(m: ChatMessage | null, me: string): string {
-  if (!m) return 'Sin mensajes todavía';
-  if (m.deleted) return 'Mensaje eliminado';
-  if (m.kind === 'SYSTEM') return 'Aviso del grupo';
-  const mine = m.sender?.id === me ? 'Tú: ' : '';
-  if (m.kind === 'OUTFIT') return `${mine}Ha enviado un outfit${m.body ? ` · ${m.body}` : ''}`;
+  if (!m) return t('Sin mensajes todavía');
+  if (m.deleted) return t('Mensaje eliminado');
+  if (m.kind === 'SYSTEM') return t('Aviso del grupo');
+  const mine = m.sender?.id === me ? t('Tú: ') : '';
+  if (m.kind === 'OUTFIT') return t('{mine}Ha enviado un outfit{v}', { mine, v: m.body ? ` · ${m.body}` : '' });
   return `${mine}${m.body ?? ''}`;
 }
 
@@ -62,6 +63,7 @@ export function ChatPage() {
   const [convs, setConvs] = useState<ConversationSummary[] | null>(null);
   const [error, setError] = useState<unknown>(null);
   const [creating, setCreating] = useState<'direct' | 'group' | null>(null);
+  const [filter, setFilter] = useState('');
   const me = user?.id ?? '';
 
   const load = useCallback(() => {
@@ -92,35 +94,48 @@ export function ChatPage() {
 
   const markSeen = useCallback((cid: string) => setConvs((l) => l?.map((c) => (c.id === cid ? { ...c, unread: 0 } : c)) ?? l), []);
 
+  const needle = filter.trim().toLowerCase();
+  const shownConvs = needle ? convs?.filter((c) => convName(c, me).toLowerCase().includes(needle)) : convs;
+
   return (
-    <section className={`page chat${id ? ' has-thread' : ''}`}>
-      <aside className="chat-list" aria-label="Conversaciones">
-        <header className="chat-list-head">
-          <h1>Mensajes</h1>
-          <div className="actions">
-            <button type="button" className="btn btn-small" onClick={() => setCreating('direct')}>
-              <Icon name="chat" size={14} /> Nuevo
+    <section className={`page chat ch${id ? ' has-thread' : ''}`}>
+      <aside className="chat-list" aria-label={t('Conversaciones')}>
+        <header className="chat-list-head ch-head">
+          <span className="wd-kicker">
+            <Icon name="chat" size={12} /> {t('Direct line')}
+          </span>
+          <h1 className="wd-title ch-title">{t('Mensajes')}</h1>
+          <div className="actions ch-new">
+            <button type="button" className="btn wd-add" onClick={() => setCreating('direct')}>
+              <Icon name="plus" size={14} /> <span>{t('Nuevo')}</span>
             </button>
-            <button type="button" className="btn btn-small btn-ghost" onClick={() => setCreating('group')}>
-              <Icon name="users" size={14} /> Grupo
+            <button type="button" className="btn wd-btn-line" onClick={() => setCreating('group')}>
+              <Icon name="users" size={14} /> {t('Grupo')}
             </button>
           </div>
+          {convs && convs.length > 3 && (
+            <label className="search ch-filter">
+              <Icon name="search" />
+              <input type="search" value={filter} placeholder={t('Buscar conversación')} aria-label={t('Buscar conversación')} onChange={(e) => setFilter(e.target.value)} />
+            </label>
+          )}
         </header>
         <ErrorNote error={error} />
-        {!convs && <Spinner label="Cargando…" />}
+        {!convs && <Spinner label={t('Cargando…')} />}
         {convs && convs.length === 0 && (
-          <div className="chat-empty">
-            <p className="muted">Aún no tienes conversaciones.</p>
-            <Link to="/personas" className="btn btn-small">
-              Buscar personas
+          <div className="chat-empty ch-empty">
+            <Icon name="chat" size={28} />
+            <p className="muted">{t('Aún no tienes conversaciones.')}</p>
+            <Link to="/personas" className="btn wd-btn-line">
+              <Icon name="search" size={14} /> {t('Buscar personas')}
             </Link>
           </div>
         )}
         <ul className="conv-list">
-          {convs?.map((c) => {
+          {shownConvs?.map((c, i) => {
             const other = c.isGroup ? null : c.members.find((m) => m.id !== me) ?? null;
             return (
-              <li key={c.id}>
+              <li key={c.id} style={{ '--i': Math.min(i, 12) } as CSSProperties}>
                 <Link to={`/mensajes/${c.id}`} className={`conv-item${c.id === id ? ' is-active' : ''}${c.unread ? ' is-unread' : ''}`}>
                   {c.isGroup ? (
                     <span className="avatar conv-group-avatar" aria-hidden="true">
@@ -136,7 +151,7 @@ export function ChatPage() {
                     </span>
                     <span className="conv-bottom">
                       <span className="conv-preview">{preview(c.lastMessage, me)}</span>
-                      {c.unread > 0 && <span className="badge" aria-label={`${c.unread} sin leer`}>{c.unread > 99 ? '99+' : c.unread}</span>}
+                      {c.unread > 0 && <span className="badge" aria-label={t('{unread} sin leer', { unread: c.unread })}>{c.unread > 99 ? '99+' : c.unread}</span>}
                     </span>
                   </span>
                 </Link>
@@ -144,15 +159,24 @@ export function ChatPage() {
             );
           })}
         </ul>
+        {convs && shownConvs && convs.length > 0 && shownConvs.length === 0 && <p className="muted small ch-nomatch">{t('Ninguna conversación con ese nombre.')}</p>}
       </aside>
 
       <div className="chat-main">
         {id ? (
           <Thread key={id} id={id} me={me} onSeen={markSeen} onLeft={() => navigate('/mensajes', { replace: true })} />
         ) : (
-          <div className="chat-placeholder">
-            <Icon name="chat" size={36} />
-            <p className="muted">Elige una conversación o empieza una nueva.</p>
+          <div className="chat-placeholder ch-placeholder">
+            <div className="ch-bubbles" aria-hidden="true">
+              <span />
+              <span />
+              <span />
+            </div>
+            <h2>{t('Tu línea directa')}</h2>
+            <p className="muted">{t('Elige una conversación o empieza una nueva.')}</p>
+            <button type="button" className="btn wd-add" onClick={() => setCreating('direct')}>
+              <Icon name="plus" size={14} /> <span>{t('Nuevo mensaje')}</span>
+            </button>
           </div>
         )}
       </div>
@@ -225,8 +249,8 @@ function Thread({ id, me, onSeen, onLeft }: { id: string; me: string; onSeen: (i
   useRealtimeEvent((e) => {
     if (e.type === 'message' && e.message.conversationId === id) {
       setMessages((l) => (l && !l.some((m) => m.id === e.message.id) ? [...l, e.message] : l));
-      setTyping((t) => {
-        const n = { ...t };
+      setTyping((cur) => {
+        const n = { ...cur };
         if (e.message.sender) delete n[e.message.sender.id];
         return n;
       });
@@ -239,7 +263,7 @@ function Thread({ id, me, onSeen, onLeft }: { id: string; me: string; onSeen: (i
     if (e.type === 'read' && e.conversationId === id) {
       setDetail((d) => (d ? { ...d, members: d.members.map((m) => (m.id === e.userId ? { ...m, lastReadAt: e.at } : m)) } : d));
     }
-    if (e.type === 'typing' && e.conversationId === id) setTyping((t) => ({ ...t, [e.userId]: Date.now() }));
+    if (e.type === 'typing' && e.conversationId === id) setTyping((cur) => ({ ...cur, [e.userId]: Date.now() }));
     if (e.type === 'conversation' && e.conversationId === id) loadDetail();
     if (e.type === 'ready') loadDetail();
   });
@@ -247,10 +271,10 @@ function Thread({ id, me, onSeen, onLeft }: { id: string; me: string; onSeen: (i
   // "Está escribiendo…" desaparece a los 4 s sin avisos nuevos.
   useEffect(() => {
     if (Object.keys(typing).length === 0) return;
-    const t = window.setInterval(() => {
+    const timer = window.setInterval(() => {
       setTyping((cur) => Object.fromEntries(Object.entries(cur).filter(([, at]) => Date.now() - at < 4000)));
     }, 1000);
-    return () => window.clearInterval(t);
+    return () => window.clearInterval(timer);
   }, [typing]);
 
   // Bajar al último mensaje si ya estabas abajo.
@@ -284,7 +308,7 @@ function Thread({ id, me, onSeen, onLeft }: { id: string; me: string; onSeen: (i
     return (
       <div className="chat-thread">
         <ErrorNote error={error} />
-        {!error && <Spinner label="Cargando conversación…" />}
+        {!error && <Spinner label={t('Cargando conversación…')} />}
       </div>
     );
   }
@@ -301,7 +325,7 @@ function Thread({ id, me, onSeen, onLeft }: { id: string; me: string; onSeen: (i
   return (
     <div className="chat-thread">
       <header className="thread-head">
-        <Link to="/mensajes" className="btn btn-small btn-ghost thread-back" aria-label="Volver a las conversaciones">
+        <Link to="/mensajes" className="btn btn-small btn-ghost thread-back" aria-label={t('Volver a las conversaciones')}>
           <Icon name="back" size={14} />
         </Link>
         {other ? (
@@ -319,18 +343,18 @@ function Thread({ id, me, onSeen, onLeft }: { id: string; me: string; onSeen: (i
             </span>
             <span>
               <strong>{detail.title}</strong>
-              <small className="muted">{detail.members.length} personas</small>
+              <small className="muted">{t('{n} personas', { n: detail.members.length })}</small>
             </span>
           </button>
         ) : (
           <span className="thread-who">
-            <strong>Solo tú</strong>
+            <strong>{t('Solo tú')}</strong>
           </span>
         )}
         {detail.isGroup && (
           <button type="button" className="btn btn-small btn-ghost" onClick={() => setShowInfo((v) => !v)} aria-expanded={showInfo}>
             <Icon name="more" size={16} />
-            <span className="visually-hidden">Información del grupo</span>
+            <span className="visually-hidden">{t('Información del grupo')}</span>
           </button>
         )}
       </header>
@@ -347,10 +371,10 @@ function Thread({ id, me, onSeen, onLeft }: { id: string; me: string; onSeen: (i
         >
           {more && (
             <button type="button" className="btn btn-small btn-ghost load-older" onClick={() => void loadOlder()}>
-              Cargar anteriores
+              {t('Cargar anteriores')}
             </button>
           )}
-          {messages.length === 0 && <p className="muted chat-hint">Escribe el primer mensaje.</p>}
+          {messages.length === 0 && <p className="muted chat-hint">{t('Escribe el primer mensaje.')}</p>}
           {messages.map((m, i) => {
             if (m.kind === 'SYSTEM') {
               return (
@@ -369,30 +393,30 @@ function Thread({ id, me, onSeen, onLeft }: { id: string; me: string; onSeen: (i
                   {!mine && detail.isGroup && (grouped ? <span className="msg-avatar-gap" /> : <PersonAvatar person={m.sender} size={28} />)}
                   <div className={`bubble${m.deleted ? ' is-deleted' : ''}`}>
                     {m.deleted ? (
-                      <em>Mensaje eliminado</em>
+                      <em>{t('Mensaje eliminado')}</em>
                     ) : (
                       <>
                         {m.outfit && <OutfitBubble outfit={m.outfit} />}
-                        {m.body && <p>{m.body}</p>}
+                        {m.body && <MessageText text={m.body} />}
                       </>
                     )}
                     <time dateTime={m.createdAt}>{timeLabel(m.createdAt)}</time>
                   </div>
                   {mine && !m.deleted && (
-                    <button type="button" className="msg-delete" title="Eliminar mensaje" onClick={() => void remove(m)}>
+                    <button type="button" className="msg-delete" title={t('Eliminar mensaje')} onClick={() => void remove(m)}>
                       <Icon name="trash" size={13} />
-                      <span className="visually-hidden">Eliminar mensaje</span>
+                      <span className="visually-hidden">{t('Eliminar mensaje')}</span>
                     </button>
                   )}
                   {!mine && !m.deleted && m.sender && (
-                    <button type="button" className="msg-delete msg-report" title="Denunciar mensaje" onClick={() => setReporting(m.id)}>
+                    <button type="button" className="msg-delete msg-report" title={t('Denunciar mensaje')} onClick={() => setReporting(m.id)}>
                       <Icon name="flag" size={13} />
-                      <span className="visually-hidden">Denunciar mensaje</span>
+                      <span className="visually-hidden">{t('Denunciar mensaje')}</span>
                     </button>
                   )}
                 </div>
                 {myLast?.id === m.id && seenBy.length > 0 && (
-                  <small className="msg-seen">{detail.isGroup ? `Visto por ${seenBy.length}` : 'Visto'}</small>
+                  <small className="msg-seen">{detail.isGroup ? t('Visto por {n}', { n: seenBy.length }) : t('Visto')}</small>
                 )}
               </div>
             );
@@ -404,7 +428,7 @@ function Thread({ id, me, onSeen, onLeft }: { id: string; me: string; onSeen: (i
                 <i />
                 <i />
               </span>
-              {typingNames.join(', ')} {typingNames.length > 1 ? 'están' : 'está'} escribiendo…
+              {t('{join} {v} escribiendo…', { join: typingNames.join(', '), v: typingNames.length > 1 ? t('están') : t('está') })}
             </p>
           )}
         </div>
@@ -416,10 +440,30 @@ function Thread({ id, me, onSeen, onLeft }: { id: string; me: string; onSeen: (i
       {detail.canSend ? (
         <Composer id={id} onTyping={() => sendRt({ type: 'typing', conversationId: id })} onSent={(m) => setMessages((l) => (l && !l.some((x) => x.id === m.id) ? [...l, m] : l))} />
       ) : (
-        <p className="chat-blocked muted">No puedes escribir en esta conversación (por su privacidad o por un bloqueo).</p>
+        <p className="chat-blocked muted">{t('No puedes escribir en esta conversación (por su privacidad o por un bloqueo).')}</p>
       )}
       {reporting && <ReportDialog targetType="MESSAGE" targetId={reporting} onClose={() => setReporting(null)} />}
     </div>
+  );
+}
+
+/** Enlaces internos del texto (anuncios del market, batallas) como enlaces de la app. */
+const INTERNAL_LINK = /(\/(?:market|batallas)\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/gi;
+
+function MessageText({ text }: { text: string }) {
+  const parts = text.split(INTERNAL_LINK);
+  return (
+    <p>
+      {parts.map((part, i) =>
+        i % 2 === 1 ? (
+          <Link key={i} to={part} className="msg-link">
+            {part.startsWith('/market') ? t('Ver anuncio') : t('Ver batalla')}
+          </Link>
+        ) : (
+          part
+        ),
+      )}
+    </p>
   );
 }
 
@@ -452,7 +496,7 @@ function Composer({ id, onTyping, onSent }: { id: string; onTyping: () => void; 
       onSent(await chatApi.send(id, body));
       if (body.body) setText('');
     } catch (err) {
-      setError(err instanceof ApiError && err.body?.code === 'slow_down' ? new Error('Vas muy rápido: espera un momento.') : err);
+      setError(err instanceof ApiError && err.body?.code === 'slow_down' ? new Error(t('Vas muy rápido: espera un momento.')) : err);
     } finally {
       setBusy(false);
     }
@@ -475,16 +519,16 @@ function Composer({ id, onTyping, onSent }: { id: string; onTyping: () => void; 
     <form className="composer" onSubmit={submit}>
       <ErrorNote error={error} />
       <div className="composer-row">
-        <button type="button" className="btn btn-small btn-ghost" title="Enviar un outfit" onClick={() => setPicking(true)} disabled={busy}>
+        <button type="button" className="btn btn-small btn-ghost" title={t('Enviar un outfit')} onClick={() => setPicking(true)} disabled={busy}>
           <Icon name="hanger" size={16} />
-          <span className="visually-hidden">Enviar un outfit</span>
+          <span className="visually-hidden">{t('Enviar un outfit')}</span>
         </button>
         <textarea
           rows={1}
           maxLength={2000}
           value={text}
-          placeholder="Escribe un mensaje"
-          aria-label="Mensaje"
+          placeholder={t('Escribe un mensaje')}
+          aria-label={t('Mensaje')}
           onKeyDown={onKey}
           onChange={(e) => {
             setText(e.target.value);
@@ -496,7 +540,7 @@ function Composer({ id, onTyping, onSent }: { id: string; onTyping: () => void; 
         />
         <button type="submit" className="btn btn-primary btn-small" disabled={busy || !text.trim()}>
           <Icon name="send" size={14} />
-          <span className="visually-hidden">Enviar</span>
+          <span className="visually-hidden">{t('Enviar')}</span>
         </button>
       </div>
       {picking && (
@@ -523,10 +567,10 @@ function OutfitPicker({ onClose, onPick }: { onClose: () => void; onPick: (o: Ou
       .catch(setError);
   }, []);
   return (
-    <Modal title="Enviar un outfit" onClose={onClose}>
+    <Modal title={t('Enviar un outfit')} onClose={onClose}>
       <ErrorNote error={error} />
-      {!outfits && !error && <Spinner label="Cargando tus outfits…" />}
-      {outfits?.length === 0 && <p className="muted">Aún no tienes outfits.</p>}
+      {!outfits && !error && <Spinner label={t('Cargando tus outfits…')} />}
+      {outfits?.length === 0 && <p className="muted">{t('Aún no tienes outfits.')}</p>}
       <ul className="outfit-pick-list">
         {outfits?.map((o) => (
           <li key={o.id}>
@@ -548,7 +592,7 @@ function OutfitPicker({ onClose, onPick }: { onClose: () => void; onPick: (o: Ou
 // Grupo: miembros, nombre y salir
 // ---------------------------------------------------------------------------
 
-const ROLE_LABEL = { OWNER: 'Creador', ADMIN: 'Admin', MEMBER: '' } as const;
+const ROLE_LABEL = { OWNER: t('Creador'), ADMIN: t('Admin'), MEMBER: '' } as const;
 
 function GroupInfo({ detail, me, onChange, onLeft }: { detail: ConversationDetail; me: string; onChange: (d: ConversationDetail) => void; onLeft: () => void }) {
   const myRole = detail.members.find((m) => m.id === me)?.role ?? 'MEMBER';
@@ -574,9 +618,9 @@ function GroupInfo({ detail, me, onChange, onLeft }: { detail: ConversationDetai
 
   async function rename(e: FormEvent) {
     e.preventDefault();
-    const t = title.trim();
-    if (!t || t === detail.title) return;
-    const d = await run(() => chatApi.rename(detail.id, t));
+    const next = title.trim();
+    if (!next || next === detail.title) return;
+    const d = await run(() => chatApi.rename(detail.id, next));
     if (d) onChange(d);
   }
 
@@ -608,11 +652,11 @@ function GroupInfo({ detail, me, onChange, onLeft }: { detail: ConversationDetai
   }
 
   return (
-    <aside className="group-info" aria-label="Información del grupo">
+    <aside className="group-info" aria-label={t('Información del grupo')}>
       {canAdmin ? (
         <form className="inline-form" onSubmit={rename}>
           <label className="field">
-            <span>Nombre del grupo</span>
+            <span>{t('Nombre del grupo')}</span>
             <input maxLength={60} value={title} onChange={(e) => setTitle(e.target.value)} onBlur={rename} />
           </label>
         </form>
@@ -621,10 +665,10 @@ function GroupInfo({ detail, me, onChange, onLeft }: { detail: ConversationDetai
       )}
 
       <div className="group-members-head">
-        <strong>{detail.members.length} personas</strong>
+        <strong>{t('{n} personas', { n: detail.members.length })}</strong>
         {canAdmin && (
           <button type="button" className="btn btn-small" onClick={() => setAdding((v) => !v)} aria-expanded={adding}>
-            <Icon name="plus" size={12} /> Añadir
+            <Icon name="plus" size={12} /> {t('Añadir')}
           </button>
         )}
       </div>
@@ -636,7 +680,7 @@ function GroupInfo({ detail, me, onChange, onLeft }: { detail: ConversationDetai
             <Link to={profilePath(m)} className="person-link">
               <PersonAvatar person={m} size={30} />
               <span className="person-text">
-                <strong>{m.id === me ? 'Tú' : personName(m)}</strong>
+                <strong>{m.id === me ? t('Tú') : personName(m)}</strong>
                 {ROLE_LABEL[m.role] && <small className="muted">{ROLE_LABEL[m.role]}</small>}
               </span>
             </Link>
@@ -644,12 +688,12 @@ function GroupInfo({ detail, me, onChange, onLeft }: { detail: ConversationDetai
               <span className="group-member-actions">
                 {myRole === 'OWNER' && (
                   <button type="button" className="link-btn" disabled={busy} onClick={() => void toggleAdmin(m)}>
-                    {m.role === 'ADMIN' ? 'Quitar admin' : 'Hacer admin'}
+                    {m.role === 'ADMIN' ? t('Quitar admin') : t('Hacer admin')}
                   </button>
                 )}
                 {canAdmin && (myRole === 'OWNER' || m.role === 'MEMBER') && (
                   <button type="button" className="link-btn danger-text" disabled={busy} onClick={() => void removeMember(m)}>
-                    Quitar
+                    {t('Quitar')}
                   </button>
                 )}
               </span>
@@ -660,7 +704,7 @@ function GroupInfo({ detail, me, onChange, onLeft }: { detail: ConversationDetai
 
       <ErrorNote error={error} />
       <button type="button" className={`btn btn-small${confirmLeave ? ' btn-danger-solid' : ' btn-ghost'}`} disabled={busy} onClick={() => void leave()}>
-        {confirmLeave ? 'Pulsa otra vez para salir' : 'Salir del grupo'}
+        {confirmLeave ? t('Pulsa otra vez para salir') : t('Salir del grupo')}
       </button>
     </aside>
   );
@@ -684,7 +728,7 @@ function NewDirect({ onClose, onOpen }: { onClose: () => void; onOpen: (id: stri
     } catch (err) {
       setError(
         err instanceof ApiError && err.body?.code === 'cannot_message'
-          ? new Error(`${personName(p)} no recibe mensajes tuyos (según su privacidad).`)
+          ? new Error(t('{personName} no recibe mensajes tuyos (según su privacidad).', { personName: personName(p) }))
           : err,
       );
     } finally {
@@ -693,9 +737,9 @@ function NewDirect({ onClose, onOpen }: { onClose: () => void; onOpen: (id: stri
   }
 
   return (
-    <Modal title="Nueva conversación" onClose={onClose}>
+    <Modal title={t('Nueva conversación')} onClose={onClose}>
       <PeoplePicker autoFocus onPick={(p) => void pick(p)} />
-      {busy && <Busy text="Abriendo…" />}
+      {busy && <Busy text={t('Abriendo…')} />}
       <ErrorNote error={error} />
     </Modal>
   );
@@ -726,30 +770,30 @@ function NewGroup({ onClose, onOpen }: { onClose: () => void; onOpen: (id: strin
   }
 
   return (
-    <Modal title="Nuevo grupo" onClose={onClose}>
+    <Modal title={t('Nuevo grupo')} onClose={onClose}>
       <form className="stack" onSubmit={create}>
         <label className="field">
-          <span>Nombre del grupo</span>
+          <span>{t('Nombre del grupo')}</span>
           <input required maxLength={60} value={title} onChange={(e) => setTitle(e.target.value)} autoFocus />
         </label>
         {people.length > 0 && (
           <div className="chips">
             {people.map((p) => (
-              <button key={p.id} type="button" className="chip is-active" onClick={() => toggle(p)} title="Quitar">
+              <button key={p.id} type="button" className="chip is-active" onClick={() => toggle(p)} title={t('Quitar')}>
                 {personName(p)} <Icon name="close" size={10} />
               </button>
             ))}
           </div>
         )}
         <PeoplePicker selected={people.map((p) => p.id)} onPick={toggle} />
-        <p className="muted small">Solo puedes añadir a quien acepte mensajes tuyos según su privacidad.</p>
+        <p className="muted small">{t('Solo puedes añadir a quien acepte mensajes tuyos según su privacidad.')}</p>
         <ErrorNote error={error} />
         <div className="actions">
           <button type="submit" className="btn btn-primary" disabled={busy || !title.trim() || people.length === 0}>
-            {busy ? <Busy text="Creando…" /> : `Crear grupo (${people.length + 1})`}
+            {busy ? <Busy text={t('Creando…')} /> : t('Crear grupo ({n})', { n: people.length + 1 })}
           </button>
           <button type="button" className="btn btn-ghost" onClick={onClose}>
-            Cancelar
+            {t('Cancelar')}
           </button>
         </div>
       </form>

@@ -4,7 +4,6 @@ import { sneakersApi } from '../api/endpoints';
 import type { Sneaker } from '../api/types';
 import { ErrorNote } from '../components/ErrorNote';
 import { ConfirmDialog } from '../components/fx/ConfirmDialog';
-import { NeonScene } from '../components/fx/NeonScene';
 import { SprayLoader } from '../components/fx/SprayLoader';
 import { useToast } from '../components/fx/Toast';
 import { Icon } from '../components/Icon';
@@ -14,6 +13,7 @@ import { SneakerForm } from '../components/sneakers/SneakerForm';
 import { hasPhoto, WishMedia } from '../components/wishlist/WishMedia';
 import { formatDate } from '../lib/labels';
 import { play } from '../lib/sfx';
+import { FEATURES } from '../lib/features';
 import { CONDITION } from '../lib/sneakers';
 import { money, num, WISH_STATUS } from '../lib/wishlist';
 
@@ -45,7 +45,6 @@ export function SneakerItemPage() {
   if (!s) {
     return (
       <section className="page snk snk-item">
-        <NeonScene />
         <Link to="/sneakers" className="wl-back">
           <Icon name="back" size={14} /> Sneakers
         </Link>
@@ -110,7 +109,6 @@ export function SneakerItemPage() {
 
   return (
     <section className={`page snk snk-item${wish ? ' is-wish' : ''}`} style={{ '--sw': s.color } as CSSProperties}>
-      <NeonScene />
       <span className="snk-spot" aria-hidden="true" />
       <Link to="/sneakers" className="wl-back">
         <Icon name="back" size={14} /> Sneakers
@@ -197,6 +195,11 @@ export function SneakerItemPage() {
             {!wish && s.outfitCount > 0 && (
               <Link to={`/outfits?item=${s.id}`} className="btn btn-street btn-ghost">
                 <Icon name="grid" size={14} /> Ver sus {s.outfitCount} outfits
+              </Link>
+            )}
+            {FEATURES.market && !wish && (
+              <Link to={`/market?sell=${s.id}`} className="btn btn-street btn-ghost">
+                <Icon name="store" size={14} /> Vender
               </Link>
             )}
             {wish && (

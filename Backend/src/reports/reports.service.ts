@@ -151,6 +151,39 @@ export class ReportsService {
         snapshot: { name: o.name, description: o.description },
       };
     }
+    if (type === ReportTarget.LISTING) {
+      const l = await this.prisma.listing.findUnique({
+        where: { id },
+        select: {
+          userId: true,
+          title: true,
+          description: true,
+          kind: true,
+          price: true,
+          currency: true,
+          hiddenByAdmin: true,
+        },
+      });
+      const mine = l?.userId === viewerId;
+      if (
+        !l ||
+        (!mine &&
+          (l.hiddenByAdmin ||
+            (await this.relations.isBlockedEitherWay(viewerId, l.userId))))
+      ) {
+        throw new NotFoundException('Not found');
+      }
+      return {
+        targetUserId: l.userId,
+        snapshot: {
+          title: l.title,
+          description: l.description,
+          kind: l.kind,
+          price: l.price?.toString() ?? null,
+          currency: l.currency,
+        },
+      };
+    }
     const i = await this.prisma.idea.findUnique({
       where: { id },
       select: { authorId: true, title: true, body: true, hidden: true },

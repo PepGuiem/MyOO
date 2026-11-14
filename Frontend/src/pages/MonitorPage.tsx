@@ -9,6 +9,7 @@ import { compact, Sparkline, TimeChart, type TooltipRow } from '../components/mo
 import { PersonAvatar, personName, profilePath } from '../components/social/PersonAvatar';
 import { Spinner } from '../components/Spinner';
 import { REPORT_REASON_LABEL, REPORT_TARGET_LABEL, timeAgo } from '../lib/community';
+import { LOCALE_TAG } from '../i18n';
 
 const RANGES: { value: MonitorRange; label: string }[] = [
   { value: '1h', label: '1 h' },
@@ -22,11 +23,11 @@ const LEVEL_LABEL: Record<MonitorLevel, string> = { ok: 'Todo en orden', warning
 
 // ------------------------------------------------------------------ formatos
 
-const num = (n: number) => new Intl.NumberFormat('es-ES').format(n);
+const num = (n: number) => new Intl.NumberFormat(LOCALE_TAG).format(n);
 const ms = (n: number | null) => (n === null ? '—' : n < 10 ? `${n.toFixed(1)} ms` : `${Math.round(n)} ms`);
-const pct = (n: number) => `${(n * 100).toLocaleString('es-ES', { maximumFractionDigits: n < 0.1 ? 1 : 0 })} %`;
-const hhmm = (iso: string) => new Date(iso).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
-const dayLabel = (d: string) => new Date(`${d}T12:00:00Z`).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', timeZone: 'UTC' });
+const pct = (n: number) => `${(n * 100).toLocaleString(LOCALE_TAG, { maximumFractionDigits: n < 0.1 ? 1 : 0 })} %`;
+const hhmm = (iso: string) => new Date(iso).toLocaleTimeString(LOCALE_TAG, { hour: '2-digit', minute: '2-digit' });
+const dayLabel = (d: string) => new Date(`${d}T12:00:00Z`).toLocaleDateString(LOCALE_TAG, { day: 'numeric', month: 'short', timeZone: 'UTC' });
 
 export function bytes(n: number | null): string {
   if (n === null) return '—';
@@ -37,7 +38,7 @@ export function bytes(n: number | null): string {
     v /= 1024;
     i++;
   }
-  return `${v.toLocaleString('es-ES', { maximumFractionDigits: v < 10 && i > 0 ? 1 : 0 })} ${units[i]}`;
+  return `${v.toLocaleString(LOCALE_TAG, { maximumFractionDigits: v < 10 && i > 0 ? 1 : 0 })} ${units[i]}`;
 }
 
 export function uptime(sec: number): string {

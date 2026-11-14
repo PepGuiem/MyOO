@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { DrawFootprint } from '../three/DrawBridge';
+import { t } from '../i18n';
 
 type Tool = 'marker' | 'spray' | 'eraser';
 
@@ -25,7 +26,7 @@ export interface DrawResult {
 }
 
 const COLORS = ['#F2F2F2', '#151517', '#8E8E93', '#E53935', '#FB8C00', '#FDD835', '#43A047', '#1E88E5', '#8E24AA', '#EC407A'];
-const TOOL_LABEL: Record<Tool, string> = { marker: 'Rotulador', spray: 'Spray', eraser: 'Goma' };
+const TOOL_LABEL: Record<Tool, string> = { marker: t('Rotulador'), spray: t('Spray'), eraser: t('Goma') };
 
 /** Lado mayor de la imagen que se guarda (px): de sobra para la textura del calco. */
 const EXPORT_SIDE = 1024;
@@ -228,7 +229,7 @@ export function DrawPad({
     if (!c) return;
     const ink = strokes.filter((s) => s.tool !== 'eraser');
     if (!ink.length) {
-      setLocalError('Dibuja algo encima de la prenda primero.');
+      setLocalError(t('Dibuja algo encima de la prenda primero.'));
       return;
     }
     // Recuadro de los trazos (en px CSS), con su grosor.
@@ -271,7 +272,7 @@ export function DrawPad({
       side *= 0.7;
     }
     if (!blob || blob.size > MAX_BYTES) {
-      setLocalError('El dibujo es demasiado grande para guardarlo. Prueba con menos spray.');
+      setLocalError(t('El dibujo es demasiado grande para guardarlo. Prueba con menos spray.'));
       return;
     }
     const r = c.getBoundingClientRect();
@@ -291,35 +292,35 @@ export function DrawPad({
         onPointerMove={onPointerMove}
         onPointerUp={endStroke}
         onPointerCancel={endStroke}
-        aria-label="Lienzo para dibujar sobre la prenda"
+        aria-label={t('Lienzo para dibujar sobre la prenda')}
       />
-      <div className="draw-toolbar" role="toolbar" aria-label="Herramientas de dibujo">
-        <div className="segmented segmented-small" role="group" aria-label="Herramienta">
+      <div className="draw-toolbar" role="toolbar" aria-label={t('Herramientas de dibujo')}>
+        <div className="segmented segmented-small" role="group" aria-label={t('Herramienta')}>
           {(Object.keys(TOOL_LABEL) as Tool[]).map((t) => (
             <button key={t} type="button" aria-pressed={tool === t} onClick={() => setTool(t)}>
               {TOOL_LABEL[t]}
             </button>
           ))}
         </div>
-        <div className="draw-colors" role="group" aria-label="Color">
+        <div className="draw-colors" role="group" aria-label={t('Color')}>
           {COLORS.map((c) => (
             <button key={c} type="button" className={`color-chip${color === c ? ' is-active' : ''}`} style={{ background: c }} aria-label={`Color ${c}`} aria-pressed={color === c} onClick={() => setColor(c)} />
           ))}
-          <label className={`color-chip color-custom${!COLORS.includes(color) ? ' is-active' : ''}`} title="Otro color" style={!COLORS.includes(color) ? { background: color } : undefined}>
-            <input type="color" value={color} onChange={(e) => setColor(e.target.value.toUpperCase())} aria-label="Otro color" />
+          <label className={`color-chip color-custom${!COLORS.includes(color) ? ' is-active' : ''}`} title={t('Otro color')} style={!COLORS.includes(color) ? { background: color } : undefined}>
+            <input type="color" value={color} onChange={(e) => setColor(e.target.value.toUpperCase())} aria-label={t('Otro color')} />
           </label>
         </div>
         <label className="draw-width">
-          <span>Grosor</span>
+          <span>{t('Grosor')}</span>
           <input type="range" min={2} max={48} step={1} value={width} onChange={(e) => setWidth(Number(e.target.value))} />
           <span className="draw-width-dot" style={{ width: Math.min(28, width), height: Math.min(28, width), background: tool === 'eraser' ? 'transparent' : color }} aria-hidden="true" />
         </label>
         <div className="draw-actions">
           <button type="button" className="btn btn-small" onClick={() => setStrokes((l) => l.slice(0, -1))} disabled={!strokes.length || busy}>
-            Deshacer
+            {t('Deshacer')}
           </button>
           <button type="button" className="btn btn-small" onClick={() => setStrokes([])} disabled={!strokes.length || busy}>
-            Borrar
+            {t('Borrar')}
           </button>
           <button
             type="button"
@@ -327,23 +328,23 @@ export function DrawPad({
             aria-pressed={orbit}
             onClick={() => setOrbit((o) => !o)}
             disabled={strokes.length > 0 || busy}
-            title={strokes.length ? 'Aplica o borra el dibujo para girar la prenda' : 'Girar la prenda para dibujar en otro lado'}
+            title={strokes.length ? t('Aplica o borra el dibujo para girar la prenda') : t('Girar la prenda para dibujar en otro lado')}
           >
-            {orbit ? 'Volver a dibujar' : 'Girar vista'}
+            {orbit ? t('Volver a dibujar') : t('Girar vista')}
           </button>
           <span className="spacer" />
           <button type="button" className="btn btn-small btn-ghost" onClick={onCancel} disabled={busy}>
-            Cancelar
+            {t('Cancelar')}
           </button>
           <button type="button" className="btn btn-small btn-primary" onClick={() => void apply()} disabled={!strokes.length || busy}>
-            {busy ? 'Aplicando…' : 'Aplicar a la prenda'}
+            {busy ? t('Aplicando…') : t('Aplicar a la prenda')}
           </button>
         </div>
         <p className="draw-hint muted small" role="status">
           {shownError ??
             (cameraFree
-              ? 'Gira la prenda hasta el lado donde quieras dibujar y pulsa «Volver a dibujar».'
-              : 'Dibuja encima de la prenda. Al aplicar, el dibujo se estampa desde este punto de vista.')}
+              ? t('Gira la prenda hasta el lado donde quieras dibujar y pulsa «Volver a dibujar».')
+              : t('Dibuja encima de la prenda. Al aplicar, el dibujo se estampa desde este punto de vista.'))}
         </p>
       </div>
     </div>

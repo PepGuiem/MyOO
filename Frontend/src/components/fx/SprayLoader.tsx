@@ -1,8 +1,9 @@
+import { t } from '../../i18n';
 /**
  * Carga con estética urbana: un bote de spray que se agita y pinta una
  * línea que gotea. Con «reducir movimiento» queda quieto.
  */
-export function SprayLoader({ label = 'Cargando…' }: { label?: string }) {
+export function SprayLoader({ label = t('Cargando…') }: { label?: string }) {
   return (
     <div className="spray-loader" role="status" aria-live="polite">
       <svg viewBox="0 0 120 70" width="120" height="70" aria-hidden="true">

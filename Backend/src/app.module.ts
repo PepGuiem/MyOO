@@ -22,6 +22,8 @@ import { HealthController } from './health/health.controller';
 import { AnalyticsModule } from './analytics/analytics.module';
 import { WishlistModule } from './wishlist/wishlist.module';
 import { SneakersModule } from './sneakers/sneakers.module';
+import { BattlesModule } from './battles/battles.module';
+import { MarketModule } from './market/market.module';
 import { CalendarModule } from './calendar/calendar.module';
 import { OutfitsModule } from './outfits/outfits.module';
 import { PlansModule } from './plans/plans.module';
@@ -61,6 +63,8 @@ import { WardrobesModule } from './wardrobes/wardrobes.module';
     AnalyticsModule,
     WishlistModule,
     SneakersModule,
+    BattlesModule,
+    MarketModule,
     MannequinsModule,
     AssetsModule,
     StylistModule,

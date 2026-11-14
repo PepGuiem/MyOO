@@ -1,76 +1,77 @@
 import type { ButtonStyle, ColorSlot, DetailFont, DetailKind, DetailShape, MetalFinish, StitchStyle } from '../api/types';
+import { t } from '../i18n';
 
 /** Textos de la personalización (los mismos que en el backend). */
 export const COLOR_SLOT_LABEL: Record<ColorSlot, string> = {
-  buttons: 'Botones',
-  stitching: 'Pespuntes (costuras)',
-  zipper: 'Cremallera',
-  hardware: 'Herrajes (remaches, ojales, hebillas)',
-  trim: 'Ribetes (cuello, puños, cintura)',
-  lining: 'Forro',
-  secondary: 'Color secundario (paneles)',
-  sole: 'Suela',
-  laces: 'Cordones',
-  pattern: 'Estampado: color 1',
-  pattern2: 'Estampado: color 2',
+  buttons: t('Botones'),
+  stitching: t('Pespuntes (costuras)'),
+  zipper: t('Cremallera'),
+  hardware: t('Herrajes (remaches, ojales, hebillas)'),
+  trim: t('Ribetes (cuello, puños, cintura)'),
+  lining: t('Forro'),
+  secondary: t('Color secundario (paneles)'),
+  sole: t('Suela'),
+  laces: t('Cordones'),
+  pattern: t('Estampado: color 1'),
+  pattern2: t('Estampado: color 2'),
 };
 
 export const METAL_LABEL: Record<MetalFinish, string> = {
-  silver: 'Plata',
-  gold: 'Dorado',
-  gunmetal: 'Pavonado',
-  brass: 'Latón',
-  copper: 'Cobre',
-  black: 'Negro mate',
+  silver: t('Plata'),
+  gold: t('Dorado'),
+  gunmetal: t('Pavonado'),
+  brass: t('Latón'),
+  copper: t('Cobre'),
+  black: t('Negro mate'),
 };
 
 export const BUTTON_LABEL: Record<ButtonStyle, string> = {
-  four_hole: 'Cuatro agujeros',
-  two_hole: 'Dos agujeros',
-  shank: 'De pie (metálico)',
-  snap: 'Automático (presión)',
-  toggle: 'Trenca (alamar)',
-  covered: 'Forrado de tela',
+  four_hole: t('Cuatro agujeros'),
+  two_hole: t('Dos agujeros'),
+  shank: t('De pie (metálico)'),
+  snap: t('Automático (presión)'),
+  toggle: t('Trenca (alamar)'),
+  covered: t('Forrado de tela'),
 };
 
 export const STITCH_LABEL: Record<StitchStyle, string> = {
-  single: 'Sencillo',
-  double: 'Doble',
-  none: 'Sin pespunte visible',
+  single: t('Sencillo'),
+  double: t('Doble'),
+  none: t('Sin pespunte visible'),
 };
 
 export const DETAIL_KIND_LABEL: Record<DetailKind, string> = {
-  patch: 'Parche',
-  embroidery: 'Bordado',
-  print: 'Estampado',
-  label: 'Etiqueta',
-  button: 'Botón',
-  rivet: 'Remache',
-  stud: 'Tachuela',
-  pin: 'Chapa',
-  pocket: 'Bolsillo de parche',
-  zipper: 'Cremallera decorativa',
-  drawing: 'Dibujo',
+  patch: t('Parche'),
+  embroidery: t('Bordado'),
+  print: t('Estampado'),
+  label: t('Etiqueta'),
+  button: t('Botón'),
+  rivet: t('Remache'),
+  stud: t('Tachuela'),
+  pin: t('Chapa'),
+  pocket: t('Bolsillo de parche'),
+  zipper: t('Cremallera decorativa'),
+  drawing: t('Dibujo'),
 };
 
 /** Detalles que se colocan con un clic (el dibujo se hace con su propio modo). */
 export const PLACEABLE_KINDS: DetailKind[] = ['patch', 'embroidery', 'print', 'label', 'button', 'rivet', 'stud', 'pin', 'pocket', 'zipper'];
 
 export const DETAIL_SHAPE_LABEL: Record<DetailShape, string> = {
-  cutout: 'Recortado (sin marco)',
-  rect: 'Rectangular',
-  rounded: 'Redondeada',
-  circle: 'Circular',
-  oval: 'Ovalada',
-  shield: 'Escudo',
+  cutout: t('Recortado (sin marco)'),
+  rect: t('Rectangular'),
+  rounded: t('Redondeada'),
+  circle: t('Circular'),
+  oval: t('Ovalada'),
+  shield: t('Escudo'),
 };
 
 export const DETAIL_FONT_LABEL: Record<DetailFont, string> = {
-  sans: 'Sans (moderna)',
-  serif: 'Serif (clásica)',
-  script: 'Caligráfica',
-  mono: 'Máquina de escribir',
-  college: 'Universitaria',
+  sans: t('Sans (moderna)'),
+  serif: t('Serif (clásica)'),
+  script: t('Caligráfica'),
+  mono: t('Máquina de escribir'),
+  college: t('Universitaria'),
 };
 
 /** Detalles que admiten texto o imagen. */
@@ -83,7 +84,7 @@ export const MAX_DRAWING_SIZE = 1.0;
 /** Tamaño inicial (metros) y colores por defecto de cada detalle nuevo. */
 export const DETAIL_DEFAULTS: Record<DetailKind, { size: number; color: string; secondaryColor?: string; text?: string }> = {
   patch: { size: 0.07, color: '#1C1C1E', secondaryColor: '#E8E8E8', text: 'MYOUT' },
-  embroidery: { size: 0.05, color: '#E8E8E8', text: 'MyOut' },
+  embroidery: { size: 0.05, color: '#E8E8E8', text: t('MyOut') },
   print: { size: 0.12, color: '#151517', text: 'MYOUT' },
   label: { size: 0.035, color: '#151517', secondaryColor: '#E8E8E8', text: 'MO' },
   button: { size: 0.016, color: '#2E2E33' },

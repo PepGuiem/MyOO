@@ -43,6 +43,7 @@ export class AuthService {
           email: dto.email,
           passwordHash,
           displayName: dto.displayName ?? null,
+          locale: dto.locale,
         },
         select: { id: true },
       });

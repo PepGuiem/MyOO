@@ -159,6 +159,11 @@ export function PublicProfilePage() {
                     )}
                   </button>
                 )}
+                {p.canView && (
+                  <Link to={`/batallas?retar=${p.id}`} className="btn" title="Retarle a una Streetwear Battle">
+                    <Icon name="bolt" size={14} /> Retar
+                  </Link>
+                )}
                 <span className="menu-wrap">
                   <button type="button" className="btn btn-ghost" aria-expanded={menu} aria-haspopup="menu" onClick={() => setMenu((v) => !v)}>
                     <Icon name="more" size={16} />

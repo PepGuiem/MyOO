@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConflictException,
   ForbiddenException,
   HttpException,
   HttpStatus,
@@ -7,7 +8,12 @@ import {
   NotFoundException,
   OnModuleInit,
 } from '@nestjs/common';
-import { ConversationRole, MessageKind, Prisma } from '@prisma/client';
+import {
+  ConversationRole,
+  MessageKind,
+  MessagePolicy,
+  Prisma,
+} from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { RealtimeService } from '../realtime/realtime.service';
 import { sharedOutfitSelect } from '../social/social.service';
@@ -259,6 +265,72 @@ export class ChatService implements OnModuleInit {
         code: 'cannot_message',
       });
     }
+    return this.detail(userId, await this.ensureDirect(userId, otherId));
+  }
+
+  /**
+   * STREET MARKET: primer mensaje a quien vende. Publicar un anuncio implica
+   * aceptar preguntas de compradores aunque su ajuste sea «personas a las que
+   * sigo» (nunca con «nadie» ni con un bloqueo). Ese ajuste solo se salta para
+   * UN mensaje: después el chat sigue sus reglas normales (puedes volver a
+   * escribir cuando te conteste).
+   */
+  async contactSeller(
+    buyerId: string,
+    sellerId: string,
+    body: string,
+  ): Promise<{ conversationId: string; message: MessageView }> {
+    if (buyerId === sellerId)
+      throw new BadRequestException('You cannot message yourself');
+    const seller = await this.prisma.user.findUnique({
+      where: { id: sellerId },
+      select: { id: true, messagePolicy: true },
+    });
+    if (!seller) throw new NotFoundException('User not found');
+    if (
+      seller.messagePolicy === MessagePolicy.NOBODY ||
+      (await this.relations.isBlockedEitherWay(buyerId, sellerId))
+    ) {
+      throw new ForbiddenException({
+        message: 'This seller does not accept messages',
+        code: 'cannot_message',
+      });
+    }
+    const conversationId = await this.ensureDirect(buyerId, sellerId);
+    let skipPolicy = false;
+    if (!(await this.canSendDirect(buyerId, sellerId, conversationId))) {
+      const already = await this.prisma.message.count({
+        where: {
+          conversationId,
+          senderId: buyerId,
+          kind: { not: MessageKind.SYSTEM },
+        },
+      });
+      if (already > 0) {
+        throw new ConflictException({
+          message: 'You already wrote to this seller: wait for a reply',
+          code: 'wait_reply',
+        });
+      }
+      skipPolicy = true;
+    }
+    const message = await this.send(
+      buyerId,
+      conversationId,
+      { body },
+      { skipPolicy },
+    );
+    return { conversationId, message };
+  }
+
+  /** Id de la conversación 1 a 1 entre dos personas (la crea si no existe). */
+  private async ensureDirect(userId: string, otherId: string): Promise<string> {
+    const directKey = [userId, otherId].sort().join(':');
+    const existing = await this.prisma.conversation.findUnique({
+      where: { directKey },
+      select: { id: true },
+    });
+    if (existing) return existing.id;
     try {
       const c = await this.prisma.conversation.create({
         data: {
@@ -273,7 +345,7 @@ export class ChatService implements OnModuleInit {
         },
         select: { id: true },
       });
-      return this.detail(userId, c.id);
+      return c.id;
     } catch (err) {
       if (
         err instanceof Prisma.PrismaClientKnownRequestError &&
@@ -283,7 +355,7 @@ export class ChatService implements OnModuleInit {
           where: { directKey },
           select: { id: true },
         });
-        return this.detail(userId, again.id);
+        return again.id;
       }
       throw err;
     }
@@ -337,6 +409,7 @@ export class ChatService implements OnModuleInit {
     userId: string,
     conversationId: string,
     dto: SendMessageDto,
+    opts: { skipPolicy?: boolean } = {},
   ): Promise<MessageView> {
     const body = dto.body?.trim() || null;
     if (!body && !dto.outfitId)
@@ -347,7 +420,8 @@ export class ChatService implements OnModuleInit {
       const other = members.find((id) => id !== userId);
       if (
         !other ||
-        !(await this.canSendDirect(userId, other, conversationId))
+        (!opts.skipPolicy &&
+          !(await this.canSendDirect(userId, other, conversationId)))
       ) {
         throw new ForbiddenException({
           message: 'You cannot send messages in this conversation',

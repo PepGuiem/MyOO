@@ -121,6 +121,23 @@ export class AdminController {
     return this.admin.setOutfitHidden(me.id, id, false);
   }
 
+  @Post('listings/:id/hide')
+  @HttpCode(HttpStatus.OK)
+  hideListing(
+    @CurrentUser() me: AuthenticatedUser,
+    @Param('id', uuid) id: string,
+  ) {
+    return this.admin.setListingHidden(me.id, id, true);
+  }
+
+  @Delete('listings/:id/hide')
+  unhideListing(
+    @CurrentUser() me: AuthenticatedUser,
+    @Param('id', uuid) id: string,
+  ) {
+    return this.admin.setListingHidden(me.id, id, false);
+  }
+
   @Delete('messages/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
   deleteMessage(

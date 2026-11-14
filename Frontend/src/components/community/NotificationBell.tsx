@@ -8,6 +8,7 @@ import { useRealtime, useRealtimeEvent } from '../../lib/realtime';
 import { ErrorNote } from '../ErrorNote';
 import { Icon } from '../Icon';
 import { Spinner } from '../Spinner';
+import { t } from '../../i18n';
 
 const PAGE = 30;
 
@@ -110,7 +111,7 @@ export function NotificationBell() {
     }
   }
 
-  const label = count > 0 ? `Avisos (${count} sin leer)` : 'Avisos';
+  const label = count > 0 ? t('Avisos ({count} sin leer)', { count }) : t('Avisos');
 
   return (
     <>
@@ -130,20 +131,20 @@ export function NotificationBell() {
       {open &&
         pos &&
         createPortal(
-          <div ref={panel} className="notif-panel" role="dialog" aria-label="Avisos" style={{ top: pos.top, left: pos.left }}>
+          <div ref={panel} className="notif-panel" role="dialog" aria-label={t('Avisos')} style={{ top: pos.top, left: pos.left }}>
             <header className="notif-head">
-              <strong>Avisos</strong>
+              <strong>{t('Avisos')}</strong>
               {items?.some((n) => !n.readAt) && (
                 <button type="button" className="link-btn" onClick={() => void readAll()}>
-                  Marcar todo como leído
+                  {t('Marcar todo como leído')}
                 </button>
               )}
             </header>
             <ErrorNote error={error} />
-            {!items && !error && <Spinner size={16} label="Cargando avisos…" />}
+            {!items && !error && <Spinner size={16} label={t('Cargando avisos…')} />}
             {items && items.length === 0 && (
               <p className="notif-empty muted">
-                Nada por aquí todavía. Te avisaremos de las novedades de MyOut, de las respuestas a tus ideas y de quién te sigue.
+                {t('Nada por aquí todavía. Te avisaremos de las novedades de MyOut, de las respuestas a tus ideas y de quién te sigue.')}
               </p>
             )}
             {items && items.length > 0 && (
@@ -161,7 +162,7 @@ export function NotificationBell() {
                           {timeAgo(n.createdAt)}
                         </time>
                       </span>
-                      {!n.readAt && <span className="notif-dot" aria-label="Sin leer" />}
+                      {!n.readAt && <span className="notif-dot" aria-label={t('Sin leer')} />}
                     </button>
                   </li>
                 ))}
@@ -169,7 +170,7 @@ export function NotificationBell() {
             )}
             {more && (
               <button type="button" className="link-btn notif-more" onClick={() => void loadMore()}>
-                Ver anteriores
+                {t('Ver anteriores')}
               </button>
             )}
           </div>,

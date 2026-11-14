@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 import { Link, NavLink, Outlet, useLocation, useOutletContext, useSearchParams } from 'react-router-dom';
 import { garmentTypesApi, wardrobesApi } from '../api/endpoints';
 import type { GarmentType, Wardrobe } from '../api/types';
@@ -10,8 +10,10 @@ import { ViewCanvas } from '../three/ViewCanvas';
 import { NotificationBell } from './community/NotificationBell';
 import { ErrorNote } from './ErrorNote';
 import { Icon } from './Icon';
+import { FEATURES } from '../lib/features';
 import { ToastProvider } from './fx/Toast';
 import { Logo } from './Logo';
+import { t } from '../i18n';
 
 export interface AppData {
   wardrobes: Wardrobe[];
@@ -30,7 +32,21 @@ export function Layout() {
   const shownName = user?.displayName || (user?.username ? `@${user.username}` : user?.email) || '';
   const [params] = useSearchParams();
   // Cambiar de sección (no de ficha ni de filtro) reproduce la entrada de página.
-  const section = useLocation().pathname.split('/')[1] ?? '';
+  const location = useLocation();
+  const section = location.pathname.split('/')[1] ?? '';
+  // Móvil: el menú es un panel lateral que entra deslizándose.
+  const [menuOpen, setMenuOpen] = useState(false);
+  useEffect(() => setMenuOpen(false), [location.pathname, location.search]);
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setMenuOpen(false);
+    document.addEventListener('keydown', onKey);
+    document.body.classList.add('no-scroll');
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.body.classList.remove('no-scroll');
+    };
+  }, [menuOpen]);
   const activeWardrobe = params.get('w');
 
   const wardrobes = useAsync(() => wardrobesApi.list(), []);
@@ -63,20 +79,31 @@ export function Layout() {
   return (
     <ToastProvider>
     <div className="shell">
-      <aside className="sidebar">
+      <aside className={`sidebar${menuOpen ? ' is-open' : ''}`}>
         <div className="sidebar-head">
-          <Link to="/" className="sidebar-brand" aria-label="MyOut, inicio">
+          <Link to="/" className="sidebar-brand" aria-label={t('MyOut, inicio')}>
             <Logo decorative />
           </Link>
           <NotificationBell />
+          <button
+            type="button"
+            className="menu-toggle"
+            aria-label={menuOpen ? t('Cerrar menú') : t('Abrir menú')}
+            aria-expanded={menuOpen}
+            aria-controls="main-nav"
+            onClick={() => setMenuOpen((o) => !o)}
+          >
+            <span aria-hidden="true" />
+          </button>
         </div>
 
-        <nav className="nav" aria-label="Principal">
+        <button type="button" className="nav-scrim" aria-label={t('Cerrar menú')} tabIndex={menuOpen ? 0 : -1} onClick={() => setMenuOpen(false)} />
+        <nav id="main-nav" className="nav" aria-label={t('Principal')}>
           <NavLink to="/" end className="nav-link">
-            Inicio
+            {t('Inicio')}
           </NavLink>
           <NavLink to="/armario" className="nav-link">
-            Armario
+            {t('Armario')}
           </NavLink>
           <ul className="wardrobe-list">
             {data.wardrobes.map((w) => (
@@ -97,51 +124,59 @@ export function Layout() {
                     autoFocus
                     value={newName}
                     maxLength={80}
-                    placeholder="Nombre del armario"
-                    aria-label="Nombre del armario"
+                    placeholder={t('Nombre del armario')}
+                    aria-label={t('Nombre del armario')}
                     onChange={(e) => setNewName(e.target.value)}
                     onKeyDown={(e) => e.key === 'Escape' && setCreating(false)}
                   />
                 </form>
               ) : (
                 <button type="button" className="link-btn" onClick={() => setCreating(true)}>
-                  + Nuevo armario
+                  {t('+ Nuevo armario')}
                 </button>
               )}
               {createError ? <ErrorNote error={createError} /> : null}
             </li>
           </ul>
           <NavLink to="/outfits" className="nav-link">
-            Outfits
+            {t('Outfits')}
           </NavLink>
           <NavLink to="/calendario" className="nav-link">
-            Calendario
+            {t('Calendario')}
           </NavLink>
           <NavLink to="/analitica" className="nav-link">
-            Analítica
+            {t('Analítica')}
           </NavLink>
           <NavLink to="/sneakers" className="nav-link">
-            Sneakers
+            {t('Sneakers')}
           </NavLink>
           <NavLink to="/wishlist" className="nav-link">
-            Wishlist
+            {t('Wishlist')}
           </NavLink>
+          <NavLink to="/batallas" className="nav-link">
+            {t('Batallas')}
+          </NavLink>
+          {FEATURES.market && (
+            <NavLink to="/market" className="nav-link">
+              {t('Market')}
+            </NavLink>
+          )}
           <NavLink to="/estilista" className="nav-link">
-            Estilista
+            {t('Estilista')}
           </NavLink>
           <NavLink to="/maniquies" className="nav-link">
-            Maniquíes
+            {t('Maniquíes')}
           </NavLink>
           <NavLink to="/mensajes" className="nav-link">
-            Mensajes
+            {t('Mensajes')}
             {unread > 0 && (
-              <span className="badge" aria-label={`${unread} sin leer`}>
+              <span className="badge" aria-label={t('{unread} sin leer', { unread })}>
                 {unread > 99 ? '99+' : unread}
               </span>
             )}
           </NavLink>
           <NavLink to="/personas" className="nav-link">
-            Personas
+            {t('Personas')}
             {requests > 0 && (
               <span className="badge" aria-label={`${requests} solicitudes`}>
                 {requests}
@@ -149,30 +184,30 @@ export function Layout() {
             )}
           </NavLink>
           <NavLink to="/ideas" className="nav-link">
-            Ideas
+            {t('Ideas')}
           </NavLink>
           <NavLink to="/novedades" className="nav-link">
-            Novedades
+            {t('Novedades')}
           </NavLink>
           <NavLink to="/perfil" className="nav-link">
-            Perfil
+            {t('Perfil')}
           </NavLink>
           <NavLink to="/account" className="nav-link">
-            Cuenta
+            {t('Cuenta')}
           </NavLink>
           {user?.role === 'ADMIN' && (
             <>
               <NavLink to="/admin" className="nav-link nav-admin">
-                <Icon name="shield" size={13} /> Admin
+                <Icon name="shield" size={13} /> {t('Admin')}
               </NavLink>
               <NavLink to="/monitor" className="nav-link nav-admin-sub">
-                <Icon name="pulse" size={13} /> Monitor
+                <Icon name="pulse" size={13} /> {t('Monitor')}
               </NavLink>
             </>
           )}
         </nav>
 
-        <Link to="/perfil" className="sidebar-user" title="Tu perfil">
+        <Link to="/perfil" className="sidebar-user" title={t('Tu perfil')}>
           <span className={`avatar avatar-xs${avatar ? ' has-image' : ''}`} aria-hidden="true">
             {avatar ? <img src={avatar} alt="" /> : shownName.replace('@', '').charAt(0).toUpperCase()}
           </span>

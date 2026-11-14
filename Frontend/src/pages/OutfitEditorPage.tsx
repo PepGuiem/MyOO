@@ -5,7 +5,6 @@ import type { OutfitStyle, RatingEntry, RatingResult, RatingTip, Season, Styling
 import { BodySelector } from '../components/BodySelector';
 import { ErrorNote } from '../components/ErrorNote';
 import { ConfirmDialog } from '../components/fx/ConfirmDialog';
-import { NeonScene } from '../components/fx/NeonScene';
 import { SoundToggle } from '../components/fx/SoundToggle';
 import { SprayLoader } from '../components/fx/SprayLoader';
 import { useToast } from '../components/fx/Toast';
@@ -27,6 +26,7 @@ import { useAssetUrl } from '../lib/assetUrl';
 import { SLOTS, SLOT_BY_ID, slotOf, type SlotId } from '../lib/wardrobeSlots';
 import { stylingSupported } from '../three/libraryCatalog';
 import { OutfitStage } from '../three/OutfitMannequin';
+import { t } from '../i18n';
 
 const MAX_ITEMS = 20;
 
@@ -241,14 +241,14 @@ export function OutfitEditorPage() {
     const replaced = selected.filter((x) => slotOfItem.get(x) === 'shoes');
     const next = [...selected.filter((x) => !replaced.includes(x)), itemId];
     if (next.length > MAX_ITEMS) {
-      toast.show(`Máximo ${MAX_ITEMS} prendas por outfit.`, { tone: 'info', sound: 'error' });
+      toast.show(t('Máximo {MAX_ITEMS} prendas por outfit.', { MAX_ITEMS }), { tone: 'info', sound: 'error' });
       return;
     }
     touch();
     setSelected(next);
     if (replaced.length) setStyling((prev) => Object.fromEntries(Object.entries(prev).filter(([k]) => !replaced.includes(k))));
     play('pop');
-    flash('on', replaced.length ? `Cambiadas: ${item.name}` : `Puestas: ${item.name}`);
+    flash('on', replaced.length ? t('Cambiadas: {name}', { name: item.name }) : t('Puestas: {name}', { name: item.name }));
     setLastOn(itemId);
   }
 
@@ -256,14 +256,14 @@ export function OutfitEditorPage() {
     const item = byId.get(itemId);
     const on = selected.includes(itemId);
     if (!on && selected.length >= MAX_ITEMS) {
-      toast.show(`Máximo ${MAX_ITEMS} prendas por outfit.`, { tone: 'info', sound: 'error' });
+      toast.show(t('Máximo {MAX_ITEMS} prendas por outfit.', { MAX_ITEMS }), { tone: 'info', sound: 'error' });
       return;
     }
     touch();
     setSelected((prev) => (prev.includes(itemId) ? prev.filter((x) => x !== itemId) : [...prev, itemId]));
     if (item) {
       play(on ? 'swoosh' : 'pop');
-      flash(on ? 'off' : 'on', on ? `Fuera: ${item.name}` : `Puesto: ${item.name}`);
+      flash(on ? 'off' : 'on', on ? t('Fuera: {name}', { name: item.name }) : t('Puesto: {name}', { name: item.name }));
       setLastOn(on ? null : itemId);
     }
   }
@@ -279,7 +279,7 @@ export function OutfitEditorPage() {
       tone: 'info',
       icon: 'shuffle',
       action: {
-        label: 'Deshacer',
+        label: t('Deshacer'),
         run: () => {
           setSelected(before.selected);
           setStyling(before.styling);
@@ -306,17 +306,17 @@ export function OutfitEditorPage() {
       Math.random() < 0.3 ? pick('acc') : null,
     ].filter((x): x is string => Boolean(x));
     if (!ids.length) {
-      toast.show('Añade prendas a tu armario para poder mezclar.', { tone: 'info' });
+      toast.show(t('Añade prendas a tu armario para poder mezclar.'), { tone: 'info' });
       return;
     }
     play('spray');
-    replaceSelection(ids, 'Look al azar. ¿Te convence?');
+    replaceSelection(ids, t('Look al azar. ¿Te convence?'));
   }
 
   function clearAll() {
     if (!selected.length) return;
     play('swoosh');
-    replaceSelection([], 'Maniquí vacío.');
+    replaceSelection([], t('Maniquí vacío.'));
   }
 
   /** Prueba en el maniquí un consejo de OUTFIT RATING. */
@@ -327,23 +327,23 @@ export function OutfitEditorPage() {
     play('spray');
     if (a.type === 'style') {
       setStyle(a.style);
-      flash('mix', `Estilo: ${OUTFIT_STYLES[a.style].label}`);
+      flash('mix', t('Estilo: {label}', { label: OUTFIT_STYLES[a.style].label }));
       return;
     }
     if (a.type === 'add') {
       if (selected.length >= MAX_ITEMS || selected.includes(a.itemId)) return;
       setSelected((prev) => [...prev, a.itemId]);
       setLastOn(a.itemId);
-      flash('on', `Puesto: ${byId.get(a.itemId)?.name ?? 'prenda'}`);
+      flash('on', t('Puesto: {v}', { v: byId.get(a.itemId)?.name ?? t('prenda') }));
     } else if (a.type === 'swap') {
       setSelected((prev) => prev.map((x) => (x === a.fromItemId ? a.toItemId : x)));
       setLastOn(a.toItemId);
-      flash('mix', `Cambio: ${byId.get(a.toItemId)?.name ?? 'prenda'}`);
+      flash('mix', t('Cambio: {v}', { v: byId.get(a.toItemId)?.name ?? t('prenda') }));
     } else if (a.type === 'remove') {
       setSelected((prev) => prev.filter((x) => x !== a.itemId));
-      flash('off', `Fuera: ${byId.get(a.itemId)?.name ?? 'prenda'}`);
+      flash('off', t('Fuera: {v}', { v: byId.get(a.itemId)?.name ?? t('prenda') }));
     }
-    if (tip.gain) toast.show(`Consejo aplicado: +${tip.gain}. Guarda si te convence.`, { tone: 'info', icon: 'spark' });
+    if (tip.gain) toast.show(t('Consejo aplicado: +{gain}. Guarda si te convence.', { gain: tip.gain }), { tone: 'info', icon: 'spark' });
   }
 
   const tipApplicable = (tip: RatingTip) => {
@@ -364,7 +364,7 @@ export function OutfitEditorPage() {
       setRating(r.result);
       setRatingStale(false);
       setHistory(await ratingsApi.history(id));
-      toast.show(r.changed ? `Nota recalculada: ${r.rating.total}` : `Sin cambios: la nota sigue en ${r.rating.total}`, {
+      toast.show(r.changed ? t('Nota recalculada: {total}', { total: r.rating.total }) : t('Sin cambios: la nota sigue en {total}', { total: r.rating.total }), {
         sound: 'success',
         icon: 'refresh',
       });
@@ -432,11 +432,11 @@ export function OutfitEditorPage() {
         if (calendarDate) {
           try {
             await calendarApi.create({ date: calendarDate, outfitId: created.id });
-            toast.show(`Y puesto en el calendario: ${shortDay(calendarDate)}`, { icon: 'check' });
+            toast.show(t('Y puesto en el calendario: {shortDay}', { shortDay: shortDay(calendarDate) }), { icon: 'check' });
             navigate(`/calendario?date=${calendarDate}`, { replace: true });
             return;
           } catch {
-            toast.show('Outfit creado, pero no se pudo poner en el calendario', { tone: 'danger' });
+            toast.show(t('Outfit creado, pero no se pudo poner en el calendario'), { tone: 'danger' });
           }
         }
         navigate(`/outfits/${created.id}`, { replace: true });
@@ -445,8 +445,8 @@ export function OutfitEditorPage() {
         void refreshSaved(id);
         setSaved(true);
         setDirty(false);
-        flash('saved', typeof updated.ratingScore === 'number' ? `Guardado · ${updated.ratingScore}/100` : 'Guardado');
-        toast.show(typeof updated.ratingScore === 'number' ? `Outfit guardado · nota ${updated.ratingScore}` : 'Outfit guardado', {
+        flash('saved', typeof updated.ratingScore === 'number' ? `Guardado · ${updated.ratingScore}/100` : t('Guardado'));
+        toast.show(typeof updated.ratingScore === 'number' ? t('Outfit guardado · nota {ratingScore}', { ratingScore: updated.ratingScore }) : t('Outfit guardado'), {
           sound: 'success',
         });
       }
@@ -464,7 +464,7 @@ export function OutfitEditorPage() {
     try {
       await outfitsApi.remove(id);
       setDirty(false);
-      toast.show(`«${name || 'Outfit'}» eliminado`, { tone: 'danger', sound: 'swoosh' });
+      toast.show(`«${name || t('Outfit')}» eliminado`, { tone: 'danger', sound: 'swoosh' });
       navigate('/outfits');
     } catch (err) {
       setError(err);
@@ -478,25 +478,24 @@ export function OutfitEditorPage() {
 
   return (
     <section className="dressing">
-      <NeonScene />
 
       <header className="dress-head">
         <Link to={calendarDate ? `/calendario?date=${calendarDate}` : '/outfits'} className="dress-back">
-          <Icon name="back" size={14} /> {calendarDate ? 'Calendario' : 'Outfits'}
+          <Icon name="back" size={14} /> {calendarDate ? t('Calendario') : t('Outfits')}
         </Link>
         <div className="dress-title">
           <span className="fits-kicker">
-            <span className="rec-dot" aria-hidden="true" /> Vestidor
-            {calendarDate && <span className="dress-for"> · para el calendario: {shortDay(calendarDate)}</span>}
+            <span className="rec-dot" aria-hidden="true" /> {t('Vestidor')}
+            {calendarDate && <span className="dress-for"> {t('· para el calendario: {shortDay}', { shortDay: shortDay(calendarDate) })}</span>}
           </span>
-          <h1>{isNew ? 'Nuevo outfit' : name || 'Outfit'}</h1>
+          <h1>{isNew ? t('Nuevo outfit') : name || t('Outfit')}</h1>
         </div>
         <div className="dress-tools">
           <button type="button" className="btn btn-street btn-ghost" onClick={surprise} disabled={loading || !allItems.length}>
-            <Icon name="shuffle" size={14} /> Sorpréndeme
+            <Icon name="shuffle" size={14} /> {t('Sorpréndeme')}
           </button>
           <button type="button" className="btn btn-ghost" onClick={clearAll} disabled={!selected.length}>
-            <Icon name="undo" size={14} /> Vaciar
+            <Icon name="undo" size={14} /> {t('Vaciar')}
           </button>
           <SoundToggle />
         </div>
@@ -504,8 +503,8 @@ export function OutfitEditorPage() {
 
       <div className="dress-grid">
         {/* Burro de prendas */}
-        <aside className="dress-rail" aria-label="Tus prendas">
-          <div className="slot-tabs" role="tablist" aria-label="Hueco">
+        <aside className="dress-rail" aria-label={t('Tus prendas')}>
+          <div className="slot-tabs" role="tablist" aria-label={t('Hueco')}>
             <button
               type="button"
               role="tab"
@@ -517,7 +516,7 @@ export function OutfitEditorPage() {
               }}
             >
               <Icon name="hanger" size={16} />
-              <span className="slot-tab-label">Todo</span>
+              <span className="slot-tab-label">{t('Todo')}</span>
               <span className="count">{allItems.length}</span>
             </button>
             {slots.map((s) => (
@@ -541,18 +540,18 @@ export function OutfitEditorPage() {
           </div>
 
           <div className="rack-head">
-            <h2>{slot === 'all' ? (owned === 'wish' ? 'Tu wishlist' : 'Todo tu armario') : SLOT_BY_ID[slot].label}</h2>
+            <h2>{slot === 'all' ? (owned === 'wish' ? t('Tu wishlist') : t('Todo tu armario')) : SLOT_BY_ID[slot].label}</h2>
             <label className="fits-search fits-search-sm">
               <Icon name="search" />
-              <input type="search" placeholder="Buscar prenda" aria-label="Buscar prenda" value={search} onChange={(e) => setSearch(e.target.value)} />
+              <input type="search" placeholder={t('Buscar prenda')} aria-label={t('Buscar prenda')} value={search} onChange={(e) => setSearch(e.target.value)} />
             </label>
           </div>
           {wishCount > 0 && (
-            <div className="own-switch" role="group" aria-label="Qué prendas ver">
+            <div className="own-switch" role="group" aria-label={t('Qué prendas ver')}>
               {(
                 [
-                  ['all', 'Todo'],
-                  ['mine', 'Las tengo'],
+                  ['all', t('Todo')],
+                  ['mine', t('Las tengo')],
                   ['wish', `Wishlist · ${wishCount}`],
                 ] as const
               ).map(([k, label]) => (
@@ -575,9 +574,9 @@ export function OutfitEditorPage() {
           {collection.length > 0 && (slot === 'shoes' || slot === 'all') && (
             <div className="snk-strip">
               <span className="snk-strip-head">
-                <Icon name="shoe" size={14} /> Tu colección de sneakers
+                <Icon name="shoe" size={14} /> {t('Tu colección de sneakers')}
                 <Link to="/sneakers" className="snk-strip-more">
-                  Ver
+                  {t('Ver')}
                 </Link>
               </span>
               <ul className="snk-strip-row">
@@ -601,7 +600,7 @@ export function OutfitEditorPage() {
                     className={`rack-item${on ? ' is-on' : ''}${lastOn === item.id ? ' just-on' : ''}${item.wishlistStatus ? ' is-wish' : ''}`}
                     aria-pressed={on}
                     onClick={() => toggle(item.id)}
-                    title={`${on ? `Quitar ${item.name}` : `Ponerle ${item.name}`}${item.wishlistStatus ? ' (de tu wishlist: aún no la tienes)' : ''}`}
+                    title={`${on ? `Quitar ${item.name}` : `Ponerle ${item.name}`}${item.wishlistStatus ? t(' (de tu wishlist: aún no la tienes)') : ''}`}
                   >
                     <span className="rack-swatch" style={{ '--sw': item.color } as CSSProperties} aria-hidden="true">
                       <Icon name={s.icon} size={26} />
@@ -611,7 +610,7 @@ export function OutfitEditorPage() {
                       {item.sneaker ? <span className="snk-mini-tag">{brandOf(item.sneaker)}</span> : null}
                       {item.wishlistStatus ? (
                         <span className="wish-badge">
-                          <Icon name="heart" size={10} /> Deseo
+                          <Icon name="heart" size={10} /> {t('Deseo')}
                         </span>
                       ) : null}
                       {item.garmentType.name}
@@ -619,7 +618,7 @@ export function OutfitEditorPage() {
                     <span className="rack-state" aria-hidden="true">
                       <Icon name={on ? 'check' : 'plus'} size={13} />
                     </span>
-                    {on && <span className="rack-stamp">Puesto</span>}
+                    {on && <span className="rack-stamp">{t('Puesto')}</span>}
                   </button>
                 </li>
               );
@@ -628,10 +627,10 @@ export function OutfitEditorPage() {
               <li className="rack-empty">
                 {allItems.length === 0 ? (
                   <>
-                    Tu armario está vacío. <Link to="/armario">Añade prendas</Link>
+                    {t('Tu armario está vacío.')} <Link to="/armario">{t('Añade prendas')}</Link>
                   </>
                 ) : (
-                  'No hay prendas aquí.'
+                  t('No hay prendas aquí.')
                 )}
               </li>
             )}
@@ -649,14 +648,14 @@ export function OutfitEditorPage() {
                 {pulse.text}
               </span>
             )}
-            <ol className="stage-hud" aria-label="Huecos del outfit">
+            <ol className="stage-hud" aria-label={t('Huecos del outfit')}>
               {slots.map((s) => {
                 const worn = wornBySlot[s.id];
                 return (
-                  <li key={s.id} className={worn.length ? 'is-on' : ''} title={worn.length ? worn.map((w) => w.name).join(', ') : `${s.label}: vacío`}>
+                  <li key={s.id} className={worn.length ? 'is-on' : ''} title={worn.length ? worn.map((w) => w.name).join(', ') : t('{label}: vacío', { label: s.label })}>
                     <button
                       type="button"
-                      aria-label={`${s.label}${worn.length ? `: ${worn.length}` : ': vacío'}`}
+                      aria-label={`${s.label}${worn.length ? `: ${worn.length}` : t(': vacío')}`}
                       onClick={() => {
                         play('click');
                         setSlot(s.id);
@@ -676,28 +675,28 @@ export function OutfitEditorPage() {
                 play('click');
                 setPanelTab('rating');
               }}
-              title="Ver OUTFIT RATING"
+              title={t('Ver OUTFIT RATING')}
             >
               <ScoreRing value={rating && selected.length ? rating.total : null} size={58} />
               <span className="stage-score-label">
-                {rating && selected.length ? tierOf(rating.total).label : 'Rating'}
+                {rating && selected.length ? tierOf(rating.total).label : t('Rating')}
               </span>
             </button>
             <span className="stage-meter" aria-hidden="true">
-              <b>{selectedItems.length}</b>/{MAX_ITEMS} · {filledSlots} huecos
+              <b>{selectedItems.length}</b>{t('/{MAX_ITEMS} · {filledSlots} huecos', { MAX_ITEMS, filledSlots })}
               {wishWorn > 0 && (
                 <span className="meter-wish">
                   {' '}
-                  · <Icon name="heart" size={10} /> {wishWorn} por comprar
+                  · <Icon name="heart" size={10} /> {t('{wishWorn} por comprar', { wishWorn })}
                 </span>
               )}
             </span>
             {loading ? (
               <div className="stage-loading">
-                <SprayLoader label="Abriendo el vestidor…" />
+                <SprayLoader label={t('Abriendo el vestidor…')} />
               </div>
             ) : (
-              selectedItems.length === 0 && <p className="stage-empty">Elige prendas del burro para vestir el maniquí.</p>
+              selectedItems.length === 0 && <p className="stage-empty">{t('Elige prendas del burro para vestir el maniquí.')}</p>
             )}
           </div>
           <BodySelector className="dress-body" />
@@ -705,7 +704,7 @@ export function OutfitEditorPage() {
 
         {/* Ficha del outfit */}
         <form className="dress-panel" onSubmit={submit}>
-          <div className={`panel-tabs is-${panelTab}`} role="tablist" aria-label="Ficha o nota">
+          <div className={`panel-tabs is-${panelTab}`} role="tablist" aria-label={t('Ficha o nota')}>
             <span className="tab-thumb" aria-hidden="true" />
             <button
               type="button"
@@ -716,7 +715,7 @@ export function OutfitEditorPage() {
                 setPanelTab('fit');
               }}
             >
-              <Icon name="edit" size={14} /> Ficha
+              <Icon name="edit" size={14} /> {t('Ficha')}
             </button>
             <button
               type="button"
@@ -727,7 +726,7 @@ export function OutfitEditorPage() {
                 setPanelTab('rating');
               }}
             >
-              <Icon name="spark" size={14} /> Rating
+              <Icon name="spark" size={14} /> {t('Rating')}
               <span className="count">{rating && selected.length ? rating.total : '–'}</span>
             </button>
           </div>
@@ -750,11 +749,11 @@ export function OutfitEditorPage() {
           <div className="panel-pane" hidden={panelTab !== 'fit'}>
           <div className="panel-top">
             <label className="field field-name">
-              <span>Nombre</span>
+              <span>{t('Nombre')}</span>
               <input
                 required
                 maxLength={80}
-                placeholder="Ponle nombre a tu fit"
+                placeholder={t('Ponle nombre a tu fit')}
                 value={name}
                 onChange={(e) => {
                   setName(e.target.value);
@@ -766,8 +765,8 @@ export function OutfitEditorPage() {
               type="button"
               className={`fav-btn fav-btn-lg${isFavorite ? ' is-on' : ''}`}
               aria-pressed={isFavorite}
-              aria-label={isFavorite ? 'Quitar de favoritos' : 'Marcar como favorito'}
-              title="Favorito"
+              aria-label={isFavorite ? t('Quitar de favoritos') : t('Marcar como favorito')}
+              title={t('Favorito')}
               onClick={() => {
                 play('pop');
                 setIsFavorite((v) => !v);
@@ -780,7 +779,7 @@ export function OutfitEditorPage() {
           </div>
 
           <div className="field">
-            <span id="outfit-style">Estilo</span>
+            <span id="outfit-style">{t('Estilo')}</span>
             <div className="style-pick" role="radiogroup" aria-labelledby="outfit-style">
               {OUTFIT_STYLE_KEYS.map((k) => {
                 const meta = OUTFIT_STYLES[k];
@@ -809,10 +808,10 @@ export function OutfitEditorPage() {
 
           <div className="row">
             <label className="field">
-              <span>Ocasión</span>
+              <span>{t('Ocasión')}</span>
               <input
                 maxLength={60}
-                placeholder="Concierto, curro…"
+                placeholder={t('Concierto, curro…')}
                 value={occasion}
                 onChange={(e) => {
                   setOccasion(e.target.value);
@@ -821,11 +820,11 @@ export function OutfitEditorPage() {
               />
             </label>
             <div className="field">
-              <span id="outfit-season">Temporada</span>
+              <span id="outfit-season">{t('Temporada')}</span>
               <Select
                 labelledBy="outfit-season"
                 value={season}
-                options={[{ value: '', label: 'Sin especificar' }, ...SEASONS.map((s) => ({ value: s, label: SEASON_LABEL[s] }))]}
+                options={[{ value: '', label: t('Sin especificar') }, ...SEASONS.map((s) => ({ value: s, label: SEASON_LABEL[s] }))]}
                 onChange={(v) => {
                   setSeason(v as Season | '');
                   touch();
@@ -834,7 +833,7 @@ export function OutfitEditorPage() {
             </div>
           </div>
           <label className="field">
-            <span>Descripción</span>
+            <span>{t('Descripción')}</span>
             <textarea
               rows={2}
               maxLength={500}
@@ -857,16 +856,16 @@ export function OutfitEditorPage() {
             />
             <span className="switch" aria-hidden="true" />
             <span>
-              <strong>Compartir en mi perfil</strong>
-              <small className="muted">Lo verá quien pueda ver tu perfil. Tus prendas no compartidas siguen siendo privadas.</small>
+              <strong>{t('Compartir en mi perfil')}</strong>
+              <small className="muted">{t('Lo verá quien pueda ver tu perfil. Tus prendas no compartidas siguen siendo privadas.')}</small>
             </span>
           </label>
 
           <h2 className="panel-title">
-            Puesto <span className="count">{selectedItems.length}</span>
+            {t('Puesto')} <span className="count">{selectedItems.length}</span>
           </h2>
           {selectedItems.length === 0 ? (
-            <p className="muted small">Nada todavía. Toca una prenda del burro para ponérsela.</p>
+            <p className="muted small">{t('Nada todavía. Toca una prenda del burro para ponérsela.')}</p>
           ) : (
             <ol className="picked">
               {selectedItems.map((item, index) => (
@@ -890,7 +889,7 @@ export function OutfitEditorPage() {
                     <span
                       className="drag-handle"
                       draggable
-                      title="Arrastra para cambiar el orden"
+                      title={t('Arrastra para cambiar el orden')}
                       aria-hidden="true"
                       onDragStart={(e) => {
                         setDragFrom(index);
@@ -909,8 +908,8 @@ export function OutfitEditorPage() {
                     <span className="swatch" style={{ background: item.color }} aria-hidden="true" />
                     <span className="picked-name">{item.name}</span>
                     {item.wishlistStatus && (
-                      <span className="wish-badge" title="De tu wishlist: todavía no la tienes">
-                        <Icon name="heart" size={10} /> Deseo
+                      <span className="wish-badge" title={t('De tu wishlist: todavía no la tienes')}>
+                        <Icon name="heart" size={10} /> {t('Deseo')}
                       </span>
                     )}
                     <span className="picked-actions">
@@ -920,7 +919,7 @@ export function OutfitEditorPage() {
                         onClick={() => move(index, -1)}
                         disabled={index === 0}
                         aria-label={`Subir ${item.name}`}
-                        title="Subir (se pone encima)"
+                        title={t('Subir (se pone encima)')}
                       >
                         <Icon name="up" />
                       </button>
@@ -930,11 +929,11 @@ export function OutfitEditorPage() {
                         onClick={() => move(index, 1)}
                         disabled={index === selectedItems.length - 1}
                         aria-label={`Bajar ${item.name}`}
-                        title="Bajar"
+                        title={t('Bajar')}
                       >
                         <Icon name="down" />
                       </button>
-                      <button type="button" className="icon-btn" onClick={() => toggle(item.id)} aria-label={`Quitar ${item.name}`} title="Quitar del outfit">
+                      <button type="button" className="icon-btn" onClick={() => toggle(item.id)} aria-label={`Quitar ${item.name}`} title={t('Quitar del outfit')}>
                         <Icon name="close" />
                       </button>
                     </span>
@@ -959,7 +958,7 @@ export function OutfitEditorPage() {
           <ErrorNote error={error} />
           {saved && (
             <p className="note note-saved" role="status">
-              <Icon name="check" size={14} /> Outfit guardado.
+              <Icon name="check" size={14} /> {t('Outfit guardado.')}
             </p>
           )}
 
@@ -973,35 +972,35 @@ export function OutfitEditorPage() {
                   setConfirmDelete(true);
                 }}
               >
-                <Icon name="trash" size={14} /> Eliminar
+                <Icon name="trash" size={14} /> {t('Eliminar')}
               </button>
             )}
             <span className="spacer" />
             <button type="button" className="btn" onClick={() => navigate('/outfits')}>
-              Volver
+              {t('Volver')}
             </button>
             <button
               type="submit"
               className={`btn btn-primary btn-street btn-save${dirty ? ' is-dirty' : ''}${saved ? ' is-saved' : ''}`}
               disabled={saving || selected.length === 0}
             >
-              {saving ? <Busy text="Guardando…" /> : isNew ? 'Crear outfit' : saved && !dirty ? 'Guardado' : 'Guardar outfit'}
+              {saving ? <Busy text={t('Guardando…')} /> : isNew ? t('Crear outfit') : saved && !dirty ? t('Guardado') : t('Guardar outfit')}
             </button>
           </div>
-          {dirty && !saving && <p className="dirty-note">Cambios sin guardar</p>}
+          {dirty && !saving && <p className="dirty-note">{t('Cambios sin guardar')}</p>}
         </form>
       </div>
 
       {confirmDelete && (
         <ConfirmDialog
-          title={`¿Eliminar «${name || 'este outfit'}»?`}
-          confirmLabel="Eliminar outfit"
+          title={t('¿Eliminar «{v}»?', { v: name || t('este outfit') })}
+          confirmLabel={t('Eliminar outfit')}
           danger
           busy={deleting}
           onConfirm={remove}
           onClose={() => setConfirmDelete(false)}
         >
-          <p>Se borra el outfit, no las prendas: siguen en tus armarios.</p>
+          <p>{t('Se borra el outfit, no las prendas: siguen en tus armarios.')}</p>
         </ConfirmDialog>
       )}
     </section>
@@ -1028,12 +1027,12 @@ function StyleControls({
   if (!options.length) return null;
   const hint =
     value.tuck && value.tuck !== 'out' && !hasBottom
-      ? 'Para meterla por dentro, añade un pantalón o una falda.'
+      ? t('Para meterla por dentro, añade un pantalón o una falda.')
       : value.boots === 'in' && !hasBoots
-        ? 'Para meterlo en las botas, añade unas botas.'
+        ? t('Para meterlo en las botas, añade unas botas.')
         : null;
   return (
-    <div className="style-controls" role="group" aria-label={`Cómo se lleva ${item.name}`}>
+    <div className="style-controls" role="group" aria-label={t('Cómo se lleva {name}', { name: item.name })}>
       {options.map((o) => (
         <div key={o.key} className="style-field">
           <span id={`${baseId}-${o.key}`}>{o.label}</span>
@@ -1041,7 +1040,7 @@ function StyleControls({
             size="sm"
             labelledBy={`${baseId}-${o.key}`}
             value={value[o.key] ?? ''}
-            options={[{ value: '', label: 'Como está' }, ...o.values]}
+            options={[{ value: '', label: t('Como está') }, ...o.values]}
             onChange={(v) => onChange(o.key, v)}
           />
         </div>
@@ -1062,7 +1061,7 @@ function SneakerPick({ item, on, onPick }: { item: WardrobeItem; on: boolean; on
       className={`snk-pick${on ? ' is-on' : ''}${item.wishlistStatus ? ' is-wish' : ''}`}
       style={{ '--sw': item.color } as CSSProperties}
       aria-pressed={on}
-      title={`${brandOf(card)} ${card.model}${card.colorway ? ` · ${card.colorway}` : ''}${item.size ? ` · talla ${item.size}` : ''}${item.wishlistStatus ? ' (wishlist: aún no las tienes)' : ''}`}
+      title={`${brandOf(card)} ${card.model}${card.colorway ? ` · ${card.colorway}` : ''}${item.size ? ` · talla ${item.size}` : ''}${item.wishlistStatus ? t(' (wishlist: aún no las tienes)') : ''}`}
       onClick={onPick}
     >
       <span className="snk-pick-img">
@@ -1077,7 +1076,7 @@ function SneakerPick({ item, on, onPick }: { item: WardrobeItem; on: boolean; on
       <span className="snk-pick-model">{card.model}</span>
       {item.wishlistStatus && (
         <span className="wish-badge">
-          <Icon name="heart" size={9} /> Deseo
+          <Icon name="heart" size={9} /> {t('Deseo')}
         </span>
       )}
     </button>

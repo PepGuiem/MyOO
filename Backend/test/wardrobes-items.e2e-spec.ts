@@ -19,13 +19,19 @@ describe('Armarios y prendas (e2e)', () => {
   });
 
   const createWardrobe = (token: string, name: string) =>
-    ctx.http().post('/api/wardrobes').set(...bearer(token)).send({ name });
+    ctx
+      .http()
+      .post('/api/wardrobes')
+      .set(...bearer(token))
+      .send({ name });
 
   describe('armarios', () => {
     let wardrobeId: string;
 
     it('crea y lista con paginación', async () => {
-      const created = await createWardrobe(alice.token, 'Principal').expect(201);
+      const created = await createWardrobe(alice.token, 'Principal').expect(
+        201,
+      );
       wardrobeId = created.body.id;
       expect(created.body).toMatchObject({ name: 'Principal', itemCount: 0 });
       expect(created.body.userId).toBeUndefined();
@@ -35,7 +41,12 @@ describe('Armarios y prendas (e2e)', () => {
         .get('/api/wardrobes?page=1&pageSize=10')
         .set(...bearer(alice.token))
         .expect(200);
-      expect(list.body.meta).toEqual({ page: 1, pageSize: 10, total: 1, totalPages: 1 });
+      expect(list.body.meta).toEqual({
+        page: 1,
+        pageSize: 10,
+        total: 1,
+        totalPages: 1,
+      });
       expect(list.body.data[0].id).toBe(wardrobeId);
     });
 
@@ -56,18 +67,30 @@ describe('Armarios y prendas (e2e)', () => {
     });
 
     it('otro usuario NO puede ver, editar ni borrar el armario (404)', async () => {
-      await ctx.http().get(`/api/wardrobes/${wardrobeId}`).set(...bearer(bob.token)).expect(404);
+      await ctx
+        .http()
+        .get(`/api/wardrobes/${wardrobeId}`)
+        .set(...bearer(bob.token))
+        .expect(404);
       await ctx
         .http()
         .patch(`/api/wardrobes/${wardrobeId}`)
         .set(...bearer(bob.token))
         .send({ name: 'Hackeado' })
         .expect(404);
-      await ctx.http().delete(`/api/wardrobes/${wardrobeId}`).set(...bearer(bob.token)).expect(404);
+      await ctx
+        .http()
+        .delete(`/api/wardrobes/${wardrobeId}`)
+        .set(...bearer(bob.token))
+        .expect(404);
     });
 
     it('400 con un id que no es UUID y 404 si no existe', async () => {
-      await ctx.http().get('/api/wardrobes/abc').set(...bearer(alice.token)).expect(400);
+      await ctx
+        .http()
+        .get('/api/wardrobes/abc')
+        .set(...bearer(alice.token))
+        .expect(400);
       await ctx
         .http()
         .get('/api/wardrobes/00000000-0000-4000-8000-999999999999')
@@ -129,7 +152,10 @@ describe('Armarios y prendas (e2e)', () => {
       ['temporada inválida', { season: 'MONZON' }],
       ['imageUrl inválida', { imageUrl: 'javascript:alert(1)' }],
       ['nombre vacío', { name: '   ' }],
-      ['tipo inexistente', { garmentTypeId: '00000000-0000-4000-8000-999999999999' }],
+      [
+        'tipo inexistente',
+        { garmentTypeId: '00000000-0000-4000-8000-999999999999' },
+      ],
       ['modelUrl que no es GLB', { modelUrl: 'https://cdn.test/modelo.obj' }],
       ['modelUrl con esquema raro', { modelUrl: 'javascript:alert(1).glb' }],
     ])('400: %s', async (_label, override) => {
@@ -169,15 +195,26 @@ describe('Armarios y prendas (e2e)', () => {
     });
 
     it('acepta un modelo 3D GLB por URL o por ruta local', async () => {
-      for (const modelUrl of ['https://cdn.test/prendas/camiseta.glb', '/models/camiseta.glb']) {
+      for (const modelUrl of [
+        'https://cdn.test/prendas/camiseta.glb',
+        '/models/camiseta.glb',
+      ]) {
         const res = await ctx
           .http()
           .post('/api/wardrobe-items')
           .set(...bearer(alice.token))
-          .send({ ...validItem(), name: `Con modelo ${modelUrl.length}`, modelUrl })
+          .send({
+            ...validItem(),
+            name: `Con modelo ${modelUrl.length}`,
+            modelUrl,
+          })
           .expect(201);
         expect(res.body.modelUrl).toBe(modelUrl);
-        await ctx.http().delete(`/api/wardrobe-items/${res.body.id}`).set(...bearer(alice.token)).expect(204);
+        await ctx
+          .http()
+          .delete(`/api/wardrobe-items/${res.body.id}`)
+          .set(...bearer(alice.token))
+          .expect(204);
       }
     });
 
@@ -199,7 +236,9 @@ describe('Armarios y prendas (e2e)', () => {
         .get('/api/wardrobe-items?category=BOTTOM')
         .set(...bearer(alice.token))
         .expect(200);
-      expect(bottoms.body.data.map((i: { name: string }) => i.name)).toEqual(['Vaquero']);
+      expect(bottoms.body.data.map((i: { name: string }) => i.name)).toEqual([
+        'Vaquero',
+      ]);
 
       const search = await ctx
         .http()
@@ -237,7 +276,11 @@ describe('Armarios y prendas (e2e)', () => {
     });
 
     it('otro usuario no puede ver, editar ni borrar la prenda', async () => {
-      await ctx.http().get(`/api/wardrobe-items/${itemId}`).set(...bearer(bob.token)).expect(404);
+      await ctx
+        .http()
+        .get(`/api/wardrobe-items/${itemId}`)
+        .set(...bearer(bob.token))
+        .expect(404);
       await ctx
         .http()
         .patch(`/api/wardrobe-items/${itemId}`)
@@ -257,7 +300,11 @@ describe('Armarios y prendas (e2e)', () => {
         .delete(`/api/wardrobe-items/${itemId}`)
         .set(...bearer(alice.token))
         .expect(204);
-      await ctx.http().get(`/api/wardrobe-items/${itemId}`).set(...bearer(alice.token)).expect(404);
+      await ctx
+        .http()
+        .get(`/api/wardrobe-items/${itemId}`)
+        .set(...bearer(alice.token))
+        .expect(404);
     });
 
     it('borrar un armario borra sus prendas', async () => {
@@ -266,8 +313,193 @@ describe('Armarios y prendas (e2e)', () => {
         .delete(`/api/wardrobes/${wardrobeId}`)
         .set(...bearer(alice.token))
         .expect(204);
-      const count = await ctx.prisma.wardrobeItem.count({ where: { wardrobeId } });
+      const count = await ctx.prisma.wardrobeItem.count({
+        where: { wardrobeId },
+      });
       expect(count).toBe(0);
+    });
+  });
+
+  describe('favoritas, filtros nuevos y resumen', () => {
+    let wardrobeId: string;
+    const ids: Record<string, string> = {};
+
+    const create = (
+      name: string,
+      color: string,
+      extra: Record<string, unknown> = {},
+    ) =>
+      ctx
+        .http()
+        .post('/api/wardrobe-items')
+        .set(...bearer(alice.token))
+        .send({
+          wardrobeId,
+          garmentTypeId: typeIds.T_SHIRT,
+          name,
+          color,
+          season: 'ALL_SEASON',
+          attributes: { sleeve: 'short' },
+          ...extra,
+        })
+        .expect(201);
+
+    beforeAll(async () => {
+      const w = await createWardrobe(alice.token, 'Colección').expect(201);
+      wardrobeId = w.body.id;
+      ids.negra = (
+        await create('Negra', '#0a0a0a', {
+          attributes: { sleeve: 'short', brand: 'Acme' },
+        })
+      ).body.id;
+      ids.blanca = (
+        await create('Blanca', '#fafaf7', {
+          attributes: { sleeve: 'short', brand: 'acme ' },
+        })
+      ).body.id;
+      ids.azul = (
+        await create('Azul', '#2f5da8', { season: 'SUMMER' })
+      ).body.id;
+    });
+
+    it('las prendas nuevas no son favoritas', async () => {
+      const res = await ctx
+        .http()
+        .get(`/api/wardrobe-items/${ids.negra}`)
+        .set(...bearer(alice.token))
+        .expect(200);
+      expect(res.body.isFavorite).toBe(false);
+    });
+
+    it('marca y desmarca favoritas (idempotente) y solo las propias', async () => {
+      const put = await ctx
+        .http()
+        .put(`/api/wardrobe-items/${ids.azul}/favorite`)
+        .set(...bearer(alice.token))
+        .expect(200);
+      expect(put.body).toEqual({ id: ids.azul, isFavorite: true });
+      await ctx
+        .http()
+        .put(`/api/wardrobe-items/${ids.azul}/favorite`)
+        .set(...bearer(alice.token))
+        .expect(200);
+      await ctx
+        .http()
+        .put(`/api/wardrobe-items/${ids.negra}/favorite`)
+        .set(...bearer(alice.token))
+        .expect(200);
+      await ctx
+        .http()
+        .delete(`/api/wardrobe-items/${ids.negra}/favorite`)
+        .set(...bearer(alice.token))
+        .expect(200);
+
+      // Bob no puede tocar las de Alice.
+      await ctx
+        .http()
+        .put(`/api/wardrobe-items/${ids.blanca}/favorite`)
+        .set(...bearer(bob.token))
+        .expect(404);
+      await ctx
+        .http()
+        .put('/api/wardrobe-items/abc/favorite')
+        .set(...bearer(alice.token))
+        .expect(400);
+
+      const fav = await ctx
+        .http()
+        .get(`/api/wardrobe-items?wardrobeId=${wardrobeId}&favorite=true`)
+        .set(...bearer(alice.token))
+        .expect(200);
+      expect(fav.body.data.map((i: { name: string }) => i.name)).toEqual([
+        'Azul',
+      ]);
+    });
+
+    it('filtra por marca (sin distinguir mayúsculas) y por grupo de color', async () => {
+      const brand = await ctx
+        .http()
+        .get(
+          `/api/wardrobe-items?wardrobeId=${wardrobeId}&brand=ACME&sort=name`,
+        )
+        .set(...bearer(alice.token))
+        .expect(200);
+      expect(brand.body.data.map((i: { name: string }) => i.name)).toEqual([
+        'Blanca',
+        'Negra',
+      ]);
+      expect(brand.body.meta.total).toBe(2);
+
+      const blue = await ctx
+        .http()
+        .get(`/api/wardrobe-items?wardrobeId=${wardrobeId}&color=blue`)
+        .set(...bearer(alice.token))
+        .expect(200);
+      expect(blue.body.data.map((i: { name: string }) => i.name)).toEqual([
+        'Azul',
+      ]);
+
+      const none = await ctx
+        .http()
+        .get(
+          `/api/wardrobe-items?wardrobeId=${wardrobeId}&color=blue&brand=acme`,
+        )
+        .set(...bearer(alice.token))
+        .expect(200);
+      expect(none.body.meta.total).toBe(0);
+
+      await ctx
+        .http()
+        .get('/api/wardrobe-items?color=fucsia-neon')
+        .set(...bearer(alice.token))
+        .expect(400);
+      await ctx
+        .http()
+        .get('/api/wardrobe-items?sort=random')
+        .set(...bearer(alice.token))
+        .expect(400);
+    });
+
+    it('ordena por favoritas primero', async () => {
+      const res = await ctx
+        .http()
+        .get(`/api/wardrobe-items?wardrobeId=${wardrobeId}&sort=favorites`)
+        .set(...bearer(alice.token))
+        .expect(200);
+      expect(res.body.data[0].name).toBe('Azul');
+    });
+
+    it('resumen del armario con datos reales', async () => {
+      const res = await ctx
+        .http()
+        .get(`/api/wardrobe-items/facets?wardrobeId=${wardrobeId}`)
+        .set(...bearer(alice.token))
+        .expect(200);
+      expect(res.body).toMatchObject({
+        total: 3,
+        favorites: 1,
+        categories: 1,
+        brands: [{ count: 2 }],
+        lastAdded: { id: ids.azul, name: 'Azul' },
+      });
+      expect(res.body.colors.map((c: { value: string }) => c.value)).toEqual([
+        'black',
+        'white',
+        'blue',
+      ]);
+
+      // Bob ve su propio resumen, vacío.
+      const bobFacets = await ctx
+        .http()
+        .get('/api/wardrobe-items/facets')
+        .set(...bearer(bob.token))
+        .expect(200);
+      expect(bobFacets.body.total).toBe(0);
+      await ctx
+        .http()
+        .get('/api/wardrobe-items/facets?wardrobeId=abc')
+        .set(...bearer(alice.token))
+        .expect(400);
     });
   });
 });

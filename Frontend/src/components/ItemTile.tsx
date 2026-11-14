@@ -4,13 +4,14 @@ import { libraryUrl, useLibraryLoaded } from '../three/garmentLibrary';
 import { ItemView } from '../three/ItemView';
 import { libraryModel } from '../three/libraryCatalog';
 import { LoadingOverlay } from './Spinner';
+import { t, tn } from '../i18n';
 
 /** Ficha de prenda: modelo 3D (gira al pasar el ratón) + nombre. */
 /** `index`: posición dentro de su tanda, para que entren una detrás de otra. */
 export function ItemTile({ item, onOpen, index = 0 }: { item: WardrobeItem; onOpen: () => void; index?: number }) {
   const [active, setActive] = useState(false);
   const nDetails = item.customization?.details?.length ?? 0;
-  const meta = [item.garmentType.name, item.size ? `talla ${item.size}` : null, nDetails ? `${nDetails} ${nDetails === 1 ? 'detalle' : 'detalles'}` : null]
+  const meta = [item.garmentType.name, item.size ? t('talla {size}', { size: item.size }) : null, nDetails ? tn(nDetails, '{n} detalle', '{n} detalles') : null]
     .filter(Boolean)
     .join(', ');
   // Mientras llega el modelo 3D de la miniatura, el icono de carga

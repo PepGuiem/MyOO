@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { ApiError } from '../api/client';
+import { t } from '../i18n';
 
 /** Muestra un error de la API; si es un límite de plan, enlaza a la cuenta. */
 export function ErrorNote({ error }: { error: unknown }) {
@@ -8,12 +9,12 @@ export function ErrorNote({ error }: { error: unknown }) {
   const isLimit = error instanceof ApiError && error.isPlanLimit;
   return (
     <p className="note note-error" role="alert">
-      {isLimit ? 'Has llegado al límite de tu plan. ' : ''}
+      {isLimit ? t('Has llegado al límite de tu plan. ') : ''}
       {message}
       {isLimit && (
         <>
           {' '}
-          <Link to="/account">Ver planes</Link>
+          <Link to="/account">{t('Ver planes')}</Link>
         </>
       )}
     </p>

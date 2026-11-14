@@ -482,6 +482,92 @@ Panel con tus cifras, destacados, STYLE INSIGHTS, estilos (barra rayada = estilo
 - **Vestidor:** en «Todo» y en «Pies» sale la fila «Tu colección de sneakers». Al elegir un par, sustituye al calzado que hubiera puesto. En el burro, las zapatillas fichadas llevan la etiqueta de su marca.
 - **Outfits:** una fila de filtros «Con…» muestra solo los outfits que llevan unas zapatillas concretas. Se guarda en la URL como `?item=`.
 
+## Batallas (`/batallas`, `/batallas/:id`): STREETWEAR BATTLES
+
+- Retos 1 vs 1: lanzas un reto con uno de tus outfits (a alguien o abierto a cualquiera) y el rival responde con el suyo. La comunidad vota 48 h.
+- Pestañas: En juego, Retos abiertos, Te retan, Mis batallas y Resultados. Al lado, el ranking (podio + puestos).
+- «Retar» en el perfil de otra persona abre el reto con esa persona elegida (`/batallas?retar=<id>`).
+- El marcador se oculta hasta que votas (o si participas). Nadie vota en su propia batalla.
+- Animaciones: los outfits entran desde los lados y el «VS» choca con una onda; al votar, chispas, «+1» y la barra se desliza; corona y celebración para el ganador.
+
+## Street Market (`/market`, `/market/:id`): apagado, «Próximamente»
+
+- Está terminado (anuncios para vender o intercambiar, fotos, favoritos, contacto por el chat, «Vender» desde una prenda o unas zapatillas) pero **apagado** hasta su lanzamiento: `FEATURES.market = false` en `src/lib/features.ts`.
+- Mientras está apagado: no sale en el menú, `/market` lleva a Novedades → «Próximamente» y no hay botones «Vender».
+- Para encenderlo: `market: true` aquí y `MARKET_ENABLED=true` en el backend.
+
+## Armario (`/armario`): catálogo streetwear
+
+- **Cabecera:**
+  - pegatina «My collection»;
+  - título grande con sombra roja y burdeos y trazo de spray;
+  - contador de prendas;
+  - botón «Añadir prenda» de neón.
+- **Barra de información** con datos reales (`GET /wardrobe-items/facets`): prendas, categorías, favoritas y última añadida (abre su ficha).
+- **Filtros, todos en la URL:**
+  - categoría, como etiquetas con su número; en móvil se desplazan en horizontal;
+  - panel «Filtros» con color (grupos presentes), marca, temporada, tipo de prenda y solo favoritas;
+  - orden: recientes, antiguas, nombre o favoritas primero.
+  - Los filtros activos salen como pastillas que se pueden quitar.
+- **Vistas:** cuadrícula, compacta y catálogo. Se recuerdan en este navegador (`localStorage`, `myout.wardrobe.view`).
+- **Fichas** (`components/wardrobe/GarmentCard.tsx`):
+  - modelo 3D protagonista, cinta arriba y «Nueva» (menos de 7 días);
+  - nombre, categoría, tipo, marca y color con su nombre (`lib/colors.ts`, la misma tabla que el estilista).
+  - El corazón de favorita y el menú «⋯» (Editar / Eliminar) van fuera del escenario 3D, porque el lienzo compartido se pinta encima del HTML. El menú se abre en una capa aparte.
+- **Ficha ampliada** (`GarmentDetail.tsx`, ventana):
+  - visor 3D propio que se gira arrastrando, y tu foto si la tiene;
+  - marca, color, temporada, talla, armario, fecha, compra, estilos y notas;
+  - botones «Añadir a un outfit» (`/outfits/new?with=<id>`), «Editar», «Ficha completa» (`/items/:id`) y «Eliminar» (con confirmación).
+  - En móvil ocupa toda la pantalla.
+- **Armario vacío:** composición con percha y prendas flotando, «Tu armario está esperando» y «Añadir mi primera prenda».
+- **Animaciones:** entrada escalonada, elevación con brillo y reflejo, modelo que crece, iconos que aparecen al pasar el ratón, latido al marcar favorita y fundido al cambiar de filtro. Con «reducir movimiento» no hay animaciones.
+
+## Estilista (`/estilista`): virtual stylist
+
+- **Cabecera** «Virtual stylist» con el título grande y trazo de spray.
+- **Controles** en tres bloques (Estilo, Ocasión, Tiempo) con etiquetas e iconos; en móvil se desplazan en horizontal. Botón «Proponer outfits» con barra de carga.
+- **Escenario** (`OutfitStage` con `rig`): arrastrar para girar, zoom con rueda, pellizco o botones, vistas Frente / Lado / Espalda, giro automático y un balanceo suave cuando está parado. No hay poses: el maniquí es una malla fija.
+- **Probador** (`components/stylist/SwapTray.tsx`): al pulsar «Cambiar» salen las prendas compatibles de tu armario; al tocar una, el maniquí se la prueba, y el cambio se aplica al confirmar.
+- **Bloqueo:** el candado de cada prenda la envía en `lockedItemIds`, y el estilista no la sustituye.
+- **Análisis** (`StyleAnalysis.tsx`): paleta, motivos y cuatro indicadores (color, equilibrio, estilo y detalles), más ocasión y tiempo.
+- **Notas** (`StickyNote.tsx`): ¡OJO!, TRUCO, IDEA y ¡BIEN!, con papel, cinta y letra a mano; vienen del motor.
+- **Le falta a tu armario** (`MissingPieces.tsx`): prenda sugerida, prioridad, outfits completos que desbloquea (recuento real) y «Añadir a la wishlist» (sin precio ni enlace).
+
+## Inicio, Mensajes y Personas: mismo lenguaje que el armario
+
+- Las tres páginas reutilizan la paleta `--wd-*`, la pegatina (`.wd-kicker`), el título (`.wd-title`) y los botones del armario. Estilos al final de `styles.css`, bajo `.hm`, `.ch` y `.pp`.
+- **Inicio (`/`):** saludo grande con tu nombre en naranja, cifras con contador y acceso al estilista, escaparate con el maniquí y tu último outfit, recientes con las fichas del armario (`GarmentCard` sin botones), categorías con icono, armarios y outfits.
+- **Mensajes (`/mensajes`):** misma lógica (tiempo real, envío, grupos, denuncias). Cabecera «Direct line», filtro de conversaciones por nombre (aparece con más de 3), burbujas propias en naranja, avisos de grupo como pastilla y estado vacío animado. Página traducida.
+- **Personas (`/personas`):** buscador grande con línea de escaneo mientras busca, resultados y solicitudes como tarjetas con aro de neón, y estados «Encuentra a tu gente» y «Nadie con ese nombre». Página traducida.
+
+## Idiomas: español e inglés
+
+- `src/i18n/index.ts`: `t('Texto en español')` devuelve la traducción. **El texto en español es la clave**; las traducciones al inglés están en `src/i18n/en.ts`. Si falta una, se ve el español (en desarrollo sale un aviso en la consola).
+  - Variables: `t('Hola, {name}', { name })`. Plurales: `tn(n, '{n} prenda', '{n} prendas')`.
+  - Contexto para palabras que se traducen distinto: `t('Bajo##estilo')` («Hem») frente a `t('Bajo')` («Low»). En español se ve sin el `##…`.
+- El idioma se decide al cargar la página: el de la cuenta (`User.locale`) → el guardado en este navegador → el del navegador (inglés si lo pide; si no, español). Cambiarlo recarga la página, así `t()` vale en cualquier sitio (también en constantes).
+- Se cambia en **Cuenta → Tus datos → Idioma** (se guarda en la cuenta) y en la pantalla de acceso (ES / EN).
+- Fechas, números y monedas usan `LOCALE_TAG` (`es-ES` o `en-GB`).
+- Los textos del catálogo que llegan del backend en español (etiquetas de campos y opciones, nombres de tipos de prenda) se traducen al recibirlos (`localize` en `api/client.ts`). Lo que escribe la gente (nombres de prendas, outfits, ideas, novedades) no se traduce.
+- `npm run i18n:check` lista los textos que aún no tienen traducción al inglés.
+- **Estado:** traducidos el menú, el acceso, la cuenta, el inicio, el armario (prendas, editor, personalización) y los outfits/vestidor. El resto de pantallas se traduce en las siguientes entregas.
+
+## Estilo neón y animaciones (toda la app)
+
+- **Fondo global** (`components/fx/NeonScene.tsx`): la pared de hormigón con firmas de grafiti, tubos de neón rojo que parpadean, fluorescentes fríos, suelo de baldosa y polvo flotando. Se monta una sola vez en `App.tsx`, así que es el mismo en todas las páginas de la app (el login conserva su calle de noche) y no se reinicia al navegar. Se mueve un poco con el ratón y el scroll.
+- **Colores:** los de siempre (superficies gris oscuro, blanco hueso y rojo neón `--fx-neon`). Las animaciones no cambian colores ni componentes.
+- **Sistema de animaciones**, sin librerías (CSS + Web Animations API; solo `transform`, `opacity` y `filter`):
+  - `lib/motion.ts`: `withTransition()` (transiciones suaves al cambiar filtros o pestañas, con View Transitions si el navegador las soporta), `animateOut()`, `burst()` y `burstAt()` (chispas rojas y blancas al confirmar), y `reducedMotion()`, `canHover()` y `lowPower()`.
+  - `components/fx/GlobalFx.tsx`, montado una vez:
+    - las tarjetas se elevan e inclinan un poco hacia el cursor y recogen un reflejo rojo;
+    - onda al pulsar botones, pestañas y filtros;
+    - aparición al hacer scroll (la animación de entrada espera hasta que la tarjeta se ve);
+    - línea roja arriba al cambiar de sección.
+  - Clases reutilizables: `cy-fade-up` (con `--i` para escalonar) y `cy-pop`.
+  - Los modales se cierran con animación; los avisos de «hecho» sueltan un anillo y chispas.
+  - En el móvil, el menú es un panel lateral deslizante (botón ☰).
+- **Rendimiento y accesibilidad:** sin inclinación ni luces de hover en pantallas táctiles; con «reducir movimiento» del sistema, todo queda quieto; el polvo se para cuando la pestaña no se ve.
+
 ## Estructura
 
 ```

@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "typecheck": "tsc -b",
+    "i18n:check": "node scripts/i18n-check.mjs",
     "preview": "vite preview",
     "models": "node scripts/prepare-garments.mjs ../prendas_3d_glb public/models/prendas",
     "models:punto": "node scripts/prepare-garments.mjs ../prendas_punto_glb public/models/prendas/punto",

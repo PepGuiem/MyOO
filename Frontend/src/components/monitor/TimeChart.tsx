@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useId, useMemo, useRef, useState, type KeyboardEvent, type PointerEvent, type RefObject } from 'react';
+import { LOCALE_TAG } from '../../i18n';
 
 export interface ChartPoint {
   /** Etiqueta del eje X (hora o día) ya formateada. */
@@ -37,8 +38,8 @@ export function niceMax(max: number): number {
 }
 
 export function compact(n: number): string {
-  if (Math.abs(n) >= 10_000) return new Intl.NumberFormat('es-ES', { notation: 'compact', maximumFractionDigits: 1 }).format(n);
-  return new Intl.NumberFormat('es-ES', { maximumFractionDigits: n < 10 && n % 1 ? 1 : 0 }).format(n);
+  if (Math.abs(n) >= 10_000) return new Intl.NumberFormat(LOCALE_TAG, { notation: 'compact', maximumFractionDigits: 1 }).format(n);
+  return new Intl.NumberFormat(LOCALE_TAG, { maximumFractionDigits: n < 10 && n % 1 ? 1 : 0 }).format(n);
 }
 
 /**

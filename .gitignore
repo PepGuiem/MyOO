@@ -1,0 +1,8 @@
+# Archivos de trabajo de Blender: pesan demasiado para GitHub.
+# Se quedan en el disco; los modelos .glb sí van en git.
+*.blend
+*.blend1
+*.fbx
+*.npz
+prendas_*/**/*.png
+.claude-tmp/

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useId, useLayoutEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react';
 import { createPortal } from 'react-dom';
+import { t } from '../i18n';
 
 export interface SelectOption {
   value: string;
@@ -31,7 +32,7 @@ interface Props {
  * flechas, Inicio/Fin, Intro o espacio para elegir, Esc para cerrar y letras
  * para saltar a una opción.
  */
-export function Select({ value, options, onChange, ariaLabel, labelledBy, placeholder = 'Elegir…', size = 'md', disabled, className = '' }: Props) {
+export function Select({ value, options, onChange, ariaLabel, labelledBy, placeholder = t('Elegir…'), size = 'md', disabled, className = '' }: Props) {
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(-1);
   const [pos, setPos] = useState<{ left: number; top: number; width: number; maxHeight: number; up: boolean } | null>(null);

@@ -1,6 +1,7 @@
 import { useMemo, useState, type CSSProperties } from 'react';
 import type { WishlistPrice } from '../../api/types';
 import { money } from '../../lib/wishlist';
+import { LOCALE_TAG } from '../../i18n';
 
 /**
  * Historial de precios en escalón: un precio vale hasta que apuntas el
@@ -29,7 +30,7 @@ function niceStep(raw: number): number {
 }
 
 const DAY = 86_400_000;
-const fmtDay = (t: number) => new Date(t).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
+const fmtDay = (t: number) => new Date(t).toLocaleDateString(LOCALE_TAG, { day: 'numeric', month: 'short' });
 
 export function PriceChart({ prices, target, currency }: { prices: WishlistPrice[]; target: number | null; currency: string }) {
   const [hover, setHover] = useState<number | null>(null);
@@ -119,7 +120,7 @@ export function PriceChart({ prices, target, currency }: { prices: WishlistPrice
         <span className={`wl-chart-tip${tipLeft > 70 ? ' is-right' : tipLeft < 25 ? ' is-left' : ''}`} style={{ left: `${tipLeft}%`, top: `${tipTop}%` }} role="status">
           <b>{money(tipPt.v, currency)}</b>
           <span>
-            {new Date(tipPt.t).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}
+            {new Date(tipPt.t).toLocaleDateString(LOCALE_TAG, { day: 'numeric', month: 'long', year: 'numeric' })}
             {tipPt.source === 'TRACKER' ? ' · seguimiento' : ''}
           </span>
           {tipPt.note && <i>{tipPt.note}</i>}

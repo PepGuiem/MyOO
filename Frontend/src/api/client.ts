@@ -1,3 +1,4 @@
+import { locale, t } from '../i18n';
 /**
  * Cliente HTTP mínimo sobre fetch.
  * - Añade el token JWT en la cabecera Authorization.
@@ -101,7 +102,7 @@ function messageFrom(body: Record<string, unknown> | null, status: number): stri
   const msg = body?.message;
   if (Array.isArray(msg)) return msg.join('. ');
   if (typeof msg === 'string') return msg;
-  if (status === 0) return 'No se puede conectar con la API. ¿Está arrancado el backend?';
+  if (status === 0) return t('No se puede conectar con la API. ¿Está arrancado el backend?');
   return `Error ${status}`;
 }
 
@@ -141,7 +142,30 @@ export async function api<T>(
     checkSession(response.status, errorBody, !!token);
     throw new ApiError(response.status, messageFrom(errorBody, response.status), errorBody);
   }
-  return body as T;
+  return (locale === 'en' ? localize(body) : body) as T;
+}
+
+/**
+ * En inglés, traduce los textos del catálogo que llegan del backend en
+ * español: etiquetas (`label`) de campos, opciones, piezas y colores, y el
+ * nombre de los tipos de prenda (objetos con `code` y `category`). Lo que
+ * escribe la gente (nombres de prendas, outfits, armarios...) no se toca.
+ */
+function localize(value: unknown, depth = 0): unknown {
+  if (depth > 12 || value === null || typeof value !== 'object') return value;
+  if (Array.isArray(value)) {
+    for (let i = 0; i < value.length; i++) value[i] = localize(value[i], depth + 1);
+    return value;
+  }
+  const o = value as Record<string, unknown>;
+  for (const k of Object.keys(o)) {
+    const v = o[k];
+    // Opciones de «cómo se lleva» (tienen key y values): su texto lleva contexto propio.
+    if (k === 'label' && typeof v === 'string') o[k] = t(Array.isArray(o.values) && typeof o.key === 'string' ? `${v}##estilo` : v);
+    else if (v && typeof v === 'object') o[k] = localize(v, depth + 1);
+  }
+  if (typeof o.name === 'string' && typeof o.code === 'string' && typeof o.category === 'string') o.name = t(o.name);
+  return o;
 }
 
 async function errorFrom(response: Response, hadToken: boolean): Promise<ApiError> {
@@ -153,7 +177,7 @@ async function errorFrom(response: Response, hadToken: boolean): Promise<ApiErro
   }
   const errorBody = body && typeof body === 'object' ? (body as Record<string, unknown>) : null;
   checkSession(response.status, errorBody, hadToken);
-  if (response.status === 413) return new ApiError(413, 'El archivo es demasiado grande (máximo 2 MB).', errorBody);
+  if (response.status === 413) return new ApiError(413, t('El archivo es demasiado grande (máximo 2 MB).'), errorBody);
   return new ApiError(response.status, messageFrom(errorBody, response.status), errorBody);
 }
 

@@ -5,12 +5,14 @@ import { REPORT_REASONS, REPORT_REASON_LABEL } from '../../lib/community';
 import { ErrorNote } from '../ErrorNote';
 import { Modal } from '../Modal';
 import { Busy } from '../Spinner';
+import { t } from '../../i18n';
 
 const WHAT: Record<ReportTarget, string> = {
-  USER: 'este perfil',
-  MESSAGE: 'este mensaje',
-  OUTFIT: 'este outfit',
-  IDEA: 'esta idea',
+  USER: t('este perfil'),
+  MESSAGE: t('este mensaje'),
+  OUTFIT: t('este outfit'),
+  IDEA: t('esta idea'),
+  LISTING: t('este anuncio'),
 };
 
 /**
@@ -44,18 +46,18 @@ export function ReportDialog({ targetType, targetId, onClose }: { targetType: Re
     <Modal title={`Denunciar ${WHAT[targetType]}`} onClose={onClose}>
       {done ? (
         <div className="stack">
-          <p>Gracias por avisar. El equipo lo revisará y te llegará un aviso cuando lo hayamos mirado.</p>
-          <p className="muted small">La otra persona no sabrá quién la ha denunciado.</p>
+          <p>{t('Gracias por avisar. El equipo lo revisará y te llegará un aviso cuando lo hayamos mirado.')}</p>
+          <p className="muted small">{t('La otra persona no sabrá quién la ha denunciado.')}</p>
           <div className="dialog-actions">
             <button type="button" className="btn btn-primary" onClick={onClose}>
-              Cerrar
+              {t('Cerrar')}
             </button>
           </div>
         </div>
       ) : (
         <form className="stack" onSubmit={submit}>
           <fieldset className="field">
-            <legend>¿Qué pasa?</legend>
+            <legend>{t('¿Qué pasa?')}</legend>
             <div className="report-reasons" role="radiogroup">
               {REPORT_REASONS.map((r) => (
                 <label key={r} className={`report-reason${reason === r ? ' is-active' : ''}`}>
@@ -66,16 +68,16 @@ export function ReportDialog({ targetType, targetId, onClose }: { targetType: Re
             </div>
           </fieldset>
           <label className="field">
-            <span>Detalles (opcional)</span>
-            <textarea rows={3} maxLength={1000} value={details} onChange={(e) => setDetails(e.target.value)} placeholder="Cuéntanos lo que haga falta para entenderlo" />
+            <span>{t('Detalles (opcional)')}</span>
+            <textarea rows={3} maxLength={1000} value={details} onChange={(e) => setDetails(e.target.value)} placeholder={t('Cuéntanos lo que haga falta para entenderlo')} />
           </label>
           <ErrorNote error={error} />
           <div className="dialog-actions">
             <button type="button" className="btn btn-ghost" onClick={onClose}>
-              Cancelar
+              {t('Cancelar')}
             </button>
             <button type="submit" className="btn btn-primary" disabled={!reason || busy}>
-              {busy ? <Busy text="Enviando…" /> : 'Enviar denuncia'}
+              {busy ? <Busy text={t('Enviando…')} /> : t('Enviar denuncia')}
             </button>
           </div>
         </form>

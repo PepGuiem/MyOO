@@ -1,6 +1,8 @@
+import { Locale } from '@prisma/client';
 import { Transform } from 'class-transformer';
 import {
   IsEmail,
+  IsEnum,
   IsOptional,
   IsString,
   Matches,
@@ -36,4 +38,9 @@ export class RegisterDto {
   @MinLength(1)
   @MaxLength(60)
   displayName?: string;
+
+  /** Idioma con el que se registra (el de la web en ese momento). */
+  @IsOptional()
+  @IsEnum(Locale)
+  locale?: Locale;
 }

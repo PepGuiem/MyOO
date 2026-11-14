@@ -383,6 +383,7 @@ function Snapshot({ type, snapshot }: { type: ReportTarget; snapshot: Record<str
   if (type === 'MESSAGE') text = s('body') ?? (s('outfitName') ? `Outfit enviado: ${s('outfitName')}` : null);
   if (type === 'OUTFIT') text = [s('name'), s('description')].filter(Boolean).join(' — ');
   if (type === 'IDEA') text = [s('title'), s('body')].filter(Boolean).join(' — ');
+  if (type === 'LISTING') text = [s('title'), s('price') && `${s('price')} ${s('currency') ?? ''}`.trim(), s('description')].filter(Boolean).join(' — ');
   if (type === 'USER') text = [s('displayName'), s('username') && `@${s('username')}`, s('bio')].filter(Boolean).join(' · ');
   if (!text) return null;
   return <blockquote className="admin-snapshot">{text}</blockquote>;
@@ -508,6 +509,11 @@ function ReportCard({ report: r, onChanged, onOpenUser }: { report: AdminReport;
             {r.targetType === 'OUTFIT' && r.targetState !== 'deleted' && (
               <button type="button" className="btn btn-small" disabled={busy} onClick={() => void run(() => adminApi.hideOutfit(r.targetId, r.targetState !== 'hidden'))}>
                 <Icon name="eyeOff" size={13} /> {r.targetState === 'hidden' ? 'Volver a mostrar el outfit' : 'Ocultar el outfit'}
+              </button>
+            )}
+            {r.targetType === 'LISTING' && r.targetState !== 'deleted' && (
+              <button type="button" className="btn btn-small" disabled={busy} onClick={() => void run(() => adminApi.hideListing(r.targetId, r.targetState !== 'hidden'))}>
+                <Icon name="eyeOff" size={13} /> {r.targetState === 'hidden' ? 'Volver a mostrar el anuncio' : 'Ocultar el anuncio'}
               </button>
             )}
             {r.targetType === 'IDEA' && r.targetState !== 'deleted' && (

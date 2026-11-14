@@ -6,7 +6,6 @@ import { DayDetail, StyleTag } from '../components/calendar/DayDetail';
 import { DayPanel } from '../components/calendar/DayPanel';
 import { OutfitGlyph } from '../components/calendar/OutfitGlyph';
 import { ErrorNote } from '../components/ErrorNote';
-import { NeonScene } from '../components/fx/NeonScene';
 import { SoundToggle } from '../components/fx/SoundToggle';
 import { useToast } from '../components/fx/Toast';
 import { Icon } from '../components/Icon';
@@ -150,7 +149,6 @@ export function CalendarPage() {
 
   return (
     <section className="page cal">
-      <NeonScene />
 
       <header className="cal-hero">
         <div>

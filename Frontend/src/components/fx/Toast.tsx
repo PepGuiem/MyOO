@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useMemo, useRef, useState, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { play, type Sfx } from '../../lib/sfx';
+import { burst } from '../../lib/motion';
 import { Icon, type IconName } from '../Icon';
 
 export type ToastTone = 'ok' | 'info' | 'danger';
@@ -41,6 +42,8 @@ export function ToastProvider({ children }: { children: ReactNode }) {
       const tone = opts.tone ?? 'ok';
       setItems((l) => [...l.slice(-2), { id, text, tone, icon: opts.icon ?? TONE_ICON[tone], action: opts.action }]);
       if (opts.sound) play(opts.sound);
+      // Acción completada: unas chispas de neón salen del aviso.
+      if (tone === 'ok') window.setTimeout(() => burst(window.innerWidth / 2, window.innerHeight - 48, { count: 12, spread: 60 }), 120);
       window.setTimeout(() => dismiss(id), opts.action ? 5200 : 3200);
     },
     [dismiss],

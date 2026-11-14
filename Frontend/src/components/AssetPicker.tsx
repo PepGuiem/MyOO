@@ -4,6 +4,7 @@ import type { Asset } from '../api/types';
 import { forgetAssetImage } from '../lib/assetImages';
 import { ErrorNote } from './ErrorNote';
 import { Icon } from './Icon';
+import { t } from '../i18n';
 
 const ACCEPT = ['image/png', 'image/jpeg', 'image/webp'];
 const MAX_BYTES = 2 * 1024 * 1024;
@@ -58,11 +59,11 @@ export function AssetPicker({ value, onChange }: { value: string | undefined; on
   async function upload(file: File) {
     setError(null);
     if (!ACCEPT.includes(file.type)) {
-      setError(new Error('La imagen debe ser PNG, JPEG o WebP.'));
+      setError(new Error(t('La imagen debe ser PNG, JPEG o WebP.')));
       return;
     }
     if (file.size > MAX_BYTES) {
-      setError(new Error('La imagen ocupa más de 2 MB.'));
+      setError(new Error(t('La imagen ocupa más de 2 MB.')));
       return;
     }
     setBusy(true);
@@ -92,23 +93,23 @@ export function AssetPicker({ value, onChange }: { value: string | undefined; on
 
   return (
     <div className="asset-picker">
-      <div className="asset-grid" role="listbox" aria-label="Imágenes">
+      <div className="asset-grid" role="listbox" aria-label={t('Imágenes')}>
         <button type="button" className={`asset-tile asset-none${!value ? ' is-active' : ''}`} aria-selected={!value} role="option" onClick={() => onChange(undefined)}>
-          Sin imagen
+          {t('Sin imagen')}
         </button>
         {(assets ?? []).map((a) => (
           <div key={a.id} className={`asset-tile${value === a.id ? ' is-active' : ''}`}>
             <button type="button" role="option" aria-selected={value === a.id} aria-label={a.name} onClick={() => onChange(a.id)}>
               {urls[a.id] ? <img src={urls[a.id]} alt="" /> : <span className="muted small">…</span>}
             </button>
-            <button type="button" className="asset-delete" aria-label={`Borrar ${a.name}`} title="Borrar imagen" onClick={() => void remove(a.id)}>
+            <button type="button" className="asset-delete" aria-label={`Borrar ${a.name}`} title={t('Borrar imagen')} onClick={() => void remove(a.id)}>
               <Icon name="close" size={14} />
             </button>
           </div>
         ))}
       </div>
       <label className="btn btn-small asset-upload">
-        {busy ? 'Subiendo…' : 'Subir imagen'}
+        {busy ? t('Subiendo…') : t('Subir imagen')}
         <input
           ref={input}
           type="file"
@@ -121,7 +122,7 @@ export function AssetPicker({ value, onChange }: { value: string | undefined; on
           }}
         />
       </label>
-      <p className="muted small">PNG con fondo transparente para logos. Máx. 2 MB.</p>
+      <p className="muted small">{t('PNG con fondo transparente para logos. Máx. 2 MB.')}</p>
       <ErrorNote error={error} />
     </div>
   );

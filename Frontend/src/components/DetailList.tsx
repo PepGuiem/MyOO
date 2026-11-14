@@ -3,6 +3,7 @@ import { assetsApi } from '../api/endpoints';
 import type { CustomDetail } from '../api/types';
 import { DETAIL_FONT_LABEL, DETAIL_KIND_LABEL, DETAIL_SHAPE_LABEL } from '../lib/customLabels';
 import { Icon } from './Icon';
+import { LOCALE_TAG, t } from '../i18n';
 
 /**
  * Lista de los detalles de una prenda (parches, bordados, estampados,
@@ -18,7 +19,7 @@ export function DetailList({
   onDuplicate,
   onRemove,
   canDuplicate = true,
-  label = 'Detalles de la prenda',
+  label = t('Detalles de la prenda'),
 }: {
   details: CustomDetail[];
   selectedId?: string | null;
@@ -41,7 +42,7 @@ export function DetailList({
               className="detail-row-main"
               aria-pressed={onSelect ? active : undefined}
               onClick={onSelect ? () => onSelect(active ? null : d.id) : onEdit ? () => onEdit(d.id) : undefined}
-              title={onSelect ? (active ? 'Quitar el resaltado' : 'Resaltar en la prenda') : undefined}
+              title={onSelect ? (active ? t('Quitar el resaltado') : t('Resaltar en la prenda')) : undefined}
             >
               <DetailThumb detail={d} />
               <span className="detail-row-text">
@@ -51,7 +52,7 @@ export function DetailList({
             </button>
             <span className="detail-row-actions">
               {onEdit && (
-                <button type="button" className="icon-btn" aria-label={`Editar ${detailTitle(d)}`} title="Editar" onClick={() => onEdit(d.id)}>
+                <button type="button" className="icon-btn" aria-label={`Editar ${detailTitle(d)}`} title={t('Editar')} onClick={() => onEdit(d.id)}>
                   <Icon name="edit" size={15} />
                 </button>
               )}
@@ -60,7 +61,7 @@ export function DetailList({
                   type="button"
                   className="icon-btn"
                   aria-label={`Duplicar ${detailTitle(d)}`}
-                  title={canDuplicate ? 'Duplicar' : 'Has llegado al máximo de detalles'}
+                  title={canDuplicate ? t('Duplicar') : t('Has llegado al máximo de detalles')}
                   disabled={!canDuplicate}
                   onClick={() => onDuplicate(d.id)}
                 >
@@ -68,7 +69,7 @@ export function DetailList({
                 </button>
               )}
               {onRemove && (
-                <button type="button" className="icon-btn icon-btn-danger" aria-label={`Quitar ${detailTitle(d)}`} title="Quitar" onClick={() => onRemove(d.id)}>
+                <button type="button" className="icon-btn icon-btn-danger" aria-label={`Quitar ${detailTitle(d)}`} title={t('Quitar')} onClick={() => onRemove(d.id)}>
                   <Icon name="trash" size={15} />
                 </button>
               )}
@@ -84,16 +85,16 @@ export function DetailList({
 export function detailTitle(d: CustomDetail): string {
   const kind = DETAIL_KIND_LABEL[d.kind];
   if (d.text) return `${kind} · ${d.text}`;
-  if (d.assetId && d.kind !== 'drawing') return `${kind} con imagen`;
+  if (d.assetId && d.kind !== 'drawing') return t('{kind} con imagen', { kind });
   return kind;
 }
 
 function detailMeta(d: CustomDetail): string {
   const cm = Math.round(d.size * 1000) / 10;
-  const parts = [`${cm.toLocaleString('es-ES')} cm`];
+  const parts = [`${cm.toLocaleString(LOCALE_TAG)} cm`];
   if (d.shape) parts.push(DETAIL_SHAPE_LABEL[d.shape].toLowerCase());
   if (d.font && d.text) parts.push(`letra ${DETAIL_FONT_LABEL[d.font].toLowerCase()}`);
-  const where = d.normal[2] < -0.35 ? 'detrás' : Math.abs(d.normal[0]) > 0.6 ? (d.position[0] > 0 ? 'lado izquierdo' : 'lado derecho') : 'delante';
+  const where = d.normal[2] < -0.35 ? t('detrás') : Math.abs(d.normal[0]) > 0.6 ? (d.position[0] > 0 ? t('lado izquierdo') : t('lado derecho')) : 'delante';
   parts.push(where);
   return parts.join(' · ');
 }

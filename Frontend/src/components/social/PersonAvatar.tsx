@@ -1,9 +1,10 @@
 import type { UserBrief } from '../../api/types';
 import { usePersonImage } from '../../lib/personImage';
+import { t } from '../../i18n';
 
 export function personName(p: Pick<UserBrief, 'displayName' | 'username'> | null | undefined): string {
-  if (!p) return 'Usuario eliminado';
-  return p.displayName?.trim() || (p.username ? `@${p.username}` : 'Sin nombre');
+  if (!p) return t('Usuario eliminado');
+  return p.displayName?.trim() || (p.username ? `@${p.username}` : t('Sin nombre'));
 }
 
 /** Ruta del perfil de alguien (por @usuario si lo tiene). */

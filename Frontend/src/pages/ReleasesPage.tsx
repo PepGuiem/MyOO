@@ -2,8 +2,11 @@ import { useEffect, useState } from 'react';
 import { releasesApi } from '../api/endpoints';
 import type { Release } from '../api/types';
 import { ErrorNote } from '../components/ErrorNote';
+import { Icon } from '../components/Icon';
 import { Spinner } from '../components/Spinner';
+import { UPCOMING } from '../lib/features';
 import { longDate, RELEASE_TAG_LABEL } from '../lib/community';
+import { t } from '../i18n';
 
 /** Novedades: lo nuevo de MyOut, de lo más reciente a lo más antiguo. */
 export function ReleasesPage() {
@@ -11,6 +14,10 @@ export function ReleasesPage() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [error, setError] = useState<unknown>(null);
+
+  useEffect(() => {
+    if (window.location.hash === '#proximamente') document.getElementById('proximamente')?.scrollIntoView({ block: 'start' });
+  }, []);
 
   useEffect(() => {
     releasesApi
@@ -36,16 +43,43 @@ export function ReleasesPage() {
     <section className="page releases-page">
       <header className="page-head">
         <div>
-          <h1>Novedades</h1>
-          <p className="muted">Lo nuevo de MyOut. Cuando publiquemos algo te llegará un aviso a la campanita.</p>
+          <h1>{t('Novedades')}</h1>
+          <p className="muted">{t('Lo nuevo de MyOut. Cuando publiquemos algo te llegará un aviso a la campanita.')}</p>
         </div>
       </header>
 
+      {UPCOMING.length > 0 && (
+        <section id="proximamente" className="upcoming" aria-labelledby="upcoming-title">
+          <h2 id="upcoming-title" className="upcoming-title">
+            <span className="rec-dot" aria-hidden="true" /> {t('Próximamente')}
+          </h2>
+          <ul className="upcoming-list">
+            {UPCOMING.map((u) => (
+              <li key={u.id} className="upcoming-card">
+                <span className="upcoming-icon" aria-hidden="true">
+                  <Icon name={u.icon} size={22} />
+                </span>
+                <div>
+                  <span className="release-tag release-tag-soon">{t('Próximo lanzamiento')}</span>
+                  <h3>{u.title}</h3>
+                  <p>{u.body}</p>
+                  <ul className="upcoming-points">
+                    {u.points.map((p) => (
+                      <li key={p}>{p}</li>
+                    ))}
+                  </ul>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
       <ErrorNote error={error} />
-      {!items && !error && <Spinner label="Cargando novedades…" />}
+      {!items && !error && <Spinner label={t('Cargando novedades…')} />}
       {items && items.length === 0 && (
         <div className="empty">
-          <p>Aún no hay novedades publicadas.</p>
+          <p>{t('Aún no hay novedades publicadas.')}</p>
         </div>
       )}
       {items && items.length > 0 && (
@@ -59,7 +93,7 @@ export function ReleasesPage() {
       )}
       {items && page < totalPages && (
         <button type="button" className="btn" onClick={() => void more()}>
-          Ver anteriores
+          {t('Ver anteriores')}
         </button>
       )}
     </section>
@@ -73,13 +107,13 @@ export function ReleaseEntry({ release: r }: { release: Release }) {
         {r.publishedAt ? (
           <time dateTime={r.publishedAt}>{longDate(r.publishedAt)}</time>
         ) : (
-          <span className="release-draft">Borrador</span>
+          <span className="release-draft">{t('Borrador')}</span>
         )}
         {r.version && <span className="release-version">v{r.version.replace(/^v/i, '')}</span>}
       </div>
       <div className="release-content">
         {r.tags.length > 0 && (
-          <ul className="release-tags" aria-label="Tipo">
+          <ul className="release-tags" aria-label={t('Tipo')}>
             {r.tags.map((t) => (
               <li key={t} className={`release-tag release-tag-${t.toLowerCase()}`}>
                 {RELEASE_TAG_LABEL[t]}

@@ -23,6 +23,8 @@ import { MAX_DRAWING_SIZE } from '../lib/customLabels';
 import { patternScaleFor } from '../lib/patterns';
 import type { StageMode } from '../three/showcase/ShowcaseStage';
 import { Busy, Spinner } from '../components/Spinner';
+import { t } from '../i18n';
+import { FEATURES } from '../lib/features';
 
 // El escenario 3D va en su propio trozo de código: se descarga al abrir el visor.
 const ShowcaseStage = lazy(() => import('../three/showcase/ShowcaseStage').then((m) => ({ default: m.ShowcaseStage })));
@@ -155,11 +157,11 @@ export default function ItemShowcasePage() {
     const project = projector.current;
     const placed = project?.(footprint) ?? null;
     if (!placed) {
-      setDrawError('El dibujo no cae sobre la prenda: dibuja encima de ella.');
+      setDrawError(t('El dibujo no cae sobre la prenda: dibuja encima de ella.'));
       return;
     }
     if (placed.size > MAX_DRAWING_SIZE) {
-      setDrawError(`El dibujo es demasiado grande (más de ${MAX_DRAWING_SIZE * 100} cm). Acerca la cámara o dibuja más pequeño.`);
+      setDrawError(t('El dibujo es demasiado grande (más de {v} cm). Acerca la cámara o dibuja más pequeño.', { v: MAX_DRAWING_SIZE * 100 }));
       return;
     }
     setDrawBusy(true);
@@ -174,7 +176,7 @@ export default function ItemShowcasePage() {
       setSelectedDetail(created.id);
       setDrawing(false);
     } catch (err) {
-      setDrawError(err instanceof Error ? err.message : 'No se pudo guardar el dibujo.');
+      setDrawError(err instanceof Error ? err.message : t('No se pudo guardar el dibujo.'));
     } finally {
       setDrawBusy(false);
     }
@@ -190,7 +192,7 @@ export default function ItemShowcasePage() {
     return (
       <section className="showcase">
         <div className="showcase-stage is-loading" aria-busy="true">
-          <p className="stage-status"><Spinner size={30} label="Cargando prenda…" /></p>
+          <p className="stage-status"><Spinner size={30} label={t('Cargando prenda…')} /></p>
         </div>
       </section>
     );
@@ -200,11 +202,11 @@ export default function ItemShowcasePage() {
     const notFound = error instanceof ApiError && error.status === 404;
     return (
       <section className="page">
-        <Link to={backTo} className="back-link"><Icon name="back" size={14} /> Volver</Link>
-        {notFound ? <p className="note">Esta prenda no existe o no es tuya.</p> : <ErrorNote error={error} />}
+        <Link to={backTo} className="back-link"><Icon name="back" size={14} /> {t('Volver')}</Link>
+        {notFound ? <p className="note">{t('Esta prenda no existe o no es tuya.')}</p> : <ErrorNote error={error} />}
         {!notFound && (
           <button type="button" className="btn" onClick={() => void reload()}>
-            Reintentar
+            {t('Reintentar')}
           </button>
         )}
       </section>
@@ -308,7 +310,7 @@ export default function ItemShowcasePage() {
   return (
     <section className="showcase">
       <header className="showcase-head">
-        <Link to={backTo} className="back-link"><Icon name="back" size={14} /> {backTo === '/' ? 'Inicio' : backTo.startsWith('/outfits') ? 'Outfits' : 'Armario'}</Link>
+        <Link to={backTo} className="back-link"><Icon name="back" size={14} /> {backTo === '/' ? t('Inicio') : backTo.startsWith('/outfits') ? t('Outfits') : t('Armario')}</Link>
         <div className="showcase-title">
           <p className="eyebrow">
             {item.garmentType.name} · {item.wardrobe.name}
@@ -318,19 +320,24 @@ export default function ItemShowcasePage() {
         <div className="head-actions">
           {!customizing && (
             <button type="button" className="btn" onClick={() => startCustomizing()} disabled={useGlb}>
-              Personalizar
+              {t('Personalizar')}
             </button>
           )}
           <button type="button" className="btn" onClick={() => setEditing(true)}>
-            Editar
+            {t('Editar')}
           </button>
+          {FEATURES.market && !item.wishlistStatus && (
+            <Link to={`/market?sell=${item.id}`} className="btn" title={t('Publicarla en Street Market')}>
+              <Icon name="store" size={14} /> {t('Vender')}
+            </Link>
+          )}
         </div>
       </header>
 
       <div className="showcase-body">
         <div className={`showcase-stage${placement ? ' is-placing' : ''}${drawing ? ' is-drawing' : ''}`} ref={setStageEl}>
           {webgl ? (
-            <Suspense fallback={<p className="stage-status"><Spinner size={30} label="Preparando el visor 3D…" /></p>}>
+            <Suspense fallback={<p className="stage-status"><Spinner size={30} label={t('Preparando el visor 3D…')} /></p>}>
               <ShowcaseStage
                 garment={stageGarment}
                 modelUrl={useGlb ? item.modelUrl : null}
@@ -358,7 +365,7 @@ export default function ItemShowcasePage() {
           {webgl && modelState === 'loading' && <ModelProgress />}
           {modelState === 'failed' && (
             <p className="stage-note" role="status">
-              No se pudo cargar el modelo 3D de esta prenda. Se muestra el modelo generado.
+              {t('No se pudo cargar el modelo 3D de esta prenda. Se muestra el modelo generado.')}
             </p>
           )}
 
@@ -374,17 +381,17 @@ export default function ItemShowcasePage() {
           {webgl && !drawing && (
             <>
               <p className="stage-hint showcase-hint" aria-hidden="true">
-                <span className="hint-pointer">Arrastra para girar · Rueda para acercar</span>
-                <span className="hint-touch">Desliza en horizontal para girar · Pellizca para acercar</span>
+                <span className="hint-pointer">{t('Arrastra para girar · Rueda para acercar')}</span>
+                <span className="hint-touch">{t('Desliza en horizontal para girar · Pellizca para acercar')}</span>
               </p>
-              <div className="stage-controls" role="toolbar" aria-label="Controles del visor">
+              <div className="stage-controls" role="toolbar" aria-label={t('Controles del visor')}>
                 {canDress && !customizing && (
-                  <div className="segmented" role="group" aria-label="Presentación">
+                  <div className="segmented" role="group" aria-label={t('Presentación')}>
                     <button type="button" aria-pressed={mode === 'garment'} onClick={() => setMode('garment')}>
-                      Prenda
+                      {t('Prenda')}
                     </button>
                     <button type="button" aria-pressed={mode === 'mannequin'} onClick={() => setMode('mannequin')}>
-                      En maniquí
+                      {t('En maniquí')}
                     </button>
                   </div>
                 )}
@@ -393,9 +400,9 @@ export default function ItemShowcasePage() {
                   className="ctl"
                   aria-pressed={wind}
                   onClick={() => setWind((w) => !w)}
-                  title="Movimiento de la tela (aproximación visual, no simulación física)"
+                  title={t('Movimiento de la tela (aproximación visual, no simulación física)')}
                 >
-                  Viento {wind ? 'sí' : 'no'}
+                  {t('Viento {v}', { v: wind ? t('sí') : t('no') })}
                 </button>
                 <button
                   type="button"
@@ -403,18 +410,18 @@ export default function ItemShowcasePage() {
                   aria-pressed={autoRotate}
                   onClick={() => setAutoRotate((a) => !a)}
                   disabled={reduced}
-                  title={reduced ? 'Desactivado: tu sistema pide reducir el movimiento' : 'Giro lento cuando no tocas la prenda'}
+                  title={reduced ? t('Desactivado: tu sistema pide reducir el movimiento') : t('Giro lento cuando no tocas la prenda')}
                 >
-                  Giro {autoRotate ? 'sí' : 'no'}
+                  {t('Giro {v}', { v: autoRotate ? t('sí') : t('no') })}
                 </button>
                 <button
                   type="button"
                   className="ctl"
-                  aria-label="Restablecer vista"
-                  title="Volver a la vista inicial"
+                  aria-label={t('Restablecer vista')}
+                  title={t('Volver a la vista inicial')}
                   onClick={() => setResetSignal((n) => n + 1)}
                 >
-                  Restablecer
+                  {t('Restablecer')}
                 </button>
               </div>
             </>
@@ -424,22 +431,20 @@ export default function ItemShowcasePage() {
         <aside className={`showcase-panel${customizing ? ' is-customizing' : ''}`}>
           {customizing && !type?.customizationOptions && (
             <section aria-labelledby="custom-title" className="custom-wrap">
-              <h2 id="custom-title" className="panel-title">Personalizar</h2>
+              <h2 id="custom-title" className="panel-title">{t('Personalizar')}</h2>
               <p className="note">
-                El servidor no ofrece todavía la personalización de prendas. Suele pasar cuando el backend sigue con la
-                versión anterior: páralo, ejecuta <code>npx prisma migrate dev</code> en la carpeta Backend y vuelve a
-                arrancarlo con <code>npm run start:dev</code>. Después recarga esta página.
+                {t('El servidor no ofrece todavía la personalización de prendas. Suele pasar cuando el backend sigue con la versión anterior: páralo, ejecuta')} <code>{t('npx prisma migrate dev')}</code> {t('en la carpeta Backend y vuelve a arrancarlo con')} <code>{t('npm run start:dev')}</code>{t('. Después recarga esta página.')}
               </p>
               <div className="actions custom-actions">
                 <button type="button" className="btn btn-ghost" onClick={stopCustomizing}>
-                  Cerrar
+                  {t('Cerrar')}
                 </button>
               </div>
             </section>
           )}
           {customizing && draft && type?.customizationOptions && (
             <section aria-labelledby="custom-title" className="custom-wrap">
-              <h2 id="custom-title" className="panel-title">Personalizar</h2>
+              <h2 id="custom-title" className="panel-title">{t('Personalizar')}</h2>
               <CustomizationPanel
                 options={type.customizationOptions}
                 initialTab={customTab}
@@ -470,11 +475,11 @@ export default function ItemShowcasePage() {
               <ErrorNote error={customError} />
               <div className="actions custom-actions">
                 <button type="button" className="btn btn-ghost" onClick={stopCustomizing}>
-                  {customDirty ? 'Descartar' : 'Cerrar'}
+                  {customDirty ? t('Descartar') : t('Cerrar')}
                 </button>
                 <span className="spacer" />
                 <button type="button" className="btn btn-primary" onClick={() => void saveCustomization()} disabled={!customDirty || savingCustom}>
-                  {savingCustom ? <Busy text="Guardando…" /> : 'Guardar'}
+                  {savingCustom ? <Busy text={t('Guardando…')} /> : t('Guardar')}
                 </button>
               </div>
             </section>
@@ -484,21 +489,21 @@ export default function ItemShowcasePage() {
           <section aria-labelledby="item-details-title" className="item-details">
             <div className="panel-title-row">
               <h2 id="item-details-title" className="panel-title">
-                Parches, bordados y estampados{(item.customization?.details?.length ?? 0) > 0 ? ` (${item.customization?.details?.length})` : ''}
+                {t('Parches, bordados y estampados{v}', { v: (item.customization?.details?.length ?? 0) > 0 ? ` (${item.customization?.details?.length})` : '' })}
               </h2>
               {!useGlb && (
                 <button type="button" className="btn btn-small" onClick={() => startCustomizing('details')}>
-                  <Icon name="plus" size={13} /> Añadir
+                  <Icon name="plus" size={13} /> {t('Añadir')}
                 </button>
               )}
             </div>
             {(item.customization?.details?.length ?? 0) === 0 ? (
               <p className="muted small">
-                {useGlb ? 'Esta prenda usa un modelo 3D propio (.glb): no admite detalles.' : 'Aún no tiene ninguno. Pulsa «Añadir» para poner parches, bordados, estampados, texto o un dibujo.'}
+                {useGlb ? t('Esta prenda usa un modelo 3D propio (.glb): no admite detalles.') : t('Aún no tiene ninguno. Pulsa «Añadir» para poner parches, bordados, estampados, texto o un dibujo.')}
               </p>
             ) : (
               <>
-                <p className="muted small">Pulsa uno para verlo resaltado en la prenda.</p>
+                <p className="muted small">{t('Pulsa uno para verlo resaltado en la prenda.')}</p>
                 <DetailList
                   details={item.customization?.details ?? []}
                   selectedId={selectedDetail}
@@ -510,9 +515,9 @@ export default function ItemShowcasePage() {
             )}
             {removed && (
               <p className="note small detail-undo" role="status">
-                Quitado: {detailTitle(removed.detail)}.{' '}
+                {t('Quitado: {detailTitle}.', { detailTitle: detailTitle(removed.detail) })}{' '}
                 <button type="button" className="btn-link" onClick={() => void undoRemove()} disabled={detailBusy}>
-                  Deshacer
+                  {t('Deshacer')}
                 </button>
               </p>
             )}
@@ -520,7 +525,7 @@ export default function ItemShowcasePage() {
           </section>
 
           <section aria-labelledby="variants-title">
-            <h2 id="variants-title" className="panel-title">Color</h2>
+            <h2 id="variants-title" className="panel-title">{t('Color')}</h2>
             {canTint ? (
               <>
                 <div className="color-row">
@@ -530,7 +535,7 @@ export default function ItemShowcasePage() {
                       type="button"
                       className={`color-chip${c.toUpperCase() === color.toUpperCase() ? ' is-active' : ''}`}
                       style={{ background: c }}
-                      aria-label={i === 0 ? `Color guardado ${c}` : `Probar color ${c}`}
+                      aria-label={i === 0 ? t('Color guardado {c}', { c }) : t('Probar color {c}', { c })}
                       aria-pressed={c.toUpperCase() === color.toUpperCase()}
                       onClick={() => setPreview(i === 0 ? null : c)}
                     />
@@ -538,40 +543,40 @@ export default function ItemShowcasePage() {
                 </div>
                 {preview ? (
                   <div className="inline-form">
-                    <span className="muted small">Vista previa: {preview}</span>
+                    <span className="muted small">{t('Vista previa: {preview}', { preview })}</span>
                     <button type="button" className="btn" onClick={() => void saveColor()} disabled={savingColor}>
-                      {savingColor ? <Busy text="Guardando…" /> : 'Guardar este color'}
+                      {savingColor ? <Busy text={t('Guardando…')} /> : t('Guardar este color')}
                     </button>
                     <button type="button" className="btn btn-ghost" onClick={() => setPreview(null)}>
-                      Deshacer
+                      {t('Deshacer')}
                     </button>
                   </div>
                 ) : (
-                  <p className="muted small">Toca un color para verlo en la prenda.</p>
+                  <p className="muted small">{t('Toca un color para verlo en la prenda.')}</p>
                 )}
                 <ErrorNote error={saveError} />
               </>
             ) : (
               <p className="muted small">
-                Este modelo 3D no tiene materiales marcados como teñibles; se muestra con sus colores originales.
+                {t('Este modelo 3D no tiene materiales marcados como teñibles; se muestra con sus colores originales.')}
               </p>
             )}
           </section>
 
           <section aria-labelledby="details-title">
-            <h2 id="details-title" className="panel-title">Ficha</h2>
+            <h2 id="details-title" className="panel-title">{t('Ficha')}</h2>
             <dl className="details">
-              <dt>Tejido (aspecto)</dt>
+              <dt>{t('Tejido (aspecto)')}</dt>
               <dd>{FABRIC_LABEL[fabric]}</dd>
-              <dt>Modelo 3D</dt>
-              <dd>{item.modelUrl ? 'Archivo propio (.glb)' : libraryEntry ? `Biblioteca: ${libraryEntry.file}` : 'Generado por código'}</dd>
+              <dt>{t('Modelo 3D')}</dt>
+              <dd>{item.modelUrl ? t('Archivo propio (.glb)') : libraryEntry ? t('Biblioteca: {file}', { file: libraryEntry.file }) : t('Generado por código')}</dd>
               {item.size && (
                 <>
-                  <dt>Talla</dt>
+                  <dt>{t('Talla')}</dt>
                   <dd>{item.size}</dd>
                 </>
               )}
-              <dt>Temporada</dt>
+              <dt>{t('Temporada')}</dt>
               <dd>{SEASON_LABEL[item.season]}</dd>
               {Object.entries(item.attributes).map(([key, value]) => {
                 const field = type?.attributeSchema.fields?.[key];
@@ -589,10 +594,10 @@ export default function ItemShowcasePage() {
           <section className="panel-foot muted small">
             <p>
               {useGlb
-                ? 'Modelo 3D real cargado desde archivo.'
-                : 'Modelo 3D generado por código a partir del tipo de prenda y sus cortes. Puedes asociar un modelo .glb real desde «Editar».'}
+                ? t('Modelo 3D real cargado desde archivo.')
+                : t('Modelo 3D generado por código a partir del tipo de prenda y sus cortes. Puedes asociar un modelo .glb real desde «Editar».')}
             </p>
-            <p>El movimiento de la tela es una aproximación visual (shader), no una simulación física.</p>
+            <p>{t('El movimiento de la tela es una aproximación visual (shader), no una simulación física.')}</p>
           </section>
           </>
           )}
@@ -625,54 +630,54 @@ function PurchaseInfo({ item }: { item: WardrobeItem }) {
   if (!url && !price && !brand && !item.storeName && !item.productName && !item.productRef && !item.purchaseDate && !styles.length) return null;
   return (
     <section aria-labelledby="purchase-title">
-      <h2 id="purchase-title" className="panel-title">Compra y estilo</h2>
+      <h2 id="purchase-title" className="panel-title">{t('Compra y estilo')}</h2>
       <dl className="details">
         {styles.length > 0 && (
           <>
-            <dt>Estilo</dt>
+            <dt>{t('Estilo')}</dt>
             <dd>{styles.join(', ')}</dd>
           </>
         )}
         {brand && (
           <>
-            <dt>Marca</dt>
+            <dt>{t('Marca')}</dt>
             <dd>{brand}</dd>
           </>
         )}
         {item.productName && (
           <>
-            <dt>Producto</dt>
+            <dt>{t('Producto')}</dt>
             <dd>{item.productName}</dd>
           </>
         )}
         {(item.storeName || item.purchasePlatform) && (
           <>
-            <dt>Tienda</dt>
+            <dt>{t('Tienda')}</dt>
             <dd>{[item.storeName, item.purchasePlatform ? labelOf(PURCHASE_PLATFORMS, item.purchasePlatform).toLowerCase() : null].filter(Boolean).join(' · ')}</dd>
           </>
         )}
         {item.productRef && (
           <>
-            <dt>Referencia</dt>
+            <dt>{t('Referencia')}</dt>
             <dd>{item.productRef}</dd>
           </>
         )}
         {price && (
           <>
-            <dt>Precio</dt>
+            <dt>{t('Precio')}</dt>
             <dd>{price}</dd>
           </>
         )}
         {item.purchaseDate && (
           <>
-            <dt>Comprado</dt>
+            <dt>{t('Comprado')}</dt>
             <dd>{formatDate(item.purchaseDate)}</dd>
           </>
         )}
       </dl>
       {url && (
         <a className="btn btn-small product-link" href={url} target="_blank" rel="noopener noreferrer nofollow">
-          Ver en {hostOf(url)} <Icon name="external" size={13} />
+          {t('Ver en {hostOf}', { hostOf: hostOf(url) })} <Icon name="external" size={13} />
         </a>
       )}
     </section>
@@ -682,7 +687,7 @@ function PurchaseInfo({ item }: { item: WardrobeItem }) {
 function AttributeRow({ field, value }: { field: AttributeField; value: AttributeValue }) {
   let text: string;
   if (field.type === 'enum') text = field.options.find((o) => o.value === value)?.label ?? String(value);
-  else if (field.type === 'boolean') text = value ? 'Sí' : 'No';
+  else if (field.type === 'boolean') text = value ? t('Sí') : t('No');
   else text = String(value);
   return (
     <>
@@ -697,7 +702,7 @@ function ModelProgress() {
   const { active, progress } = useProgress();
   if (!active) return null;
   return (
-    <div className="stage-progress" role="progressbar" aria-label="Cargando modelo 3D" aria-valuenow={Math.round(progress)} aria-valuemin={0} aria-valuemax={100}>
+    <div className="stage-progress" role="progressbar" aria-label={t('Cargando modelo 3D')} aria-valuenow={Math.round(progress)} aria-valuemin={0} aria-valuemax={100}>
       <span style={{ transform: `scaleX(${progress / 100})` }} />
     </div>
   );
@@ -713,8 +718,7 @@ function NoWebGL({ item }: { item: WardrobeItem }) {
         <span className="no-webgl-swatch" style={{ background: item.color }} aria-hidden="true" />
       )}
       <p className="muted small">
-        Tu navegador no puede mostrar gráficos 3D (WebGL desactivado o no disponible).
-        {item.imageUrl ? '' : ' Añade una URL de imagen a la prenda para verla aquí.'}
+        {t('Tu navegador no puede mostrar gráficos 3D (WebGL desactivado o no disponible).{v}', { v: item.imageUrl ? '' : t(' Añade una URL de imagen a la prenda para verla aquí.') })}
       </p>
     </div>
   );

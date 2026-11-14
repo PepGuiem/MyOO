@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { Icon } from '../Icon';
+import { t } from '../../i18n';
 
 /**
  * Confirmación con entrada y salida animadas (la pegatina cae y, al cerrar,
@@ -62,10 +63,10 @@ export function ConfirmDialog({
         {children && <div className="fx-dialog-body">{children}</div>}
         <div className="fx-dialog-actions">
           <button ref={cancelRef} type="button" className="btn" onClick={close} disabled={busy}>
-            Cancelar
+            {t('Cancelar')}
           </button>
           <button type="button" className={`btn ${danger ? 'btn-danger' : 'btn-primary'} btn-street`} onClick={onConfirm} disabled={busy}>
-            {busy ? 'Un momento…' : confirmLabel}
+            {busy ? t('Un momento…') : confirmLabel}
           </button>
         </div>
       </div>

@@ -63,6 +63,15 @@ export class EnvironmentVariables {
   @IsBoolean()
   ALLOW_SIMULATED_PLAN_CHANGE = false;
 
+  // STREET MARKET: está terminado pero apagado («próximamente» en Novedades).
+  // Con MARKET_ENABLED=true se abren sus rutas (/api/market).
+  @Transform(({ obj }: { obj: Record<string, unknown> }) => {
+    const raw = obj.MARKET_ENABLED;
+    return raw === true || raw === 'true';
+  })
+  @IsBoolean()
+  MARKET_ENABLED = false;
+
   // --- Inicio de sesión con Google / Apple y conexión con Instagram ---------
   // Todas son opcionales: si faltan las de un proveedor, su botón no aparece.
 

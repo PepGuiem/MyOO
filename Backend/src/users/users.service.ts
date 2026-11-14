@@ -87,6 +87,7 @@ export class UsersService {
       accentColor: dto.accentColor,
       isPrivate: dto.isPrivate,
       messagePolicy: dto.messagePolicy,
+      locale: dto.locale,
     };
     // Las relaciones se cambian con connect / disconnect.
     if (dto.avatarAssetId !== undefined) {

@@ -12,6 +12,7 @@ import {
   type PatternPreset,
 } from '../lib/patterns';
 import { ColorRow } from './ColorRow';
+import { t } from '../i18n';
 
 interface Props {
   /** Color de la prenda (el fondo del estampado). */
@@ -118,10 +119,10 @@ function Slider({ label, value, display, min, max, step, onChange }: { label: st
 }
 
 const DIRECTIONS: { angle: number; label: string; title: string; path: string }[] = [
-  { angle: 0, label: 'Horizontal', title: 'Horizontal (0°)', path: 'M2 5h12M2 8h12M2 11h12' },
-  { angle: 90, label: 'Vertical', title: 'Vertical (90°)', path: 'M5 2v12M8 2v12M11 2v12' },
-  { angle: 45, label: 'Diagonal /', title: 'Diagonal ascendente (45°)', path: 'M2 9 9 2M2 14 14 2M7 14l7-7' },
-  { angle: -45, label: 'Diagonal \\', title: 'Diagonal descendente (−45°)', path: 'M2 7l7 7M2 2l12 12M7 2l7 7' },
+  { angle: 0, label: t('Horizontal'), title: t('Horizontal (0°)'), path: 'M2 5h12M2 8h12M2 11h12' },
+  { angle: 90, label: t('Vertical'), title: t('Vertical (90°)'), path: 'M5 2v12M8 2v12M11 2v12' },
+  { angle: 45, label: t('Diagonal /'), title: t('Diagonal ascendente (45°)'), path: 'M2 9 9 2M2 14 14 2M7 14l7-7' },
+  { angle: -45, label: t('Diagonal \\'), title: t('Diagonal descendente (−45°)'), path: 'M2 7l7 7M2 2l12 12M7 2l7 7' },
 ];
 
 /**
@@ -183,15 +184,15 @@ export function PatternEditor({ base, value, onChange, hasSecondary, scale = 1 }
   return (
     <div className="pattern-editor">
       <div className="pattern-head">
-        <span id={`${id}-label`}>Estampado de la tela</span>
+        <span id={`${id}-label`}>{t('Estampado de la tela')}</span>
         <button type="button" className="btn-link" onClick={randomize}>
-          Sorpréndeme
+          {t('Sorpréndeme')}
         </button>
       </div>
       <div className="pattern-grid" role="listbox" aria-labelledby={`${id}-label`}>
-        <button type="button" role="option" aria-selected={!spec} className={`pattern-swatch${!spec ? ' is-active' : ''}`} onClick={() => onChange(null)} title="Sin estampado">
+        <button type="button" role="option" aria-selected={!spec} className={`pattern-swatch${!spec ? ' is-active' : ''}`} onClick={() => onChange(null)} title={t('Sin estampado')}>
           <PatternCanvas spec={null} base={base} width={56} height={56} widthM={0.1} />
-          <span>Liso</span>
+          <span>{t('Liso')}</span>
         </button>
         {thumbs.map(({ preset, spec: s }) => (
           <button
@@ -214,8 +215,7 @@ export function PatternEditor({ base, value, onChange, hasSecondary, scale = 1 }
           <div className="pattern-preview">
             <PatternCanvas spec={spec} base={base} width={560} height={200} widthM={previewM} className="pattern-preview-canvas" />
             <span className="pattern-preview-label">
-              {info.label}
-              {!active && ' · personalizado'} · vista plana de {Math.round(previewM * 100)} cm
+              {t('{label}{v} · vista plana de {round} cm', { label: info.label, v: !active && t(' · personalizado'), round: Math.round(previewM * 100) })}
             </span>
           </div>
 
@@ -234,14 +234,14 @@ export function PatternEditor({ base, value, onChange, hasSecondary, scale = 1 }
             ))}
             {spec.colors.length < PATTERN_LIMITS.maxColors && (
               <button type="button" className="btn btn-small pattern-add-color" onClick={addColor}>
-                + Añadir color
+                {t('+ Añadir color')}
               </button>
             )}
-            <p className="muted small">{info.colors} El fondo es el color de la prenda.</p>
+            <p className="muted small">{t('{colors} El fondo es el color de la prenda.', { colors: info.colors })}</p>
           </div>
 
           <Slider
-            label="Tamaño de la repetición"
+            label={t('Tamaño de la repetición')}
             value={sizeToSlider(spec.size)}
             display={`${(spec.size * 100).toFixed(spec.size < 0.1 ? 1 : 0)} cm`}
             min={0}
@@ -266,7 +266,7 @@ export function PatternEditor({ base, value, onChange, hasSecondary, scale = 1 }
           )}
           <div className="field">
             <span id={`${id}-dir`}>
-              Dirección <output>{deg}°</output>
+              {t('Dirección')} <output>{deg}°</output>
             </span>
             <div className="segmented segmented-small segmented-fill pattern-dirs" role="group" aria-labelledby={`${id}-dir`}>
               {DIRECTIONS.map((d) => (
@@ -277,11 +277,11 @@ export function PatternEditor({ base, value, onChange, hasSecondary, scale = 1 }
                 </button>
               ))}
             </div>
-            <input type="range" min={-180} max={180} step={1} value={deg} aria-label="Giro en grados" onChange={(e) => set({ angle: Number(e.target.value) })} />
+            <input type="range" min={-180} max={180} step={1} value={deg} aria-label={t('Giro en grados')} onChange={(e) => set({ angle: Number(e.target.value) })} />
           </div>
 
           <div className="field">
-            <span id={`${id}-target`}>Dónde</span>
+            <span id={`${id}-target`}>{t('Dónde')}</span>
             <div className="segmented segmented-small segmented-fill" role="group" aria-labelledby={`${id}-target`}>
               {targets.map((t) => (
                 <button key={t} type="button" aria-pressed={spec.target === t} onClick={() => set({ target: t })}>
@@ -292,13 +292,13 @@ export function PatternEditor({ base, value, onChange, hasSecondary, scale = 1 }
           </div>
 
           <details className="pattern-more">
-            <summary>Más ajustes: intensidad, bordes y posición</summary>
-            <Slider label="Intensidad" value={Math.round(spec.opacity * 100)} display={`${Math.round(spec.opacity * 100)} %`} min={5} max={100} step={1} onChange={(v) => set({ opacity: v / 100 })} />
-            <Slider label="Bordes difuminados" value={Math.round(spec.softness * 100)} display={spec.softness ? `${Math.round(spec.softness * 100)} %` : 'Nítidos'} min={0} max={100} step={1} onChange={(v) => set({ softness: v / 100 })} />
-            <Slider label="Desplazar en horizontal" value={Math.round(spec.offsetX * 100)} display={`${Math.round(spec.offsetX * 100)} %`} min={0} max={100} step={1} onChange={(v) => set({ offsetX: v / 100 })} />
-            <Slider label="Desplazar en vertical" value={Math.round(spec.offsetY * 100)} display={`${Math.round(spec.offsetY * 100)} %`} min={0} max={100} step={1} onChange={(v) => set({ offsetY: v / 100 })} />
+            <summary>{t('Más ajustes: intensidad, bordes y posición')}</summary>
+            <Slider label={t('Intensidad')} value={Math.round(spec.opacity * 100)} display={`${Math.round(spec.opacity * 100)} %`} min={5} max={100} step={1} onChange={(v) => set({ opacity: v / 100 })} />
+            <Slider label={t('Bordes difuminados')} value={Math.round(spec.softness * 100)} display={spec.softness ? `${Math.round(spec.softness * 100)} %` : t('Nítidos')} min={0} max={100} step={1} onChange={(v) => set({ softness: v / 100 })} />
+            <Slider label={t('Desplazar en horizontal')} value={Math.round(spec.offsetX * 100)} display={`${Math.round(spec.offsetX * 100)} %`} min={0} max={100} step={1} onChange={(v) => set({ offsetX: v / 100 })} />
+            <Slider label={t('Desplazar en vertical')} value={Math.round(spec.offsetY * 100)} display={`${Math.round(spec.offsetY * 100)} %`} min={0} max={100} step={1} onChange={(v) => set({ offsetY: v / 100 })} />
             <button type="button" className="btn-link" onClick={() => set({ opacity: 1, softness: 0, offsetX: 0, offsetY: 0 })}>
-              Restablecer estos ajustes
+              {t('Restablecer estos ajustes')}
             </button>
           </details>
         </div>

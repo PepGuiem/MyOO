@@ -12,6 +12,7 @@
  * menor que el de la sección: se compensa para que el maniquí mida lo que dice.
  */
 import { BODY_SHAPES, makeBody, type Body, type BodyShape } from './body';
+import { t } from '../i18n';
 
 export type Sex = BodyShape['sex'];
 
@@ -28,12 +29,12 @@ export type MeasureKey = keyof Measures;
 
 /** Límites (los mismos que valida el backend en mannequin-measures.ts). */
 export const MEASURE_LIMITS: Record<MeasureKey, { min: number; max: number; label: string; hint: string }> = {
-  heightCm: { min: 140, max: 210, label: 'Altura', hint: 'De pies a cabeza, descalzo' },
-  shoulderCm: { min: 30, max: 56, label: 'Hombros', hint: 'Ancho de hombro a hombro, por detrás' },
-  chestCm: { min: 65, max: 150, label: 'Pecho', hint: 'Contorno por la parte más ancha' },
-  waistCm: { min: 45, max: 150, label: 'Cintura', hint: 'Contorno por la parte más estrecha' },
-  hipCm: { min: 65, max: 160, label: 'Cadera', hint: 'Contorno por la parte más ancha de los glúteos' },
-  armCm: { min: 18, max: 45, label: 'Brazo', hint: 'Contorno del brazo, a media altura' },
+  heightCm: { min: 140, max: 210, label: t('Altura'), hint: t('De pies a cabeza, descalzo') },
+  shoulderCm: { min: 30, max: 56, label: t('Hombros'), hint: t('Ancho de hombro a hombro, por detrás') },
+  chestCm: { min: 65, max: 150, label: t('Pecho'), hint: t('Contorno por la parte más ancha') },
+  waistCm: { min: 45, max: 150, label: t('Cintura'), hint: t('Contorno por la parte más estrecha') },
+  hipCm: { min: 65, max: 160, label: t('Cadera'), hint: t('Contorno por la parte más ancha de los glúteos') },
+  armCm: { min: 18, max: 45, label: t('Brazo'), hint: t('Contorno del brazo, a media altura') },
 };
 
 export const MEASURE_KEYS = Object.keys(MEASURE_LIMITS) as MeasureKey[];

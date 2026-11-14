@@ -49,6 +49,11 @@ export async function createTestApp(): Promise<TestContext> {
 /** Borra los datos de usuario (en orden, por las claves foráneas). */
 export async function resetDatabase(prisma: PrismaService): Promise<void> {
   await prisma.dailyActive.deleteMany();
+  await prisma.battleVote.deleteMany();
+  await prisma.battle.deleteMany();
+  await prisma.listingFavorite.deleteMany();
+  await prisma.listingPhoto.deleteMany();
+  await prisma.listing.deleteMany();
   await prisma.notification.deleteMany();
   await prisma.report.deleteMany();
   await prisma.ideaVote.deleteMany();

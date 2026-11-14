@@ -552,6 +552,46 @@ npm test               # incluye src/sneakers/sneakers.rules.spec.ts
 npm run test:e2e       # incluye test/sneakers.e2e-spec.ts
 ```
 
+## STREETWEAR BATTLES (`/api/battles`)
+
+- Retos 1 vs 1 entre outfits: `POST /battles` (con `opponentId` o abierto), `POST /battles/:id/accept` (con tu outfit), `decline`, `DELETE` (retirar) y `POST /battles/:id/vote`.
+- Cada lado guarda una copia del outfit (sin datos de compra). Votación de 48 h; 72 h para aceptar un reto.
+- Un voto por persona (clave primaria) y nunca en tu batalla; el voto y el contador van en una transacción con actualización condicionada.
+- Las batallas vencidas se cierran con `UPDATE … RETURNING` (cada minuto y al consultar): cada una se cierra y se avisa una sola vez.
+- Ranking: `GET /battles/leaderboard`. Resumen: `GET /battles/summary`.
+- Avisos nuevos: `BATTLE_CHALLENGE`, `BATTLE_ACCEPTED`, `BATTLE_RESULT`.
+
+## STREET MARKET (`/api/market`): apagado
+
+- Anuncios para vender o intercambiar (fotos propias, precio, talla, estado, ciudad), favoritos y contacto por el chat (`POST /market/:id/contact`). Sin pagos dentro de la app.
+- **Apagado por defecto**: sin `MARKET_ENABLED=true` en el `.env`, todas sus rutas responden 404 con `code: "coming_soon"` (`market-enabled.guard.ts`). Los e2e del market lo encienden solos.
+- Los admins pueden ocultar anuncios denunciados (`POST/DELETE /admin/listings/:id/hide`).
+
+## Idiomas
+
+- `User.locale` (`ES` por defecto, o `EN`); migración `20261114100000_user_locale`. Las cuentas que ya existen siguen en español.
+- Se cambia con `PATCH /users/me { "locale": "EN" }` y se elige al registrarse (`POST /auth/register { …, "locale": "EN" }`).
+- Pendiente (siguientes entregas): que los avisos, el estilista y el OUTFIT RATING generen sus textos en el idioma de cada cuenta.
+
+## Armario: favoritas, filtros y resumen (`/api/wardrobe-items`)
+
+- Migración `20261114120000_item_favorite`: columna `WardrobeItem.isFavorite` (por defecto `false`; no toca las prendas existentes).
+- `PUT /wardrobe-items/:id/favorite` y `DELETE /wardrobe-items/:id/favorite`: marcar y desmarcar (idempotentes, solo prendas propias; 404 si no es tuya).
+- `GET /wardrobe-items` acepta además:
+  - `favorite=true`;
+  - `brand` (sin distinguir mayúsculas; marca de `attributes.brand` o de la ficha de zapatilla);
+  - `color` (grupo: `black`, `white`, `grey`, `beige`, `brown`, `blue`, `green`, `red`, `pink`, `orange`, `yellow`, `purple`; sale del nombre de color del estilista);
+  - `sort` (`newest`, `oldest`, `name`, `favorites`).
+  - Ya existían `season` y `garmentTypeId`.
+- `GET /wardrobe-items/facets?wardrobeId=`: total, favoritas, categorías, tipos, marcas, grupos de color, temporadas y última prenda añadida. Solo prendas del armario (no las de la wishlist).
+- Lógica en `src/wardrobe-items/item-facets.ts`, con tests unitarios. Hay e2e en `test/wardrobes-items.e2e-spec.ts`.
+
+## Estilista: sugerencias con ganancia real (`GET /api/stylist/insights`)
+
+- Cada aviso que se resuelve con una prenda lleva `suggestion`: hueco, categoría de wishlist, color orientativo y `gain` (`before` / `after`).
+- `gain` cuenta combinaciones con tus prendas: (arriba × abajo + vestidos) × calzado × (abrigos + 1). Es un recuento, no mira colores ni estilos. Para accesorios es `null`.
+- `stats.combinations`: combinaciones posibles hoy.
+
 ## Pendiente y siguientes pasos
 
 1. **Ejecutar las comprobaciones** de la sección anterior y corregir lo que falle (el código no se ha podido ejecutar todavía).

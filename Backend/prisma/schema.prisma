@@ -111,6 +111,10 @@ model User {
   /// Quién puede escribirle por chat.
   messagePolicy   MessagePolicy @default(FOLLOWING)
 
+  // --- Idioma ----------------------------------------------------------------
+  /// Idioma de la web y de lo que genera el servidor (avisos, estilista...).
+  locale          Locale        @default(ES)
+
   // --- Administración --------------------------------------------------------
   /// ADMIN solo se da con el comando `npm run admin:grant` (nunca por la API).
   role            UserRole  @default(USER)
@@ -150,6 +154,11 @@ model User {
   reportsMade   Report[]       @relation("Reporter")
   notifications Notification[] @relation("NotificationUser")
   activeDays    DailyActive[]
+  battlesStarted  Battle[]          @relation("BattleChallenger")
+  battlesAnswered Battle[]          @relation("BattleOpponent")
+  battleVotes     BattleVote[]
+  listings        Listing[]
+  listingFavorites ListingFavorite[]
 }
 
 // -----------------------------------------------------------------------------
@@ -223,6 +232,8 @@ enum ReportTarget {
   MESSAGE
   OUTFIT
   IDEA
+  /// Anuncio de Street Market.
+  LISTING
 }
 
 enum ReportReason {
@@ -297,6 +308,12 @@ enum NotificationType {
   REPORT_UPDATE
   /// Un artículo de la wishlist ha bajado del precio que querías.
   PRICE_DROP
+  /// Alguien te ha retado a una batalla.
+  BATTLE_CHALLENGE
+  /// Han aceptado tu reto (empieza la votación).
+  BATTLE_ACCEPTED
+  /// Ha terminado una batalla en la que participabas.
+  BATTLE_RESULT
 }
 
 /// Aviso de la campanita.
@@ -336,6 +353,12 @@ model AdminAction {
 // -----------------------------------------------------------------------------
 // Red social: seguidores, bloqueos y chats
 // -----------------------------------------------------------------------------
+
+/// Idiomas de la web.
+enum Locale {
+  ES
+  EN
+}
 
 enum MessagePolicy {
   /// Cualquiera (que no esté bloqueado).
@@ -686,6 +709,9 @@ model WardrobeItem {
   /// Cuándo pasó de la wishlist al armario (comprado).
   fromWishlistAt   DateTime?
 
+  /// Marcada como favorita en el armario (estrella / corazón en su ficha).
+  isFavorite       Boolean   @default(false)
+
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
@@ -729,6 +755,8 @@ model Asset {
   /// Si es la foto de perfil o la portada de su dueño.
   avatarOf User? @relation("UserAvatar")
   coverOf  User? @relation("UserCover")
+  /// Fotos de anuncios de Street Market que la usan.
+  listingPhotos ListingPhoto[]
 
   @@unique([id, userId])
   @@index([userId, createdAt])
@@ -1069,4 +1097,180 @@ model DailyActive {
 
   @@id([day, userId])
   @@index([userId])
+}
+
+// -----------------------------------------------------------------------------
+// Streetwear Battles: retos 1 vs 1 entre outfits, votados por la comunidad
+// -----------------------------------------------------------------------------
+
+/// Estado de una batalla.
+enum BattleStatus {
+  /// Reto enviado (a alguien o abierto a quien quiera), esperando rival.
+  PENDING
+  /// Los dos outfits están: la comunidad vota hasta `endsAt`.
+  ACTIVE
+  /// Votación cerrada. `winner` dice quién ganó (null = empate).
+  FINISHED
+  /// La persona retada dijo que no.
+  DECLINED
+  /// Quien retó lo retiró antes de que lo aceptaran.
+  CANCELLED
+  /// Nadie lo aceptó a tiempo.
+  EXPIRED
+}
+
+/// Lado de la batalla: A = quien reta, B = quien responde.
+enum BattleSide {
+  A
+  B
+}
+
+/// Reto 1 vs 1. Cada lado guarda una COPIA del outfit (como en el chat):
+/// lo que se vota no cambia aunque el dueño edite o borre el outfit.
+model Battle {
+  id                 String       @id @default(uuid()) @db.Uuid
+  challengerId       String       @db.Uuid
+  /// Persona retada; null = reto abierto (se rellena con quien lo acepte).
+  opponentId         String?      @db.Uuid
+  /// Si nació como reto abierto (para enseñarlo así en el historial).
+  isOpen             Boolean      @default(false)
+  /// Tema del reto («Noche de club», «Todo negro»...).
+  theme              String?      @db.VarChar(60)
+  /// Copia del outfit de quien reta (sin datos de compra).
+  challengerOutfit   Json
+  challengerOutfitId String?      @db.Uuid
+  opponentOutfit     Json?
+  opponentOutfitId   String?      @db.Uuid
+  status             BattleStatus @default(PENDING)
+  /// Contadores de votos (se suman en la misma transacción que el voto).
+  votesA             Int          @default(0)
+  votesB             Int          @default(0)
+  /// Ganador al terminar; null con FINISHED = empate.
+  winner             BattleSide?
+  /// Hasta cuándo se puede aceptar el reto.
+  expiresAt          DateTime
+  startedAt          DateTime?
+  /// Fin de la votación (inicio + 48 h).
+  endsAt             DateTime?
+  finishedAt         DateTime?
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+
+  challenger User         @relation("BattleChallenger", fields: [challengerId], references: [id], onDelete: Cascade)
+  opponent   User?        @relation("BattleOpponent", fields: [opponentId], references: [id], onDelete: Cascade)
+  votes      BattleVote[]
+
+  @@index([status, endsAt])
+  @@index([status, expiresAt])
+  @@index([status, createdAt])
+  @@index([challengerId, createdAt])
+  @@index([opponentId, createdAt])
+}
+
+/// Un voto por persona y batalla (la clave lo garantiza). No se puede cambiar.
+model BattleVote {
+  battleId  String     @db.Uuid
+  userId    String     @db.Uuid
+  side      BattleSide
+  createdAt DateTime   @default(now())
+
+  battle Battle @relation(fields: [battleId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([battleId, userId])
+  @@index([userId, createdAt])
+}
+
+// -----------------------------------------------------------------------------
+// Street Market: anuncios para vender o intercambiar ropa y zapatillas.
+// Sin pagos dentro de la app: comprador y vendedor hablan por el chat.
+// -----------------------------------------------------------------------------
+
+/// Vender o intercambiar.
+enum ListingKind {
+  SELL
+  SWAP
+}
+
+enum ListingStatus {
+  ACTIVE
+  /// Apalabrado con alguien: sigue visible pero marcado.
+  RESERVED
+  SOLD
+}
+
+/// Estado de la prenda que se anuncia.
+enum ListingCondition {
+  NEW_WITH_TAGS
+  LIKE_NEW
+  GOOD
+  FAIR
+}
+
+model Listing {
+  id            String           @id @default(uuid()) @db.Uuid
+  userId        String           @db.Uuid
+  kind          ListingKind
+  title         String           @db.VarChar(80)
+  description   String?          @db.VarChar(1000)
+  /// Mismas categorías que la wishlist.
+  category      WishlistCategory
+  brand         String?          @db.VarChar(40)
+  size          String?          @db.VarChar(20)
+  condition     ListingCondition
+  /// Obligatorio para vender; opcional (orientativo) para intercambiar.
+  price         Decimal?         @db.Decimal(10, 2)
+  currency      String           @default("EUR") @db.VarChar(3)
+  city          String?          @db.VarChar(60)
+  /// Qué te gustaría a cambio (intercambios).
+  swapFor       String?          @db.VarChar(200)
+  /// Prenda del armario de la que salió (solo informativo; sin clave foránea
+  /// para que borrar la prenda no borre el anuncio).
+  itemId        String?          @db.Uuid
+  /// Copia de la prenda (tipo, color, atributos, personalización) para
+  /// enseñarla en 3D aunque no haya fotos.
+  garment       Json?
+  status        ListingStatus    @default(ACTIVE)
+  /// Ocultado por un admin (moderación).
+  hiddenByAdmin Boolean          @default(false)
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  user      User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  photos    ListingPhoto[]
+  favorites ListingFavorite[]
+
+  @@unique([id, userId])
+  @@index([status, createdAt])
+  @@index([category, status, createdAt])
+  @@index([userId, createdAt])
+}
+
+/// Fotos del anuncio (máximo 6). Las dos claves son compuestas con userId:
+/// la base de datos impide usar imágenes de otra persona.
+model ListingPhoto {
+  id        String @id @default(uuid()) @db.Uuid
+  listingId String @db.Uuid
+  userId    String @db.Uuid
+  assetId   String @db.Uuid
+  position  Int
+
+  listing Listing @relation(fields: [listingId, userId], references: [id, userId], onDelete: Cascade)
+  asset   Asset   @relation(fields: [assetId, userId], references: [id, userId], onDelete: Cascade)
+
+  @@unique([listingId, assetId])
+  @@index([assetId])
+}
+
+/// Anuncios que guardas en favoritos.
+model ListingFavorite {
+  listingId String   @db.Uuid
+  userId    String   @db.Uuid
+  createdAt DateTime @default(now())
+
+  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([listingId, userId])
+  @@index([userId, createdAt])
 }

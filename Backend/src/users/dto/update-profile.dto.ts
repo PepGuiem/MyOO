@@ -1,4 +1,4 @@
-import { MessagePolicy } from '@prisma/client';
+import { Locale, MessagePolicy } from '@prisma/client';
 import { Transform } from 'class-transformer';
 import {
   ArrayMaxSize,
@@ -174,4 +174,9 @@ export class UpdateProfileDto {
   @IsOptional()
   @IsEnum(MessagePolicy)
   messagePolicy?: MessagePolicy;
+
+  /** Idioma de la web: ES (español) o EN (inglés). */
+  @IsOptional()
+  @IsEnum(Locale)
+  locale?: Locale;
 }

@@ -4,6 +4,7 @@ import type { PersonResult } from '../../api/types';
 import { Icon } from '../Icon';
 import { Spinner } from '../Spinner';
 import { PersonAvatar, personName } from './PersonAvatar';
+import { t } from '../../i18n';
 
 /** Buscador de personas por @usuario o nombre (para chats y grupos). */
 export function PeoplePicker({
@@ -51,14 +52,14 @@ export function PeoplePicker({
         <input
           type="search"
           value={q}
-          placeholder="Busca por @usuario o nombre"
-          aria-label="Buscar personas"
+          placeholder={t('Busca por @usuario o nombre')}
+          aria-label={t('Buscar personas')}
           autoFocus={autoFocus}
           onChange={(e) => setQ(e.target.value)}
         />
       </label>
-      {loading && <Spinner size={16} label="Buscando…" />}
-      {results && !loading && shown.length === 0 && <p className="muted small">Nadie con ese nombre.</p>}
+      {loading && <Spinner size={16} label={t('Buscando…')} />}
+      {results && !loading && shown.length === 0 && <p className="muted small">{t('Nadie con ese nombre.')}</p>}
       {shown.length > 0 && (
         <ul className="picker-list">
           {shown.map((p) => {

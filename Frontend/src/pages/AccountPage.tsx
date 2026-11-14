@@ -5,12 +5,14 @@ import type { LimitedResource, Plan, ProviderSlug, UsageEntry, User } from '../a
 import { useAuth } from '../auth/AuthContext';
 import { ErrorNote } from '../components/ErrorNote';
 import { Icon } from '../components/Icon';
+import { LanguageSwitch } from '../components/LanguageSwitch';
 import { Modal } from '../components/Modal';
 import { RESOURCE_LABEL, formatDate } from '../lib/labels';
 import { isNative } from '../lib/native';
 import { useAsync } from '../lib/useAsync';
 import { useAssetUrl } from '../lib/assetUrl';
 import { openProvider, pendingAction, PROVIDER_LABEL, setPendingAction, takeReauthProof } from '../lib/oauthFlow';
+import { LOCALE_TAG, t } from '../i18n';
 
 /** Plan que se marca como recomendado (si existe). */
 const RECOMMENDED = 'PLUS';
@@ -19,15 +21,15 @@ const RECOMMENDED = 'PLUS';
 const RESOURCES: LimitedResource[] = ['WARDROBE_ITEMS', 'WARDROBES', 'OUTFITS', 'MANNEQUINS'];
 
 /** Singular para «Hasta 1 …». */
-const ONE: Record<LimitedResource, string> = { WARDROBE_ITEMS: 'prenda', WARDROBES: 'armario', OUTFITS: 'outfit', MANNEQUINS: 'maniquí con tus medidas' };
+const ONE: Record<LimitedResource, string> = { WARDROBE_ITEMS: t('prenda'), WARDROBES: t('armario'), OUTFITS: t('outfit'), MANNEQUINS: t('maniquí con tus medidas') };
 
 /** Lo que incluyen todos los planes (funciones de la app, sin límites). */
-const INCLUDED = ['Visor 3D de cada prenda', 'Personalización de colores, piezas y detalles', 'Maniquíes genéricos de hombre y de mujer'];
+const INCLUDED = [t('Visor 3D de cada prenda'), t('Personalización de colores, piezas y detalles'), t('Maniquíes genéricos de hombre y de mujer')];
 
 function priceParts(plan: Plan): { amount: string; period: string | null } {
-  if (plan.priceCents === 0) return { amount: '0 €', period: 'para siempre' };
-  const amount = new Intl.NumberFormat('es-ES', { style: 'currency', currency: plan.currency }).format(plan.priceCents / 100);
-  return { amount, period: 'al mes' };
+  if (plan.priceCents === 0) return { amount: '0 €', period: t('para siempre') };
+  const amount = new Intl.NumberFormat(LOCALE_TAG, { style: 'currency', currency: plan.currency }).format(plan.priceCents / 100);
+  return { amount, period: t('al mes') };
 }
 
 function limitText(plan: Plan, resource: LimitedResource): string {
@@ -37,7 +39,7 @@ function limitText(plan: Plan, resource: LimitedResource): string {
   // «Prendas» es femenino: ilimitadas; armarios y outfits, ilimitados.
   const unlimited = resource === 'WARDROBE_ITEMS' ? 'ilimitadas' : 'ilimitados';
   if (l.isUnlimited) return `${RESOURCE_LABEL[resource]} ${unlimited}`;
-  return l.maxCount === 1 ? `1 ${ONE[resource]}` : `Hasta ${l.maxCount} ${label}`;
+  return l.maxCount === 1 ? `1 ${ONE[resource]}` : t('Hasta {maxCount} {label}', { maxCount: l.maxCount, label });
 }
 
 export function AccountPage() {
@@ -96,14 +98,14 @@ export function AccountPage() {
           <h1>{name}</h1>
           <p className="muted">
             {user?.email}
-            {user?.createdAt ? ` · Miembro desde ${formatDate(user.createdAt)}` : ''}
+            {user?.createdAt ? t(' · Miembro desde {formatDate}', { formatDate: formatDate(user.createdAt) }) : ''}
           </p>
         </div>
         <Link to="/perfil" className="btn">
-          Ver tu perfil
+          {t('Ver tu perfil')}
         </Link>
         <button type="button" className="btn btn-ghost" onClick={logout}>
-          Cerrar sesión
+          {t('Cerrar sesión')}
         </button>
       </header>
 
@@ -113,7 +115,7 @@ export function AccountPage() {
         <section className="panel plan-now" aria-labelledby="plan-now-title">
           <div className="plan-now-head">
             <div>
-              <p className="eyebrow">Tu plan</p>
+              <p className="eyebrow">{t('Tu plan')}</p>
               <h2 id="plan-now-title">{current?.name ?? '…'}</h2>
             </div>
             {currentPrice && (
@@ -127,46 +129,52 @@ export function AccountPage() {
             {mine.data?.usage.map((u) => <UsageBar key={u.resource} entry={u} />)}
           </div>
           <p className="muted small">
-            Si bajas de plan no se borra nada: podrás ver y eliminar lo que tengas, pero no crear más hasta quedar por debajo del límite.
+            {t('Si bajas de plan no se borra nada: podrás ver y eliminar lo que tengas, pero no crear más hasta quedar por debajo del límite.')}
           </p>
         </section>
 
         <section className="panel" aria-labelledby="profile-title">
           <div>
-            <p className="eyebrow">Cuenta</p>
-            <h2 id="profile-title">Tus datos</h2>
+            <p className="eyebrow">{t('Cuenta')}</p>
+            <h2 id="profile-title">{t('Tus datos')}</h2>
           </div>
           <dl className="account-facts">
             <div>
-              <dt>Correo</dt>
+              <dt>{t('Correo')}</dt>
               <dd>
                 {user?.email}
                 {user?.emailVerified && (
                   <span className="fact-ok">
-                    <Icon name="check" size={12} /> verificado
+                    <Icon name="check" size={12} /> {t('verificado')}
                   </span>
                 )}
               </dd>
             </div>
             <div>
-              <dt>@usuario</dt>
+              <dt>{t('@usuario')}</dt>
               <dd>{user?.username ? `@${user.username}` : '—'}</dd>
             </div>
             <div>
-              <dt>Acceso</dt>
+              <dt>{t('Acceso')}</dt>
               <dd>
                 {[
-                  user?.hasPassword ? 'Contraseña' : null,
+                  user?.hasPassword ? t('Contraseña') : null,
                   ...(user?.accounts ?? []).filter((a) => a.provider !== 'INSTAGRAM').map((a) => PROVIDER_LABEL[a.provider.toLowerCase() as ProviderSlug]),
                 ]
                   .filter(Boolean)
                   .join(' · ') || '—'}
               </dd>
             </div>
+            <div>
+              <dt>{t('Idioma')}</dt>
+              <dd>
+                <LanguageSwitch />
+              </dd>
+            </div>
           </dl>
           <div className="actions">
             <Link to="/perfil" className="btn">
-              Editar perfil, foto y cuentas
+              {t('Editar perfil, foto y cuentas')}
             </Link>
           </div>
         </section>
@@ -177,11 +185,11 @@ export function AccountPage() {
       {!isNative && (
       <section className="plans-section" aria-labelledby="plans-title">
         <div className="plans-intro">
-          <h2 id="plans-title">Elige tu plan</h2>
-          <p className="muted">Cambia cuando quieras. El cambio es simulado: no se realiza ningún cobro.</p>
+          <h2 id="plans-title">{t('Elige tu plan')}</h2>
+          <p className="muted">{t('Cambia cuando quieras. El cambio es simulado: no se realiza ningún cobro.')}</p>
           {changedTo && (
             <p className="note plans-note" role="status">
-              <Icon name="check" size={14} /> Ahora estás en {changedTo}.
+              <Icon name="check" size={14} /> {t('Ahora estás en {changedTo}.', { changedTo })}
             </p>
           )}
         </div>
@@ -194,7 +202,7 @@ export function AccountPage() {
             const { amount, period } = priceParts(plan);
             return (
               <article key={plan.id} className={`plan${isCurrent ? ' is-current' : ''}${recommended ? ' is-recommended' : ''}`}>
-                {(recommended || isCurrent) && <span className="plan-badge">{isCurrent ? 'Tu plan' : 'Recomendado'}</span>}
+                {(recommended || isCurrent) && <span className="plan-badge">{isCurrent ? t('Tu plan') : t('Recomendado')}</span>}
                 <h3>{plan.name}</h3>
                 {plan.description && <p className="plan-desc">{plan.description}</p>}
                 <p className="plan-price">
@@ -212,7 +220,7 @@ export function AccountPage() {
                 <div className="plan-cta">
                   {isCurrent ? (
                     <button type="button" className="btn btn-block" disabled>
-                      Plan actual
+                      {t('Plan actual')}
                     </button>
                   ) : (
                     <button
@@ -221,7 +229,7 @@ export function AccountPage() {
                       disabled={changing !== null || !current}
                       onClick={() => changePlan(plan)}
                     >
-                      {changing === plan.code ? 'Cambiando…' : upgrade ? `Pasar a ${plan.name}` : `Bajar a ${plan.name}`}
+                      {changing === plan.code ? t('Cambiando…') : upgrade ? t('Pasar a {name}', { name: plan.name }) : t('Bajar a {name}', { name: plan.name })}
                     </button>
                   )}
                 </div>
@@ -232,7 +240,7 @@ export function AccountPage() {
         </div>
 
         <div className="plans-included">
-          <span className="muted small">Todos los planes incluyen:</span>
+          <span className="muted small">{t('Todos los planes incluyen:')}</span>
           {INCLUDED.map((f) => (
             <span key={f} className="included-item">
               <Icon name="check" size={14} /> {f}
@@ -243,15 +251,15 @@ export function AccountPage() {
       )}
 
       <section className="panel history" aria-labelledby="history-title">
-        <h2 id="history-title">Historial de suscripciones</h2>
+        <h2 id="history-title">{t('Historial de suscripciones')}</h2>
         {history.data && history.data.length > 0 ? (
           <table className="table">
             <thead>
               <tr>
-                <th scope="col">Plan</th>
-                <th scope="col">Estado</th>
-                <th scope="col">Desde</th>
-                <th scope="col">Hasta</th>
+                <th scope="col">{t('Plan')}</th>
+                <th scope="col">{t('Estado')}</th>
+                <th scope="col">{t('Desde')}</th>
+                <th scope="col">{t('Hasta')}</th>
               </tr>
             </thead>
             <tbody>
@@ -260,7 +268,7 @@ export function AccountPage() {
                   <td>{s.plan.name}</td>
                   <td>
                     <span className={`status status-${s.status.toLowerCase()}`}>
-                      {{ ACTIVE: 'Activa', CANCELED: 'Cancelada', EXPIRED: 'Caducada' }[s.status]}
+                      {{ ACTIVE: t('Activa'), CANCELED: t('Cancelada'), EXPIRED: t('Caducada') }[s.status]}
                     </span>
                   </td>
                   <td>{formatDate(s.startedAt)}</td>
@@ -270,20 +278,20 @@ export function AccountPage() {
             </tbody>
           </table>
         ) : (
-          <p className="muted">Sin suscripciones: estás en el plan gratuito por defecto.</p>
+          <p className="muted">{t('Sin suscripciones: estás en el plan gratuito por defecto.')}</p>
         )}
       </section>
 
       <section className="panel danger-zone" aria-labelledby="delete-title">
         <div>
-          <h2 id="delete-title">Eliminar la cuenta</h2>
+          <h2 id="delete-title">{t('Eliminar la cuenta')}</h2>
           <p className="muted">
-            Se borran para siempre tu cuenta, tus armarios, prendas, outfits e imágenes. No se puede deshacer.
+            {t('Se borran para siempre tu cuenta, tus armarios, prendas, outfits e imágenes. No se puede deshacer.')}
           </p>
         </div>
         <div className="actions">
           <button type="button" className="btn btn-danger-solid" onClick={() => setDeleting(true)}>
-            Eliminar mi cuenta
+            {t('Eliminar mi cuenta')}
           </button>
         </div>
       </section>
@@ -335,7 +343,7 @@ function DeleteAccountDialog({
       const status = (err as { status?: number }).status;
       setError(
         status === 403
-          ? new Error(withPassword ? 'La contraseña no es correcta.' : 'La confirmación ha caducado. Vuelve a confirmar tu identidad.')
+          ? new Error(withPassword ? t('La contraseña no es correcta.') : t('La confirmación ha caducado. Vuelve a confirmar tu identidad.'))
           : err,
       );
       setBusy(false);
@@ -352,14 +360,14 @@ function DeleteAccountDialog({
   }
 
   return (
-    <Modal title="Eliminar la cuenta" onClose={busy ? () => undefined : onClose}>
+    <Modal title={t('Eliminar la cuenta')} onClose={busy ? () => undefined : onClose}>
       <form className="stack" onSubmit={confirm}>
         <p>
-          Vas a borrar tu cuenta y <strong>todo</strong> lo que tienes en MyOut. Esta acción no se puede deshacer.
+          {t('Vas a borrar tu cuenta y')} <strong>{t('todo')}</strong> {t('lo que tienes en MyOut. Esta acción no se puede deshacer.')}
         </p>
         {withPassword ? (
           <label className="field">
-            <span>Escribe tu contraseña para confirmar</span>
+            <span>{t('Escribe tu contraseña para confirmar')}</span>
             <input
               type="password"
               required
@@ -371,15 +379,15 @@ function DeleteAccountDialog({
           </label>
         ) : proof ? (
           <p className="note" role="status">
-            <Icon name="check" size={14} /> Identidad confirmada. Tienes unos minutos para terminar.
+            <Icon name="check" size={14} /> {t('Identidad confirmada. Tienes unos minutos para terminar.')}
           </p>
         ) : (
           <div className="stack">
-            <p className="muted">Tu cuenta no tiene contraseña: confirma que eres tú volviendo a entrar.</p>
+            <p className="muted">{t('Tu cuenta no tiene contraseña: confirma que eres tú volviendo a entrar.')}</p>
             <div className="actions">
               {providers.map((slug) => (
                 <button key={slug} type="button" className="btn" onClick={() => reauth(slug)}>
-                  Confirmar con {PROVIDER_LABEL[slug]}
+                  {t('Confirmar con {v}', { v: PROVIDER_LABEL[slug] })}
                 </button>
               ))}
             </div>
@@ -388,10 +396,10 @@ function DeleteAccountDialog({
         <ErrorNote error={error} />
         <div className="actions">
           <button type="button" className="btn btn-ghost" onClick={onClose} disabled={busy}>
-            Cancelar
+            {t('Cancelar')}
           </button>
           <button type="submit" className="btn btn-danger-solid" disabled={busy || (withPassword ? !password : !proof)}>
-            {busy ? 'Eliminando…' : 'Eliminar para siempre'}
+            {busy ? t('Eliminando…') : t('Eliminar para siempre')}
           </button>
         </div>
       </form>

@@ -1,5 +1,6 @@
 import { oauthApi } from '../api/endpoints';
 import type { ProviderSlug } from '../api/types';
+import { t } from '../i18n';
 
 /**
  * Acciones que esperan a que vuelvas de Google/Apple (crear contraseña o borrar
@@ -68,21 +69,21 @@ export async function openProvider(provider: ProviderSlug, intent: 'link' | 'rea
 }
 
 export const PROVIDER_LABEL: Record<ProviderSlug, string> = {
-  google: 'Google',
-  apple: 'Apple',
-  instagram: 'Instagram',
+  google: t('Google'),
+  apple: t('Apple'),
+  instagram: t('Instagram'),
 };
 
 /** Mensajes de los errores que llegan en #error=... al volver. */
 export const OAUTH_ERRORS: Record<string, string> = {
-  cancelled: 'Has cancelado el acceso. No se ha cambiado nada.',
-  expired: 'El enlace ha caducado. Vuelve a intentarlo.',
-  browser_mismatch: 'Hay que terminar el acceso en el mismo navegador en el que se empezó. Vuelve a intentarlo.',
-  invalid_state: 'La respuesta no es válida. Vuelve a intentarlo.',
-  provider_error: 'El proveedor no ha respondido bien. Vuelve a intentarlo en un momento.',
-  not_configured: 'Este proveedor no está configurado en el servidor.',
-  email_unverified: 'Tu proveedor no ha verificado tu email. Entra con tu contraseña y conéctalo desde tu perfil.',
-  email_missing: 'El proveedor no ha compartido tu email.',
-  provider_already_linked: 'Tu cuenta ya tiene otra cuenta de ese proveedor conectada. Desconéctala primero.',
-  linked_to_other_user: 'Esa cuenta ya está conectada a otro perfil de MyOut.',
+  cancelled: t('Has cancelado el acceso. No se ha cambiado nada.'),
+  expired: t('El enlace ha caducado. Vuelve a intentarlo.'),
+  browser_mismatch: t('Hay que terminar el acceso en el mismo navegador en el que se empezó. Vuelve a intentarlo.'),
+  invalid_state: t('La respuesta no es válida. Vuelve a intentarlo.'),
+  provider_error: t('El proveedor no ha respondido bien. Vuelve a intentarlo en un momento.'),
+  not_configured: t('Este proveedor no está configurado en el servidor.'),
+  email_unverified: t('Tu proveedor no ha verificado tu email. Entra con tu contraseña y conéctalo desde tu perfil.'),
+  email_missing: t('El proveedor no ha compartido tu email.'),
+  provider_already_linked: t('Tu cuenta ya tiene otra cuenta de ese proveedor conectada. Desconéctala primero.'),
+  linked_to_other_user: t('Esa cuenta ya está conectada a otro perfil de MyOut.'),
 };

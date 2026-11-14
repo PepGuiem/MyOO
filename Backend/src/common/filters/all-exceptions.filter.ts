@@ -40,8 +40,10 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
     if (statusCode >= 500) {
       // Para el monitor: solo la clase del error, nunca el mensaje.
-      response.locals.errorName =
-        exception instanceof Error ? exception.constructor.name : 'Error';
+      if (response.locals) {
+        response.locals.errorName =
+          exception instanceof Error ? exception.constructor.name : 'Error';
+      }
       // Solo método y ruta: no registramos cuerpos de petición ni cabeceras.
       this.logger.error(
         `${request.method} ${request.url} -> ${statusCode}`,

@@ -1,13 +1,16 @@
-import { useId, useState, type FormEvent, type KeyboardEvent } from 'react';
+import { useId, useState, type CSSProperties, type FormEvent, type KeyboardEvent } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { oauthApi } from '../api/endpoints';
 import type { GarmentLike, ProviderSlug } from '../api/types';
 import { useAuth } from '../auth/AuthContext';
 import { ErrorNote } from '../components/ErrorNote';
+import { Icon, type IconName } from '../components/Icon';
+import { LanguageSwitch } from '../components/LanguageSwitch';
 import { Logo } from '../components/Logo';
 import { banFromError, banMessage } from '../lib/ban';
 import { useAsync } from '../lib/useAsync';
 import { OutfitStage } from '../three/OutfitMannequin';
+import { t } from '../i18n';
 
 /** Outfit de muestra para la pantalla de acceso (no viene de la API). */
 const SAMPLE: GarmentLike[] = [
@@ -18,14 +21,21 @@ const SAMPLE: GarmentLike[] = [
   { color: '#202022', attributes: {}, garmentType: { modelKey: 'cap', category: 'ACCESSORY' } },
 ];
 
+/** Lo que hay dentro (funciones reales de la app), como pegatinas en la pared. */
+const PERKS: { icon: IconName; text: string }[] = [
+  { icon: 'tshirt', text: t('Tu ropa en 3D') },
+  { icon: 'sparkles', text: t('Estilista propio') },
+  { icon: 'trophy', text: t('Batallas de outfits') },
+];
+
 /** Cuenta del seed local (solo se ofrece en desarrollo). */
 const DEMO = { email: 'demo@myout.dev', password: 'Demo1234!' };
 
 /** Mismas reglas que el backend: 8+ caracteres, con letras y números. */
 function passwordChecks(p: string) {
   return [
-    { ok: p.length >= 8, label: '8 caracteres o más' },
-    { ok: /[A-Za-zÀ-ÿ]/.test(p) && /\d/.test(p), label: 'Letras y números' },
+    { ok: p.length >= 8, label: t('8 caracteres o más') },
+    { ok: /[A-Za-zÀ-ÿ]/.test(p) && /\d/.test(p), label: t('Letras y números') },
   ];
 }
 
@@ -38,7 +48,7 @@ function strength(p: string): 0 | 1 | 2 | 3 {
   return Math.max(1, s) as 1 | 2 | 3;
 }
 
-const STRENGTH_LABEL = ['', 'Floja', 'Aceptable', 'Fuerte'] as const;
+const STRENGTH_LABEL = ['', t('Floja'), t('Aceptable'), t('Fuerte')] as const;
 
 /** En móvil no se enfoca solo: abriría el teclado y taparía la pantalla. */
 const FINE_POINTER = typeof window !== 'undefined' && !!window.matchMedia?.('(pointer: fine)').matches;
@@ -94,12 +104,24 @@ export function AuthPage({ mode }: { mode: 'login' | 'register' }) {
   }
 
   return (
-    <div className="auth">
+    <div className="auth au">
       {/* La calle: pared, farola y el logo pintado con spray */}
       <div className="auth-street">
         <Logo className="auth-piece" />
         <div className="auth-grain" aria-hidden="true" />
+        <span className="au-wash" aria-hidden="true" />
+        <span className="au-tube au-tube-a" aria-hidden="true" />
+        <span className="au-tube au-tube-b" aria-hidden="true" />
+        <span className="au-floor" aria-hidden="true" />
       </div>
+
+      <ul className="au-perks" aria-label={t('Qué hay dentro')}>
+        {PERKS.map((p, i) => (
+          <li key={p.text} style={{ '--i': i } as CSSProperties}>
+            <Icon name={p.icon} size={14} /> {p.text}
+          </li>
+        ))}
+      </ul>
 
       <div className="auth-stage" aria-hidden="true">
         <OutfitStage garments={SAMPLE} />
@@ -107,19 +129,25 @@ export function AuthPage({ mode }: { mode: 'login' | 'register' }) {
 
       <main className="auth-panel">
         <div className="auth-card">
-          <p className="auth-lead">Tu armario, prenda a prenda, en 3D.</p>
+          <LanguageSwitch compact />
+          <span className="wd-kicker au-kicker">
+            <Icon name="hanger" size={12} /> {t('Members only')}
+          </span>
+          <p className="auth-lead">{t('Tu armario, prenda a prenda, en 3D.')}</p>
 
-          <nav className="auth-tabs" aria-label="Acceso">
+          <nav className="auth-tabs" aria-label={t('Acceso')}>
             <Link to="/login" className="auth-tab" aria-current={isLogin ? 'page' : undefined} replace>
-              Entrar
+              {t('Entrar')}
             </Link>
             <Link to="/register" className="auth-tab" aria-current={!isLogin ? 'page' : undefined} replace>
-              Crear cuenta
+              {t('Crear cuenta')}
             </Link>
           </nav>
 
           <form className="stack auth-form" onSubmit={submit}>
-            <h1 className="auth-title spray-title">{isLogin ? 'Vuelve a tu armario' : 'Empieza tu armario'}</h1>
+            <h1 key={mode} className="auth-title au-title">
+              {isLogin ? t('Vuelve a tu armario') : t('Empieza tu armario')}
+            </h1>
 
             {social.length > 0 && (
               <>
@@ -134,26 +162,31 @@ export function AuthPage({ mode }: { mode: 'login' | 'register' }) {
                       onClick={() => setLeaving(p)}
                     >
                       {leaving === p && <span className="spinner" aria-hidden="true" />}
-                      Continuar con {p === 'google' ? 'Google' : 'Apple'}
+                      {t('Continuar con {v}', { v: p === 'google' ? t('Google') : t('Apple') })}
                     </a>
                   ))}
                 </div>
                 <p className="auth-divider">
-                  <span>o con tu email</span>
+                  <span>{t('o con tu email')}</span>
                 </p>
               </>
             )}
 
             {!isLogin && (
               <label className="field">
-                <span>Nombre (opcional)</span>
-                <input maxLength={60} value={displayName} onChange={(e) => setDisplayName(e.target.value)} autoComplete="nickname" />
+                <span>{t('Nombre (opcional)')}</span>
+                <span className="au-input">
+                  <Icon name="users" size={16} />
+                  <input maxLength={60} value={displayName} onChange={(e) => setDisplayName(e.target.value)} autoComplete="nickname" />
+                </span>
               </label>
             )}
 
             <label className="field">
-              <span>Email</span>
-              <input
+              <span>{t('Email')}</span>
+              <span className="au-input">
+                <Icon name="mail" size={16} />
+                <input
                 type="email"
                 required
                 autoFocus={FINE_POINTER}
@@ -163,13 +196,15 @@ export function AuthPage({ mode }: { mode: 'login' | 'register' }) {
                 onChange={(e) => setEmail(e.target.value)}
                 autoComplete={isLogin ? 'username' : 'email'}
               />
+              </span>
             </label>
 
             <div className="field">
               <label htmlFor={`${ids}-pw`} className="field-label">
-                Contraseña
+                {t('Contraseña')}
               </label>
-              <div className="input-affix">
+              <div className="input-affix au-input">
+                <Icon name="lock" size={16} />
                 <input
                   id={`${ids}-pw`}
                   type={showPassword ? 'text' : 'password'}
@@ -186,16 +221,18 @@ export function AuthPage({ mode }: { mode: 'login' | 'register' }) {
                 />
                 <button
                   type="button"
-                  className="affix-btn"
+                  className="affix-btn au-eye"
                   aria-pressed={showPassword}
                   aria-controls={`${ids}-pw`}
+                  title={showPassword ? t('Ocultar') : t('Mostrar')}
                   onClick={() => setShowPassword((v) => !v)}
                 >
-                  {showPassword ? 'Ocultar' : 'Mostrar'}
+                  <Icon name={showPassword ? 'eyeOff' : 'eye'} size={17} />
+                  <span className="visually-hidden">{showPassword ? t('Ocultar contraseña') : t('Mostrar contraseña')}</span>
                 </button>
               </div>
               <div id={`${ids}-pw-help`} className="pw-help" aria-live="polite">
-                {capsLock && <small className="pw-caps">Bloq Mayús está activado</small>}
+                {capsLock && <small className="pw-caps">{t('Bloq Mayús está activado')}</small>}
                 {!isLogin && (
                   <>
                     <div className={`pw-meter level-${level}`} aria-hidden="true">
@@ -224,14 +261,15 @@ export function AuthPage({ mode }: { mode: 'login' | 'register' }) {
               <ErrorNote error={error} />
             )}
 
-            <button type="submit" className="btn btn-primary btn-block btn-spray" disabled={busy} aria-busy={busy}>
+            <button type="submit" className="btn btn-primary btn-block au-cta" disabled={busy} aria-busy={busy}>
               {busy && <span className="spinner" aria-hidden="true" />}
-              {busy ? 'Un momento…' : isLogin ? 'Entrar' : 'Crear cuenta'}
+              <span>{busy ? t('Un momento…') : isLogin ? t('Entrar') : t('Crear cuenta')}</span>
+              {!busy && <Icon name="forward" size={16} />}
             </button>
 
             {isLogin && import.meta.env.DEV && (
               <button type="button" className="btn btn-ghost btn-block" onClick={fillDemo}>
-                Usar la cuenta de prueba local
+                {t('Usar la cuenta de prueba local')}
               </button>
             )}
           </form>
@@ -239,16 +277,16 @@ export function AuthPage({ mode }: { mode: 'login' | 'register' }) {
           <p className="auth-switch">
             {isLogin ? (
               <>
-                ¿Aún no tienes cuenta?{' '}
+                {t('¿Aún no tienes cuenta?')}{' '}
                 <Link to="/register" replace>
-                  Crea una gratis
+                  {t('Crea una gratis')}
                 </Link>
               </>
             ) : (
               <>
-                ¿Ya tienes cuenta?{' '}
+                {t('¿Ya tienes cuenta?')}{' '}
                 <Link to="/login" replace>
-                  Entra
+                  {t('Entra')}
                 </Link>
               </>
             )}

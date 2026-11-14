@@ -24,6 +24,9 @@ export interface ConnectedAccount {
 }
 
 /** El usuario y su perfil (GET /users/me). */
+/** Idioma guardado en la cuenta. */
+export type AccountLocale = 'ES' | 'EN';
+
 export interface User {
   id: string;
   email: string;
@@ -47,6 +50,8 @@ export interface User {
   /** Privacidad: cuenta privada y quién puede escribirte. */
   isPrivate: boolean;
   messagePolicy: MessagePolicy;
+  /** Idioma de la web (se cambia en Cuenta). */
+  locale: AccountLocale;
   /** ADMIN ve el panel de administración (se da con `npm run admin:grant`). */
   role: UserRole;
   createdAt: string;
@@ -59,6 +64,7 @@ export type MessagePolicy = 'EVERYONE' | 'FOLLOWING' | 'NOBODY';
 
 /** Lo que se puede cambiar del perfil (null o '' borra el campo). */
 export interface ProfileInput {
+  locale?: AccountLocale;
   displayName?: string;
   username?: string | null;
   bio?: string | null;
@@ -326,6 +332,25 @@ export interface WardrobeItem {
   photoAssetId?: string | null;
   /** Ficha de SNEAKER COLLECTION (null si no es una zapatilla fichada). */
   sneaker?: SneakerCard | null;
+  /** Favorita en el armario. Falta si el backend es antiguo. */
+  isFavorite?: boolean;
+}
+
+/** Grupos de color para filtrar el armario. */
+export type ColorGroup = 'black' | 'white' | 'grey' | 'beige' | 'brown' | 'blue' | 'green' | 'red' | 'pink' | 'orange' | 'yellow' | 'purple';
+export type ItemSort = 'newest' | 'oldest' | 'name' | 'favorites';
+
+/** Resumen del armario: datos reales para la barra de información y los filtros. */
+export interface WardrobeFacets {
+  total: number;
+  favorites: number;
+  categories: number;
+  byCategory: Partial<Record<GarmentCategory, number>>;
+  garmentTypes: { id: string; code: string; name: string; category: GarmentCategory; count: number }[];
+  brands: { value: string; count: number }[];
+  colors: { value: ColorGroup; count: number }[];
+  seasons: { value: Season; count: number }[];
+  lastAdded: { id: string; name: string; createdAt: string } | null;
 }
 
 export interface OutfitEntry {
@@ -755,8 +780,17 @@ export interface StylistAlternatives {
   items: Record<string, StylistItem>;
 }
 
+/** Prenda que resolvería un aviso del armario y lo que ganarías con ella. */
+export interface StylistSuggestion {
+  slot: 'top' | 'bottom' | 'shoes' | 'outer' | 'accessory';
+  wishlistCategory: 'SNEAKERS' | 'TSHIRTS' | 'PANTS' | 'JACKETS' | 'ACCESSORIES';
+  color: string;
+  /** Combinaciones posibles antes y después (null: no se puede contar). */
+  gain: { before: number; after: number } | null;
+}
+
 export interface StylistInsights {
-  insights: { code: string; priority: 1 | 2 | 3; text: string }[];
+  insights: { code: string; priority: 1 | 2 | 3; text: string; suggestion?: StylistSuggestion }[];
   stats: {
     total: number;
     byCategory: Record<string, number>;
@@ -764,6 +798,8 @@ export interface StylistInsights {
     topColors: { name: string; count: number }[];
     styles: { style: string; label: string; count: number }[];
     unusedItemIds: string[];
+    /** Combinaciones posibles con lo que tienes. Falta si el backend es antiguo. */
+    combinations?: number;
   };
 }
 
@@ -891,7 +927,10 @@ export type NotificationType =
   | 'NEW_FOLLOWER'
   | 'FOLLOW_ACCEPTED'
   | 'REPORT_UPDATE'
-  | 'PRICE_DROP';
+  | 'PRICE_DROP'
+  | 'BATTLE_CHALLENGE'
+  | 'BATTLE_ACCEPTED'
+  | 'BATTLE_RESULT';
 
 export interface AppNotification {
   id: string;
@@ -942,7 +981,7 @@ export interface IdeaAdminInput {
   duplicateOfId?: string | null;
 }
 
-export type ReportTarget = 'USER' | 'MESSAGE' | 'OUTFIT' | 'IDEA';
+export type ReportTarget = 'USER' | 'MESSAGE' | 'OUTFIT' | 'IDEA' | 'LISTING';
 export type ReportReason = 'SPAM' | 'HARASSMENT' | 'INAPPROPRIATE' | 'IMPERSONATION' | 'OTHER';
 export type ReportStatus = 'OPEN' | 'RESOLVED' | 'DISMISSED';
 
@@ -1320,4 +1359,149 @@ export interface SneakerStats {
   byCondition: { condition: SneakerCondition; count: number }[];
   combos: SneakerRankRow[];
   neverCombined: number;
+}
+
+// --- STREETWEAR BATTLES ---
+
+export type BattleStatus = 'PENDING' | 'ACTIVE' | 'FINISHED' | 'DECLINED' | 'CANCELLED' | 'EXPIRED';
+export type BattleSide = 'A' | 'B';
+export type BattleTab = 'live' | 'open' | 'challenges' | 'mine' | 'finished';
+
+export interface Battle {
+  id: string;
+  status: BattleStatus;
+  theme: string | null;
+  isOpen: boolean;
+  challenger: UserBrief;
+  opponent: UserBrief | null;
+  /** Copias de los outfits: A = quien reta, B = quien responde. */
+  outfitA: SharedOutfit;
+  outfitB: SharedOutfit | null;
+  /** Solo si ya votaste, si participas o si terminó. */
+  votes: { a: number; b: number; shareA: number } | null;
+  totalVotes: number;
+  winner: BattleSide | null;
+  mySide: BattleSide | null;
+  myVote: BattleSide | null;
+  canVote: boolean;
+  voteBlock: 'own_battle' | 'not_active' | 'already_voted' | null;
+  canAccept: boolean;
+  canDecline: boolean;
+  canCancel: boolean;
+  expiresAt: string;
+  startedAt: string | null;
+  endsAt: string | null;
+  finishedAt: string | null;
+  createdAt: string;
+}
+
+export interface BattleRecord {
+  wins: number;
+  losses: number;
+  ties: number;
+  played: number;
+  votes: number;
+  winRate: number;
+}
+
+export interface BattleSummary {
+  challenges: number;
+  live: number;
+  myLive: number;
+  record: BattleRecord & { userId: string };
+  streak: number;
+}
+
+export interface LeaderEntry extends BattleRecord {
+  userId: string;
+  rank: number;
+  user: UserBrief;
+}
+
+export interface Leaderboard {
+  top: LeaderEntry[];
+  me: BattleRecord & { userId: string; rank: number | null };
+}
+
+// --- STREET MARKET ---
+
+export type ListingKind = 'SELL' | 'SWAP';
+export type ListingStatus = 'ACTIVE' | 'RESERVED' | 'SOLD';
+export type ListingCondition = 'NEW_WITH_TAGS' | 'LIKE_NEW' | 'GOOD' | 'FAIR';
+export type MarketSort = 'new' | 'price_asc' | 'price_desc';
+
+export interface ListingGarment {
+  name: string;
+  color: string;
+  attributes: Attributes;
+  customization: Customization;
+  garmentType: GarmentTypeSummary;
+}
+
+export interface Listing {
+  id: string;
+  kind: ListingKind;
+  title: string;
+  description: string | null;
+  category: WishlistCategory;
+  brand: string | null;
+  size: string | null;
+  condition: ListingCondition;
+  price: string | null;
+  currency: string;
+  city: string | null;
+  swapFor: string | null;
+  itemId: string | null;
+  garment: ListingGarment | null;
+  status: ListingStatus;
+  photos: string[];
+  seller: UserBrief;
+  isMine: boolean;
+  isFavorite: boolean;
+  favorites: number;
+  canContact: boolean;
+  hiddenByAdmin: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ListingInput {
+  kind?: ListingKind;
+  title?: string;
+  description?: string | null;
+  category?: WishlistCategory;
+  brand?: string | null;
+  size?: string | null;
+  condition?: ListingCondition;
+  price?: number | null;
+  currency?: string;
+  city?: string | null;
+  swapFor?: string | null;
+  photoAssetIds?: string[];
+  itemId?: string;
+  status?: ListingStatus;
+}
+
+export interface MarketQuery {
+  scope?: 'all' | 'mine' | 'favorites';
+  category?: WishlistCategory;
+  kind?: ListingKind;
+  condition?: ListingCondition;
+  status?: ListingStatus;
+  size?: string;
+  city?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  search?: string;
+  sort?: MarketSort;
+  page?: number;
+  pageSize?: number;
+}
+
+export interface MarketSummary {
+  active: number;
+  reserved: number;
+  sold: number;
+  favorites: number;
+  limit: number;
 }

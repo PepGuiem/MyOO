@@ -9,13 +9,17 @@ import {
   ParseUUIDPipe,
   Patch,
   Post,
+  Put,
   Query,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import type { AuthenticatedUser } from '../common/types/authenticated-user';
 import { CreateWardrobeItemDto } from './dto/create-wardrobe-item.dto';
-import { ListWardrobeItemsQueryDto } from './dto/list-wardrobe-items-query.dto';
+import {
+  ListWardrobeItemsQueryDto,
+  WardrobeFacetsQueryDto,
+} from './dto/list-wardrobe-items-query.dto';
 import { UpdateWardrobeItemDto } from './dto/update-wardrobe-item.dto';
 import { WardrobeItemsService } from './wardrobe-items.service';
 
@@ -32,6 +36,15 @@ export class WardrobeItemsController {
     @Query() query: ListWardrobeItemsQueryDto,
   ) {
     return this.items.findAll(user.id, query);
+  }
+
+  /** Resumen para la barra de información y los filtros del armario. */
+  @Get('facets')
+  facets(
+    @CurrentUser() user: AuthenticatedUser,
+    @Query() query: WardrobeFacetsQueryDto,
+  ) {
+    return this.items.facets(user.id, query.wardrobeId);
   }
 
   @Post()
@@ -57,6 +70,24 @@ export class WardrobeItemsController {
     @Body() dto: UpdateWardrobeItemDto,
   ) {
     return this.items.update(user.id, id, dto);
+  }
+
+  /** Marca la prenda como favorita (idempotente). */
+  @Put(':id/favorite')
+  favorite(
+    @CurrentUser() user: AuthenticatedUser,
+    @Param('id', new ParseUUIDPipe()) id: string,
+  ) {
+    return this.items.setFavorite(user.id, id, true);
+  }
+
+  /** Quita la prenda de favoritas (idempotente). */
+  @Delete(':id/favorite')
+  unfavorite(
+    @CurrentUser() user: AuthenticatedUser,
+    @Param('id', new ParseUUIDPipe()) id: string,
+  ) {
+    return this.items.setFavorite(user.id, id, false);
   }
 
   @Delete(':id')
