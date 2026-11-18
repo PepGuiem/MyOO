@@ -3,8 +3,7 @@
   "services": {
     "backend": {
       "root": "Backend",
-      "framework": "nestjs",
-      "buildCommand": "npx prisma generate && npm run build"
+      "framework": "nestjs"
     },
     "frontend": {
       "root": "Frontend",
