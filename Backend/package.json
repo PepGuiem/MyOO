@@ -10,6 +10,7 @@
   "scripts": {
     "build": "nest build",
     "postinstall": "prisma generate",
+    "vercel:migrate": "prisma migrate deploy && ts-node --transpile-only prisma/seed-reference.ts",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\" \"prisma/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",

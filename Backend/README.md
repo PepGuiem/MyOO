@@ -609,7 +609,8 @@ Limitaciones conocidas en Vercel:
 
 - **Chat en tiempo real**: las funciones de Vercel no aceptan WebSockets; los mensajes llegan al recargar, no al instante.
 - **Imágenes subidas**: `LocalDiskStorage` escribe en disco y en Vercel el disco no es persistente. Hace falta un almacenamiento de objetos (Vercel Blob, S3, R2...).
-- **Migraciones**: el build NO ejecuta `prisma migrate deploy`; se lanzan a mano contra la base de datos de producción cuando toque.
+- **Migraciones**: el build del servicio `backend` ejecuta `prisma migrate deploy` (script `vercel:migrate`) con la conexión directa de Neon (`DATABASE_URL_UNPOOLED`) antes de compilar, y después `prisma/seed-reference.ts` (planes y tipos de prenda, sin el usuario de demo; idempotente). Ojo: los despliegues de *preview* usan la misma base de datos que producción.
+- **Base de datos**: Neon, conectada desde la pestaña Storage de Vercel (crea `DATABASE_URL`, `DATABASE_URL_UNPOOLED` y otras).
 - El límite de intentos usa la IP real del usuario (`trust proxy` solo cuando existe la variable `VERCEL`).
 - **Dependencias en la función**: Vercel tiene un fallo abierto con NestJS en «services» ([vercel/vercel#17712](https://github.com/vercel/vercel/issues/17712)) que deja `node_modules` fuera de su sitio. `src/vercel-module-paths.ts` (importado lo primero en `main.ts`) busca la carpeta y la añade a `NODE_PATH`, y `src/vercel-deps.ts` importa todas las dependencias desde un archivo sin decoradores para que Vercel las incluya. **Si añades una dependencia al backend, añádela también en `vercel-deps.ts`.** Solo actúan con la variable `VERCEL`.
 - `postinstall` ejecuta `prisma generate` (Vercel instala sin build propio de Prisma).

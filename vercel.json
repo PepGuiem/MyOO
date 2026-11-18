@@ -3,7 +3,8 @@
   "services": {
     "backend": {
       "root": "Backend",
-      "framework": "nestjs"
+      "framework": "nestjs",
+      "buildCommand": "DATABASE_URL=\"$DATABASE_URL_UNPOOLED\" npm run vercel:migrate && npm run build"
     },
     "frontend": {
       "root": "Frontend",
