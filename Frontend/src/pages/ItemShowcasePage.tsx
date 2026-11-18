@@ -190,7 +190,7 @@ export default function ItemShowcasePage() {
 
   if (loading && !item) {
     return (
-      <section className="showcase">
+      <section className="showcase ux sc">
         <div className="showcase-stage is-loading" aria-busy="true">
           <p className="stage-status"><Spinner size={30} label={t('Cargando prenda…')} /></p>
         </div>
@@ -201,11 +201,11 @@ export default function ItemShowcasePage() {
   if (!item) {
     const notFound = error instanceof ApiError && error.status === 404;
     return (
-      <section className="page">
+      <section className="page ux sc">
         <Link to={backTo} className="back-link"><Icon name="back" size={14} /> {t('Volver')}</Link>
         {notFound ? <p className="note">{t('Esta prenda no existe o no es tuya.')}</p> : <ErrorNote error={error} />}
         {!notFound && (
-          <button type="button" className="btn" onClick={() => void reload()}>
+          <button type="button" className="btn wd-btn-line" onClick={() => void reload()}>
             {t('Reintentar')}
           </button>
         )}
@@ -308,26 +308,31 @@ export default function ItemShowcasePage() {
   }
 
   return (
-    <section className="showcase">
-      <header className="showcase-head">
+    <section className="showcase ux sc">
+      <header className="showcase-head ux-head">
         <Link to={backTo} className="back-link"><Icon name="back" size={14} /> {backTo === '/' ? t('Inicio') : backTo.startsWith('/outfits') ? t('Outfits') : t('Armario')}</Link>
         <div className="showcase-title">
-          <p className="eyebrow">
-            {item.garmentType.name} · {item.wardrobe.name}
+          <span className="wd-kicker">
+            <Icon name="tag" size={12} /> {t('Item file')}
+          </span>
+          <h1 className="wd-title ux-title" data-text={item.name}>
+            {item.name}
+          </h1>
+          <p className="ux-lede sc-path">
+            {item.garmentType.name} <i aria-hidden="true">/</i> {item.wardrobe.name}
           </p>
-          <h1>{item.name}</h1>
         </div>
-        <div className="head-actions">
+        <div className="head-actions wd-head-actions">
           {!customizing && (
-            <button type="button" className="btn" onClick={() => startCustomizing()} disabled={useGlb}>
-              {t('Personalizar')}
+            <button type="button" className="btn wd-add" onClick={() => startCustomizing()} disabled={useGlb}>
+              <Icon name="palette" size={15} /> <span>{t('Personalizar')}</span>
             </button>
           )}
-          <button type="button" className="btn" onClick={() => setEditing(true)}>
-            {t('Editar')}
+          <button type="button" className="btn wd-btn-line" onClick={() => setEditing(true)}>
+            <Icon name="edit" size={14} /> {t('Editar')}
           </button>
           {FEATURES.market && !item.wishlistStatus && (
-            <Link to={`/market?sell=${item.id}`} className="btn" title={t('Publicarla en Street Market')}>
+            <Link to={`/market?sell=${item.id}`} className="btn wd-btn-line" title={t('Publicarla en Street Market')}>
               <Icon name="store" size={14} /> {t('Vender')}
             </Link>
           )}
@@ -436,7 +441,7 @@ export default function ItemShowcasePage() {
                 {t('El servidor no ofrece todavía la personalización de prendas. Suele pasar cuando el backend sigue con la versión anterior: páralo, ejecuta')} <code>{t('npx prisma migrate dev')}</code> {t('en la carpeta Backend y vuelve a arrancarlo con')} <code>{t('npm run start:dev')}</code>{t('. Después recarga esta página.')}
               </p>
               <div className="actions custom-actions">
-                <button type="button" className="btn btn-ghost" onClick={stopCustomizing}>
+                <button type="button" className="btn wd-btn-line" onClick={stopCustomizing}>
                   {t('Cerrar')}
                 </button>
               </div>
@@ -474,11 +479,11 @@ export default function ItemShowcasePage() {
               />
               <ErrorNote error={customError} />
               <div className="actions custom-actions">
-                <button type="button" className="btn btn-ghost" onClick={stopCustomizing}>
+                <button type="button" className="btn wd-btn-line" onClick={stopCustomizing}>
                   {customDirty ? t('Descartar') : t('Cerrar')}
                 </button>
                 <span className="spacer" />
-                <button type="button" className="btn btn-primary" onClick={() => void saveCustomization()} disabled={!customDirty || savingCustom}>
+                <button type="button" className="btn wd-add" onClick={() => void saveCustomization()} disabled={!customDirty || savingCustom}>
                   {savingCustom ? <Busy text={t('Guardando…')} /> : t('Guardar')}
                 </button>
               </div>
@@ -492,7 +497,7 @@ export default function ItemShowcasePage() {
                 {t('Parches, bordados y estampados{v}', { v: (item.customization?.details?.length ?? 0) > 0 ? ` (${item.customization?.details?.length})` : '' })}
               </h2>
               {!useGlb && (
-                <button type="button" className="btn btn-small" onClick={() => startCustomizing('details')}>
+                <button type="button" className="btn wd-btn-line btn-small" onClick={() => startCustomizing('details')}>
                   <Icon name="plus" size={13} /> {t('Añadir')}
                 </button>
               )}
@@ -544,10 +549,10 @@ export default function ItemShowcasePage() {
                 {preview ? (
                   <div className="inline-form">
                     <span className="muted small">{t('Vista previa: {preview}', { preview })}</span>
-                    <button type="button" className="btn" onClick={() => void saveColor()} disabled={savingColor}>
+                    <button type="button" className="btn wd-add" onClick={() => void saveColor()} disabled={savingColor}>
                       {savingColor ? <Busy text={t('Guardando…')} /> : t('Guardar este color')}
                     </button>
-                    <button type="button" className="btn btn-ghost" onClick={() => setPreview(null)}>
+                    <button type="button" className="btn wd-btn-line" onClick={() => setPreview(null)}>
                       {t('Deshacer')}
                     </button>
                   </div>

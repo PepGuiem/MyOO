@@ -12,6 +12,12 @@ export function setupApp(app: INestApplication): void {
   const config = app.get(ConfigService);
 
   app.setGlobalPrefix('api');
+  // En Vercel la petición llega a través de su proxy: la IP real del usuario
+  // va en X-Forwarded-For (Vercel la sobrescribe, no la puede falsear el cliente).
+  // Sin esto, el límite de intentos (ThrottlerGuard) contaría a todos como uno.
+  if (process.env.VERCEL) {
+    app.getHttpAdapter().getInstance().set('trust proxy', true);
+  }
   // Métricas de cada petición para el monitor de admins (ruta, código, tiempo).
   app.use(metricsMiddleware(app.get(MetricsService)));
   // Cabeceras HTTP de seguridad (X-Content-Type-Options, etc.).

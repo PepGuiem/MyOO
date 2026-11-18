@@ -1,5 +1,6 @@
 import type { Outfit } from '../../api/types';
 import { slotOf } from '../../lib/wardrobeSlots';
+import { t } from '../../i18n';
 
 const SKIN = '#9b968f';
 const EDGE = 'rgba(0,0,0,0.55)';
@@ -34,7 +35,7 @@ export function OutfitGlyph({ outfit, height = 64, className = '' }: { outfit: O
       height={height}
       width={(height * 40) / 90}
       role="img"
-      aria-label={`Miniatura de ${outfit.name}`}
+      aria-label={t('Miniatura de {name}', { name: outfit.name })}
       strokeLinejoin="round"
     >
       {/* Piernas y brazos (la base del maniquí) */}

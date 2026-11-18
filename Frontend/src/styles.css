@@ -24936,7 +24936,7 @@ button.snk-brand-tag:hover {
     6px 6px 0 var(--wd-wine);
 }
 
-.wd .wd-add-big {
+:is(.wd, .ux) .wd-add-big {
   min-height: 52px;
   padding: 12px 26px;
   font-size: 1.05rem;
@@ -27936,7 +27936,8 @@ button.snk-brand-tag:hover {
 
 .hm,
 .ch,
-.pp {
+.pp,
+.ux {
   --wd-black: #080808;
   --wd-carbon: #1b1b1f;
   --wd-orange: #ff4d00;
@@ -27952,7 +27953,7 @@ button.snk-brand-tag:hover {
 }
 
 /* Botones del armario también aquí (misma regla que gana al fondo global) */
-:is(.hm, .ch, .pp) :is(.wd-add, .wd-btn-line) {
+:is(.hm, .ch, .pp, .ux) :is(.wd-add, .wd-btn-line) {
   position: relative;
   isolation: isolate;
   overflow: hidden;
@@ -27976,11 +27977,12 @@ button.snk-brand-tag:hover {
     transform 0.3s var(--wd-spring);
 }
 
-.main :is(.hm, .ch, .pp).page .btn.btn:is(.wd-add, .wd-btn-line) {
+.main :is(.hm, .ch, .pp, .ux).page .btn.btn:is(.wd-add, .wd-btn-line),
+.ux.ux.ux .btn.btn:is(.wd-add, .wd-btn-line) {
   background: var(--wd-bg, rgba(8, 8, 8, 0.55));
 }
 
-:is(.hm, .ch, .pp) .wd-add {
+:is(.hm, .ch, .pp, .ux) .wd-add {
   --wd-bg: rgba(8, 8, 8, 0.6);
   color: var(--wd-bone);
   border: 1px solid var(--wd-orange);
@@ -27990,7 +27992,7 @@ button.snk-brand-tag:hover {
     inset 0 0 16px -6px rgba(255, 77, 0, 0.6);
 }
 
-:is(.hm, .ch, .pp) .wd-add::before {
+:is(.hm, .ch, .pp, .ux) .wd-add::before {
   content: '';
   position: absolute;
   inset: 0;
@@ -28001,7 +28003,7 @@ button.snk-brand-tag:hover {
   transition: transform 0.45s var(--wd-ease);
 }
 
-:is(.hm, .ch, .pp) .wd-add:hover:not(:disabled) {
+:is(.hm, .ch, .pp, .ux) .wd-add:hover:not(:disabled) {
   color: var(--wd-black);
   transform: translateY(-2px);
   box-shadow:
@@ -28009,18 +28011,18 @@ button.snk-brand-tag:hover {
     0 0 34px -4px rgba(255, 77, 0, 0.9);
 }
 
-:is(.hm, .ch, .pp) .wd-add:hover:not(:disabled)::before {
+:is(.hm, .ch, .pp, .ux) .wd-add:hover:not(:disabled)::before {
   transform: scaleX(1);
 }
 
-:is(.hm, .ch, .pp) .wd-btn-line {
+:is(.hm, .ch, .pp, .ux) .wd-btn-line {
   --wd-bg: rgba(8, 8, 8, 0.5);
   color: rgba(241, 238, 233, 0.86);
   border: 1px solid rgba(241, 238, 233, 0.18);
   font-size: 0.8rem;
 }
 
-:is(.hm, .ch, .pp) .wd-btn-line:hover {
+:is(.hm, .ch, .pp, .ux) .wd-btn-line:hover {
   color: var(--wd-bone);
   border-color: var(--wd-orange);
   box-shadow: 0 0 18px -6px rgba(255, 77, 0, 0.9);
@@ -28104,7 +28106,7 @@ button.snk-brand-tag:hover {
   overflow-wrap: anywhere;
 }
 
-.hm-title em {
+:is(.hm-title, .ux-title) em {
   font-style: normal;
   color: var(--wd-orange);
   text-shadow:
@@ -28113,7 +28115,8 @@ button.snk-brand-tag:hover {
 }
 
 .hm-summary,
-.pp-lede {
+.pp-lede,
+.ux-lede {
   margin: 12px 0 0;
   color: rgba(241, 238, 233, 0.7);
   animation: wd-rise 0.6s 0.4s var(--wd-ease) backwards;
@@ -29444,10 +29447,10 @@ p.hm-outfit-meta:not(:has(+ ul)) {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  :is(.hm, .ch, .pp),
-  :is(.hm, .ch, .pp) *,
-  :is(.hm, .ch, .pp) *::before,
-  :is(.hm, .ch, .pp) *::after {
+  :is(.hm, .ch, .pp, .ux),
+  :is(.hm, .ch, .pp, .ux) *,
+  :is(.hm, .ch, .pp, .ux) *::before,
+  :is(.hm, .ch, .pp, .ux) *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     animation-delay: 0s !important;
@@ -29954,4 +29957,814 @@ p.hm-outfit-meta:not(:has(+ ul)) {
     animation-delay: 0s !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* =============================================================================
+   Estilo unificado (.ux), tanda 1: Outfits (.ft), Calendario (.cl),
+   Vestidor (.dr) y Ficha de prenda (.sc).
+   La paleta, la pegatina, el título, las cifras, las secciones numeradas y los
+   botones son los del inicio (ver `:is(.hm, .ch, .pp, .ux)` más arriba). Aquí
+   solo se adapta lo propio de cada página, sin tocar su lógica.
+   ========================================================================== */
+
+/* Las piezas antiguas de estas páginas (variables --fx-*) toman la paleta nueva */
+.ux {
+  --fx-neon: var(--wd-red);
+  --fx-neon-glow: rgba(255, 23, 68, 0.55);
+  --fx-orange: var(--wd-orange);
+  --fx-bone: var(--wd-bone);
+  --fx-panel: rgba(17, 17, 20, 0.74);
+  --fx-edge: var(--wd-edge);
+  --fx-cond: var(--wd-cond);
+  --ux-glass: linear-gradient(180deg, rgba(27, 27, 31, 0.72), rgba(8, 8, 8, 0.82));
+}
+
+/* ---- Cabecera ---- */
+.ux .ux-title {
+  font-size: clamp(2.4rem, 1.5rem + 3.6vw, 4.8rem);
+  overflow-wrap: anywhere;
+}
+
+.ux .wd-kicker {
+  margin-bottom: 2px;
+}
+
+.ux .ux-lede {
+  max-width: 62ch;
+}
+
+.ux .ux-stats {
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+  animation: wd-rise 0.7s 0.25s var(--wd-ease) backwards;
+}
+
+.ux .ux-stats li {
+  transition: background 0.3s;
+}
+
+.ux .ux-stats li:hover {
+  background: rgba(255, 77, 0, 0.07);
+}
+
+.ux .ux-stats strong small {
+  margin-left: 2px;
+  font-size: 0.55em;
+  color: rgba(241, 238, 233, 0.5);
+}
+
+.ux .wd-add:disabled,
+.ux .wd-btn-line:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.ux .wd-add:hover:not(:disabled) .icon {
+  animation: wd-spin-in 0.5s var(--wd-ease);
+}
+
+/* Cifra al lado del título de sección */
+.ux-section-count {
+  order: 2;
+  padding: 2px 10px;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--wd-orange);
+  border: 1px solid rgba(255, 77, 0, 0.35);
+  border-radius: 999px;
+  background: rgba(255, 77, 0, 0.08);
+}
+
+.ux .hm-section-head {
+  animation: wd-rise 0.6s 0.2s var(--wd-ease) backwards;
+}
+
+/* Paneles de cristal: borde fino, brillo naranja y reflejo al pasar */
+.ft :is(.fits-filters, .spotlight),
+.cl :is(.cal-toolbar, .side-card),
+.dr :is(.dress-rail, .dress-panel),
+.sc .showcase-panel {
+  border: 1px solid var(--wd-edge);
+  border-radius: 16px;
+  background: var(--ux-glass);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 24px 50px -28px rgba(0, 0, 0, 0.95);
+  transition:
+    border-color 0.3s,
+    box-shadow 0.3s;
+}
+
+.ft .fits-filters:focus-within,
+.cl .side-card:hover,
+.dr :is(.dress-rail, .dress-panel):focus-within,
+.sc .showcase-panel:hover {
+  border-color: rgba(255, 77, 0, 0.32);
+  box-shadow:
+    0 0 0 1px rgba(255, 77, 0, 0.12),
+    0 0 32px -12px rgba(255, 77, 0, 0.55),
+    0 24px 50px -28px rgba(0, 0, 0, 0.95);
+}
+
+/* =============================================================================
+   Outfits (/outfits)
+   ========================================================================== */
+
+.ft .fits-hero {
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px 28px;
+  margin-bottom: 18px;
+}
+
+.ft .ux-stats {
+  margin-bottom: 30px;
+}
+
+.ft .ux-section {
+  margin-bottom: 30px;
+}
+
+.ft .spotlight {
+  margin-bottom: 0;
+  border-color: rgba(255, 77, 0, 0.28);
+  border-radius: 18px;
+  background:
+    radial-gradient(ellipse 40% 90% at 14% 50%, rgba(255, 77, 0, 0.16), transparent 70%),
+    radial-gradient(ellipse 50% 70% at 90% 10%, rgba(91, 16, 40, 0.45), transparent 70%),
+    linear-gradient(110deg, rgba(27, 27, 31, 0.92), rgba(8, 8, 8, 0.8));
+  box-shadow:
+    0 0 50px -18px rgba(255, 23, 68, 0.55),
+    0 30px 60px -30px #000;
+  overflow: clip;
+  animation: wd-rise 0.7s 0.3s var(--wd-ease) backwards;
+}
+
+.ft .spotlight::before {
+  background: repeating-linear-gradient(-45deg, var(--wd-orange) 0 12px, var(--wd-black) 12px 24px);
+}
+
+.ft .spot-beam {
+  background:
+    radial-gradient(ellipse 42% 7% at 50% 92%, rgba(255, 77, 0, 0.55), transparent 70%),
+    conic-gradient(from 168deg at 50% -6%, transparent 0deg, rgba(255, 220, 200, 0.14) 10deg, rgba(255, 220, 200, 0.14) 14deg, transparent 24deg);
+}
+
+.ft .spot-label {
+  color: var(--wd-orange);
+}
+
+.ft .spot-name {
+  text-shadow:
+    3px 3px 0 var(--wd-red),
+    6px 6px 0 var(--wd-wine);
+}
+
+.ft .hm-section-head + .fits-filters {
+  margin-top: 0;
+}
+
+.ft .fits-filters {
+  padding: 16px;
+}
+
+/* Fichas: cristal, brillo naranja y elevación */
+.ft .fit-card {
+  border-radius: 16px;
+  border-color: var(--wd-edge);
+  background: linear-gradient(180deg, rgba(27, 27, 31, 0.9), rgba(8, 8, 8, 0.94));
+  animation: wd-card-in 0.6s calc(var(--i, 0) * 55ms) var(--wd-ease) backwards;
+}
+
+.ft .fit-card::before {
+  background: radial-gradient(circle at var(--mx) var(--my), rgba(255, 140, 80, 0.1), transparent 45%);
+}
+
+.ft .fit-card:hover {
+  border-color: rgba(255, 77, 0, 0.55);
+  box-shadow:
+    0 0 0 1px rgba(255, 77, 0, 0.25),
+    0 0 36px -10px rgba(255, 77, 0, 0.7),
+    0 30px 50px -24px #000;
+}
+
+.ft .fit-card.is-picked {
+  border-color: var(--wd-orange);
+}
+
+.ft .fit-card .fit-name {
+  font-stretch: var(--wd-cond);
+}
+
+.ft .compare-tray {
+  border-radius: 16px;
+  border-color: rgba(255, 77, 0, 0.4);
+  background: rgba(8, 8, 8, 0.92);
+  box-shadow: 0 0 40px -12px rgba(255, 77, 0, 0.6);
+}
+
+/* =============================================================================
+   Calendario (/calendario)
+   ========================================================================== */
+
+.cl .cal-hero {
+  align-items: flex-end;
+  margin-bottom: 18px;
+}
+
+.cl .cal-hero .wd-head-actions {
+  flex-wrap: nowrap;
+}
+
+.cl .ux-stats {
+  margin-bottom: 26px;
+}
+
+.cl .today-banner {
+  border-radius: 14px;
+  border-color: rgba(255, 77, 0, 0.55);
+  background: linear-gradient(110deg, rgba(255, 77, 0, 0.18), rgba(8, 8, 8, 0.88) 60%);
+  box-shadow: 0 0 30px -10px rgba(255, 77, 0, 0.8);
+}
+
+.cl .today-banner small {
+  color: var(--wd-orange);
+}
+
+.cl .today-banner.is-empty {
+  border-color: rgba(241, 238, 233, 0.3);
+  background: rgba(8, 8, 8, 0.7);
+  box-shadow: none;
+}
+
+.cl .cal-toolbar {
+  padding: 10px 12px;
+}
+
+.cl .cal-today {
+  min-height: 40px;
+}
+
+.cl .cal-title {
+  font-stretch: var(--wd-cond);
+}
+
+/* Columna derecha: cada tarjeta es una sección numerada (sigue al 01 de la agenda) */
+.cl .cal-side {
+  counter-reset: cl-side 1;
+}
+
+.cl .side-card {
+  padding: 14px;
+  animation: wd-rise 0.6s calc(0.25s + var(--i, 0) * 0.08s) var(--wd-ease) backwards;
+}
+
+.cl .side-card > h3 {
+  gap: 10px;
+  font-size: 1.05rem;
+  font-stretch: var(--wd-cond);
+}
+
+.cl .side-card > h3 > .icon {
+  display: none;
+}
+
+.cl .side-card > h3::before {
+  counter-increment: cl-side;
+  content: counter(cl-side, decimal-leading-zero);
+  min-width: 24px;
+  padding: 1px 5px;
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  font-weight: 700;
+  text-align: center;
+  color: var(--wd-black);
+  background: var(--wd-orange);
+  border-radius: 3px;
+  transform: rotate(-3deg);
+  box-shadow: 0 0 12px rgba(255, 77, 0, 0.5);
+}
+
+.cl .side-card > h3::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(255, 23, 68, 0.6), transparent);
+}
+
+.cl .side-card.is-warn {
+  border-color: rgba(255, 77, 0, 0.4);
+}
+
+.cl :is(.cal-month, .cal-week) .is-today {
+  border-color: var(--wd-orange);
+  box-shadow: 0 0 22px -8px rgba(255, 77, 0, 0.8);
+}
+
+/* Panel del día (va en una capa aparte, también con .ux) */
+.cl-panel .day-panel {
+  background: linear-gradient(180deg, rgba(27, 27, 31, 0.97), rgba(8, 8, 8, 0.98));
+  border-left: 1px solid rgba(255, 77, 0, 0.35);
+  box-shadow: -24px 0 60px -24px rgba(255, 23, 68, 0.5);
+}
+
+/* =============================================================================
+   Vestidor (/outfits/new y /outfits/:id)
+   ========================================================================== */
+
+.dr .dress-head {
+  align-items: flex-end;
+  gap: 14px 24px;
+}
+
+.dr .dress-back {
+  align-self: flex-start;
+  min-height: 40px;
+  border-radius: 10px;
+  border-color: rgba(241, 238, 233, 0.16);
+  background: rgba(8, 8, 8, 0.55);
+}
+
+.dr .dress-back:hover {
+  border-color: var(--wd-orange);
+}
+
+.dr .dress-title {
+  flex: 1 1 320px;
+}
+
+.dr .ux-title {
+  font-size: clamp(2.1rem, 1.4rem + 2.8vw, 3.8rem);
+}
+
+.dr .dress-for {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--wd-orange);
+}
+
+.dr .dress-rail,
+.dr .dress-panel {
+  border-radius: 16px;
+}
+
+.dr .stage-frame {
+  border-radius: 18px;
+  border-color: rgba(255, 77, 0, 0.22);
+  box-shadow:
+    0 0 50px -20px rgba(255, 23, 68, 0.5),
+    0 30px 60px -30px #000;
+}
+
+/* Secciones numeradas: 01 el burro de prendas, 02 lo que lleva puesto */
+.dr .rack-head h2,
+.dr .panel-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-stretch: var(--wd-cond);
+}
+
+.dr .rack-head h2::before,
+.dr .panel-title::before {
+  min-width: 24px;
+  padding: 1px 5px;
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  font-weight: 700;
+  text-align: center;
+  color: var(--wd-black);
+  background: var(--wd-orange);
+  border-radius: 3px;
+  transform: rotate(-3deg);
+  box-shadow: 0 0 12px rgba(255, 77, 0, 0.5);
+}
+
+.dr .rack-head h2::before {
+  content: '01';
+}
+
+.dr .panel-title::before {
+  content: '02';
+}
+
+.dr .rack-item.is-on {
+  border-color: var(--wd-orange);
+}
+
+/* Guardar: botón principal con un pulso mientras hay cambios */
+.dr .dress-actions {
+  border-radius: 0 0 16px 16px;
+  background: linear-gradient(180deg, rgba(8, 8, 8, 0.6), rgba(8, 8, 8, 0.97) 40%);
+}
+
+.dr .btn-save.wd-add {
+  overflow: hidden;
+}
+
+.dr .btn-save.is-dirty::before {
+  inset: 0;
+  border: 0;
+  border-radius: 0;
+  animation: none;
+}
+
+.dr .btn-save.is-dirty {
+  animation: dr-save-pulse 1.8s ease-out infinite;
+}
+
+.main .dr.dr .btn-save.is-saved:not(.is-dirty) {
+  --wd-bg: rgba(255, 77, 0, 0.16);
+  color: var(--wd-bone);
+  border-color: var(--wd-orange);
+}
+
+@keyframes dr-save-pulse {
+  0% {
+    box-shadow:
+      0 0 0 0 rgba(255, 77, 0, 0.6),
+      0 0 22px -4px rgba(255, 77, 0, 0.75);
+  }
+  100% {
+    box-shadow:
+      0 0 0 10px rgba(255, 77, 0, 0),
+      0 0 22px -4px rgba(255, 77, 0, 0.75);
+  }
+}
+
+/* =============================================================================
+   Ficha de prenda (/items/:id)
+   ========================================================================== */
+
+.sc .showcase-head {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 16px 28px;
+}
+
+.sc .back-link {
+  align-self: start;
+  min-height: 40px;
+  padding: 0 12px;
+  border: 1px solid rgba(241, 238, 233, 0.16);
+  border-radius: 10px;
+  background: rgba(8, 8, 8, 0.55);
+  color: rgba(241, 238, 233, 0.8);
+  transition:
+    border-color 0.25s,
+    transform 0.25s var(--wd-ease);
+}
+
+.sc .back-link:hover {
+  border-color: var(--wd-orange);
+  transform: translateX(-3px);
+}
+
+.sc .showcase-title .ux-title {
+  margin-top: 10px;
+  font-size: clamp(2rem, 1.3rem + 2.6vw, 3.6rem);
+}
+
+.sc .sc-path {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.sc .sc-path i {
+  font-style: normal;
+  color: var(--wd-red);
+}
+
+.sc .showcase-stage {
+  border-radius: 18px;
+  border-color: rgba(255, 77, 0, 0.22);
+  box-shadow:
+    0 0 50px -20px rgba(255, 23, 68, 0.45),
+    0 30px 60px -30px #000;
+  animation: wd-rise 0.7s 0.15s var(--wd-ease) backwards;
+}
+
+.sc .showcase-panel {
+  gap: 24px;
+  padding: 18px;
+  counter-reset: sc-panel;
+  animation: wd-rise 0.7s 0.3s var(--wd-ease) backwards;
+}
+
+/* Títulos del panel como secciones numeradas */
+.sc .showcase-panel .panel-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 12px;
+  font-size: 1.05rem;
+  font-weight: 800;
+  font-stretch: var(--wd-cond);
+  letter-spacing: 0.02em;
+  color: var(--wd-bone);
+}
+
+.sc .showcase-panel .panel-title::before {
+  counter-increment: sc-panel;
+  content: counter(sc-panel, decimal-leading-zero);
+  min-width: 24px;
+  padding: 1px 5px;
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  font-weight: 700;
+  text-align: center;
+  color: var(--wd-black);
+  background: var(--wd-orange);
+  border-radius: 3px;
+  transform: rotate(-3deg);
+  box-shadow: 0 0 12px rgba(255, 77, 0, 0.5);
+}
+
+.sc .showcase-panel .panel-title::after {
+  content: '';
+  flex: 1;
+  min-width: 16px;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(255, 23, 68, 0.6), transparent);
+}
+
+.sc .panel-title-row {
+  align-items: center;
+}
+
+.sc .panel-title-row .panel-title {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.sc .panel-title-row {
+  margin-bottom: 12px;
+}
+
+.sc .details dt {
+  color: rgba(241, 238, 233, 0.55);
+}
+
+.sc .color-chip.is-active {
+  box-shadow:
+    0 0 0 2px var(--wd-black),
+    0 0 0 4px var(--wd-orange),
+    0 0 18px rgba(255, 77, 0, 0.6);
+}
+
+.sc .wd-btn-line.btn-small {
+  min-height: 36px;
+  padding: 6px 12px;
+  font-size: 0.72rem;
+}
+
+.sc .panel-foot {
+  padding-top: 14px;
+  border-top: 1px solid var(--wd-edge);
+}
+
+/* =============================================================================
+   Responsive y movimiento reducido (tanda 1)
+   ========================================================================== */
+
+@media (max-width: 960px) {
+  .ft .fits-hero {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ux .ux-head .wd-head-actions {
+    justify-content: flex-start;
+  }
+
+  .cl .cal-hero .wd-head-actions {
+    flex: 1 1 100%;
+  }
+
+  .cl .cal-hero .today-banner {
+    flex: 1;
+  }
+
+  .sc .showcase-head {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sc .showcase-head .back-link {
+    justify-self: start;
+  }
+}
+
+@media (max-width: 600px) {
+  .ux .ux-title {
+    font-size: clamp(2.1rem, 11vw, 3rem);
+  }
+
+  .sc .showcase-title .ux-title,
+  .dr .ux-title {
+    font-size: clamp(1.9rem, 9.5vw, 2.6rem);
+  }
+
+  .ux .ux-head .wd-head-actions .wd-add,
+  .ux .ux-head .wd-head-actions .wd-btn-line {
+    flex: 1 1 auto;
+  }
+
+  .ux .ux-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ux .ux-stats li:nth-child(odd) {
+    border-left: 0;
+  }
+
+  .ux .ux-stats li:nth-child(n + 3) {
+    border-top: 1px solid var(--wd-edge);
+  }
+
+  .ft .ux-stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .ft .ux-stats li:nth-child(n) {
+    border-top: 0;
+    border-left: 1px solid var(--wd-edge);
+  }
+
+  .ft .ux-stats li:first-child {
+    border-left: 0;
+  }
+
+  /* Filtros desplazables en horizontal */
+  .ft :is(.style-rail, .shoe-rail) {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .ft :is(.style-rail, .shoe-rail)::-webkit-scrollbar {
+    display: none;
+  }
+
+  .ft .fit-act {
+    min-width: 0;
+    padding-inline: 4px;
+    font-size: 0.68rem;
+    letter-spacing: 0.03em;
+  }
+
+  .ft :is(.style-rail, .shoe-rail) > * {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  .ft .spotlight {
+    border-radius: 14px;
+  }
+
+  .ft :is(.fits-filters, .fit-card),
+  .cl :is(.cal-toolbar, .side-card),
+  .dr :is(.dress-rail, .dress-panel),
+  .sc .showcase-panel {
+    border-radius: 14px;
+  }
+
+  .sc .showcase-stage {
+    border-radius: 0;
+  }
+
+  .sc .head-actions {
+    width: 100%;
+  }
+
+  /* Zonas táctiles de al menos 44 px */
+  .ux :is(button, .btn, .dress-back, .back-link, .fits-search input):not(.color-chip, .cal-cell, .wd-bar, .stage-hud button, .drag-handle, .today-banner) {
+    min-height: 44px;
+  }
+
+  .ux .icon-btn {
+    min-width: 44px;
+  }
+}
+
+@media (hover: none) {
+  .ft .fit-card:hover {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dr .btn-save.is-dirty {
+    animation: none;
+  }
+}
+
+.ft .fit-stage {
+  border-radius: 15px 15px 0 0;
+}
+
+/* «Asignar» / «Probar» de las sugerencias: naranja de la paleta */
+.ux .tip-try {
+  color: var(--wd-orange);
+  border-color: rgba(255, 77, 0, 0.7);
+  border-radius: 8px;
+  background: rgba(8, 8, 8, 0.5);
+}
+
+.ux .tip-try:hover {
+  color: var(--wd-black);
+  background: var(--wd-hot);
+}
+
+/* Acciones del día: naranja (el verde se queda para «usado») */
+.ux .day-add {
+  color: var(--wd-orange);
+  background: rgba(255, 77, 0, 0.05);
+  border-color: rgba(255, 77, 0, 0.5);
+  border-radius: 12px;
+}
+
+.ux .day-add:hover {
+  background: rgba(255, 77, 0, 0.12);
+}
+
+.ux .cpk {
+  border-color: rgba(255, 77, 0, 0.3);
+  border-radius: 14px;
+  background: rgba(8, 8, 8, 0.5);
+}
+
+.ux .entry-act {
+  border-radius: 10px;
+}
+
+/* Gráficas del calendario con el degradado de la paleta */
+.cl .wd-bar i {
+  background: linear-gradient(0deg, var(--wd-red), var(--wd-orange));
+  box-shadow: 0 0 14px -4px rgba(255, 77, 0, 0.8);
+}
+
+.cl .hb-track span:not([style*='background']) {
+  background: linear-gradient(90deg, var(--wd-orange), var(--wd-red));
+}
+
+.dr .panel-title {
+  margin: 18px 0 10px;
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--wd-bone);
+}
+
+.dr .panel-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(255, 23, 68, 0.6), transparent);
+}
+
+.dr .panel-title .count {
+  order: 1;
+}
+
+/* Eliminar: línea roja, como el peligro del armario */
+.main .dr.dr .dress-actions .btn.btn-danger {
+  min-height: 44px;
+  padding: 10px 16px;
+  font-weight: 800;
+  font-stretch: var(--wd-cond);
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #ff8095;
+  border: 1px solid rgba(255, 23, 68, 0.4);
+  border-radius: 10px;
+  background: rgba(8, 8, 8, 0.5);
+}
+
+.main .dr.dr .dress-actions .btn.btn-danger:hover {
+  color: var(--wd-bone);
+  border-color: var(--wd-red);
+  background: rgba(255, 23, 68, 0.16);
+  box-shadow: 0 0 18px -6px rgba(255, 23, 68, 0.9);
+}
+
+.ft .fit-act {
+  border-radius: 10px;
+  transition:
+    color 0.2s,
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.ft .fit-act:hover:not(:disabled) {
+  color: var(--wd-bone);
+  border-color: var(--wd-orange);
+  box-shadow: 0 0 16px -6px rgba(255, 77, 0, 0.9);
+}
+
+.ft .fit-act.is-danger:hover:not(:disabled) {
+  border-color: var(--wd-red);
+  box-shadow: 0 0 16px -6px rgba(255, 23, 68, 0.9);
 }

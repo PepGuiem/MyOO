@@ -477,24 +477,30 @@ export function OutfitEditorPage() {
   const filledSlots = slots.filter((s) => wornBySlot[s.id].length > 0).length;
 
   return (
-    <section className="dressing">
+    <section className="dressing ux dr">
 
-      <header className="dress-head">
+      <header className="dress-head ux-head">
         <Link to={calendarDate ? `/calendario?date=${calendarDate}` : '/outfits'} className="dress-back">
           <Icon name="back" size={14} /> {calendarDate ? t('Calendario') : t('Outfits')}
         </Link>
         <div className="dress-title">
-          <span className="fits-kicker">
-            <span className="rec-dot" aria-hidden="true" /> {t('Vestidor')}
-            {calendarDate && <span className="dress-for"> {t('· para el calendario: {shortDay}', { shortDay: shortDay(calendarDate) })}</span>}
+          <span className="wd-kicker">
+            <Icon name="hanger" size={12} /> {t('Dressing room')}
           </span>
-          <h1>{isNew ? t('Nuevo outfit') : name || t('Outfit')}</h1>
+          <h1 className="wd-title ux-title" data-text={isNew ? t('Nuevo outfit') : name || t('Outfit')}>
+            {isNew ? t('Nuevo outfit') : name || t('Outfit')}
+          </h1>
+          {calendarDate && (
+            <p className="ux-lede dress-for">
+              <Icon name="calendar" size={13} /> {t('Para el calendario: {shortDay}', { shortDay: shortDay(calendarDate) })}
+            </p>
+          )}
         </div>
         <div className="dress-tools">
-          <button type="button" className="btn btn-street btn-ghost" onClick={surprise} disabled={loading || !allItems.length}>
+          <button type="button" className="btn wd-btn-line" onClick={surprise} disabled={loading || !allItems.length}>
             <Icon name="shuffle" size={14} /> {t('Sorpréndeme')}
           </button>
-          <button type="button" className="btn btn-ghost" onClick={clearAll} disabled={!selected.length}>
+          <button type="button" className="btn wd-btn-line" onClick={clearAll} disabled={!selected.length}>
             <Icon name="undo" size={14} /> {t('Vaciar')}
           </button>
           <SoundToggle />
@@ -552,7 +558,7 @@ export function OutfitEditorPage() {
                 [
                   ['all', t('Todo')],
                   ['mine', t('Las tengo')],
-                  ['wish', `Wishlist · ${wishCount}`],
+                  ['wish', t('Wishlist · {n}', { n: wishCount })],
                 ] as const
               ).map(([k, label]) => (
                 <button
@@ -600,7 +606,7 @@ export function OutfitEditorPage() {
                     className={`rack-item${on ? ' is-on' : ''}${lastOn === item.id ? ' just-on' : ''}${item.wishlistStatus ? ' is-wish' : ''}`}
                     aria-pressed={on}
                     onClick={() => toggle(item.id)}
-                    title={`${on ? `Quitar ${item.name}` : `Ponerle ${item.name}`}${item.wishlistStatus ? t(' (de tu wishlist: aún no la tienes)') : ''}`}
+                    title={`${on ? t('Quitar {name}', { name: item.name }) : t('Ponerle {name}', { name: item.name })}${item.wishlistStatus ? t(' (de tu wishlist: aún no la tienes)') : ''}`}
                   >
                     <span className="rack-swatch" style={{ '--sw': item.color } as CSSProperties} aria-hidden="true">
                       <Icon name={s.icon} size={26} />
@@ -862,7 +868,7 @@ export function OutfitEditorPage() {
           </label>
 
           <h2 className="panel-title">
-            {t('Puesto')} <span className="count">{selectedItems.length}</span>
+            {t('Puesto##sección')} <span className="count">{selectedItems.length}</span>
           </h2>
           {selectedItems.length === 0 ? (
             <p className="muted small">{t('Nada todavía. Toca una prenda del burro para ponérsela.')}</p>
@@ -918,7 +924,7 @@ export function OutfitEditorPage() {
                         className="icon-btn"
                         onClick={() => move(index, -1)}
                         disabled={index === 0}
-                        aria-label={`Subir ${item.name}`}
+                        aria-label={t('Subir {name}', { name: item.name })}
                         title={t('Subir (se pone encima)')}
                       >
                         <Icon name="up" />
@@ -928,12 +934,12 @@ export function OutfitEditorPage() {
                         className="icon-btn"
                         onClick={() => move(index, 1)}
                         disabled={index === selectedItems.length - 1}
-                        aria-label={`Bajar ${item.name}`}
+                        aria-label={t('Bajar {name}', { name: item.name })}
                         title={t('Bajar')}
                       >
                         <Icon name="down" />
                       </button>
-                      <button type="button" className="icon-btn" onClick={() => toggle(item.id)} aria-label={`Quitar ${item.name}`} title={t('Quitar del outfit')}>
+                      <button type="button" className="icon-btn" onClick={() => toggle(item.id)} aria-label={t('Quitar {name}', { name: item.name })} title={t('Quitar del outfit')}>
                         <Icon name="close" />
                       </button>
                     </span>
@@ -976,12 +982,12 @@ export function OutfitEditorPage() {
               </button>
             )}
             <span className="spacer" />
-            <button type="button" className="btn" onClick={() => navigate('/outfits')}>
+            <button type="button" className="btn wd-btn-line" onClick={() => navigate('/outfits')}>
               {t('Volver')}
             </button>
             <button
               type="submit"
-              className={`btn btn-primary btn-street btn-save${dirty ? ' is-dirty' : ''}${saved ? ' is-saved' : ''}`}
+              className={`btn wd-add btn-save${dirty ? ' is-dirty' : ''}${saved ? ' is-saved' : ''}`}
               disabled={saving || selected.length === 0}
             >
               {saving ? <Busy text={t('Guardando…')} /> : isNew ? t('Crear outfit') : saved && !dirty ? t('Guardado') : t('Guardar outfit')}

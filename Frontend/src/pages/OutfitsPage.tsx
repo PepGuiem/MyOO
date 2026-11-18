@@ -12,6 +12,8 @@ import { SprayLoader } from '../components/fx/SprayLoader';
 import { useToast } from '../components/fx/Toast';
 import { Icon } from '../components/Icon';
 import { InfiniteSentinel } from '../components/InfiniteSentinel';
+import { EmptyStage, NoMatch } from '../components/street/EmptyStage';
+import { SectionHead } from '../components/street/SectionHead';
 import { CountUp, stickerTilt } from '../components/street/Street';
 import { useBodyShape } from '../lib/bodyPref';
 import { formatDate, SEASON_LABEL, plural } from '../lib/labels';
@@ -235,7 +237,7 @@ export function OutfitsPage() {
       dropFromList(o.id);
       setFeatured((l) => l.filter((x) => x.id !== o.id));
       refreshSummary();
-      toast.show(`«${o.name}» eliminado`, { tone: 'danger', sound: 'swoosh' });
+      toast.show(t('«{name}» eliminado', { name: o.name }), { tone: 'danger', sound: 'swoosh' });
     } catch (err) {
       toast.show(errorText(err), { tone: 'danger', sound: 'error' });
     } finally {
@@ -257,43 +259,59 @@ export function OutfitsPage() {
   const firstLoad = loading && outfits.length === 0;
 
   return (
-    <section className="page fits">
+    <section className="page fits ux ft">
 
-      <header className="fits-hero">
+      <header className="fits-hero ux-head">
         <div className="fits-title">
-          <span className="fits-kicker">
-            <span className="rec-dot" aria-hidden="true" /> {t('Vestidor / {getFullYear}', { getFullYear: new Date().getFullYear() })}
+          <span className="wd-kicker">
+            <Icon name="layers" size={12} /> {t('My outfits')}
           </span>
-          <h1 className="fits-h1" data-text={t('Outfits')}>
+          <h1 className="wd-title ux-title" data-text={t('Outfits')}>
             {t('Outfits')}
           </h1>
-          <p className="fits-sub">{t('Combina, guarda y estrena. Tu ropa, tus reglas.')}</p>
+          <p className="ux-lede">{t('Combina, guarda y estrena. Tu ropa, tus reglas.')}</p>
         </div>
 
-        <dl className="fits-stats">
-          <div>
-            <dt>{t('Fits')}</dt>
-            <dd>{grandTotal === null ? '—' : <CountUp value={grandTotal} />}</dd>
-          </div>
-          <div>
-            <dt>{t('Favoritos')}</dt>
-            <dd>{summary ? <CountUp value={summary.favorites} delay={120} /> : '—'}</dd>
-          </div>
-          <div>
-            <dt>{t('Estilos')}</dt>
-            <dd>{summary ? <CountUp value={stylesUsed} delay={240} /> : '—'}</dd>
-          </div>
-        </dl>
-
-        <div className="fits-actions">
+        <div className="wd-head-actions">
           <SoundToggle />
-          <Link to="/outfits/new" className="btn btn-primary btn-street btn-new" onClick={() => play('spray')}>
-            <Icon name="plus" size={16} /> {t('Nuevo outfit')}
+          <Link to="/outfits/new" className="btn wd-add" onClick={() => play('spray')}>
+            <Icon name="plus" size={16} /> <span>{t('Nuevo outfit')}</span>
           </Link>
         </div>
       </header>
 
-      {showSpotlight && <Spotlight outfits={featured} favorites={featured.some((o) => o.isFavorite)} />}
+      <ul className="wd-stats ux-stats" aria-label={t('Resumen')}>
+        <li style={{ '--i': 0 } as CSSProperties}>
+          <Icon name="layers" size={16} />
+          <strong>{grandTotal === null ? '–' : <CountUp value={grandTotal} />}</strong>
+          <span>{t('Fits')}</span>
+        </li>
+        <li style={{ '--i': 1 } as CSSProperties}>
+          <Icon name="star" size={16} />
+          <strong>{summary ? <CountUp value={summary.favorites} delay={120} /> : '–'}</strong>
+          <span>{t('Favoritos')}</span>
+        </li>
+        <li style={{ '--i': 2 } as CSSProperties}>
+          <Icon name="palette" size={16} />
+          <strong>{summary ? <CountUp value={stylesUsed} delay={240} /> : '–'}</strong>
+          <span>{t('Estilos')}</span>
+        </li>
+      </ul>
+
+      {showSpotlight && (
+        <section className="ux-section">
+          <SectionHead n={1} title={featured.some((o) => o.isFavorite) ? t('Fit del día') : t('Lo último')} />
+          <Spotlight outfits={featured} favorites={featured.some((o) => o.isFavorite)} />
+        </section>
+      )}
+
+      <SectionHead n={showSpotlight ? 2 : 1} title={t('Tu colección')}>
+        {!firstLoad && (
+          <span className="ux-section-count">
+            <CountUp value={total} />
+          </span>
+        )}
+      </SectionHead>
 
       <div className="fits-filters" role="search">
         <div className="fits-row">
@@ -463,21 +481,24 @@ export function OutfitsPage() {
         <SprayLoader label={t('Sacando tus outfits…')} />
       ) : !loading && !error && outfits.length === 0 ? (
         filtered ? (
-          <div className="fits-empty is-filtered">
-            <span className="fits-empty-tag">{t('Nada por aquí')}</span>
-            <p>{t('Ningún outfit con estos filtros. Prueba con otro estilo o busca otra palabra.')}</p>
-            <button type="button" className="btn btn-street" onClick={clearFilters}>
+          <NoMatch title={t('Nada por aquí')} text={t('Ningún outfit con estos filtros. Prueba con otro estilo o busca otra palabra.')}>
+            <button type="button" className="btn wd-btn-line" onClick={clearFilters}>
               {t('Ver todos')}
             </button>
-          </div>
+          </NoMatch>
         ) : (
-          <div className="fits-empty">
-            <span className="fits-empty-tag">{t('Pared en blanco')}</span>
-            <p>{t('Todavía no tienes outfits. Entra al vestidor, combina prendas de tus armarios y guárdalas juntas.')}</p>
-            <Link to="/outfits/new" className="btn btn-primary btn-street btn-new">
-              <Icon name="plus" size={16} /> {t('Crear el primero')}
+          <EmptyStage
+            icon="layers"
+            pieces={['hoodie', 'cap', 'shoe', 'pants', 'jacket', 'tshirt']}
+            kicker={t('My outfits')}
+            kickerIcon="layers"
+            title={t('Pared en blanco')}
+            text={t('Todavía no tienes outfits. Entra al vestidor, combina prendas de tus armarios y guárdalas juntas.')}
+          >
+            <Link to="/outfits/new" className="btn wd-add wd-add-big">
+              <Icon name="plus" size={16} /> <span>{t('Crear el primero')}</span>
             </Link>
-          </div>
+          </EmptyStage>
         )
       ) : (
         <div className={`fits-grid${swapping ? ' is-swapping' : ''}${comparing ? ' is-comparing' : ''}`}>
@@ -521,11 +542,11 @@ export function OutfitsPage() {
             ))}
           </span>
           <span className="compare-tray-text">
-            {picked.length < 2 ? t('Elige {v} más para comparar', { v: 2 - picked.length }) : `${picked.length} elegidos`}
+            {picked.length < 2 ? t('Elige {v} más para comparar', { v: 2 - picked.length }) : t('{n} elegidos', { n: picked.length })}
           </span>
           <button
             type="button"
-            className="btn btn-primary btn-street"
+            className="btn wd-add"
             disabled={picked.length < 2}
             onClick={() => {
               play('swoosh');
@@ -643,7 +664,7 @@ function FitCard({
         className="fit-stage"
         role="link"
         tabIndex={0}
-        aria-label={comparing ? t('{v} la comparativa: {name}', { v: picked ? t('Quitar de') : t('Añadir a'), name: outfit.name }) : `Abrir ${outfit.name}`}
+        aria-label={comparing ? t('{v} la comparativa: {name}', { v: picked ? t('Quitar de') : t('Añadir a'), name: outfit.name }) : t('Abrir {name}', { name: outfit.name })}
         onClick={open}
         onKeyDown={(e) => e.key === 'Enter' && open()}
         onFocus={() => setActive(true)}
@@ -721,7 +742,7 @@ function FitCard({
           <button type="button" className="fit-act" onClick={onDuplicate} disabled={busy}>
             <Icon name="copy" size={14} /> {busy ? t('Copiando…') : t('Duplicar')}
           </button>
-          <button type="button" className="fit-act is-danger" onClick={onDelete} aria-label={`Eliminar ${outfit.name}`}>
+          <button type="button" className="fit-act is-danger" onClick={onDelete} aria-label={t('Eliminar {name}', { name: outfit.name })}>
             <Icon name="trash" size={14} />
           </button>
         </div>
@@ -780,7 +801,7 @@ function Spotlight({ outfits, favorites }: { outfits: Outfit[]; favorites: boole
           ))}
         </ul>
         <div className="spot-actions">
-          <button type="button" className="btn btn-primary btn-street" onClick={() => navigate(`/outfits/${o.id}`)}>
+          <button type="button" className="btn wd-add" onClick={() => navigate(`/outfits/${o.id}`)}>
             {t('Entrar al vestidor')} <Icon name="forward" size={14} />
           </button>
           {outfits.length > 1 && (

@@ -16,9 +16,10 @@ import { Icon } from '../Icon';
 import { ScoreRing } from '../rating/RatingGauge';
 import { stickerTilt } from '../street/Street';
 import { OutfitGlyph } from './OutfitGlyph';
+import { t } from '../../i18n';
 
 function errorText(err: unknown): string {
-  return err instanceof Error ? err.message : 'Algo ha fallado.';
+  return err instanceof Error ? err.message : t('Algo ha fallado.');
 }
 
 export function StyleTag({ outfit }: { outfit: Outfit }) {
@@ -72,7 +73,7 @@ export function DayDetail({
       </header>
 
       {entries.length > 1 && (
-        <div className="day-tabs" role="tablist" aria-label="Outfits del día">
+        <div className="day-tabs" role="tablist" aria-label={t('Outfits del día')}>
           {entries.map((e) => (
             <button
               key={e.id}
@@ -124,7 +125,7 @@ export function DayDetail({
               setPicking('add');
             }}
           >
-            <Icon name="plus" size={14} /> {entries.length ? 'Otro outfit para este día (p. ej. un evento)' : 'Asignar un outfit'}
+            <Icon name="plus" size={14} /> {entries.length ? t('Otro outfit para este día (p. ej. un evento)') : t('Asignar un outfit')}
           </button>
         )
       )}
@@ -195,7 +196,7 @@ function EntryCard({
       <div className="entry-stage">
         <span className="entry-beam" aria-hidden="true" />
         <OutfitStage garments={garments} shape={shape} distance={4.4} />
-        {entry.worn && <span className="worn-stamp">Usado</span>}
+        {entry.worn && <span className="worn-stamp">{t('Usado')}</span>}
       </div>
 
       <div className="entry-main">
@@ -211,7 +212,7 @@ function EntryCard({
         </div>
         {entry.repeat && (
           <p className={`entry-repeat is-${entry.repeat.level}`}>
-            <Icon name="refresh" size={13} /> {entry.repeat.text}. ¿Y si pruebas otro?
+            <Icon name="refresh" size={13} /> {t('{text}. ¿Y si pruebas otro?', { text: entry.repeat.text })}
           </p>
         )}
         <ul className="entry-pieces">
@@ -230,26 +231,26 @@ function EntryCard({
           className={`worn-toggle${entry.worn ? ' is-on' : ''}`}
           aria-pressed={entry.worn}
           disabled={busy || (future && !entry.worn)}
-          title={future && !entry.worn ? 'Podrás marcarlo cuando llegue el día' : undefined}
+          title={future && !entry.worn ? t('Podrás marcarlo cuando llegue el día') : undefined}
           onClick={() => {
             play(entry.worn ? 'click' : 'pop');
-            void save({ worn: !entry.worn }, entry.worn ? undefined : `«${entry.outfit.name}» marcado como usado`);
+            void save({ worn: !entry.worn }, entry.worn ? undefined : t('«{name}» marcado como usado', { name: entry.outfit.name }));
           }}
         >
           <span className="worn-box" aria-hidden="true">
             <Icon name="check" size={14} />
           </span>
-          {entry.worn ? `Usado${entry.wornAt ? ` · ${formatDate(entry.wornAt)}` : ''}` : future ? 'Aún no ha llegado el día' : 'Marcar como usado'}
+          {entry.worn ? `${t('Usado')}${entry.wornAt ? ` · ${formatDate(entry.wornAt)}` : ''}` : future ? t('Aún no ha llegado el día') : t('Marcar como usado')}
         </button>
 
         <label className="field entry-note">
           <span>
-            Nota {noteSaved && <em className="note-ok">guardada</em>}
+            {t('Nota##apunte')} {noteSaved && <em className="note-ok">{t('guardada')}</em>}
           </span>
           <textarea
             rows={2}
             maxLength={500}
-            placeholder="Llevar paraguas, devolver la chaqueta a Leo…"
+            placeholder={t('Llevar paraguas, devolver la chaqueta a Leo…')}
             value={note}
             onChange={(e) => setNote(e.target.value)}
             onBlur={saveNote}
@@ -269,19 +270,19 @@ function EntryCard({
             />
             <span className="switch" aria-hidden="true" />
             <span>
-              <strong>Evento especial</strong>
+              <strong>{t('Evento especial')}</strong>
             </span>
           </label>
           {eventOn && (
             <div className="event-form">
               <input
                 maxLength={80}
-                placeholder="Boda de Ana, concierto…"
-                aria-label="Nombre del evento"
+                placeholder={t('Boda de Ana, concierto…')}
+                aria-label={t('Nombre del evento')}
                 value={eventName}
                 onChange={(e) => setEventName(e.target.value)}
               />
-              <div className="event-kinds" role="radiogroup" aria-label="Tipo de evento">
+              <div className="event-kinds" role="radiogroup" aria-label={t('Tipo de evento')}>
                 {EVENT_KIND_KEYS.map((k) => (
                   <button
                     key={k}
@@ -298,11 +299,11 @@ function EntryCard({
               </div>
               <button
                 type="button"
-                className="btn btn-street btn-ghost btn-small"
+                className="btn wd-btn-line btn-small"
                 disabled={busy || !eventName.trim()}
-                onClick={() => void save({ eventName: eventName.trim(), eventKind }, 'Evento guardado')}
+                onClick={() => void save({ eventName: eventName.trim(), eventKind }, t('Evento guardado'))}
               >
-                Guardar evento
+                {t('Guardar evento')}
               </button>
             </div>
           )}
@@ -312,10 +313,10 @@ function EntryCard({
 
         <div className="entry-actions">
           <button type="button" className={`entry-act${swapping ? ' is-on' : ''}`} onClick={onSwap}>
-            <Icon name="shuffle" size={14} /> Cambiar outfit
+            <Icon name="shuffle" size={14} /> {t('Cambiar outfit')}
           </button>
           <button type="button" className="entry-act" onClick={() => navigate(`/outfits/${entry.outfit.id}`)}>
-            <Icon name="edit" size={14} /> Editar outfit
+            <Icon name="edit" size={14} /> {t('Editar outfit')}
           </button>
           <button
             type="button"
@@ -331,7 +332,7 @@ function EntryCard({
               try {
                 await calendarApi.remove(entry.id);
                 play('swoosh');
-                toast.show(`Quitado del ${shortDay(entry.date)}`, { tone: 'danger' });
+                toast.show(t('Quitado del {shortDay}', { shortDay: shortDay(entry.date) }), { tone: 'danger' });
                 onChanged({});
               } catch (err) {
                 setError(err);
@@ -340,7 +341,7 @@ function EntryCard({
               }
             }}
           >
-            <Icon name="trash" size={14} /> {confirmRemove ? '¿Seguro? Quitar' : 'Quitar del día'}
+            <Icon name="trash" size={14} /> {confirmRemove ? t('¿Seguro? Quitar') : t('Quitar del día')}
           </button>
         </div>
       </div>
@@ -382,7 +383,7 @@ function OutfitPicker({
 
   useEffect(() => {
     let alive = true;
-    const t = window.setTimeout(() => {
+    const timer = window.setTimeout(() => {
       outfitsApi
         .list(1, 60, { search: query.trim() || undefined })
         .then((r) => alive && setAll(r.data))
@@ -390,7 +391,7 @@ function OutfitPicker({
     }, 250);
     return () => {
       alive = false;
-      window.clearTimeout(t);
+      window.clearTimeout(timer);
     };
   }, [query]);
 
@@ -399,7 +400,7 @@ function OutfitPicker({
     try {
       play('spray');
       await onPick(o);
-      toast.show(`«${o.name}» para el ${shortDay(date)}`, { icon: 'check' });
+      toast.show(t('«{name}» para el {shortDay}', { name: o.name, shortDay: shortDay(date) }), { icon: 'check' });
     } catch (err) {
       toast.show(errorText(err), { tone: 'danger', sound: 'error' });
     } finally {
@@ -424,11 +425,11 @@ function OutfitPicker({
 
   const visibleSuggested = (suggested ?? []).filter((s) => s.outfit.id !== excludeId);
   return (
-    <section className="cpk" aria-label="Elegir outfit">
+    <section className="cpk" aria-label={t('Elegir outfit')}>
       <div className="cpk-head">
-        <h4>{mode === 'swap' ? 'Cambiar por…' : `Outfit para el ${shortDay(date)}`}</h4>
+        <h4>{mode === 'swap' ? t('Cambiar por…') : t('Outfit para el {shortDay}', { shortDay: shortDay(date) })}</h4>
         {onCancel && (
-          <button type="button" className="icon-btn" onClick={onCancel} aria-label="Cancelar">
+          <button type="button" className="icon-btn" onClick={onCancel} aria-label={t('Cancelar')}>
             <Icon name="close" />
           </button>
         )}
@@ -437,7 +438,7 @@ function OutfitPicker({
       {visibleSuggested.length > 0 && !query && (
         <>
           <p className="cpk-label">
-            <Icon name="spark" size={12} /> Recomendados para ese día
+            <Icon name="spark" size={12} /> {t('Recomendados para ese día')}
           </p>
           <ul className="cpk-list is-suggested">{visibleSuggested.map((s, i) => card(s.outfit, i, s.reasons))}</ul>
         </>
@@ -445,25 +446,25 @@ function OutfitPicker({
 
       <label className="fits-search fits-search-sm">
         <Icon name="search" />
-        <input type="search" placeholder="Buscar en tus outfits" aria-label="Buscar en tus outfits" value={query} onChange={(e) => setQuery(e.target.value)} />
+        <input type="search" placeholder={t('Buscar en tus outfits')} aria-label={t('Buscar en tus outfits')} value={query} onChange={(e) => setQuery(e.target.value)} />
       </label>
       {all === null ? (
-        <p className="muted small">Cargando outfits…</p>
+        <p className="muted small">{t('Cargando outfits…')}</p>
       ) : all.length === 0 ? (
-        <p className="muted small">{query ? 'Ningún outfit con ese nombre.' : 'Todavía no tienes outfits guardados.'}</p>
+        <p className="muted small">{query ? t('Ningún outfit con ese nombre.') : t('Todavía no tienes outfits guardados.')}</p>
       ) : (
         <ul className="cpk-list">{all.filter((o) => o.id !== excludeId).map((o, i) => card(o, Math.min(i, 10)))}</ul>
       )}
 
       <button
         type="button"
-        className="btn btn-primary btn-street cpk-new"
+        className="btn wd-add cpk-new"
         onClick={() => {
           play('spray');
           navigate(`/outfits/new?date=${date}`);
         }}
       >
-        <Icon name="plus" size={14} /> Crear un outfit nuevo para este día
+        <Icon name="plus" size={14} /> {t('Crear un outfit nuevo para este día')}
       </button>
     </section>
   );

@@ -4,6 +4,7 @@ import type { CalendarEntry } from '../../api/types';
 import type { DayKey } from '../../lib/dates';
 import { Icon } from '../Icon';
 import { DayDetail } from './DayDetail';
+import { t } from '../../i18n';
 
 /** Panel lateral con el detalle de un día (en el móvil sube desde abajo). */
 export function DayPanel({
@@ -43,17 +44,17 @@ export function DayPanel({
   });
 
   return createPortal(
-    <div className={`day-overlay${leaving ? ' is-leaving' : ''}`} onMouseDown={(e) => e.target === e.currentTarget && close()}>
-      <aside className="day-panel" role="dialog" aria-modal="true" aria-label={`Día ${date}`}>
+    <div className={`day-overlay ux cl-panel${leaving ? ' is-leaving' : ''}`} onMouseDown={(e) => e.target === e.currentTarget && close()}>
+      <aside className="day-panel" role="dialog" aria-modal="true" aria-label={t('Día {date}', { date })}>
         <div className="day-panel-bar">
-          <button type="button" className="icon-btn" onClick={onPrev} aria-label="Día anterior">
+          <button type="button" className="icon-btn" onClick={onPrev} aria-label={t('Día anterior')}>
             <Icon name="back" />
           </button>
-          <button type="button" className="icon-btn" onClick={onNext} aria-label="Día siguiente">
+          <button type="button" className="icon-btn" onClick={onNext} aria-label={t('Día siguiente')}>
             <Icon name="forward" />
           </button>
           <span className="spacer" />
-          <button type="button" className="icon-btn" onClick={close} aria-label="Cerrar">
+          <button type="button" className="icon-btn" onClick={close} aria-label={t('Cerrar')}>
             <Icon name="close" />
           </button>
         </div>

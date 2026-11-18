@@ -592,6 +592,26 @@ npm run test:e2e       # incluye test/sneakers.e2e-spec.ts
 - `gain` cuenta combinaciones con tus prendas: (arriba × abajo + vestidos) × calzado × (abrigos + 1). Es un recuento, no mira colores ni estilos. Para accesorios es `null`.
 - `stats.combinations`: combinaciones posibles hoy.
 
+## Despliegue en Vercel (servicios)
+
+`vercel.json` (en la raíz del repositorio) despliega las dos carpetas como un único proyecto de Vercel con dos servicios y un solo dominio:
+
+| Servicio | Carpeta | Público en | Qué es |
+| --- | --- | --- | --- |
+| `backend` | `Backend/` | `/api/*` | API NestJS (Vercel Functions). Recibe la ruta completa (`/api/...`), que coincide con `setGlobalPrefix('api')`. |
+| `frontend` | `Frontend/` | todo lo demás | Web estática de Vite (`dist/`). Las rutas del cliente (`/outfits/o1`...) caen en `index.html`. |
+
+El navegador llama a `/api` en el mismo dominio (`VITE_API_URL` sin definir), así que no hay llamadas de servidor a servidor ni *bindings*.
+
+Variables de entorno del servicio `backend` (en el panel de Vercel, nunca en el repositorio): `DATABASE_URL` (PostgreSQL accesible desde internet), `JWT_SECRET`, `CORS_ORIGIN`, `FRONTEND_URL` y `OAUTH_PUBLIC_API_URL` (con el dominio de Vercel), y las de Google / Apple si se usan.
+
+Limitaciones conocidas en Vercel:
+
+- **Chat en tiempo real**: las funciones de Vercel no aceptan WebSockets; los mensajes llegan al recargar, no al instante.
+- **Imágenes subidas**: `LocalDiskStorage` escribe en disco y en Vercel el disco no es persistente. Hace falta un almacenamiento de objetos (Vercel Blob, S3, R2...).
+- **Migraciones**: el build NO ejecuta `prisma migrate deploy`; se lanzan a mano contra la base de datos de producción cuando toque.
+- El límite de intentos usa la IP real del usuario (`trust proxy` solo cuando existe la variable `VERCEL`).
+
 ## Pendiente y siguientes pasos
 
 1. **Ejecutar las comprobaciones** de la sección anterior y corregir lo que falle (el código no se ha podido ejecutar todavía).

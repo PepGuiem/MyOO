@@ -583,3 +583,15 @@ src/
 ```
 
 **Nota de seguridad:** guardar el token en `localStorage` es sencillo, pero cualquier script de la página puede leerlo. Por eso es clave evitar XSS (React ya escapa el contenido). Una alternativa más robusta, para una fase posterior, es una cookie `httpOnly`.
+
+## Estilo unificado (`.ux`): tanda 1
+
+Outfits, vestidor (`/outfits/new`, `/outfits/:id`), calendario y ficha de prenda (`/items/:id`) usan ya el estilo del inicio. Cada página lleva `ux` y su prefijo junto a la clase antigua: `.ft` (outfits), `.dr` (vestidor), `.cl` (calendario y su panel del día) y `.sc` (ficha).
+
+- `.ux` define la paleta `--wd-*` y redirige las variables antiguas (`--fx-neon`, `--fx-panel`...) a la nueva, así las piezas propias (filtros, fichas, celdas del calendario) cambian de color sin tocarlas. El verde «usado» del calendario se mantiene como señal de estado.
+- Cabecera: `.wd-kicker` + `.wd-title.ux-title` + `.ux-lede`; cifras reales en `.wd-stats.ux-stats` (outfits: fits, favoritos, estilos; calendario: usados en 30 días, racha, cumplidos, sin estrenar, que salen de la columna lateral).
+- Secciones numeradas con `components/street/SectionHead.tsx`; en paneles estrechos (columna del calendario, panel de la ficha, vestidor) el número sale de un contador CSS.
+- Estados vacíos con `components/street/EmptyStage.tsx` (la composición del armario) y `NoMatch`.
+- Botones `wd-add` / `wd-btn-line`: el fondo va por `--wd-bg` con `.ux.ux.ux .btn.btn:is(...)` para ganar a `.main .btn:not(...)`.
+- A 390 px: sin scroll horizontal, filtros desplazables y zonas táctiles de 44 px. Con «reducir movimiento» no hay animaciones.
+- El calendario ya está traducido (antes tenía los textos fijos en español).

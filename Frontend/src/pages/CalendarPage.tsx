@@ -10,6 +10,7 @@ import { SoundToggle } from '../components/fx/SoundToggle';
 import { useToast } from '../components/fx/Toast';
 import { Icon } from '../components/Icon';
 import { ScoreRing } from '../components/rating/RatingGauge';
+import { SectionHead } from '../components/street/SectionHead';
 import { CountUp } from '../components/street/Street';
 import { useBodyShape } from '../lib/bodyPref';
 import { EVENT_KINDS } from '../lib/calendar';
@@ -18,7 +19,6 @@ import {
   addDays,
   addMonths,
   diffDays,
-  fromKey,
   monthGrid,
   monthLabel,
   relativeDay,
@@ -31,12 +31,13 @@ import {
 import { OUTFIT_STYLES } from '../lib/outfitStyles';
 import { play } from '../lib/sfx';
 import { OutfitView } from '../three/OutfitMannequin';
+import { t } from '../i18n';
 
 type View = 'month' | 'week' | 'day';
 const VIEWS: { id: View; label: string }[] = [
-  { id: 'month', label: 'Mes' },
-  { id: 'week', label: 'Semana' },
-  { id: 'day', label: 'Día' },
+  { id: 'month', label: t('Mes') },
+  { id: 'week', label: t('Semana') },
+  { id: 'day', label: t('Día') },
 ];
 const DAY_RE = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -148,25 +149,63 @@ export function CalendarPage() {
   const todayEntries = insights?.upcoming.filter((e) => e.date === today) ?? [];
 
   return (
-    <section className="page cal">
+    <section className="page cal ux cl">
 
-      <header className="cal-hero">
+      <header className="cal-hero ux-head">
         <div>
-          <span className="fits-kicker">
-            <span className="rec-dot" aria-hidden="true" /> Agenda / {fromKey(today).getFullYear()}
+          <span className="wd-kicker">
+            <Icon name="calendar" size={12} /> {t('On the calendar')}
           </span>
-          <h1 className="cal-h1" data-text="Outfit Calendar">
-            Outfit <span>Calendar</span>
+          <h1 className="wd-title ux-title" data-text={t('Outfit Calendar')}>
+            {t('Outfit')} <em>{t('Calendar')}</em>
           </h1>
+          <p className="ux-lede">{t('Qué te pones cada día: planifica, marca lo que usas y no repitas sin querer.')}</p>
         </div>
-        <TodayBanner entries={todayEntries} onOpen={() => open(today)} />
-        <SoundToggle />
+        <div className="wd-head-actions">
+          <TodayBanner entries={todayEntries} onOpen={() => open(today)} />
+          <SoundToggle />
+        </div>
       </header>
+
+      {insights && (
+        <ul className="wd-stats ux-stats cl-stats" aria-label={t('Estadísticas')}>
+          <li style={{ '--i': 0 } as CSSProperties}>
+            <Icon name="check" size={16} />
+            <strong>
+              <CountUp value={insights.stats.worn30} />
+            </strong>
+            <span>{t('Usados (30 días)')}</span>
+          </li>
+          <li style={{ '--i': 1 } as CSSProperties}>
+            <Icon name="flame" size={16} />
+            <strong>
+              <CountUp value={insights.stats.streak} delay={100} />
+            </strong>
+            <span>
+              {t('Racha')} · {insights.stats.streak === 1 ? t('día') : t('días')}
+            </span>
+          </li>
+          <li style={{ '--i': 2 } as CSSProperties}>
+            <Icon name="target" size={16} />
+            <strong>{insights.stats.wearRate30 === null ? '—' : `${Math.round(insights.stats.wearRate30 * 100)}%`}</strong>
+            <span>{t('Cumplidos')}</span>
+          </li>
+          <li style={{ '--i': 3 } as CSSProperties}>
+            <Icon name="sparkles" size={16} />
+            <strong>
+              <CountUp value={insights.stats.neverWorn} delay={200} />
+              <small>/{insights.stats.totalOutfits}</small>
+            </strong>
+            <span>{t('Sin estrenar')}</span>
+          </li>
+        </ul>
+      )}
 
       <div className="cal-layout">
         <div className="cal-main">
+          <SectionHead n={1} title={t('Agenda')} />
           <div className="cal-toolbar">
-            <div className={`view-switch is-${view}`} role="tablist" aria-label="Vista">
+            <div className={`view-switch is-${view}`} role="tablist" aria-label={t('Vista')}>
               <span className="tab-thumb" aria-hidden="true" />
               {VIEWS.map((v) => (
                 <button
@@ -185,19 +224,19 @@ export function CalendarPage() {
               ))}
             </div>
             <div className="cal-nav">
-              <button type="button" className="icon-btn" onClick={() => move(-1)} aria-label="Anterior">
+              <button type="button" className="icon-btn" onClick={() => move(-1)} aria-label={t('Anterior')}>
                 <Icon name="back" />
               </button>
               <h2 key={title} className={`cal-title is-${dir}`}>
                 {title}
               </h2>
-              <button type="button" className="icon-btn" onClick={() => move(1)} aria-label="Siguiente">
+              <button type="button" className="icon-btn" onClick={() => move(1)} aria-label={t('Siguiente')}>
                 <Icon name="forward" />
               </button>
             </div>
             <button
               type="button"
-              className="btn btn-street btn-ghost cal-today"
+              className="btn wd-btn-line cal-today"
               disabled={cursor === today}
               onClick={() => {
                 play('click');
@@ -205,15 +244,15 @@ export function CalendarPage() {
                 setCursor(today);
               }}
             >
-              Hoy
+              {t('Hoy')}
             </button>
           </div>
 
-          <ul className="cal-legend" aria-label="Leyenda">
-            <li className="lg-worn">Usado</li>
-            <li className="lg-plan">Planificado</li>
-            <li className="lg-event">Evento</li>
-            <li className="lg-repeat">Se repite</li>
+          <ul className="cal-legend" aria-label={t('Leyenda')}>
+            <li className="lg-worn">{t('Usado')}</li>
+            <li className="lg-plan">{t('Planificado')}</li>
+            <li className="lg-event">{t('Evento')}</li>
+            <li className="lg-repeat">{t('Se repite')}</li>
           </ul>
 
           <ErrorNote error={error} />
@@ -250,10 +289,10 @@ export function CalendarPage() {
             try {
               await calendarApi.create({ date, outfitId: s.outfit.id });
               play('spray');
-              toast.show(`«${s.outfit.name}» para ${relativeDay(date, today)}`, { icon: 'check' });
+              toast.show(t('«{name}» para {relativeDay}', { name: s.outfit.name, relativeDay: relativeDay(date, today) }), { icon: 'check' });
               refresh({ assigned: date });
             } catch (err) {
-              toast.show(err instanceof Error ? err.message : 'No se pudo asignar', { tone: 'danger', sound: 'error' });
+              toast.show(err instanceof Error ? err.message : t('No se pudo asignar'), { tone: 'danger', sound: 'error' });
             }
           }}
           version={version}
@@ -291,9 +330,9 @@ function TodayBanner({ entries, onOpen }: { entries: CalendarEntry[]; onOpen: ()
         <>
           <OutfitGlyph outfit={e.outfit} height={56} />
           <span>
-            <small>Hoy te toca</small>
+            <small>{t('Hoy te toca')}</small>
             <b>{e.outfit.name}</b>
-            {e.worn ? <em className="is-ok">Ya marcado como usado</em> : <em>Toca para marcarlo como usado</em>}
+            {e.worn ? <em className="is-ok">{t('Ya marcado como usado')}</em> : <em>{t('Toca para marcarlo como usado')}</em>}
           </span>
         </>
       ) : (
@@ -302,9 +341,9 @@ function TodayBanner({ entries, onOpen }: { entries: CalendarEntry[]; onOpen: ()
             <Icon name="plus" size={18} />
           </span>
           <span>
-            <small>Hoy</small>
-            <b>Sin outfit todavía</b>
-            <em>Elige qué te pones</em>
+            <small>{t('Hoy')}</small>
+            <b>{t('Sin outfit todavía')}</b>
+            <em>{t('Elige qué te pones')}</em>
           </span>
         </>
       )}
@@ -330,7 +369,7 @@ function DayBadges({ list }: { list: CalendarEntry[] }) {
             <span className="visually-hidden">{repeat.repeat.text}</span>
           </span>
         )}
-        {worn && <span className="cell-worn">Usado</span>}
+        {worn && <span className="cell-worn">{t('Usado')}</span>}
       </span>
     </>
   );
@@ -388,11 +427,11 @@ function MonthView({
             className={cls}
             style={{ '--i': i } as CSSProperties}
             onClick={() => onOpen(d)}
-            aria-label={`${shortDay(d)}${first ? `: ${list.map((e) => e.outfit.name).join(', ')}` : ', sin outfit'}`}
+            aria-label={`${shortDay(d)}${first ? `: ${list.map((e) => e.outfit.name).join(', ')}` : t(', sin outfit')}`}
           >
             <span className="cell-top">
               <span className="cell-num">{Number(d.slice(8))}</span>
-              {d === today && <span className="cell-today">Hoy</span>}
+              {d === today && <span className="cell-today">{t('Hoy')}</span>}
               <DayBadges list={list} />
             </span>
             {first ? (
@@ -472,12 +511,12 @@ function WeekView({
                   <ScoreRing value={first.outfit.ratingScore} size={28} />
                 </span>
                 {first.note && <span className="week-note">{first.note}</span>}
-                {list.length > 1 && <span className="cell-more">+{list.length - 1} más</span>}
+                {list.length > 1 && <span className="cell-more">{t('+{v} más', { v: list.length - 1 })}</span>}
               </>
             ) : (
               <span className="week-empty">
                 <Icon name="plus" size={20} />
-                Asignar
+                {t('Asignar')}
               </span>
             )}
           </button>
@@ -523,13 +562,13 @@ function Insights({
   const maxStyle = Math.max(1, ...s.byStyle.map((t) => t.count));
 
   return (
-    <aside className="cal-side" aria-label="Resumen del calendario">
+    <aside className="cal-side" aria-label={t('Resumen del calendario')}>
       <section className="side-card">
         <h3>
-          <Icon name="bell" size={14} /> Próximos 7 días
+          <Icon name="bell" size={14} /> {t('Próximos 7 días')}
         </h3>
         {insights.upcoming.length === 0 ? (
-          <p className="muted small">Nada planificado. Elige qué te pones esta semana.</p>
+          <p className="muted small">{t('Nada planificado. Elige qué te pones esta semana.')}</p>
         ) : (
           <ul className="upcoming">
             {insights.upcoming.map((e, i) => (
@@ -551,14 +590,14 @@ function Insights({
       {insights.events.length > 0 && (
         <section className="side-card">
           <h3>
-            <Icon name="flag" size={14} /> Eventos
+            <Icon name="flag" size={14} /> {t('Eventos')}
           </h3>
           <ul className="events">
             {insights.events.map((e) => (
               <li key={e.id} style={{ '--c': EVENT_KINDS[e.eventKind ?? 'OTHER'].color } as CSSProperties}>
                 <button type="button" onClick={() => onOpen(e.date)}>
                   <span className="ev-count">
-                    {diffDays(today, e.date) === 0 ? 'Hoy' : <>{diffDays(today, e.date)}<small>días</small></>}
+                    {diffDays(today, e.date) === 0 ? t('Hoy') : <>{diffDays(today, e.date)}<small>{t('días')}</small></>}
                   </span>
                   <span>
                     <b>{e.eventName}</b>
@@ -576,7 +615,7 @@ function Insights({
       {insights.repeats.length > 0 && (
         <section className="side-card is-warn">
           <h3>
-            <Icon name="refresh" size={14} /> Se repiten
+            <Icon name="refresh" size={14} /> {t('Se repiten')}
           </h3>
           <ul className="repeats">
             {insights.repeats.map((r) => (
@@ -592,7 +631,7 @@ function Insights({
       {suggested.length > 0 && (
         <section className="side-card">
           <h3>
-            <Icon name="spark" size={14} /> Para {relativeDay(assignTo, today)}
+            <Icon name="spark" size={14} /> {t('Para {relativeDay}', { relativeDay: relativeDay(assignTo, today) })}
           </h3>
           <ul className="suggested">
             {suggested.map((x) => (
@@ -600,10 +639,10 @@ function Insights({
                 <OutfitGlyph outfit={x.outfit} height={46} />
                 <span>
                   <b>{x.outfit.name}</b>
-                  <small>{x.reasons.join(' · ') || 'Buena opción'}</small>
+                  <small>{x.reasons.join(' · ') || t('Buena opción')}</small>
                 </span>
                 <button type="button" className="tip-try" onClick={() => onAssign(x, assignTo)}>
-                  Asignar
+                  {t('Asignar')}
                 </button>
               </li>
             ))}
@@ -613,37 +652,10 @@ function Insights({
 
       <section className="side-card">
         <h3>
-          <Icon name="pulse" size={14} /> Estadísticas
+          <Icon name="pulse" size={14} /> {t('Estadísticas')}
         </h3>
-        <dl className="cal-stats">
-          <div>
-            <dt>Usados (30 días)</dt>
-            <dd>
-              <CountUp value={s.worn30} />
-            </dd>
-          </div>
-          <div>
-            <dt>Racha</dt>
-            <dd>
-              <CountUp value={s.streak} />
-              <small>{s.streak === 1 ? 'día' : 'días'}</small>
-            </dd>
-          </div>
-          <div>
-            <dt>Cumplidos</dt>
-            <dd>{s.wearRate30 === null ? '—' : `${Math.round(s.wearRate30 * 100)}%`}</dd>
-          </div>
-          <div>
-            <dt>Sin estrenar</dt>
-            <dd>
-              {s.neverWorn}
-              <small>/{s.totalOutfits}</small>
-            </dd>
-          </div>
-        </dl>
-
-        <h4>Por día de la semana</h4>
-        <div className="wd-bars" role="img" aria-label={`Usos por día: ${WEEKDAYS_SHORT.map((w, i) => `${w} ${s.byWeekday[i]}`).join(', ')}`}>
+        <h4>{t('Por día de la semana')}</h4>
+        <div className="wd-bars" role="img" aria-label={t('Usos por día: {join}', { join: WEEKDAYS_SHORT.map((w, i) => `${w} ${s.byWeekday[i]}`).join(', ') })}>
           {s.byWeekday.map((n, i) => (
             <span key={i} className="wd-bar" style={{ '--h': `${(n / maxWd) * 100}%`, '--i': i } as CSSProperties} title={`${WEEKDAYS_SHORT[i]}: ${n}`}>
               <i />
@@ -655,15 +667,15 @@ function Insights({
 
         {s.topWorn.length > 0 && (
           <>
-            <h4>Los que más usas</h4>
+            <h4>{t('Los que más usas')}</h4>
             <ul className="hbars">
-              {s.topWorn.map((t) => (
-                <li key={t.outfitId}>
-                  <span className="hb-label">{t.name}</span>
+              {s.topWorn.map((row) => (
+                <li key={row.outfitId}>
+                  <span className="hb-label">{row.name}</span>
                   <span className="hb-track">
-                    <span style={{ width: `${(t.count / maxTop) * 100}%` }} />
+                    <span style={{ width: `${(row.count / maxTop) * 100}%` }} />
                   </span>
-                  <b>{t.count}</b>
+                  <b>{row.count}</b>
                 </li>
               ))}
             </ul>
@@ -672,21 +684,21 @@ function Insights({
 
         {s.byStyle.length > 0 && (
           <>
-            <h4>Estilos (90 días)</h4>
+            <h4>{t('Estilos (90 días)')}</h4>
             <ul className="hbars">
-              {s.byStyle.map((t) => (
-                <li key={t.style ?? 'none'}>
-                  <span className="hb-label">{t.style ? OUTFIT_STYLES[t.style].label : 'Sin estilo'}</span>
+              {s.byStyle.map((row) => (
+                <li key={row.style ?? 'none'}>
+                  <span className="hb-label">{row.style ? OUTFIT_STYLES[row.style].label : t('Sin estilo')}</span>
                   <span className="hb-track">
-                    <span style={{ width: `${(t.count / maxStyle) * 100}%`, background: t.style ? OUTFIT_STYLES[t.style].color : '#8d8a85' } as CSSProperties} />
+                    <span style={{ width: `${(row.count / maxStyle) * 100}%`, background: row.style ? OUTFIT_STYLES[row.style].color : '#8d8a85' } as CSSProperties} />
                   </span>
-                  <b>{t.count}</b>
+                  <b>{row.count}</b>
                 </li>
               ))}
             </ul>
           </>
         )}
-        {s.wornTotal === 0 && <p className="muted small">Marca tus outfits como usados para ver aquí tus números.</p>}
+        {s.wornTotal === 0 && <p className="muted small">{t('Marca tus outfits como usados para ver aquí tus números.')}</p>}
       </section>
     </aside>
   );
