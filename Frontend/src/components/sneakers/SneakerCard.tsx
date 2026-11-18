@@ -7,6 +7,7 @@ import { useTilt } from '../../lib/useTilt';
 import { money, num, WISH_STATUS } from '../../lib/wishlist';
 import { Icon } from '../Icon';
 import { WishMedia } from '../wishlist/WishMedia';
+import { t } from '../../i18n';
 
 /** Puntos del estado de conservación (5 = sin estrenar). Siempre con su nombre al lado. */
 export function ConditionDots({ condition }: { condition: Sneaker['sneaker']['condition'] }) {
@@ -68,7 +69,7 @@ export function SneakerCard({
         <span className="snk-brand-tag is-card">{s.sneaker.brandLabel}</span>
         {wish ? (
           <span className="snk-ribbon">
-            <Icon name="heart" size={11} /> Wishlist · {WISH_STATUS[s.wishlistStatus!].short}
+            <Icon name="heart" size={11} /> {t('Wishlist · {short}', { short: WISH_STATUS[s.wishlistStatus!].short })}
           </span>
         ) : (
           <ConditionDots condition={s.sneaker.condition} />
@@ -88,30 +89,30 @@ export function SneakerCard({
         </p>
         <dl className="snk-figs">
           <div>
-            <dt>Talla</dt>
+            <dt>{t('Talla')}</dt>
             <dd>{s.size ?? '—'}</dd>
           </div>
           {wish ? (
             <>
               <div>
-                <dt>Precio</dt>
+                <dt>{t('Precio')}</dt>
                 <dd>{price === null ? '—' : money(price, s.currency, { compact: true })}</dd>
               </div>
               <div>
-                <dt>Objetivo</dt>
+                <dt>{t('Objetivo')}</dt>
                 <dd>{s.targetPrice ? money(s.targetPrice, s.currency, { compact: true }) : '—'}</dd>
               </div>
             </>
           ) : (
             <>
               <div>
-                <dt>Usos</dt>
+                <dt>{t('Usos')}</dt>
                 <dd key={bump} className={bump ? 'is-bump' : ''}>
                   {s.uses.total}
                 </dd>
               </div>
               <div>
-                <dt>Outfits</dt>
+                <dt>{t('Outfits')}</dt>
                 <dd>{s.outfitCount}</dd>
               </div>
             </>
@@ -124,25 +125,25 @@ export function SneakerCard({
           <button
             type="button"
             className="snk-wear-btn"
-            title="Apuntar un uso"
+            title={t('Apuntar un uso')}
             onClick={() => {
               setBump((b) => b + 1);
               onWear();
             }}
           >
-            <Icon name="plus" size={12} /> 1 uso
+            <Icon name="plus" size={12} /> {t('1 uso')}
           </button>
         )}
         {wish && (
           <Link to={`/wishlist/${s.id}`} className="snk-wish-link" onClick={() => play('click')}>
-            <Icon name="tag" size={12} /> Precios
+            <Icon name="tag" size={12} /> {t('Precios')}
           </Link>
         )}
         <button
           type="button"
           className="icon-btn"
-          aria-label={`Editar ${s.sneaker.model}`}
-          title="Editar"
+          aria-label={t('Editar {name}', { name: s.sneaker.model })}
+          title={t('Editar')}
           onClick={() => {
             play('click');
             onEdit();

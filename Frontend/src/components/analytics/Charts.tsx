@@ -1,4 +1,5 @@
 import { useState, type CSSProperties, type ReactNode } from 'react';
+import { t, tn } from '../../i18n';
 
 /**
  * Gráficos de STYLE ANALYTICS hechos con HTML/SVG (sin librerías). Reglas:
@@ -112,7 +113,7 @@ export function StackedShare({
               onMouseLeave={() => setHover(null)}
               onFocus={() => setHover(i)}
               onBlur={() => setHover(null)}
-              aria-label={`${d.label}: ${total ? series.filter((s) => d.values[s.key]).map((s) => `${s.label} ${Math.round(((d.values[s.key] ?? 0) / total) * 100)}%`).join(', ') : 'sin outfits'}`}
+              aria-label={`${d.label}: ${total ? series.filter((s) => d.values[s.key]).map((s) => `${s.label} ${Math.round(((d.values[s.key] ?? 0) / total) * 100)}%`).join(', ') : t('sin outfits')}`}
             >
               <span className="stack-bar" style={{ '--i': i } as CSSProperties}>
                 {total > 0 &&
@@ -126,7 +127,7 @@ export function StackedShare({
               {hover === i && total > 0 && (
                 <span className={`an-tip${tipSide(i, data.length)}`} role="status">
                   <b>
-                    {d.label} · {total} {total === 1 ? 'outfit' : 'outfits'}
+                    {d.label} · {tn(total, '{n} outfit', '{n} outfits')}
                   </b>
                   {series
                     .filter((s) => d.values[s.key])

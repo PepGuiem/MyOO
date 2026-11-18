@@ -6,26 +6,27 @@ import { BarRow, ColumnChart, OTHER, SERIES, StackedShare, type Series } from '.
 import { ErrorNote } from '../components/ErrorNote';
 import { SprayLoader } from '../components/fx/SprayLoader';
 import { Icon, type IconName } from '../components/Icon';
+import { EmptyStage } from '../components/street/EmptyStage';
 import { CountUp, stickerTilt } from '../components/street/Street';
 import { OUTFIT_STYLES } from '../lib/outfitStyles';
 import { play } from '../lib/sfx';
 import { withTransition } from '../lib/motion';
-import { LOCALE_TAG } from '../i18n';
+import { LOCALE_TAG, t, tn } from '../i18n';
 
 const CATEGORY_LABEL: Record<GarmentCategory, string> = {
-  TOP: 'Arriba',
-  BOTTOM: 'Abajo',
-  FULL_BODY: 'Vestidos y monos',
-  OUTERWEAR: 'Chaquetas y abrigos',
-  FOOTWEAR: 'Calzado',
-  ACCESSORY: 'Accesorios',
+  TOP: t('Arriba'),
+  BOTTOM: t('Abajo'),
+  FULL_BODY: t('Vestidos y monos'),
+  OUTERWEAR: t('Chaquetas y abrigos'),
+  FOOTWEAR: t('Calzado'),
+  ACCESSORY: t('Accesorios'),
 };
 
 const TONE: Record<StyleAnalytics['insights'][number]['tone'], { icon: IconName; label: string }> = {
-  warn: { icon: 'flag', label: 'Ojo' },
-  tip: { icon: 'bulb', label: 'Idea' },
-  praise: { icon: 'star', label: 'Bien' },
-  info: { icon: 'pulse', label: 'Dato' },
+  warn: { icon: 'flag', label: t('Ojo') },
+  tip: { icon: 'bulb', label: t('Idea') },
+  praise: { icon: 'star', label: t('Bien') },
+  info: { icon: 'pulse', label: t('Dato') },
 };
 
 function StyleSticker({ style }: { style: OutfitStyle }) {
@@ -75,100 +76,105 @@ export function AnalyticsPage() {
     if (!data) return [];
     const top = data.styles.filter((s) => s.count > 0).slice(0, 4);
     const out: Series[] = top.map((s, i) => ({ key: s.style, label: OUTFIT_STYLES[s.style].label, color: SERIES[i] }));
-    if (data.styles.filter((s) => s.count > 0).length > 4) out.push({ key: 'OTHER', label: 'Otros', color: OTHER });
+    if (data.styles.filter((s) => s.count > 0).length > 4) out.push({ key: 'OTHER', label: t('Otros'), color: OTHER });
     return out;
   }, [data]);
 
   if (!data) {
     return (
-      <section className="page an">
+      <section className="page an ux at">
         <AnHero onRefresh={load} loading={loading} stamp={stamp} />
         <ErrorNote error={error} />
-        {!error && <SprayLoader label="Analizando tu armario…" />}
+        {!error && <SprayLoader label={t('Analizando tu armario…')} />}
       </section>
     );
   }
 
-  const t = data.totals;
+  const tot = data.totals;
   const h = data.highlights;
-  const empty = t.items === 0 && t.outfits === 0;
-  const delta = t.outfitsThisMonth - t.outfitsLastMonth;
+  const empty = tot.items === 0 && tot.outfits === 0;
+  const delta = tot.outfitsThisMonth - tot.outfitsLastMonth;
   const evo = data.evolution[period];
   const maxColor = Math.max(1, ...data.colors.ranking.map((c) => c.uses));
   const styled = data.styles.reduce((a, s) => a + s.count, 0);
 
   return (
-    <section className="page an">
+    <section className="page an ux at">
       <AnHero onRefresh={load} loading={loading} stamp={stamp} />
       <ErrorNote error={error} />
 
       {empty ? (
-        <div className="fits-empty">
-          <span className="fits-empty-tag">Sin datos todavía</span>
-          <p>Cuando tengas prendas y outfits, aquí verás tus estilos, colores y cómo evolucionas. Nada de datos inventados: todo sale de lo que guardas.</p>
-          <Link to="/armario" className="btn btn-primary btn-street btn-new">
-            <Icon name="plus" size={16} /> Añadir prendas
+        <EmptyStage
+          icon="pulse"
+          pieces={['tshirt', 'palette', 'layers', 'pants', 'star', 'shoe']}
+          kicker={t('Style data')}
+          kickerIcon="pulse"
+          title={t('Sin datos todavía')}
+          text={t('Cuando tengas prendas y outfits, aquí verás tus estilos, colores y cómo evolucionas. Nada de datos inventados: todo sale de lo que guardas.')}
+        >
+          <Link to="/armario" className="btn wd-add wd-add-big">
+            <Icon name="plus" size={16} /> <span>{t('Añadir prendas')}</span>
           </Link>
-        </div>
+        </EmptyStage>
       ) : (
         <>
           {/* 1. Cifras */}
           <dl className="an-kpis">
-            <Kpi label="Prendas" value={t.items} sub={t.itemsThisMonth ? `+${t.itemsThisMonth} este mes` : `${t.usedItemsShare}% en algún outfit`} i={0} />
-            <Kpi label="Outfits" value={t.outfits} sub={`${t.favorites} favoritos`} i={1} />
+            <Kpi label={t('Prendas')} value={tot.items} sub={tot.itemsThisMonth ? t('+{n} este mes', { n: tot.itemsThisMonth }) : t('{usedItemsShare}% en algún outfit', { usedItemsShare: tot.usedItemsShare })} i={0} />
+            <Kpi label={t('Outfits')} value={tot.outfits} sub={tn(tot.favorites, '{n} favorito', '{n} favoritos')} i={1} />
             <Kpi
-              label="Outfits este mes"
-              value={t.outfitsThisMonth}
-              sub={delta === 0 ? 'Igual que el mes pasado' : `${delta > 0 ? '▲' : '▼'} ${Math.abs(delta)} frente al mes pasado`}
+              label={t('Outfits este mes')}
+              value={tot.outfitsThisMonth}
+              sub={delta === 0 ? t('Igual que el mes pasado') : t('{v} {abs} frente al mes pasado', { v: delta > 0 ? '▲' : '▼', abs: Math.abs(delta) })}
               tone={delta > 0 ? 'up' : delta < 0 ? 'down' : undefined}
               i={2}
             />
-            <Kpi label="Usados (30 días)" value={t.worn30} sub="Marcados en el calendario" i={3} />
-            <Kpi label="Nota media" value={t.avgRating} sub="OUTFIT RATING" i={4} />
+            <Kpi label={t('Usados (30 días)')} value={tot.worn30} sub={t('Marcados en el calendario')} i={3} />
+            <Kpi label={t('Nota media')} value={tot.avgRating} sub={t('OUTFIT RATING')} i={4} />
           </dl>
 
           <div className="an-highlights">
             <article className="an-hl" style={{ '--i': 0 } as CSSProperties}>
-              <span className="an-hl-label">Estilo más usado</span>
+              <span className="an-hl-label">{t('Estilo más usado')}</span>
               {h.topStyle ? (
                 <>
                   <StyleSticker style={h.topStyle.style} />
                   <p>
-                    <b>{h.topStyle.share}%</b> de tus outfits{h.topStyle.inferred ? ' (deducido por las prendas)' : ''}
+                    <b>{h.topStyle.share}%</b> {t('de tus outfits{v}', { v: h.topStyle.inferred ? t(' (deducido por las prendas)') : '' })}
                   </p>
                 </>
               ) : (
-                <p className="muted">Sin outfits todavía</p>
+                <p className="muted">{t('Sin outfits todavía')}</p>
               )}
             </article>
             <article className="an-hl" style={{ '--i': 1 } as CSSProperties}>
-              <span className="an-hl-label">Color más usado</span>
+              <span className="an-hl-label">{t('Color más usado')}</span>
               {h.topColor ? (
                 <>
                   <span className="an-swatch-big" style={{ background: h.topColor.hex }} aria-hidden="true" />
                   <p>
-                    <b className="cap">{h.topColor.name}</b> · {h.topColor.share}% de lo que combinas
+                    <b className="cap">{h.topColor.name}</b> {t('· {share}% de lo que combinas', { share: h.topColor.share })}
                   </p>
                 </>
               ) : (
-                <p className="muted">Combina prendas para verlo</p>
+                <p className="muted">{t('Combina prendas para verlo')}</p>
               )}
             </article>
             <article className="an-hl" style={{ '--i': 2 } as CSSProperties}>
-              <span className="an-hl-label">Marca más frecuente</span>
+              <span className="an-hl-label">{t('Marca más frecuente')}</span>
               {h.topBrand ? (
                 <>
                   <span className="an-brand">{h.topBrand.name}</span>
                   <p>
-                    {h.topBrand.count} {h.topBrand.count === 1 ? 'prenda' : 'prendas'} · marca puesta en el {h.brandCoverage}% del armario
+                    {t('{count} {v} · marca puesta en el {brandCoverage}% del armario', { count: h.topBrand.count, v: h.topBrand.count === 1 ? t('prenda') : t('prendas'), brandCoverage: h.brandCoverage })}
                   </p>
                 </>
               ) : (
-                <p className="muted">Ninguna prenda tiene marca. Añádela al editar la prenda.</p>
+                <p className="muted">{t('Ninguna prenda tiene marca. Añádela al editar la prenda.')}</p>
               )}
             </article>
             <article className="an-hl" style={{ '--i': 3 } as CSSProperties}>
-              <span className="an-hl-label">Prenda más combinada</span>
+              <span className="an-hl-label">{t('Prenda más combinada')}</span>
               {h.mostCombined ? (
                 <>
                   <span className="an-item">
@@ -176,11 +182,11 @@ export function AnalyticsPage() {
                     <b>{h.mostCombined.name}</b>
                   </span>
                   <p>
-                    En {h.mostCombined.count} {h.mostCombined.count === 1 ? 'outfit' : 'outfits'} ({h.mostCombined.share}%)
+                    {t('En {count} {v} ({share}%)', { count: h.mostCombined.count, v: h.mostCombined.count === 1 ? t('outfit') : t('outfits'), share: h.mostCombined.share })}
                   </p>
                 </>
               ) : (
-                <p className="muted">Aún no hay outfits</p>
+                <p className="muted">{t('Aún no hay outfits')}</p>
               )}
             </article>
           </div>
@@ -189,7 +195,7 @@ export function AnalyticsPage() {
           {data.insights.length > 0 && (
             <section className="an-card an-insights">
               <h2 className="an-h2">
-                Style <span>Insights</span>
+                {t('Style')} <span>{t('Insights')}</span>
               </h2>
               <ul>
                 {data.insights.map((ins, i) => (
@@ -211,9 +217,9 @@ export function AnalyticsPage() {
           <div className="an-grid">
             {/* 2. Estilos */}
             <section className="an-card">
-              <h2 className="an-h2">Estilos</h2>
+              <h2 className="an-h2">{t('Estilos')}</h2>
               <p className="an-sub">
-                Porcentaje de tus {styled} outfits. Rayado: estilo deducido por las prendas (no lo marcaste).
+                {t('Porcentaje de tus {styled} outfits. Rayado: estilo deducido por las prendas (no lo marcaste).', { styled })}
               </p>
               <ul className="bar-list">
                 {data.styles.map((s, i) => (
@@ -228,7 +234,7 @@ export function AnalyticsPage() {
                         <b>{s.share}%</b> <small>{s.count}</small>
                       </>
                     }
-                    title={`${s.declared} marcados, ${s.inferred} deducidos`}
+                    title={t('{declared} marcados, {inferred} deducidos', { declared: s.declared, inferred: s.inferred })}
                   />
                 ))}
               </ul>
@@ -236,17 +242,17 @@ export function AnalyticsPage() {
 
             {/* 3. Colores */}
             <section className="an-card">
-              <h2 className="an-h2">Colores</h2>
-              <p className="an-sub">Cuántas veces sale cada color en tus outfits (cada prenda cuenta una vez por outfit).</p>
+              <h2 className="an-h2">{t('Colores')}</h2>
+              <p className="an-sub">{t('Cuántas veces sale cada color en tus outfits (cada prenda cuenta una vez por outfit).')}</p>
               {data.colors.ranking.length ? (
                 <>
-                  <div className="fam-strip" role="img" aria-label={`Neutros ${data.colors.families.neutral}%, tierras ${data.colors.families.earth}%, colores ${data.colors.families.color}%`}>
+                  <div className="fam-strip" role="img" aria-label={t('Neutros {neutral}%, tierras {earth}%, colores {color}%', { neutral: data.colors.families.neutral, earth: data.colors.families.earth, color: data.colors.families.color })}>
                     {(['neutral', 'earth', 'color'] as const).map((k) =>
                       data.colors.families[k] ? (
                         <span key={k} className={`fam fam-${k}`} style={{ flexGrow: data.colors.families[k] }}>
                           {data.colors.families[k] >= 12 && (
                             <>
-                              {k === 'neutral' ? 'Neutros' : k === 'earth' ? 'Tierras' : 'Color'} {Math.round(data.colors.families[k])}%
+                              {k === 'neutral' ? t('Neutros') : k === 'earth' ? t('Tierras') : t('Color')} {Math.round(data.colors.families[k])}%
                             </>
                           )}
                         </span>
@@ -272,18 +278,18 @@ export function AnalyticsPage() {
                             <b>{c.share}%</b> <small>{c.uses}</small>
                           </>
                         }
-                        title={`${c.uses} usos en outfits · ${c.items} ${c.items === 1 ? 'prenda' : 'prendas'}`}
+                        title={t('{uses} usos en outfits · {items} {v}', { uses: c.uses, items: c.items, v: c.items === 1 ? t('prenda') : t('prendas') })}
                       />
                     ))}
                   </ol>
                 </>
               ) : (
-                <p className="muted small">Combina prendas en outfits para ver tus colores.</p>
+                <p className="muted small">{t('Combina prendas en outfits para ver tus colores.')}</p>
               )}
 
               {data.colors.pairs.length > 0 && (
                 <>
-                  <h3 className="an-h3">Combinaciones que más repites</h3>
+                  <h3 className="an-h3">{t('Combinaciones que más repites')}</h3>
                   <ul className="pairs">
                     {data.colors.pairs.map((p, i) => (
                       <li key={`${p.a.name}-${p.b.name}`} style={{ '--i': i } as CSSProperties}>
@@ -303,14 +309,14 @@ export function AnalyticsPage() {
 
               {data.colors.least.length > 0 && (
                 <>
-                  <h3 className="an-h3">Los que menos usas</h3>
+                  <h3 className="an-h3">{t('Los que menos usas')}</h3>
                   <ul className="least">
                     {data.colors.least.map((c) => (
                       <li key={c.name}>
                         <i style={{ background: c.hex }} aria-hidden="true" />
                         <span className="cap">{c.name}</span>
                         <small>
-                          {c.uses ? `${c.uses} ${c.uses === 1 ? 'uso' : 'usos'}` : 'sin usar'} · {c.items} {c.items === 1 ? 'prenda' : 'prendas'}
+                          {c.uses ? tn(c.uses, '{n} uso', '{n} usos') : t('sin usar')} · {tn(c.items, '{n} prenda', '{n} prendas')}
                         </small>
                       </li>
                     ))}
@@ -323,8 +329,8 @@ export function AnalyticsPage() {
           {/* 4. Evolución */}
           <section className="an-card an-evo">
             <div className="an-card-head">
-              <h2 className="an-h2">Evolución</h2>
-              <div className={`tab-switch is-${period === 'weekly' ? 'all' : 'fav'} an-period`} role="tablist" aria-label="Periodo">
+              <h2 className="an-h2">{t('Evolución')}</h2>
+              <div className={`tab-switch is-${period === 'weekly' ? 'all' : 'fav'} an-period`} role="tablist" aria-label={t('Periodo')}>
                 <span className="tab-thumb" aria-hidden="true" />
                 <button
                   type="button"
@@ -335,7 +341,7 @@ export function AnalyticsPage() {
                     withTransition(() => setPeriod('weekly'));
                   }}
                 >
-                  Semanal
+                  {t('Semanal')}
                 </button>
                 <button
                   type="button"
@@ -346,28 +352,28 @@ export function AnalyticsPage() {
                     withTransition(() => setPeriod('monthly'));
                   }}
                 >
-                  Mensual
+                  {t('Mensual')}
                 </button>
               </div>
             </div>
             <p className="an-sub">
-              {period === 'weekly' ? 'Últimas 12 semanas.' : 'Últimos 12 meses.'} Outfits creados, prendas añadidas y outfits marcados como usados en el calendario.
+              {t('{v} Outfits creados, prendas añadidas y outfits marcados como usados en el calendario.', { v: period === 'weekly' ? t('Últimas 12 semanas.') : t('Últimos 12 meses.') })}
             </p>
             <ColumnChart
               key={period}
-              label="Actividad por periodo"
+              label={t('Actividad por periodo')}
               data={evo.map((d) => ({ key: d.key, label: d.label, values: { outfits: d.outfits, items: d.items, worn: d.worn } }))}
               series={[
-                { key: 'outfits', label: 'Outfits creados', color: SERIES[0] },
-                { key: 'items', label: 'Prendas añadidas', color: SERIES[1] },
-                { key: 'worn', label: 'Usados', color: SERIES[2] },
+                { key: 'outfits', label: t('Outfits creados'), color: SERIES[0] },
+                { key: 'items', label: t('Prendas añadidas'), color: SERIES[1] },
+                { key: 'worn', label: t('Usados'), color: SERIES[2] },
               ]}
             />
             {mixSeries.length > 0 && (
               <>
-                <h3 className="an-h3">Cómo cambia tu estilo (por mes)</h3>
+                <h3 className="an-h3">{t('Cómo cambia tu estilo (por mes)')}</h3>
                 <StackedShare
-                  label="Mezcla de estilos por mes"
+                  label={t('Mezcla de estilos por mes')}
                   data={data.evolution.monthly.map((m) => {
                     const values: Record<string, number> = {};
                     let other = 0;
@@ -386,8 +392,8 @@ export function AnalyticsPage() {
 
           <div className="an-grid">
             <section className="an-card">
-              <h2 className="an-h2">Uso de tu armario</h2>
-              <p className="an-sub">Prendas de cada tipo que han salido en algún outfit.</p>
+              <h2 className="an-h2">{t('Uso de tu armario')}</h2>
+              <p className="an-sub">{t('Prendas de cada tipo que han salido en algún outfit.')}</p>
               <ul className="bar-list">
                 {data.categories.map((c, i) => (
                   <BarRow
@@ -408,11 +414,11 @@ export function AnalyticsPage() {
             </section>
 
             <section className="an-card">
-              <h2 className="an-h2">Sin combinar</h2>
+              <h2 className="an-h2">{t('Sin combinar')}</h2>
               {data.unused.count ? (
                 <>
                   <p className="an-sub">
-                    {data.unused.count} {data.unused.count === 1 ? 'prenda no ha salido' : 'prendas no han salido'} en ningún outfit.
+                    {t('{count} {v} en ningún outfit.', { count: data.unused.count, v: data.unused.count === 1 ? t('prenda no ha salido') : t('prendas no han salido') })}
                   </p>
                   <ul className="unused">
                     {data.unused.sample.map((u, i) => (
@@ -423,16 +429,16 @@ export function AnalyticsPage() {
                       </li>
                     ))}
                   </ul>
-                  <Link to="/outfits/new" className="btn btn-primary btn-street">
-                    <Icon name="plus" size={14} /> Combinarlas en un outfit
+                  <Link to="/outfits/new" className="btn wd-add">
+                    <Icon name="plus" size={14} /> <span>{t('Combinarlas en un outfit')}</span>
                   </Link>
                 </>
               ) : (
-                <p className="an-sub">Todas tus prendas salen en algún outfit.</p>
+                <p className="an-sub">{t('Todas tus prendas salen en algún outfit.')}</p>
               )}
               {data.brands.length > 1 && (
                 <>
-                  <h3 className="an-h3">Marcas</h3>
+                  <h3 className="an-h3">{t('Marcas')}</h3>
                   <ul className="bar-list">
                     {data.brands.map((b, i) => (
                       <BarRow key={b.name} index={i} label={b.name} share={(b.count / data.brands[0].count) * 100} fill="var(--fx-bone)" value={<b>{b.count}</b>} />
@@ -450,27 +456,28 @@ export function AnalyticsPage() {
 
 function AnHero({ onRefresh, loading, stamp }: { onRefresh: () => void; loading: boolean; stamp: Date | null }) {
   return (
-    <header className="an-hero">
+    <header className="an-hero ux-head">
       <div>
-        <span className="fits-kicker">
-          <span className="rec-dot" aria-hidden="true" /> Tus datos · solo tuyos
+        <span className="wd-kicker">
+          <Icon name="pulse" size={12} /> {t('Style data')}
         </span>
-        <h1 className="cal-h1">
-          Style <span>Analytics</span>
+        <h1 className="wd-title ux-title" data-text={`${t('Style')} ${t('Analytics')}`}>
+          {t('Style')} <em>{t('Analytics')}</em>
         </h1>
+        <p className="ux-lede">{t('Tus datos · solo tuyos')}</p>
       </div>
-      <div className="an-refresh">
-        {stamp && <small>Actualizado a las {stamp.toLocaleTimeString(LOCALE_TAG, { hour: '2-digit', minute: '2-digit' })}</small>}
+      <div className="an-refresh wd-head-actions">
+        {stamp && <small>{t('Actualizado a las {toLocaleTimeString}', { toLocaleTimeString: stamp.toLocaleTimeString(LOCALE_TAG, { hour: '2-digit', minute: '2-digit' }) })}</small>}
         <button
           type="button"
-          className="btn btn-street btn-ghost"
+          className="btn wd-btn-line"
           onClick={() => {
             play('click');
             onRefresh();
           }}
           disabled={loading}
         >
-          <Icon name="refresh" size={14} className={loading ? 'spin' : ''} /> Actualizar
+          <Icon name="refresh" size={14} className={loading ? 'spin' : ''} /> {t('Actualizar')}
         </button>
       </div>
     </header>

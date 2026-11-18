@@ -16,6 +16,7 @@ import { play } from '../lib/sfx';
 import { FEATURES } from '../lib/features';
 import { CONDITION } from '../lib/sneakers';
 import { money, num, WISH_STATUS } from '../lib/wishlist';
+import { t } from '../i18n';
 
 /** Ficha de un par: foto o 3D, datos, usos (+1 / −1), outfits y acciones. */
 export function SneakerItemPage() {
@@ -44,12 +45,12 @@ export function SneakerItemPage() {
 
   if (!s) {
     return (
-      <section className="page snk snk-item">
+      <section className="page snk snk-item ux sk">
         <Link to="/sneakers" className="wl-back">
-          <Icon name="back" size={14} /> Sneakers
+          <Icon name="back" size={14} /> {t('Sneakers')}
         </Link>
         <ErrorNote error={error} />
-        {!error && <SprayLoader label="Abriendo la ficha…" />}
+        {!error && <SprayLoader label={t('Abriendo la ficha…')} />}
       </section>
     );
   }
@@ -66,7 +67,7 @@ export function SneakerItemPage() {
       setBump((b) => b + 1);
       play(delta > 0 ? 'pop' : 'swoosh');
     } catch (err) {
-      toast.show(err instanceof Error ? err.message : 'No se pudo apuntar', { tone: 'danger', sound: 'error' });
+      toast.show(err instanceof Error ? err.message : t('No se pudo apuntar'), { tone: 'danger', sound: 'error' });
     } finally {
       setBusy(false);
     }
@@ -78,40 +79,40 @@ export function SneakerItemPage() {
     try {
       await sneakersApi.remove(s.id, keepItem);
       play('swoosh');
-      toast.show(keepItem ? 'Ficha quitada: la prenda sigue en tu armario' : `${s.sneaker.model} eliminadas`, { tone: 'danger', icon: 'trash' });
+      toast.show(keepItem ? t('Ficha quitada: la prenda sigue en tu armario') : `${s.sneaker.model} eliminadas`, { tone: 'danger', icon: 'trash' });
       void reloadWardrobes();
       navigate('/sneakers');
     } catch (err) {
       setBusy(false);
       setConfirm(null);
-      toast.show(err instanceof Error ? err.message : 'No se pudo borrar', { tone: 'danger', sound: 'error' });
+      toast.show(err instanceof Error ? err.message : t('No se pudo borrar'), { tone: 'danger', sound: 'error' });
     }
   }
 
   const facts: [string, string][] = [
-    ['Marca', s.sneaker.brandLabel],
-    ['Colorway', s.sneaker.colorway ?? '—'],
-    ['Talla', s.size ?? '—'],
-    ['Color', s.colorName],
+    [t('Marca'), s.sneaker.brandLabel],
+    [t('Colorway'), s.sneaker.colorway ?? '—'],
+    [t('Talla'), s.size ?? '—'],
+    [t('Color'), s.colorName],
     ...(wish
       ? ([
-          ['Estado', WISH_STATUS[s.wishlistStatus!].label],
-          ['Precio visto', num(s.currentPrice) === null ? '—' : money(s.currentPrice, s.currency)],
-          ['Objetivo', s.targetPrice ? money(s.targetPrice, s.currency) : '—'],
+          [t('Estado'), WISH_STATUS[s.wishlistStatus!].label],
+          [t('Precio visto'), num(s.currentPrice) === null ? '—' : money(s.currentPrice, s.currency)],
+          [t('Objetivo'), s.targetPrice ? money(s.targetPrice, s.currency) : '—'],
         ] as [string, string][])
       : ([
-          ['Adquiridas', s.purchaseDate ? formatDate(s.purchaseDate) : '—'],
-          ['Precio de compra', s.purchasePrice ? money(s.purchasePrice, s.currency) : '—'],
-          ['Tienda', s.storeName ?? '—'],
-          ['Armario', s.wardrobe.name],
+          [t('Adquiridas'), s.purchaseDate ? formatDate(s.purchaseDate) : '—'],
+          [t('Precio de compra'), s.purchasePrice ? money(s.purchasePrice, s.currency) : '—'],
+          [t('Tienda'), s.storeName ?? '—'],
+          [t('Armario'), s.wardrobe.name],
         ] as [string, string][])),
   ];
 
   return (
-    <section className={`page snk snk-item${wish ? ' is-wish' : ''}`} style={{ '--sw': s.color } as CSSProperties}>
+    <section className={`page snk snk-item ux sk${wish ? ' is-wish' : ''}`} style={{ '--sw': s.color } as CSSProperties}>
       <span className="snk-spot" aria-hidden="true" />
       <Link to="/sneakers" className="wl-back">
-        <Icon name="back" size={14} /> Sneakers
+        <Icon name="back" size={14} /> {t('Sneakers')}
       </Link>
 
       <div className="snk-item-grid">
@@ -122,27 +123,30 @@ export function SneakerItemPage() {
             <span className="snk-brand-tag is-card is-big">{s.sneaker.brandLabel}</span>
             {wish && (
               <span className="snk-ribbon is-big">
-                <Icon name="heart" size={12} /> Wishlist · todavía no son tuyas
+                <Icon name="heart" size={12} /> {t('Wishlist · todavía no son tuyas')}
               </span>
             )}
           </div>
           {photo && (
-            <div className="wl-view-switch" role="group" aria-label="Ver">
+            <div className="wl-view-switch" role="group" aria-label={t('Ver')}>
               <button type="button" aria-pressed={view === 'photo'} onClick={() => setView('photo')}>
-                Tu foto
+                {t('Tu foto')}
               </button>
               <button type="button" aria-pressed={view === '3d'} onClick={() => setView('3d')}>
-                Modelo 3D
+                {t('Modelo 3D')}
               </button>
             </div>
           )}
         </div>
 
         <div className="snk-item-info">
-          <span className="fits-kicker">
-            <Icon name="shoe" size={13} /> {s.sneaker.brandLabel}
+          <span className="wd-kicker">
+            <Icon name="shoe" size={12} /> {wish ? t('On my wishlist') : t('In my rotation')}
           </span>
-          <h1 className="snk-item-h1">{s.sneaker.model}</h1>
+          <h1 className="wd-title ux-title" data-text={s.sneaker.model}>
+            {s.sneaker.model}
+          </h1>
+          <p className="ux-lede sc-path">{s.sneaker.brandLabel}</p>
           <div className="snk-item-sub">
             <ConditionDots condition={s.sneaker.condition} />
             <span className="muted">{CONDITION[s.sneaker.condition].hint}</span>
@@ -151,26 +155,26 @@ export function SneakerItemPage() {
           {!wish && (
             <div className="snk-uses">
               <div className="snk-uses-num">
-                <span className="wl-label">Usos</span>
+                <span className="wl-label">{t('Usos')}</span>
                 <b key={bump} className={bump ? 'is-bump' : ''}>
                   {s.uses.total}
                 </b>
                 <small>
-                  {s.uses.manual} apuntados · {s.uses.calendar} del calendario
+                  {t('{manual} apuntados · {calendar} del calendario', { manual: s.uses.manual, calendar: s.uses.calendar })}
                 </small>
               </div>
               <div className="snk-uses-btns">
-                <button type="button" className="btn btn-primary btn-street" onClick={() => void wear(1)} disabled={busy}>
-                  <Icon name="plus" size={14} /> 1 uso
+                <button type="button" className="btn wd-add" onClick={() => void wear(1)} disabled={busy}>
+                  <Icon name="plus" size={14} /> <span>{t('1 uso')}</span>
                 </button>
-                <button type="button" className="btn btn-ghost" onClick={() => void wear(-1)} disabled={busy || s.uses.manual === 0} title="Quitar un uso apuntado">
+                <button type="button" className="btn wd-btn-line" onClick={() => void wear(-1)} disabled={busy || s.uses.manual === 0} title={t('Quitar un uso apuntado')}>
                   −1
                 </button>
               </div>
               <div className="snk-uses-num">
-                <span className="wl-label">Outfits</span>
+                <span className="wl-label">{t('Outfits')}</span>
                 <b>{s.outfitCount}</b>
-                <small>con {s.partners} {s.partners === 1 ? 'prenda distinta' : 'prendas distintas'}</small>
+                <small>{t('con {partners} {v}', { partners: s.partners, v: s.partners === 1 ? t('prenda distinta') : t('prendas distintas') })}</small>
               </div>
             </div>
           )}
@@ -179,8 +183,8 @@ export function SneakerItemPage() {
             {facts.map(([k, v]) => (
               <div key={k}>
                 <dt>{k}</dt>
-                <dd className={k === 'Color' ? 'cap' : undefined}>
-                  {k === 'Color' && <i className="snk-swatch" aria-hidden="true" />} {v}
+                <dd className={k === t('Color') ? 'cap' : undefined}>
+                  {k === t('Color') && <i className="snk-swatch" aria-hidden="true" />} {v}
                 </dd>
               </div>
             ))}
@@ -189,34 +193,34 @@ export function SneakerItemPage() {
           {s.notes && <p className="wl-notes">{s.notes}</p>}
 
           <div className="wl-item-actions">
-            <Link to={`/outfits/new?with=${s.id}`} className="btn btn-street" onClick={() => play('spray')}>
-              <Icon name="hanger" size={14} /> Crear outfit con estas
+            <Link to={`/outfits/new?with=${s.id}`} className="btn wd-add" onClick={() => play('spray')}>
+              <Icon name="hanger" size={14} /> <span>{t('Crear outfit con estas')}</span>
             </Link>
             {!wish && s.outfitCount > 0 && (
-              <Link to={`/outfits?item=${s.id}`} className="btn btn-street btn-ghost">
-                <Icon name="grid" size={14} /> Ver sus {s.outfitCount} outfits
+              <Link to={`/outfits?item=${s.id}`} className="btn wd-btn-line">
+                <Icon name="grid" size={14} /> {t('Ver sus {outfitCount} outfits', { outfitCount: s.outfitCount })}
               </Link>
             )}
             {FEATURES.market && !wish && (
-              <Link to={`/market?sell=${s.id}`} className="btn btn-street btn-ghost">
-                <Icon name="store" size={14} /> Vender
+              <Link to={`/market?sell=${s.id}`} className="btn wd-btn-line">
+                <Icon name="store" size={14} /> {t('Vender')}
               </Link>
             )}
             {wish && (
-              <Link to={`/wishlist/${s.id}`} className="btn btn-street btn-ghost">
-                <Icon name="tag" size={14} /> Precios y comprar
+              <Link to={`/wishlist/${s.id}`} className="btn wd-btn-line">
+                <Icon name="tag" size={14} /> {t('Precios y comprar')}
               </Link>
             )}
-            <button type="button" className="btn btn-street btn-ghost" onClick={() => setEditing(true)}>
-              <Icon name="edit" size={14} /> Editar
+            <button type="button" className="btn wd-btn-line" onClick={() => setEditing(true)}>
+              <Icon name="edit" size={14} /> {t('Editar')}
             </button>
             <button type="button" className="btn btn-danger" onClick={() => setConfirm('delete')}>
-              <Icon name="trash" size={14} /> Eliminar
+              <Icon name="trash" size={14} /> {t('Eliminar')}
             </button>
           </div>
           {!wish && (
             <button type="button" className="link-btn snk-unlink" onClick={() => setConfirm('unlink')}>
-              Quitar de la colección pero dejarlas en mi armario
+              {t('Quitar de la colección pero dejarlas en mi armario')}
             </button>
           )}
         </div>
@@ -231,22 +235,22 @@ export function SneakerItemPage() {
             setS(u);
             setEditing(false);
             play('success');
-            toast.show('Cambios guardados', { tone: 'ok' });
+            toast.show(t('Cambios guardados'), { tone: 'ok' });
           }}
         />
       )}
       {confirm && (
         <ConfirmDialog
-          title={confirm === 'delete' ? `¿Eliminar ${s.sneaker.brandLabel} ${s.sneaker.model}?` : '¿Quitar la ficha de colección?'}
-          confirmLabel={confirm === 'delete' ? 'Eliminar' : 'Quitar ficha'}
+          title={confirm === 'delete' ? t('¿Eliminar {brandLabel} {model}?', { brandLabel: s.sneaker.brandLabel, model: s.sneaker.model }) : t('¿Quitar la ficha de colección?')}
+          confirmLabel={confirm === 'delete' ? t('Eliminar') : t('Quitar ficha')}
           danger={confirm === 'delete'}
           busy={busy}
           onConfirm={() => void remove(confirm === 'unlink')}
           onClose={() => setConfirm(null)}
         >
           {confirm === 'delete'
-            ? 'Se borran de tu colección y de tu armario. Los outfits que las llevan las pierden. No se puede deshacer.'
-            : 'Dejan de salir en la colección y en sus estadísticas, pero siguen en tu armario y en tus outfits.'}
+            ? t('Se borran de tu colección y de tu armario. Los outfits que las llevan las pierden. No se puede deshacer.')
+            : t('Dejan de salir en la colección y en sus estadísticas, pero siguen en tu armario y en tus outfits.')}
         </ConfirmDialog>
       )}
     </section>

@@ -1,5 +1,6 @@
 import type { Sneaker, SneakerBrand, SneakerCondition } from '../api/types';
 import type { IconName } from '../components/Icon';
+import { t } from '../i18n';
 
 /**
  * SNEAKER COLLECTION: marcas y estados. Las marcas son solo etiquetas de
@@ -18,26 +19,26 @@ export const BRAND_LABEL: Record<SneakerBrand, string> = {
   SALOMON: 'Salomon',
   CONVERSE: 'Converse',
   VANS: 'Vans',
-  OTHER: 'Otras',
+  OTHER: t('Otras'),
 };
 
 export const SNEAKER_CONDITIONS: SneakerCondition[] = ['DEADSTOCK', 'LIKE_NEW', 'GOOD', 'WORN', 'BEAT'];
 
 export const CONDITION: Record<SneakerCondition, { label: string; short: string; hint: string; level: number }> = {
-  DEADSTOCK: { label: 'Sin estrenar (DS)', short: 'DS', hint: 'Nuevas, sin usar.', level: 5 },
-  LIKE_NEW: { label: 'Como nuevas', short: 'Como nuevas', hint: 'Usadas muy poco, sin marcas.', level: 4 },
-  GOOD: { label: 'Buen estado', short: 'Buen estado', hint: 'Uso normal, bien cuidadas.', level: 3 },
-  WORN: { label: 'Usadas', short: 'Usadas', hint: 'Se nota el uso: arrugas, suela gastada.', level: 2 },
-  BEAT: { label: 'Muy gastadas', short: 'Gastadas', hint: 'Para el día a día o la lluvia.', level: 1 },
+  DEADSTOCK: { label: t('Sin estrenar (DS)'), short: 'DS', hint: t('Nuevas, sin usar.'), level: 5 },
+  LIKE_NEW: { label: t('Como nuevas'), short: t('Como nuevas'), hint: t('Usadas muy poco, sin marcas.'), level: 4 },
+  GOOD: { label: t('Buen estado'), short: t('Buen estado'), hint: t('Uso normal, bien cuidadas.'), level: 3 },
+  WORN: { label: t('Usadas'), short: t('Usadas'), hint: t('Se nota el uso: arrugas, suela gastada.'), level: 2 },
+  BEAT: { label: t('Muy gastadas'), short: t('Gastadas'), hint: t('Para el día a día o la lluvia.'), level: 1 },
 };
 
 export type SneakerSort = 'new' | 'brand' | 'model' | 'most' | 'least';
 export const SNEAKER_SORTS: { id: SneakerSort; label: string }[] = [
-  { id: 'new', label: 'Recientes' },
-  { id: 'brand', label: 'Marca' },
-  { id: 'model', label: 'Modelo' },
-  { id: 'most', label: 'Más usadas' },
-  { id: 'least', label: 'Menos usadas' },
+  { id: 'new', label: t('Recientes') },
+  { id: 'brand', label: t('Marca') },
+  { id: 'model', label: t('Modelo') },
+  { id: 'most', label: t('Más usadas') },
+  { id: 'least', label: t('Menos usadas') },
 ];
 
 export function sortSneakers(list: Sneaker[], sort: SneakerSort): Sneaker[] {

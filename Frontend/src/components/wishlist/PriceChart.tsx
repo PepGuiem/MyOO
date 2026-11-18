@@ -1,7 +1,7 @@
 import { useMemo, useState, type CSSProperties } from 'react';
 import type { WishlistPrice } from '../../api/types';
 import { money } from '../../lib/wishlist';
-import { LOCALE_TAG } from '../../i18n';
+import { LOCALE_TAG, t } from '../../i18n';
 
 /**
  * Historial de precios en escalón: un precio vale hasta que apuntas el
@@ -61,7 +61,7 @@ export function PriceChart({ prices, target, currency }: { prices: WishlistPrice
   const tipTop = tipPt ? (y(tipPt.v) / H) * 100 : 0;
 
   return (
-    <figure className="wl-chart" aria-label={`Historial de precios: ${pts.map((p) => `${fmtDay(p.t)} ${money(p.v, currency)}`).join(', ')}`}>
+    <figure className="wl-chart" aria-label={t('Historial de precios: {join}', { join: pts.map((p) => `${fmtDay(p.t)} ${money(p.v, currency)}`).join(', ') })}>
       <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-hidden="true">
         {ticks.map((t) => (
           <g key={t} className="wl-chart-grid">
@@ -75,13 +75,13 @@ export function PriceChart({ prices, target, currency }: { prices: WishlistPrice
           {fmtDay(t0)}
         </text>
         <text className="wl-chart-axis" x={W - PAD.r} y={H - 6} textAnchor="end">
-          Hoy
+          {t('Hoy')}
         </text>
         {target !== null && (
           <g className="wl-chart-target">
             <line x1={PAD.l} x2={W - PAD.r} y1={y(target)} y2={y(target)} />
             <text x={W - PAD.r - 4} y={y(target) - 6} textAnchor="end">
-              Objetivo {money(target, currency)}
+              {t('Objetivo {money}', { money: money(target, currency) })}
             </text>
           </g>
         )}
@@ -121,7 +121,7 @@ export function PriceChart({ prices, target, currency }: { prices: WishlistPrice
           <b>{money(tipPt.v, currency)}</b>
           <span>
             {new Date(tipPt.t).toLocaleDateString(LOCALE_TAG, { day: 'numeric', month: 'long', year: 'numeric' })}
-            {tipPt.source === 'TRACKER' ? ' · seguimiento' : ''}
+            {tipPt.source === 'TRACKER' ? t(' · seguimiento') : ''}
           </span>
           {tipPt.note && <i>{tipPt.note}</i>}
         </span>

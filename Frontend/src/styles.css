@@ -30043,7 +30043,10 @@ p.hm-outfit-meta:not(:has(+ ul)) {
 .ft :is(.fits-filters, .spotlight),
 .cl :is(.cal-toolbar, .side-card),
 .dr :is(.dress-rail, .dress-panel),
-.sc .showcase-panel {
+.sc .showcase-panel,
+.wh :is(.fits-filters, .wl-budget, .wl-item-info, .wl-prices, .wl-move),
+.sk :is(.fits-filters, .snk-adopt, .snk-item-info, .snk-kpi, .snk-panel),
+.at :is(.an-card, .an-kpi, .an-hl) {
   border: 1px solid var(--wd-edge);
   border-radius: 16px;
   background: var(--ux-glass);
@@ -30058,7 +30061,11 @@ p.hm-outfit-meta:not(:has(+ ul)) {
 .ft .fits-filters:focus-within,
 .cl .side-card:hover,
 .dr :is(.dress-rail, .dress-panel):focus-within,
-.sc .showcase-panel:hover {
+.sc .showcase-panel:hover,
+:is(.wh, .sk) .fits-filters:focus-within,
+.wh :is(.wl-budget, .wl-item-info, .wl-prices):hover,
+.sk :is(.snk-item-info, .snk-kpi, .snk-panel):hover,
+.at :is(.an-card, .an-kpi, .an-hl):hover {
   border-color: rgba(255, 77, 0, 0.32);
   box-shadow:
     0 0 0 1px rgba(255, 77, 0, 0.12),
@@ -30070,13 +30077,13 @@ p.hm-outfit-meta:not(:has(+ ul)) {
    Outfits (/outfits)
    ========================================================================== */
 
-.ft .fits-hero {
+:is(.ft, .wh, .sk) .fits-hero {
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 16px 28px;
   margin-bottom: 18px;
 }
 
-.ft .ux-stats {
+:is(.ft, .wh, .sk) .ux-stats {
   margin-bottom: 30px;
 }
 
@@ -30123,7 +30130,7 @@ p.hm-outfit-meta:not(:has(+ ul)) {
   margin-top: 0;
 }
 
-.ft .fits-filters {
+:is(.ft, .wh, .sk) .fits-filters {
   padding: 16px;
 }
 
@@ -30402,7 +30409,8 @@ p.hm-outfit-meta:not(:has(+ ul)) {
   gap: 16px 28px;
 }
 
-.sc .back-link {
+.sc .back-link,
+.ux .wl-back {
   align-self: start;
   min-height: 40px;
   padding: 0 12px;
@@ -30415,24 +30423,26 @@ p.hm-outfit-meta:not(:has(+ ul)) {
     transform 0.25s var(--wd-ease);
 }
 
-.sc .back-link:hover {
+.sc .back-link:hover,
+.ux .wl-back:hover {
   border-color: var(--wd-orange);
   transform: translateX(-3px);
 }
 
-.sc .showcase-title .ux-title {
+.sc .showcase-title .ux-title,
+.ux:is(.wl-item, .snk-item) .ux-title {
   margin-top: 10px;
   font-size: clamp(2rem, 1.3rem + 2.6vw, 3.6rem);
 }
 
-.sc .sc-path {
+.ux .sc-path {
   font-family: var(--mono);
   font-size: 0.72rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
 }
 
-.sc .sc-path i {
+.ux .sc-path i {
   font-style: normal;
   color: var(--wd-red);
 }
@@ -30530,7 +30540,7 @@ p.hm-outfit-meta:not(:has(+ ul)) {
    ========================================================================== */
 
 @media (max-width: 960px) {
-  .ft .fits-hero {
+  :is(.ft, .wh, .sk) .fits-hero {
     grid-template-columns: minmax(0, 1fr);
   }
 
@@ -30561,7 +30571,8 @@ p.hm-outfit-meta:not(:has(+ ul)) {
   }
 
   .sc .showcase-title .ux-title,
-  .dr .ux-title {
+  .dr .ux-title,
+  .ux:is(.wl-item, .snk-item) .ux-title {
     font-size: clamp(1.9rem, 9.5vw, 2.6rem);
   }
 
@@ -30582,27 +30593,29 @@ p.hm-outfit-meta:not(:has(+ ul)) {
     border-top: 1px solid var(--wd-edge);
   }
 
-  .ft .ux-stats {
+  :is(.ft, .wh, .sk) .ux-stats {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
-  .ft .ux-stats li:nth-child(n) {
+  :is(.ft, .wh, .sk) .ux-stats li:nth-child(n) {
     border-top: 0;
     border-left: 1px solid var(--wd-edge);
   }
 
-  .ft .ux-stats li:first-child {
+  :is(.ft, .wh, .sk) .ux-stats li:first-child {
     border-left: 0;
   }
 
   /* Filtros desplazables en horizontal */
-  .ft :is(.style-rail, .shoe-rail) {
+  :is(.ft, .wh, .sk) :is(.style-rail, .shoe-rail, .wl-cat-rail, .snk-brand-rail, .snk-color-rail, .snk-cond-rail, .snk-tabs) {
     flex-wrap: nowrap;
+    min-width: 0;
+    max-width: 100%;
     overflow-x: auto;
     scrollbar-width: none;
   }
 
-  .ft :is(.style-rail, .shoe-rail)::-webkit-scrollbar {
+  :is(.ft, .wh, .sk) :is(.style-rail, .shoe-rail, .wl-cat-rail, .snk-brand-rail, .snk-color-rail, .snk-cond-rail, .snk-tabs)::-webkit-scrollbar {
     display: none;
   }
 
@@ -30613,7 +30626,7 @@ p.hm-outfit-meta:not(:has(+ ul)) {
     letter-spacing: 0.03em;
   }
 
-  .ft :is(.style-rail, .shoe-rail) > * {
+  :is(.ft, .wh, .sk) :is(.style-rail, .shoe-rail, .wl-cat-rail, .snk-brand-rail, .snk-color-rail, .snk-cond-rail, .snk-tabs) > * {
     flex-shrink: 0;
     white-space: nowrap;
   }
@@ -30622,7 +30635,11 @@ p.hm-outfit-meta:not(:has(+ ul)) {
     border-radius: 14px;
   }
 
-  .ft :is(.fits-filters, .fit-card),
+  :is(.ft, .wh, .sk) .fits-filters,
+  .ft .fit-card,
+  .wh :is(.wl-budget, .wl-item-info, .wl-prices, .wl-move),
+  .sk :is(.snk-adopt, .snk-item-info, .snk-kpi, .snk-panel),
+  .at :is(.an-card, .an-kpi, .an-hl),
   .cl :is(.cal-toolbar, .side-card),
   .dr :is(.dress-rail, .dress-panel),
   .sc .showcase-panel {
@@ -30729,7 +30746,7 @@ p.hm-outfit-meta:not(:has(+ ul)) {
 }
 
 /* Eliminar: línea roja, como el peligro del armario */
-.main .dr.dr .dress-actions .btn.btn-danger {
+.main .ux.ux .btn.btn-danger {
   min-height: 44px;
   padding: 10px 16px;
   font-weight: 800;
@@ -30743,7 +30760,7 @@ p.hm-outfit-meta:not(:has(+ ul)) {
   background: rgba(8, 8, 8, 0.5);
 }
 
-.main .dr.dr .dress-actions .btn.btn-danger:hover {
+.main .ux.ux .btn.btn-danger:hover {
   color: var(--wd-bone);
   border-color: var(--wd-red);
   background: rgba(255, 23, 68, 0.16);
@@ -30767,4 +30784,269 @@ p.hm-outfit-meta:not(:has(+ ul)) {
 .ft .fit-act.is-danger:hover:not(:disabled) {
   border-color: var(--wd-red);
   box-shadow: 0 0 16px -6px rgba(255, 23, 68, 0.9);
+}
+
+/* =============================================================================
+   Estilo unificado, tanda 2: Wishlist (.wh), Sneakers (.sk) y Analítica (.at)
+   Lo común (cabecera, cifras, paneles de cristal, filtros, botones, volver,
+   responsive) va en las reglas de la tanda 1, ampliadas con :is(...).
+   ========================================================================== */
+
+/* ---- Wishlist ---- */
+.wh .wl-budget {
+  margin-bottom: 30px;
+  padding: 18px 20px 16px;
+  border-left: 1px solid var(--wd-edge);
+  background:
+    radial-gradient(ellipse 50% 90% at 100% 0%, rgba(255, 77, 0, 0.12), transparent 70%),
+    var(--ux-glass);
+  animation: wd-rise 0.7s 0.3s var(--wd-ease) backwards;
+}
+
+.wh .wl-budget .hm-section-head {
+  margin-bottom: 14px;
+}
+
+.wh .wl-budget-kpis > div {
+  border-radius: 12px;
+}
+
+.wh .wl-budget-kpis .is-key {
+  border-color: rgba(255, 77, 0, 0.45);
+  box-shadow: 0 0 24px -10px rgba(255, 77, 0, 0.8);
+}
+
+.wh .wl-meter-fill {
+  background: var(--wd-hot);
+}
+
+.wh .wl-card {
+  border-radius: 16px;
+  overflow: clip;
+  animation: wd-card-in 0.6s calc(var(--i, 0) * 55ms) var(--wd-ease) backwards;
+  transition:
+    transform 0.3s var(--wd-spring),
+    border-color 0.3s,
+    box-shadow 0.3s;
+}
+
+.wh .wl-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 77, 0, 0.5);
+  box-shadow:
+    0 0 0 1px rgba(255, 77, 0, 0.2),
+    0 0 34px -10px rgba(255, 77, 0, 0.7),
+    0 28px 50px -26px #000;
+}
+
+.wh .wl-item-info {
+  gap: 14px;
+  padding: 20px 22px;
+}
+
+.wh .wl-item-frame {
+  border-radius: 18px;
+  border-color: rgba(255, 77, 0, 0.22);
+  box-shadow: 0 0 50px -20px rgba(255, 23, 68, 0.45);
+}
+
+.wh .wl-prices,
+.wh .wl-move {
+  padding: 18px 20px;
+  margin-top: 26px;
+}
+
+.wh .wl-prices-note {
+  margin: -6px 0 14px;
+}
+
+.ux .ux-panel-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-stretch: var(--wd-cond);
+}
+
+/* ---- Sneakers ---- */
+.sk .snk-tabs {
+  margin-bottom: 26px;
+  animation: wd-rise 0.6s 0.25s var(--wd-ease) backwards;
+}
+
+.sk .snk-tab {
+  border-radius: 12px;
+}
+
+.sk .snk-tab[aria-selected='true'] {
+  border-color: var(--wd-orange);
+  box-shadow: 0 0 22px -8px rgba(255, 77, 0, 0.9);
+}
+
+.sk .snk-adopt {
+  padding: 14px 16px;
+  margin-bottom: 18px;
+}
+
+.sk .snk-card {
+  border-radius: 16px;
+  animation: wd-card-in 0.6s calc(var(--i, 0) * 55ms) var(--wd-ease) backwards;
+  transition:
+    transform 0.3s var(--wd-spring),
+    border-color 0.3s,
+    box-shadow 0.3s;
+}
+
+.sk .snk-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 77, 0, 0.5);
+  box-shadow:
+    0 0 0 1px rgba(255, 77, 0, 0.2),
+    0 0 34px -10px rgba(255, 77, 0, 0.7),
+    0 28px 50px -26px #000;
+}
+
+.sk .snk-item-info {
+  padding: 20px 22px;
+}
+
+.sk .snk-item-frame {
+  border-radius: 18px;
+}
+
+.sk .snk-uses {
+  border-radius: 14px;
+}
+
+/* ---- Analítica ---- */
+.at {
+  counter-reset: at-sec;
+}
+
+.at .an-hero {
+  margin-bottom: 22px;
+}
+
+.at .an-kpis {
+  gap: 0;
+  border: 1px solid var(--wd-edge);
+  border-radius: 14px;
+  background: var(--ux-glass);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  overflow: clip;
+  margin-bottom: 18px;
+  animation: wd-rise 0.7s 0.25s var(--wd-ease) backwards;
+}
+
+/* Las cifras como la barra .wd-stats: celdas pegadas con separador fino */
+.at .an-kpis .an-kpi {
+  border: 0;
+  border-left: 1px solid var(--wd-edge);
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  animation: wd-rise 0.6s calc(0.35s + var(--i, 0) * 0.08s) var(--wd-ease) backwards;
+}
+
+.at .an-kpis .an-kpi:first-child {
+  border-left: 0;
+}
+
+.at .an-kpis .an-kpi:hover {
+  background: rgba(255, 77, 0, 0.07);
+  box-shadow: none;
+}
+
+.at .an-kpi dt {
+  color: rgba(241, 238, 233, 0.55);
+}
+
+.at .an-kpi dd {
+  font-stretch: var(--wd-cond);
+}
+
+.at .an-hl {
+  animation: wd-card-in 0.6s calc(0.2s + var(--i, 0) * 0.07s) var(--wd-ease) backwards;
+}
+
+.at .an-card {
+  padding: 18px 20px 20px;
+  animation: wd-rise 0.7s 0.35s var(--wd-ease) backwards;
+}
+
+/* Cada tarjeta, una sección numerada */
+.at .an-h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  font-size: clamp(1.3rem, 1.1rem + 0.8vw, 1.7rem);
+  font-stretch: var(--wd-cond);
+}
+
+.at .an-h2::before {
+  counter-increment: at-sec;
+  content: counter(at-sec, decimal-leading-zero);
+  min-width: 26px;
+  padding: 2px 6px;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-align: center;
+  color: var(--wd-black);
+  background: var(--wd-orange);
+  border-radius: 3px;
+  transform: rotate(-3deg);
+  box-shadow: 0 0 14px rgba(255, 77, 0, 0.5);
+}
+
+.at .an-card:not(.an-evo) .an-h2::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(255, 23, 68, 0.6), transparent);
+}
+
+.at .an-h2 span {
+  color: var(--wd-orange);
+  text-shadow: 0 0 14px rgba(255, 77, 0, 0.45);
+}
+
+@media (max-width: 600px) {
+  .at .an-kpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .at .an-kpis .an-kpi:nth-child(odd) {
+    border-left: 0;
+  }
+
+  .at .an-kpis .an-kpi:nth-child(n + 3) {
+    border-top: 1px solid var(--wd-edge);
+  }
+
+  .at .an-kpis .an-kpi:last-child {
+    grid-column: 1 / -1;
+  }
+
+  .wh .wl-budget,
+  .wh .wl-prices,
+  .wh .wl-move,
+  .sk .snk-item-info,
+  .wh .wl-item-info {
+    padding: 16px 14px;
+  }
+}
+
+@media (hover: none) {
+  :is(.wh, .sk) :is(.wl-card, .snk-card):hover {
+    transform: none;
+  }
+}
+
+/* Títulos con nombres largos (fichas y vestidor): sin la copia en contorno, que en dos líneas ensucia */
+.ux:is(.sc, .dr, .wl-item, .snk-item) .ux-title::before {
+  display: none;
 }

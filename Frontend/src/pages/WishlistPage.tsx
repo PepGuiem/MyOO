@@ -9,6 +9,8 @@ import { useToast } from '../components/fx/Toast';
 import { Icon } from '../components/Icon';
 import { useAppData } from '../components/Layout';
 import { Select } from '../components/Select';
+import { EmptyStage, NoMatch } from '../components/street/EmptyStage';
+import { SectionHead } from '../components/street/SectionHead';
 import { CountUp } from '../components/street/Street';
 import { PriceSpark } from '../components/wishlist/PriceChart';
 import { WishForm } from '../components/wishlist/WishForm';
@@ -16,6 +18,7 @@ import { WishMedia } from '../components/wishlist/WishMedia';
 import { play } from '../lib/sfx';
 import { withTransition } from '../lib/motion';
 import { atTarget, brandOf, CURRENCIES, hostOf, money, num, WISH_CATEGORIES, WISH_CATEGORY, WISH_SORTS, WISH_STATUS, WISH_STATUSES } from '../lib/wishlist';
+import { t, tn } from '../i18n';
 
 function sortItems(items: WishlistItem[], sort: WishlistSort): WishlistItem[] {
   const byPrice = (dir: 1 | -1) => (a: WishlistItem, b: WishlistItem) => {
@@ -116,7 +119,7 @@ export function WishlistPage() {
       void reloadWardrobes();
     }
     play(created ? 'spray' : 'success');
-    toast.show(created ? `«${item.name}» guardado en tu wishlist` : 'Cambios guardados', { tone: 'ok', icon: created ? 'heart' : 'check' });
+    toast.show(created ? t('«{name}» guardado en tu wishlist', { name: item.name }) : t('Cambios guardados'), { tone: 'ok', icon: created ? 'heart' : 'check' });
     loadSummary();
   }
 
@@ -129,20 +132,20 @@ export function WishlistPage() {
       setItems((prev) => (prev ?? []).map((i) => (i.id === item.id ? updated : i)));
       setBumped(item.id);
       play(next === 'PURCHASED' ? 'success' : 'pop');
-      toast.show(next === 'PURCHASED' ? `¡«${item.name}» comprado! Pásalo a tu armario desde su ficha.` : `${item.name}: ${WISH_STATUS[next].label}`, {
+      toast.show(next === 'PURCHASED' ? t('¡«{name}» comprado! Pásalo a tu armario desde su ficha.', { name: item.name }) : `${item.name}: ${WISH_STATUS[next].label}`, {
         tone: next === 'PURCHASED' ? 'ok' : 'info',
         icon: WISH_STATUS[next].icon,
         action:
           next === 'PURCHASED'
-            ? { label: 'Al armario', run: () => navigate(`/wishlist/${item.id}#armario`) }
+            ? { label: t('Al armario'), run: () => navigate(`/wishlist/${item.id}#armario`) }
             : {
-                label: 'Deshacer',
+                label: t('Deshacer'),
                 run: () => void wishlistApi.update(item.id, { status: before }).then((u) => setItems((p) => (p ?? []).map((i) => (i.id === u.id ? u : i)))).then(loadSummary),
               },
       });
       loadSummary();
     } catch (err) {
-      toast.show(err instanceof Error ? err.message : 'No se pudo cambiar el estado', { tone: 'danger', sound: 'error' });
+      toast.show(err instanceof Error ? err.message : t('No se pudo cambiar el estado'), { tone: 'danger', sound: 'error' });
     } finally {
       setBusyId(null);
     }
@@ -150,56 +153,70 @@ export function WishlistPage() {
 
   const s = summary;
   const cur = s?.currency ?? 'EUR';
+  const showBudget = !!(s && items && items.length + s.counts.movedToWardrobe > 0);
 
   return (
-    <section className="page wl">
+    <section className="page wl ux wh">
 
-      <header className="fits-hero wl-hero">
+      <header className="fits-hero wl-hero ux-head">
         <div className="fits-title">
-          <span className="fits-kicker">
-            <span className="rec-dot" aria-hidden="true" /> Lista de deseos · guardada en tu cuenta
+          <span className="wd-kicker">
+            <Icon name="heart" size={12} /> {t('My wishlist')}
           </span>
-          <h1 className="fits-h1" data-text="Wishlist">
-            Wishlist
+          <h1 className="wd-title ux-title" data-text={t('Wishlist')}>
+            {t('Wishlist')}
           </h1>
-          <p className="fits-sub">Lo que quieres, lo que cuesta y lo que te falta para tenerlo.</p>
+          <p className="ux-lede">{t('Lo que quieres, lo que cuesta y lo que te falta para tenerlo.')}</p>
         </div>
 
-        <dl className="fits-stats">
-          <div>
-            <dt>Deseos</dt>
-            <dd>{s ? <CountUp value={s.counts.pending} /> : '—'}</dd>
-          </div>
-          <div>
-            <dt>Comprados</dt>
-            <dd>{s ? <CountUp value={s.counts.purchased} delay={120} /> : '—'}</dd>
-          </div>
-          <div className="wl-stat-money">
-            <dt>Valor</dt>
-            <dd>{s ? money(s.money.totalValue, cur, { compact: true }) : '—'}</dd>
-          </div>
-        </dl>
-
-        <div className="fits-actions">
+        <div className="wd-head-actions">
           <SoundToggle />
           <button
             type="button"
-            className="btn btn-primary btn-street btn-new"
+            className="btn wd-add"
             onClick={() => {
               play('spray');
               setForm({ item: null });
             }}
           >
-            <Icon name="plus" size={16} /> Añadir deseo
+            <Icon name="plus" size={16} /> <span>{t('Añadir deseo')}</span>
           </button>
         </div>
       </header>
 
-      {s && items && items.length + s.counts.movedToWardrobe > 0 && <BudgetPanel summary={s} onChange={setSummary} tracked={items.filter((i) => i.trackPrice).length} />}
+      <ul className="wd-stats ux-stats" aria-label={t('Resumen')}>
+        <li style={{ '--i': 0 } as CSSProperties}>
+          <Icon name="heart" size={16} />
+          <strong>{s ? <CountUp value={s.counts.pending} /> : '–'}</strong>
+          <span>{t('Deseos')}</span>
+        </li>
+        <li style={{ '--i': 1 } as CSSProperties}>
+          <Icon name="check" size={16} />
+          <strong>{s ? <CountUp value={s.counts.purchased} delay={120} /> : '–'}</strong>
+          <span>{t('Comprados')}</span>
+        </li>
+        <li style={{ '--i': 2 } as CSSProperties}>
+          <Icon name="wallet" size={16} />
+          <strong>{s ? money(s.money.totalValue, cur, { compact: true }) : '–'}</strong>
+          <span>{t('Valor')}</span>
+        </li>
+      </ul>
+
+      {showBudget && s && items && (
+        <BudgetPanel summary={s} onChange={setSummary} tracked={items.filter((i) => i.trackPrice).length} />
+      )}
+
+      <SectionHead n={showBudget ? 2 : 1} title={t('Tu lista')}>
+        {items && (
+          <span className="ux-section-count">
+            <CountUp value={items.length} />
+          </span>
+        )}
+      </SectionHead>
 
       <div className="fits-filters wl-filters" role="search">
         <div className="fits-row">
-          <div className="wl-status-rail" role="tablist" aria-label="Estado">
+          <div className="wl-status-rail" role="tablist" aria-label={t('Estado')}>
             <button
               type="button"
               role="tab"
@@ -210,7 +227,7 @@ export function WishlistPage() {
                 setStatus('ALL');
               }}
             >
-              Todo <span className="count">{s?.counts.total ?? '–'}</span>
+              {t('Todo')} <span className="count">{s?.counts.total ?? '–'}</span>
             </button>
             {WISH_STATUSES.map((k) => (
               <button
@@ -234,15 +251,15 @@ export function WishlistPage() {
 
           <label className="fits-search">
             <Icon name="search" />
-            <input type="search" placeholder="Buscar nombre, marca, tienda…" aria-label="Buscar en la wishlist" value={query} onChange={(e) => setQuery(e.target.value)} />
+            <input type="search" placeholder={t('Buscar nombre, marca, tienda…')} aria-label={t('Buscar en la wishlist')} value={query} onChange={(e) => setQuery(e.target.value)} />
             {query && (
-              <button type="button" className="icon-btn" aria-label="Borrar búsqueda" onClick={() => setQuery('')}>
+              <button type="button" className="icon-btn" aria-label={t('Borrar búsqueda')} onClick={() => setQuery('')}>
                 <Icon name="close" size={14} />
               </button>
             )}
           </label>
 
-          <div className="sort-pills" role="group" aria-label="Orden">
+          <div className="sort-pills" role="group" aria-label={t('Orden')}>
             {WISH_SORTS.map((o) => (
               <button
                 key={o.id}
@@ -259,7 +276,7 @@ export function WishlistPage() {
           </div>
         </div>
 
-        <div className="wl-cat-rail" role="group" aria-label="Categoría">
+        <div className="wl-cat-rail" role="group" aria-label={t('Categoría')}>
           <button
             type="button"
             className={`wl-cat-chip${category === null ? ' is-active' : ''}`}
@@ -269,7 +286,7 @@ export function WishlistPage() {
               setCategory(null);
             }}
           >
-            Todas
+            {t('Todas')}
           </button>
           {WISH_CATEGORIES.map((c, i) => (
             <button
@@ -293,7 +310,7 @@ export function WishlistPage() {
       <div className="fits-status" aria-live="polite">
         {items && (
           <span>
-            {visible.length} {visible.length === 1 ? 'artículo' : 'artículos'}
+            {visible.length} {visible.length === 1 ? t('artículo') : t('artículos')}
             {status !== 'ALL' && <span className="status-tag">{WISH_STATUS[status].label}</span>}
             {category && <span className="status-tag">{WISH_CATEGORY[category].label}</span>}
             {q && <span className="status-tag">«{query.trim()}»</span>}
@@ -301,7 +318,7 @@ export function WishlistPage() {
         )}
         {filtered && (
           <button type="button" className="link-btn" onClick={clearFilters}>
-            <Icon name="close" size={12} /> Quitar filtros
+            <Icon name="close" size={12} /> {t('Quitar filtros')}
           </button>
         )}
       </div>
@@ -309,23 +326,26 @@ export function WishlistPage() {
       <ErrorNote error={error} />
 
       {!items ? (
-        !error && <SprayLoader label="Abriendo tu wishlist…" />
+        !error && <SprayLoader label={t('Abriendo tu wishlist…')} />
       ) : items.length === 0 ? (
-        <div className="fits-empty wl-empty">
-          <span className="fits-empty-tag">Lista en blanco</span>
-          <p>Guarda aquí las zapas, sudaderas y prendas que tienes fichadas: con foto, talla, precio y enlace. Te ayudamos a ver cuánto te falta.</p>
-          <button type="button" className="btn btn-primary btn-street btn-new" onClick={() => setForm({ item: null })}>
-            <Icon name="plus" size={16} /> Añadir el primero
+        <EmptyStage
+          icon="heart"
+          pieces={['shoe', 'hoodie', 'cap', 'tag', 'wallet', 'jacket']}
+          kicker={t('My wishlist')}
+          kickerIcon="heart"
+          title={t('Lista en blanco')}
+          text={t('Guarda aquí las zapas, sudaderas y prendas que tienes fichadas: con foto, talla, precio y enlace. Te ayudamos a ver cuánto te falta.')}
+        >
+          <button type="button" className="btn wd-add wd-add-big" onClick={() => setForm({ item: null })}>
+            <Icon name="plus" size={16} /> <span>{t('Añadir el primero')}</span>
           </button>
-        </div>
+        </EmptyStage>
       ) : visible.length === 0 ? (
-        <div className="fits-empty is-filtered">
-          <span className="fits-empty-tag">Nada por aquí</span>
-          <p>Ningún artículo con estos filtros.</p>
-          <button type="button" className="btn btn-street" onClick={clearFilters}>
-            Ver todo
+        <NoMatch title={t('Nada por aquí')} text={t('Ningún artículo con estos filtros.')}>
+          <button type="button" className="btn wd-btn-line" onClick={clearFilters}>
+            {t('Ver todo')}
           </button>
-        </div>
+        </NoMatch>
       ) : (
         <div className="wl-grid">
           {visible.map((item, i) => (
@@ -380,7 +400,7 @@ function WishCard({
   const brand = brandOf(item);
   const price = num(item.currentPrice);
   const deal = atTarget(item);
-  const t = item.trend;
+  const trend = item.trend;
   const host = hostOf(item.productUrl);
   const purchased = item.wishlistStatus === 'PURCHASED';
 
@@ -403,17 +423,17 @@ function WishCard({
         </span>
         {deal && !purchased && (
           <span className="wl-deal">
-            <Icon name="tag" size={12} /> En tu precio
+            <Icon name="tag" size={12} /> {t('En tu precio')}
           </span>
         )}
-        {purchased && <span className="wl-stamp">Comprado</span>}
+        {purchased && <span className="wl-stamp">{t('Comprado')}</span>}
         {fresh && <span className="wl-burst" aria-hidden="true" />}
       </div>
 
       <div className="wl-body">
         <span className="wl-brand">
           {brand ?? cat.label}
-          {item.size && <i> · talla {item.size}</i>}
+          {item.size && <i> {t('· talla {size}', { size: item.size })}</i>}
         </span>
         <h3 className="wl-name">
           <Link to={`/wishlist/${item.id}`} className="wl-link" onClick={() => play('click')}>
@@ -421,25 +441,25 @@ function WishCard({
           </Link>
         </h3>
         <div className="wl-price-row">
-          <b className="wl-price">{price === null ? <span className="wl-noprice">Sin precio</span> : money(price, item.currency)}</b>
-          {t && t.direction !== 'same' && (
-            <span className={`wl-trend is-${t.direction}`} title={`Antes: ${money(price! - t.diff, item.currency)}`}>
-              <Icon name={t.direction === 'down' ? 'trendDown' : 'trendUp'} size={12} />
-              {t.direction === 'down' ? '−' : '+'}
-              {money(Math.abs(t.diff), item.currency)}
+          <b className="wl-price">{price === null ? <span className="wl-noprice">{t('Sin precio')}</span> : money(price, item.currency)}</b>
+          {trend && trend.direction !== 'same' && (
+            <span className={`wl-trend is-${trend.direction}`} title={t('Antes: {money}', { money: money(price! - trend.diff, item.currency) })}>
+              <Icon name={trend.direction === 'down' ? 'trendDown' : 'trendUp'} size={12} />
+              {trend.direction === 'down' ? '−' : '+'}
+              {money(Math.abs(trend.diff), item.currency)}
             </span>
           )}
           <PriceSpark prices={item.prices} currency={item.currency} />
         </div>
         <span className="wl-meta">
           <i className="wl-swatch" aria-hidden="true" />
-          {item.targetPrice ? <>Objetivo {money(item.targetPrice, item.currency)}</> : <>{cat.label}</>}
+          {item.targetPrice ? <>{t('Objetivo {money}', { money: money(item.targetPrice, item.currency) })}</> : <>{cat.label}</>}
           {host && <span className="wl-host">· {host}</span>}
         </span>
       </div>
 
       <div className="wl-card-actions">
-        <div className="wl-quick" role="group" aria-label={`Estado de ${item.name}`}>
+        <div className="wl-quick" role="group" aria-label={t('Estado de {name}', { name: item.name })}>
           {WISH_STATUSES.map((k) => (
             <button
               key={k}
@@ -448,7 +468,7 @@ function WishCard({
               style={{ '--st': WISH_STATUS[k].color } as CSSProperties}
               aria-pressed={item.wishlistStatus === k}
               title={WISH_STATUS[k].label}
-              aria-label={`Marcar como ${WISH_STATUS[k].label}`}
+              aria-label={t('Marcar como {label}', { label: WISH_STATUS[k].label })}
               disabled={busy}
               onClick={() => onStatus(k)}
             >
@@ -458,14 +478,14 @@ function WishCard({
         </div>
         {purchased ? (
           <Link to={`/wishlist/${item.id}#armario`} className="wl-move-btn" onClick={() => play('click')}>
-            <Icon name="hanger" size={13} /> Al armario
+            <Icon name="hanger" size={13} /> {t('Al armario')}
           </Link>
         ) : (
           <button
             type="button"
             className="icon-btn"
-            aria-label={`Editar ${item.name}`}
-            title="Editar"
+            aria-label={t('Editar {name}', { name: item.name })}
+            title={t('Editar')}
             onClick={() => {
               play('click');
               onEdit();
@@ -506,7 +526,7 @@ function BudgetPanel({ summary: s, onChange, tracked }: { summary: WishlistSumma
     const b = budget.trim() === '' ? null : Number(budget.replace(',', '.'));
     const sv = saved.trim() === '' ? 0 : Number(saved.replace(',', '.'));
     if ((b !== null && (!Number.isFinite(b) || b < 0)) || !Number.isFinite(sv) || sv < 0) {
-      setError(new Error('Escribe importes válidos (0 o más).'));
+      setError(new Error(t('Escribe importes válidos (0 o más).')));
       return;
     }
     setBusy(true);
@@ -515,7 +535,7 @@ function BudgetPanel({ summary: s, onChange, tracked }: { summary: WishlistSumma
       onChange(next);
       setEditing(false);
       play('success');
-      toast.show('Presupuesto guardado', { tone: 'ok', icon: 'wallet' });
+      toast.show(t('Presupuesto guardado'), { tone: 'ok', icon: 'wallet' });
     } catch (err) {
       setError(err);
     } finally {
@@ -528,37 +548,34 @@ function BudgetPanel({ summary: s, onChange, tracked }: { summary: WishlistSumma
 
   return (
     <section className="wl-budget" aria-labelledby="wl-budget-h">
-      <header className="wl-budget-head">
-        <h2 id="wl-budget-h">
-          <Icon name="wallet" size={16} /> Presupuesto
-        </h2>
+      <SectionHead n={1} title={t('Presupuesto')} id="wl-budget-h">
         {!editing && (
-          <button type="button" className="link-btn" onClick={open}>
-            <Icon name="edit" size={12} /> {m.budget === null ? 'Fijar objetivo' : 'Cambiar'}
+          <button type="button" className="link-btn hm-section-link" onClick={open}>
+            <Icon name="edit" size={12} /> {m.budget === null ? t('Fijar objetivo') : t('Cambiar##editar')}
           </button>
         )}
-      </header>
+      </SectionHead>
 
       {editing ? (
         <form className="wl-budget-form" onSubmit={submit}>
           <label className="field">
-            <span>Presupuesto objetivo</span>
-            <input ref={firstRef} inputMode="decimal" placeholder="Sin objetivo" value={budget} onChange={(e) => setBudget(e.target.value)} />
+            <span>{t('Presupuesto objetivo')}</span>
+            <input ref={firstRef} inputMode="decimal" placeholder={t('Sin objetivo')} value={budget} onChange={(e) => setBudget(e.target.value)} />
           </label>
           <label className="field">
-            <span>Lo que llevas ahorrado</span>
+            <span>{t('Lo que llevas ahorrado')}</span>
             <input inputMode="decimal" placeholder="0" value={saved} onChange={(e) => setSaved(e.target.value)} />
           </label>
           <div className="field">
-            <span id="wl-bcur">Moneda</span>
+            <span id="wl-bcur">{t('Moneda')}</span>
             <Select labelledBy="wl-bcur" size="sm" value={currency} options={[...new Set([currency, ...CURRENCIES])].map((c) => ({ value: c, label: c }))} onChange={setCurrency} />
           </div>
           <div className="wl-budget-form-actions">
-            <button type="button" className="btn btn-ghost btn-small" onClick={() => setEditing(false)} disabled={busy}>
-              Cancelar
+            <button type="button" className="btn wd-btn-line btn-small" onClick={() => setEditing(false)} disabled={busy}>
+              {t('Cancelar')}
             </button>
-            <button type="submit" className="btn btn-primary btn-small" disabled={busy}>
-              {busy ? 'Guardando…' : 'Guardar'}
+            <button type="submit" className="btn wd-add btn-small" disabled={busy}>
+              {busy ? t('Guardando…') : t('Guardar')}
             </button>
           </div>
           <ErrorNote error={error} />
@@ -567,38 +584,38 @@ function BudgetPanel({ summary: s, onChange, tracked }: { summary: WishlistSumma
         <>
           <dl className="wl-budget-kpis">
             <div style={{ '--i': 0 } as CSSProperties}>
-              <dt>Valor de la wishlist</dt>
+              <dt>{t('Valor de la wishlist')}</dt>
               <dd>{money(m.totalValue, cur)}</dd>
               <span>
-                {s.counts.pending} {s.counts.pending === 1 ? 'pendiente' : 'pendientes'}
-                {s.counts.unpriced > 0 && ` · ${s.counts.unpriced} sin precio`}
+                {tn(s.counts.pending, '{n} pendiente', '{n} pendientes')}
+                {s.counts.unpriced > 0 && t(' · {unpriced} sin precio', { unpriced: s.counts.unpriced })}
               </span>
             </div>
             <div style={{ '--i': 1 } as CSSProperties}>
-              <dt>Comprado</dt>
+              <dt>{t('Comprado')}</dt>
               <dd>{money(m.spent, cur)}</dd>
               <span>
-                {s.counts.purchased} {s.counts.purchased === 1 ? 'artículo' : 'artículos'}
-                {s.counts.movedToWardrobe > 0 && ` · ${s.counts.movedToWardrobe} ya en el armario`}
+                {s.counts.purchased} {s.counts.purchased === 1 ? t('artículo') : t('artículos')}
+                {s.counts.movedToWardrobe > 0 && t(' · {movedToWardrobe} ya en el armario', { movedToWardrobe: s.counts.movedToWardrobe })}
               </span>
             </div>
             <div style={{ '--i': 2 } as CSSProperties}>
-              <dt>Objetivo</dt>
+              <dt>{t('Objetivo')}</dt>
               <dd>{m.budget === null ? '—' : money(m.budget, cur)}</dd>
-              <span>Ahorrado: {money(m.saved, cur)}</span>
+              <span>{t('Ahorrado: {money}', { money: money(m.saved, cur) })}</span>
             </div>
             <div style={{ '--i': 3 } as CSSProperties} className="is-key">
-              <dt>Te falta para el objetivo</dt>
+              <dt>{t('Te falta para el objetivo')}</dt>
               <dd>{m.remaining === null ? '—' : money(m.remaining, cur)}</dd>
-              <span>{m.remaining === null ? 'Fija un objetivo para verlo' : m.remaining === 0 ? '¡Objetivo cumplido!' : `${Math.round(m.progress ?? 0)} % conseguido`}</span>
+              <span>{m.remaining === null ? t('Fija un objetivo para verlo') : m.remaining === 0 ? t('¡Objetivo cumplido!') : t('{n} % conseguido', { n: Math.round(m.progress ?? 0) })}</span>
             </div>
           </dl>
 
           <div className="wl-meters">
             {m.budget !== null && (
-              <div className="wl-meter" role="img" aria-label={`Ahorrado ${money(m.saved, cur)} de ${money(m.budget, cur)}`}>
+              <div className="wl-meter" role="img" aria-label={t('Ahorrado {money} de {money2}', { money: money(m.saved, cur), money2: money(m.budget, cur) })}>
                 <span className="wl-meter-label">
-                  Ahorrado / objetivo <b>{Math.round(savedPct)} %</b>
+                  {t('Ahorrado / objetivo')} <b>{Math.round(savedPct)} %</b>
                 </span>
                 <span className="wl-meter-track">
                   <span className="wl-meter-fill" style={{ width: `${savedPct}%` }} />
@@ -606,9 +623,9 @@ function BudgetPanel({ summary: s, onChange, tracked }: { summary: WishlistSumma
               </div>
             )}
             {m.totalValue > 0 && (
-              <div className="wl-meter is-cover" role="img" aria-label={`Con lo ahorrado cubres el ${Math.round(coverPct)} % de lo pendiente`}>
+              <div className="wl-meter is-cover" role="img" aria-label={t('Con lo ahorrado cubres el {round} % de lo pendiente', { round: Math.round(coverPct) })}>
                 <span className="wl-meter-label">
-                  Para comprarlo todo te faltan <b>{money(m.shortfall, cur)}</b>
+                  {t('Para comprarlo todo te faltan')} <b>{money(m.shortfall, cur)}</b>
                 </span>
                 <span className="wl-meter-track">
                   <span className="wl-meter-fill" style={{ width: `${coverPct}%` }} />
@@ -619,15 +636,14 @@ function BudgetPanel({ summary: s, onChange, tracked }: { summary: WishlistSumma
 
           {m.otherCurrencies.length > 0 && (
             <p className="wl-budget-note">
-              <Icon name="flag" size={12} /> No se suman (no convertimos monedas):{' '}
-              {m.otherCurrencies.map((o) => `${o.count} en ${o.currency} (${money(o.total, o.currency)})`).join(', ')}.
+              <Icon name="flag" size={12} /> {t('No se suman (no convertimos monedas): {join}.', { join: m.otherCurrencies.map((o) => t('{count} en {currency} ({money})', { count: o.count, currency: o.currency, money: money(o.total, o.currency) })).join(', ') })}
             </p>
           )}
           <p className="wl-budget-note">
             <Icon name="pulse" size={12} />{' '}
             {s.trackers === 0
-              ? `Seguimiento automático de precios: aún no hay servicios conectados. Los precios los apuntas tú${tracked ? ` (${tracked} ${tracked === 1 ? 'marcado' : 'marcados'} para seguir cuando lo haya)` : ''}.`
-              : `${s.trackers} ${s.trackers === 1 ? 'servicio' : 'servicios'} de seguimiento conectados.`}
+              ? t('Seguimiento automático de precios: aún no hay servicios conectados. Los precios los apuntas tú{v}.', { v: tracked ? t(' ({tracked} {v} para seguir cuando lo haya)', { tracked, v: tracked === 1 ? t('marcado') : t('marcados') }) : '' })
+              : t('{trackers} {v} de seguimiento conectados.', { trackers: s.trackers, v: s.trackers === 1 ? t('servicio') : t('servicios') })}
           </p>
         </>
       )}

@@ -595,3 +595,10 @@ Outfits, vestidor (`/outfits/new`, `/outfits/:id`), calendario y ficha de prenda
 - Botones `wd-add` / `wd-btn-line`: el fondo va por `--wd-bg` con `.ux.ux.ux .btn.btn:is(...)` para ganar a `.main .btn:not(...)`.
 - A 390 px: sin scroll horizontal, filtros desplazables y zonas táctiles de 44 px. Con «reducir movimiento» no hay animaciones.
 - El calendario ya está traducido (antes tenía los textos fijos en español).
+
+### Tanda 2: Wishlist, Sneakers y Analítica
+
+- Prefijos: `.wh` (wishlist y su ficha), `.sk` (sneakers y su ficha) y `.at` (analítica), junto a sus clases de siempre (`.wl`, `.snk`, `.an`).
+- Cabecera, cifras (`.wd-stats`), botones, estados vacíos (`EmptyStage` / `NoMatch`) y secciones numeradas como en la tanda 1. Las reglas comunes de la tanda 1 se han ampliado con `:is(.ft, .wh, .sk)` en vez de copiarlas.
+- Se conservan los elementos propios: colores de estado de la wishlist, presupuesto y medidores, historial de precios, dashboard de zapatillas y gráficas de la analítica (sus cifras pasan a una barra como `.wd-stats` y cada tarjeta lleva su número con un contador CSS).
+- Estas páginas y sus formularios estaban sin traducir: ya van con `t()` / `tn()`. Las marcas de zapatillas (Nike, Adidas…) no se traducen. Siguen en español los textos que genera el servidor (consejos de la analítica, nombres de colores).

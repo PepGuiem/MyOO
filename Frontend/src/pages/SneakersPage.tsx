@@ -11,10 +11,13 @@ import { Select } from '../components/Select';
 import { SneakerCard } from '../components/sneakers/SneakerCard';
 import { SneakerDashboard } from '../components/sneakers/SneakerDashboard';
 import { SneakerForm, type SneakerFormMode } from '../components/sneakers/SneakerForm';
+import { EmptyStage, NoMatch } from '../components/street/EmptyStage';
+import { SectionHead } from '../components/street/SectionHead';
 import { CountUp } from '../components/street/Street';
 import { play } from '../lib/sfx';
 import { withTransition } from '../lib/motion';
 import { BRAND_LABEL, CONDITION, SNEAKER_BRANDS, SNEAKER_CONDITIONS, SNEAKER_SORTS, sortSizes, sortSneakers, type SneakerSort } from '../lib/sneakers';
+import { t, tn } from '../i18n';
 
 type Tab = 'owned' | 'wish' | 'stats';
 
@@ -141,7 +144,7 @@ export function SneakersPage() {
     }
     play(created ? 'spray' : 'success');
     toast.show(
-      created ? (isWish ? `${s.sneaker.brandLabel} ${s.sneaker.model} a tu wishlist` : `${s.sneaker.brandLabel} ${s.sneaker.model} entran en tu colección`) : 'Cambios guardados',
+      created ? (isWish ? t('{brandLabel} {model} a tu wishlist', { brandLabel: s.sneaker.brandLabel, model: s.sneaker.model }) : t('{brandLabel} {model} entran en tu colección', { brandLabel: s.sneaker.brandLabel, model: s.sneaker.model })) : t('Cambios guardados'),
       { tone: 'ok', icon: created ? (isWish ? 'heart' : 'shoe') : 'check' },
     );
     loadStats();
@@ -156,7 +159,7 @@ export function SneakersPage() {
         tone: 'info',
         icon: 'shoe',
         action: {
-          label: 'Deshacer',
+          label: t('Deshacer'),
           run: () =>
             void sneakersApi
               .wear(s.id, -1)
@@ -166,73 +169,76 @@ export function SneakersPage() {
       });
       loadStats();
     } catch (err) {
-      toast.show(err instanceof Error ? err.message : 'No se pudo apuntar', { tone: 'danger', sound: 'error' });
+      toast.show(err instanceof Error ? err.message : t('No se pudo apuntar'), { tone: 'danger', sound: 'error' });
     }
   }
 
   const loading = !owned || !wish;
 
   return (
-    <section className="page snk">
+    <section className="page snk ux sk">
       <span className="snk-spot" aria-hidden="true" />
 
-      <header className="fits-hero snk-hero">
+      <header className="fits-hero snk-hero ux-head">
         <div className="fits-title">
-          <span className="fits-kicker">
-            <span className="rec-dot" aria-hidden="true" /> Colección personal · guardada en tu cuenta
+          <span className="wd-kicker">
+            <Icon name="shoe" size={12} /> {t('My rotation')}
           </span>
-          <h1 className="fits-h1" data-text="Sneakers">
-            Sneakers
+          <h1 className="wd-title ux-title" data-text={t('Sneakers')}>
+            {t('Sneakers')}
           </h1>
-          <p className="fits-sub">Tu colección, lo que te falta y con qué lo combinas.</p>
+          <p className="ux-lede">{t('Tu colección, lo que te falta y con qué lo combinas.')}</p>
         </div>
 
-        <dl className="fits-stats">
-          <div>
-            <dt>Pares</dt>
-            <dd>{owned ? <CountUp value={owned.length} /> : '—'}</dd>
-          </div>
-          <div>
-            <dt>Usos</dt>
-            <dd>{stats ? <CountUp value={stats.totalUses} delay={120} /> : '—'}</dd>
-          </div>
-          <div>
-            <dt>Quiero</dt>
-            <dd>{wish ? <CountUp value={wish.length} delay={240} /> : '—'}</dd>
-          </div>
-        </dl>
-
-        <div className="fits-actions snk-actions-top">
+        <div className="wd-head-actions snk-actions-top">
           <SoundToggle />
           <button
             type="button"
-            className="btn btn-street btn-ghost"
+            className="btn wd-btn-line"
             onClick={() => {
               play('click');
               setForm({ kind: 'create', scope: 'wish' });
             }}
           >
-            <Icon name="heart" size={14} /> Quiero unas
+            <Icon name="heart" size={14} /> {t('Quiero unas')}
           </button>
           <button
             type="button"
-            className="btn btn-primary btn-street btn-new"
+            className="btn wd-add"
             onClick={() => {
               play('spray');
               setForm({ kind: 'create', scope: 'owned' });
             }}
           >
-            <Icon name="plus" size={16} /> Añadir par
+            <Icon name="plus" size={16} /> <span>{t('Añadir par')}</span>
           </button>
         </div>
       </header>
 
-      <div className="snk-tabs" role="tablist" aria-label="Sección">
+      <ul className="wd-stats ux-stats" aria-label={t('Resumen')}>
+        <li style={{ '--i': 0 } as CSSProperties}>
+          <Icon name="shoe" size={16} />
+          <strong>{owned ? <CountUp value={owned.length} /> : '–'}</strong>
+          <span>{t('Pares')}</span>
+        </li>
+        <li style={{ '--i': 1 } as CSSProperties}>
+          <Icon name="pulse" size={16} />
+          <strong>{stats ? <CountUp value={stats.totalUses} delay={120} /> : '–'}</strong>
+          <span>{t('Usos')}</span>
+        </li>
+        <li style={{ '--i': 2 } as CSSProperties}>
+          <Icon name="heart" size={16} />
+          <strong>{wish ? <CountUp value={wish.length} delay={240} /> : '–'}</strong>
+          <span>{t('Quiero')}</span>
+        </li>
+      </ul>
+
+      <div className="snk-tabs" role="tablist" aria-label={t('Sección')}>
         {(
           [
-            ['owned', 'Mi colección', 'shoe', owned?.length],
-            ['wish', 'Quiero conseguir', 'heart', wish?.length],
-            ['stats', 'Dashboard', 'pulse', undefined],
+            ['owned', t('Mi colección'), 'shoe', owned?.length],
+            ['wish', t('Quiero conseguir'), 'heart', wish?.length],
+            ['stats', t('Dashboard'), 'pulse', undefined],
           ] as const
         ).map(([k, label, icon, n]) => (
           <button key={k} type="button" role="tab" aria-selected={tab === k} className={`snk-tab is-${k}`} onClick={() => switchTab(k)}>
@@ -242,24 +248,32 @@ export function SneakersPage() {
         ))}
       </div>
 
+      <SectionHead n={1} title={tab === 'owned' ? t('Mi colección') : tab === 'wish' ? t('Quiero conseguir') : t('Dashboard')}>
+        {tab !== 'stats' && list && (
+          <span className="ux-section-count">
+            <CountUp value={list.length} />
+          </span>
+        )}
+      </SectionHead>
+
       <ErrorNote error={error} />
 
       {tab === 'stats' ? (
         stats ? (
           <SneakerDashboard stats={stats} />
         ) : (
-          !error && <SprayLoader label="Contando tus pares…" />
+          !error && <SprayLoader label={t('Contando tus pares…')} />
         )
       ) : (
         <>
           {tab === 'owned' && candidates.length > 0 && (
-            <aside className="snk-adopt" aria-label="Zapatillas de tu armario sin ficha">
+            <aside className="snk-adopt" aria-label={t('Zapatillas de tu armario sin ficha')}>
               <p>
-                <Icon name="hanger" size={15} /> Tienes{' '}
+                <Icon name="hanger" size={15} /> {t('Tienes')}{' '}
                 <b>
-                  {candidates.length} {candidates.length === 1 ? 'par' : 'pares'}
+                  {tn(candidates.length, '{n} par', '{n} pares')}
                 </b>{' '}
-                en tu armario sin ficha de colección. Añádeles marca y modelo (no se duplican):
+                {t('en tu armario sin ficha de colección. Añádeles marca y modelo (no se duplican):')}
               </p>
               <ul>
                 {candidates.slice(0, 8).map((c) => (
@@ -285,7 +299,7 @@ export function SneakersPage() {
 
           {all.length > 0 && (
             <div className="fits-filters snk-filters" role="search">
-              <div className="snk-brand-rail" role="group" aria-label="Marca">
+              <div className="snk-brand-rail" role="group" aria-label={t('Marca')}>
                 <button
                   type="button"
                   className={`snk-brand-tag${brand === null ? ' is-active' : ''}`}
@@ -295,7 +309,7 @@ export function SneakersPage() {
                     setBrand(null);
                   }}
                 >
-                  Todas
+                  {t('Todas')}
                 </button>
                 {SNEAKER_BRANDS.filter((b) => brandCount.get(b)).map((b, i) => (
                   <button
@@ -317,30 +331,30 @@ export function SneakersPage() {
               <div className="fits-row">
                 <label className="fits-search">
                   <Icon name="search" />
-                  <input type="search" placeholder="Buscar modelo, colorway, notas…" aria-label="Buscar zapatillas" value={query} onChange={(e) => setQuery(e.target.value)} />
+                  <input type="search" placeholder={t('Buscar modelo, colorway, notas…')} aria-label={t('Buscar zapatillas')} value={query} onChange={(e) => setQuery(e.target.value)} />
                   {query && (
-                    <button type="button" className="icon-btn" aria-label="Borrar búsqueda" onClick={() => setQuery('')}>
+                    <button type="button" className="icon-btn" aria-label={t('Borrar búsqueda')} onClick={() => setQuery('')}>
                       <Icon name="close" size={14} />
                     </button>
                   )}
                 </label>
                 <Select
                   size="sm"
-                  ariaLabel="Modelo"
+                  ariaLabel={t('Modelo')}
                   className="snk-select"
                   value={model}
-                  options={[{ value: '', label: 'Todos los modelos' }, ...models.map((m) => ({ value: m, label: m }))]}
+                  options={[{ value: '', label: t('Todos los modelos') }, ...models.map((m) => ({ value: m, label: m }))]}
                   onChange={setModel}
                 />
                 <Select
                   size="sm"
-                  ariaLabel="Talla"
+                  ariaLabel={t('Talla')}
                   className="snk-select is-size"
                   value={size}
-                  options={[{ value: '', label: 'Todas las tallas' }, ...sizes.map((s) => ({ value: s, label: `Talla ${s}` }))]}
+                  options={[{ value: '', label: t('Todas las tallas') }, ...sizes.map((s) => ({ value: s, label: t('Talla {size}', { size: s }) }))]}
                   onChange={setSize}
                 />
-                <div className="sort-pills" role="group" aria-label="Orden">
+                <div className="sort-pills" role="group" aria-label={t('Orden')}>
                   {SNEAKER_SORTS.filter((o) => tab === 'owned' || (o.id !== 'most' && o.id !== 'least')).map((o) => (
                     <button
                       key={o.id}
@@ -358,7 +372,7 @@ export function SneakersPage() {
               </div>
 
               <div className="fits-row snk-row2">
-                <div className="snk-color-rail" role="group" aria-label="Color">
+                <div className="snk-color-rail" role="group" aria-label={t('Color')}>
                   {colors.map(([name, c]) => (
                     <button
                       key={name}
@@ -376,7 +390,7 @@ export function SneakersPage() {
                     </button>
                   ))}
                 </div>
-                <div className="snk-cond-rail" role="group" aria-label="Estado">
+                <div className="snk-cond-rail" role="group" aria-label={t('Estado')}>
                   {SNEAKER_CONDITIONS.filter((c) => all.some((s) => s.sneaker.condition === c)).map((c) => (
                     <button
                       key={c}
@@ -405,44 +419,47 @@ export function SneakersPage() {
           <div className="fits-status" aria-live="polite">
             {list && (
               <span>
-                {visible.length} {visible.length === 1 ? 'par' : 'pares'}
-                {tab === 'wish' && <span className="status-tag">Wishlist</span>}
+                {tn(visible.length, '{n} par', '{n} pares')}
+                {tab === 'wish' && <span className="status-tag">{t('Wishlist')}</span>}
                 {brand && <span className="status-tag">{BRAND_LABEL[brand]}</span>}
                 {model && <span className="status-tag">{model}</span>}
-                {size && <span className="status-tag">Talla {size}</span>}
+                {size && <span className="status-tag">{t('Talla {size}', { size })}</span>}
                 {color && <span className="status-tag cap">{color}</span>}
                 {condition && <span className="status-tag">{CONDITION[condition].short}</span>}
               </span>
             )}
             {filtered && (
               <button type="button" className="link-btn" onClick={clearFilters}>
-                <Icon name="close" size={12} /> Quitar filtros
+                <Icon name="close" size={12} /> {t('Quitar filtros')}
               </button>
             )}
           </div>
 
           {loading ? (
-            !error && <SprayLoader label="Sacando tus zapatillas…" />
+            !error && <SprayLoader label={t('Sacando tus zapatillas…')} />
           ) : all.length === 0 ? (
-            <div className="fits-empty snk-empty">
-              <span className="fits-empty-tag">{tab === 'wish' ? 'Nada fichado' : 'Estantería vacía'}</span>
-              <p>
-                {tab === 'wish'
-                  ? 'Guarda aquí los pares que quieres conseguir: marca, modelo, colorway, talla, precio y tu foto.'
-                  : 'Añade tus zapatillas con tu foto, marca, modelo, colorway, talla, fecha y precio de compra. Luego podrás usarlas en tus outfits.'}
-              </p>
-              <button type="button" className="btn btn-primary btn-street btn-new" onClick={() => setForm({ kind: 'create', scope: tab === 'wish' ? 'wish' : 'owned' })}>
-                <Icon name={tab === 'wish' ? 'heart' : 'plus'} size={16} /> {tab === 'wish' ? 'Añadir a la wishlist' : 'Añadir el primer par'}
+            <EmptyStage
+              icon="shoe"
+              pieces={['shoe', 'tag', 'heart', 'shoe', 'sparkles', 'bag']}
+              kicker={t('My rotation')}
+              kickerIcon="shoe"
+              title={tab === 'wish' ? t('Nada fichado') : t('Estantería vacía')}
+              text={
+                tab === 'wish'
+                  ? t('Guarda aquí los pares que quieres conseguir: marca, modelo, colorway, talla, precio y tu foto.')
+                  : t('Añade tus zapatillas con tu foto, marca, modelo, colorway, talla, fecha y precio de compra. Luego podrás usarlas en tus outfits.')
+              }
+            >
+              <button type="button" className="btn wd-add wd-add-big" onClick={() => setForm({ kind: 'create', scope: tab === 'wish' ? 'wish' : 'owned' })}>
+                <Icon name={tab === 'wish' ? 'heart' : 'plus'} size={16} /> <span>{tab === 'wish' ? t('Añadir a la wishlist') : t('Añadir el primer par')}</span>
               </button>
-            </div>
+            </EmptyStage>
           ) : visible.length === 0 ? (
-            <div className="fits-empty is-filtered">
-              <span className="fits-empty-tag">Nada por aquí</span>
-              <p>Ningún par con estos filtros.</p>
-              <button type="button" className="btn btn-street" onClick={clearFilters}>
-                Ver todos
+            <NoMatch title={t('Nada por aquí')} text={t('Ningún par con estos filtros.')}>
+              <button type="button" className="btn wd-btn-line" onClick={clearFilters}>
+                {t('Ver todos')}
               </button>
-            </div>
+            </NoMatch>
           ) : (
             <div className={`snk-grid${tab === 'wish' ? ' is-wish' : ''}`}>
               {visible.map((s, i) => (

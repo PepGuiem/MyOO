@@ -1,3 +1,4 @@
+import { t } from '../i18n';
 /**
  * Lectura de una foto de una prenda (motor propio, en el navegador: la foto no
  * sale del equipo y no se usa ningún servicio de IA externo).
@@ -604,75 +605,75 @@ export function classify(s: ShapeInfo): { modelKey: string | null; attributes: R
   // s.sleeveEnd: largo de la manga relativo al cuerpo (hombro → bajo)
   const rel = s.sleeveEnd;
   const sleeve = rel === 0 ? 'sleeveless' : rel < 0.5 ? 'short' : rel < 0.68 ? 'three_quarter' : 'long';
-  const sleeveLabel = { sleeveless: 'sin mangas', short: 'manga corta', three_quarter: 'manga tres cuartos', long: 'manga larga' }[sleeve];
+  const sleeveLabel = { sleeveless: t('sin mangas'), short: t('manga corta'), three_quarter: t('manga tres cuartos'), long: t('manga larga') }[sleeve];
 
   if (s.legs > 0.45) {
     if (s.ratio > 1.4) {
-      notes.push('Dos perneras largas: pantalón.');
+      notes.push(t('Dos perneras largas: pantalón.'));
       return { modelKey: 'pants', attributes, notes };
     }
     attributes.length = s.ratio < 0.85 ? 'short' : s.ratio < 1.1 ? 'mid' : 'bermuda';
-    notes.push('Dos perneras cortas: pantalón corto.');
+    notes.push(t('Dos perneras cortas: pantalón corto.'));
     return { modelKey: 'shorts', attributes, notes };
   }
   if (sleeve === 'sleeveless' && s.waistband && s.flare > 1.05) {
     attributes.length = s.ratio < 0.95 ? 'mini' : s.ratio < 1.5 ? 'midi' : 'maxi';
-    notes.push('Cintura recta arriba que se abre hacia abajo: falda.');
+    notes.push(t('Cintura recta arriba que se abre hacia abajo: falda.'));
     return { modelKey: 'skirt', attributes, notes };
   }
   const front = s.openFront || s.frontLine > 0.6 || s.buttons >= 4;
   const closure = s.openFront ? 'open' : s.buttons >= 4 ? 'buttons' : 'zip';
   if (s.hood) {
     attributes.neckline = front ? 'hoodie_zip' : 'hoodie';
-    notes.push(`Capucha${front ? ' y cremallera' : ''}: sudadera.`);
+    notes.push(t('Capucha{v}: sudadera.', { v: front ? t(' y cremallera') : '' }));
     return { modelKey: 'sweater', attributes, notes };
   }
   // Prendas largas: la manga (larga) acaba muy por encima del bajo, o sin mangas y muy larga
   const long = s.torsoRatio > 2.3 || (rel >= 0.5 && rel < 0.75 && s.torsoRatio > 1.75) || (sleeve === 'sleeveless' && s.torsoRatio > 2.4);
   if (long && front && sleeve !== 'sleeveless' && s.flare < 1.25) {
     attributes.length = s.torsoRatio < 2.0 ? 'thigh' : s.torsoRatio < 2.5 ? 'knee' : 'midi';
-    notes.push('Larga, con mangas y abrochada por delante: abrigo.');
+    notes.push(t('Larga, con mangas y abrochada por delante: abrigo.'));
     return { modelKey: 'coat', attributes, notes };
   }
   if (long) {
     attributes.sleeve = rel >= 0.5 && rel < 0.75 && s.torsoRatio > 1.75 ? 'long' : sleeve;
     attributes.length = s.torsoRatio < 2.4 ? 'mini' : s.torsoRatio < 3.0 ? 'midi' : 'maxi';
-    notes.push(`Larga y de una pieza (${attributes.sleeve === 'sleeveless' ? 'sin mangas' : attributes.sleeve === 'short' ? 'manga corta' : 'con mangas'}): vestido.`);
+    notes.push(t('Larga y de una pieza ({v}): vestido.', { v: attributes.sleeve === 'sleeveless' ? t('sin mangas') : attributes.sleeve === 'short' ? t('manga corta') : t('con mangas') }));
     return { modelKey: 'dress', attributes, notes };
   }
   if (sleeve === 'sleeveless') {
     if (front && closure === 'zip') {
-      notes.push('Sin mangas y con cremallera: chaleco acolchado.');
+      notes.push(t('Sin mangas y con cremallera: chaleco acolchado.'));
       return { modelKey: 'jacket', attributes: { style: 'puffer_vest', closure: 'zip' }, notes };
     }
     if (front) {
       attributes.style = 'waistcoat';
-      notes.push('Sin mangas y abrochado: chaleco.');
+      notes.push(t('Sin mangas y abrochado: chaleco.'));
     } else {
       attributes.style = 'tank';
-      notes.push('Sin mangas: top de tirantes.');
+      notes.push(t('Sin mangas: top de tirantes.'));
     }
     return { modelKey: 'top', attributes, notes };
   }
   if (front) {
     if (closure === 'buttons' && !s.openFront) {
       attributes.sleeve = sleeve;
-      notes.push(`Botones por delante y ${sleeveLabel}: camisa (si es gruesa, cámbiala a chaqueta).`);
+      notes.push(t('Botones por delante y {sleeveLabel}: camisa (si es gruesa, cámbiala a chaqueta).', { sleeveLabel }));
       return { modelKey: 'shirt', attributes, notes };
     }
     attributes.closure = closure;
     if (closure === 'buttons') attributes.style = 'field';
     notes.push(
-      `${sleeveLabel[0].toUpperCase()}${sleeveLabel.slice(1)} y ${closure === 'open' ? 'delantera abierta' : closure === 'buttons' ? 'botones o broches' : 'cremallera'}: chaqueta${closure === 'buttons' ? ' de campo' : ''}.`,
+      t('{toUpperCase}{slice} y {v}: chaqueta{v2}.', { toUpperCase: sleeveLabel[0].toUpperCase(), slice: sleeveLabel.slice(1), v: closure === 'open' ? t('delantera abierta') : closure === 'buttons' ? t('botones o broches') : t('cremallera'), v2: closure === 'buttons' ? t(' de campo') : '' }),
     );
     return { modelKey: 'jacket', attributes, notes };
   }
   if (sleeve === 'long' || sleeve === 'three_quarter') {
-    notes.push(`${sleeveLabel[0].toUpperCase()}${sleeveLabel.slice(1)}, cerrada: jersey o sudadera.`);
+    notes.push(t('{toUpperCase}{slice}, cerrada: jersey o sudadera.', { toUpperCase: sleeveLabel[0].toUpperCase(), slice: sleeveLabel.slice(1) }));
     return { modelKey: 'sweater', attributes, notes };
   }
   attributes.sleeve = sleeve;
-  notes.push('Manga corta, cerrada: camiseta.');
+  notes.push(t('Manga corta, cerrada: camiseta.'));
   return { modelKey: 'tshirt', attributes, notes };
 }
 
@@ -1238,7 +1239,7 @@ export function analyzePixels(img: Px): PhotoGuess | null {
   const { modelKey, attributes, notes } = classify(shape);
   if (garment?.layered && modelKey === 'jacket' && shape.buttons >= 4) {
     attributes.style = 'field';
-    notes.push('Lleva broches o botones a la vista: chaqueta de campo.');
+    notes.push(t('Lleva broches o botones a la vista: chaqueta de campo.'));
   }
   const second = groups[1] ? { lab: groups[1].lab, share: groups[1].share } : undefined;
   let { pattern, on } = patternOf(lab, mask, img.w, img.h, mainLab, second);
@@ -1254,21 +1255,21 @@ export function analyzePixels(img: Px): PhotoGuess | null {
   }
   const graphics = graphicsOf(lab, mask, img.w, img.h, mainLab, on, shape, pattern && second ? second.lab : null, raw, bg);
   const color = labToHex(base);
-  if (worn) notes.unshift('Foto con la prenda puesta: se ha separado la prenda de la persona.');
+  if (worn) notes.unshift(t('Foto con la prenda puesta: se ha separado la prenda de la persona.'));
   if (pattern) {
     const name =
       pattern.kind === 'camo'
         ? 'camuflaje'
         : pattern.kind === 'stripes'
           ? pattern.angle === 0
-            ? 'rayas horizontales'
-            : 'rayas verticales'
+            ? t('rayas horizontales')
+            : t('rayas verticales')
           : pattern.kind === 'checks'
             ? 'cuadros'
             : 'lunares';
-    notes.push(pattern.kind === 'camo' ? `Estampado: camuflaje (${pattern.colors.join(', ')}).` : `Estampado: ${name} en ${pattern.color}.`);
+    notes.push(pattern.kind === 'camo' ? t('Estampado: camuflaje ({join}).', { join: pattern.colors.join(', ') }) : t('Estampado: {name} en {color}.', { name, color: pattern.color }));
   }
-  if (graphics.length) notes.push(`${graphics.length} ${graphics.length === 1 ? 'gráfico (logo o estampado)' : 'gráficos (logos o estampados)'} recortado${graphics.length === 1 ? '' : 's'} y colocado${graphics.length === 1 ? '' : 's'} en la prenda.`);
+  if (graphics.length) notes.push(t('{n} {v} recortado{v2} y colocado{v2} en la prenda.', { n: graphics.length, v: graphics.length === 1 ? t('gráfico (logo o estampado)') : t('gráficos (logos o estampados)'), v2: graphics.length === 1 ? '' : 's' }));
   return {
     modelKey,
     attributes,

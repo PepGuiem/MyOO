@@ -7,6 +7,7 @@ import { ConfirmDialog } from '../components/fx/ConfirmDialog';
 import { SprayLoader } from '../components/fx/SprayLoader';
 import { useToast } from '../components/fx/Toast';
 import { Icon } from '../components/Icon';
+import { SectionHead } from '../components/street/SectionHead';
 import { useAppData } from '../components/Layout';
 import { Select } from '../components/Select';
 import { PriceChart } from '../components/wishlist/PriceChart';
@@ -14,7 +15,7 @@ import { WishForm } from '../components/wishlist/WishForm';
 import { hasPhoto, WishMedia } from '../components/wishlist/WishMedia';
 import { play } from '../lib/sfx';
 import { atTarget, brandOf, hostOf, money, num, todayKey, WISH_CATEGORY, WISH_STATUS, WISH_STATUSES } from '../lib/wishlist';
-import { LOCALE_TAG } from '../i18n';
+import { LOCALE_TAG, t } from '../i18n';
 
 /**
  * Ficha de un deseo: foto o modelo 3D, estado, precios (historial y apuntar
@@ -60,12 +61,12 @@ export function WishItemPage() {
 
   if (!item) {
     return (
-      <section className="page wl wl-item">
+      <section className="page wl wl-item ux wh">
         <Link to="/wishlist" className="wl-back">
-          <Icon name="back" size={14} /> Wishlist
+          <Icon name="back" size={14} /> {t('Wishlist')}
         </Link>
         <ErrorNote error={error} />
-        {!error && <SprayLoader label="Abriendo la ficha…" />}
+        {!error && <SprayLoader label={t('Abriendo la ficha…')} />}
       </section>
     );
   }
@@ -77,7 +78,7 @@ export function WishItemPage() {
   const target = num(item.targetPrice);
   const cur = item.currency ?? defaultCurrency;
   const host = hostOf(item.productUrl);
-  const t = item.trend;
+  const trend = item.trend;
   const photo = hasPhoto(item);
 
   async function setStatus(next: WishlistStatus) {
@@ -88,11 +89,11 @@ export function WishItemPage() {
       setItem(u);
       play(next === 'PURCHASED' ? 'success' : 'pop');
       if (next === 'PURCHASED') {
-        toast.show('¡Comprado! Ya puedes pasarlo a tu armario.', { tone: 'ok', icon: 'check' });
+        toast.show(t('¡Comprado! Ya puedes pasarlo a tu armario.'), { tone: 'ok', icon: 'check' });
         window.setTimeout(() => document.getElementById('armario')?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 200);
       }
     } catch (err) {
-      toast.show(err instanceof Error ? err.message : 'No se pudo cambiar el estado', { tone: 'danger', sound: 'error' });
+      toast.show(err instanceof Error ? err.message : t('No se pudo cambiar el estado'), { tone: 'danger', sound: 'error' });
     } finally {
       setStatusBusy(false);
     }
@@ -104,19 +105,19 @@ export function WishItemPage() {
     try {
       await wishlistApi.remove(item.id);
       play('swoosh');
-      toast.show(`«${item.name}» quitado de la wishlist`, { tone: 'danger', icon: 'trash' });
+      toast.show(t('«{name}» quitado de la wishlist', { name: item.name }), { tone: 'danger', icon: 'trash' });
       navigate('/wishlist');
     } catch (err) {
       setDeleting(false);
       setConfirmDelete(false);
-      toast.show(err instanceof Error ? err.message : 'No se pudo borrar', { tone: 'danger', sound: 'error' });
+      toast.show(err instanceof Error ? err.message : t('No se pudo borrar'), { tone: 'danger', sound: 'error' });
     }
   }
 
   return (
-    <section className={`page wl wl-item is-${item.wishlistStatus.toLowerCase()}`} style={{ '--st': st.color, '--sw': item.color } as CSSProperties}>
+    <section className={`page wl wl-item ux wh is-${item.wishlistStatus.toLowerCase()}`} style={{ '--st': st.color, '--sw': item.color } as CSSProperties}>
       <Link to="/wishlist" className="wl-back">
-        <Icon name="back" size={14} /> Wishlist
+        <Icon name="back" size={14} /> {t('Wishlist')}
       </Link>
 
       <div className="wl-item-grid">
@@ -127,15 +128,15 @@ export function WishItemPage() {
             <span key={item.wishlistStatus} className="wl-status-badge is-big">
               <Icon name={st.icon} size={14} /> {st.label}
             </span>
-            {item.wishlistStatus === 'PURCHASED' && <span className="wl-stamp">Comprado</span>}
+            {item.wishlistStatus === 'PURCHASED' && <span className="wl-stamp">{t('Comprado')}</span>}
           </div>
           {photo && (
-            <div className="wl-view-switch" role="group" aria-label="Ver">
+            <div className="wl-view-switch" role="group" aria-label={t('Ver')}>
               <button type="button" aria-pressed={view === 'photo'} onClick={() => setView('photo')}>
-                Foto
+                {t('Foto')}
               </button>
               <button type="button" aria-pressed={view === '3d'} onClick={() => setView('3d')}>
-                Modelo 3D
+                {t('Modelo 3D')}
               </button>
             </div>
           )}
@@ -143,13 +144,23 @@ export function WishItemPage() {
 
         {/* Ficha */}
         <div className="wl-item-info">
-          <span className="fits-kicker">
-            <Icon name={cat.icon} size={13} /> {cat.label}
-            {brand && <> · {brand}</>}
+          <span className="wd-kicker">
+            <Icon name="heart" size={12} /> {t('On my wishlist')}
           </span>
-          <h1 className="wl-item-h1">{item.name}</h1>
+          <h1 className="wd-title ux-title" data-text={item.name}>
+            {item.name}
+          </h1>
+          <p className="ux-lede sc-path">
+            <Icon name={cat.icon} size={13} /> {cat.label}
+            {brand && (
+              <>
+                {' '}
+                <i aria-hidden="true">/</i> {brand}
+              </>
+            )}
+          </p>
 
-          <div className="wl-status-pick is-big" role="radiogroup" aria-label="Estado">
+          <div className="wl-status-pick is-big" role="radiogroup" aria-label={t('Estado')}>
             {WISH_STATUSES.map((s) => (
               <button
                 key={s}
@@ -169,55 +180,55 @@ export function WishItemPage() {
 
           <div className="wl-price-box">
             <div>
-              <span className="wl-label">Precio actual</span>
-              <b className="wl-price-big">{price === null ? 'Sin precio' : money(price, cur)}</b>
-              {t && t.direction !== 'same' && (
-                <span className={`wl-trend is-${t.direction}`} title="Frente al precio apuntado antes">
-                  <Icon name={t.direction === 'down' ? 'trendDown' : 'trendUp'} size={12} />
-                  {t.direction === 'down' ? '−' : '+'}
-                  {money(Math.abs(t.diff), cur)} ({t.pct > 0 ? '+' : '−'}
-                  {Math.abs(t.pct).toLocaleString(LOCALE_TAG)} %)
+              <span className="wl-label">{t('Precio actual')}</span>
+              <b className="wl-price-big">{price === null ? t('Sin precio') : money(price, cur)}</b>
+              {trend && trend.direction !== 'same' && (
+                <span className={`wl-trend is-${trend.direction}`} title={t('Frente al precio apuntado antes')}>
+                  <Icon name={trend.direction === 'down' ? 'trendDown' : 'trendUp'} size={12} />
+                  {trend.direction === 'down' ? '−' : '+'}
+                  {money(Math.abs(trend.diff), cur)} ({trend.pct > 0 ? '+' : '−'}
+                  {Math.abs(trend.pct).toLocaleString(LOCALE_TAG)} %)
                 </span>
               )}
             </div>
             <dl className="wl-price-facts">
               <div>
-                <dt>Objetivo</dt>
+                <dt>{t('Objetivo')}</dt>
                 <dd>{target === null ? '—' : money(target, cur)}</dd>
               </div>
               <div>
-                <dt>Más bajo apuntado</dt>
-                <dd>{t ? money(t.lowest, cur) : '—'}</dd>
+                <dt>{t('Más bajo apuntado')}</dt>
+                <dd>{trend ? money(trend.lowest, cur) : '—'}</dd>
               </div>
               <div>
-                <dt>Precios apuntados</dt>
-                <dd>{t?.points ?? 0}</dd>
+                <dt>{t('Precios apuntados')}</dt>
+                <dd>{trend?.points ?? 0}</dd>
               </div>
             </dl>
             {atTarget(item) && (
               <p className="wl-deal-note">
-                <Icon name="tag" size={13} /> Está en tu precio objetivo o por debajo.
+                <Icon name="tag" size={13} /> {t('Está en tu precio objetivo o por debajo.')}
               </p>
             )}
           </div>
 
           <dl className="wl-facts">
             <div>
-              <dt>Talla</dt>
+              <dt>{t('Talla')}</dt>
               <dd>{item.size ?? '—'}</dd>
             </div>
             <div>
-              <dt>Color</dt>
+              <dt>{t('Color')}</dt>
               <dd>
                 <i className="wl-swatch" aria-hidden="true" /> {item.color.toUpperCase()}
               </dd>
             </div>
             <div>
-              <dt>Tienda</dt>
+              <dt>{t('Tienda')}</dt>
               <dd>{item.storeName ?? host ?? '—'}</dd>
             </div>
             <div>
-              <dt>Irá al armario</dt>
+              <dt>{t('Irá al armario')}</dt>
               <dd>{item.wardrobe.name}</dd>
             </div>
           </dl>
@@ -226,18 +237,18 @@ export function WishItemPage() {
 
           <div className="wl-item-actions">
             {item.productUrl && (
-              <a className="btn btn-street" href={item.productUrl} target="_blank" rel="noopener noreferrer nofollow">
-                <Icon name="external" size={14} /> Abrir enlace{host ? ` (${host})` : ''}
+              <a className="btn wd-btn-line" href={item.productUrl} target="_blank" rel="noopener noreferrer nofollow">
+                <Icon name="external" size={14} /> {t('Abrir enlace{v}', { v: host ? ` (${host})` : '' })}
               </a>
             )}
-            <Link to={`/outfits/new?with=${item.id}`} className="btn btn-street btn-ghost" onClick={() => play('spray')}>
-              <Icon name="hanger" size={14} /> Probar en un outfit
+            <Link to={`/outfits/new?with=${item.id}`} className="btn wd-add" onClick={() => play('spray')}>
+              <Icon name="hanger" size={14} /> <span>{t('Probar en un outfit')}</span>
             </Link>
-            <button type="button" className="btn btn-street btn-ghost" onClick={() => setEditing(true)}>
-              <Icon name="edit" size={14} /> Editar
+            <button type="button" className="btn wd-btn-line" onClick={() => setEditing(true)}>
+              <Icon name="edit" size={14} /> {t('Editar')}
             </button>
             <button type="button" className="btn btn-danger" onClick={() => setConfirmDelete(true)}>
-              <Icon name="trash" size={14} /> Quitar
+              <Icon name="trash" size={14} /> {t('Quitar')}
             </button>
           </div>
         </div>
@@ -251,21 +262,21 @@ export function WishItemPage() {
           onMoved={(wardrobeId) => {
             void reloadWardrobes();
             play('success');
-            toast.show(`«${item.name}» ya está en tu armario`, { tone: 'ok', icon: 'hanger' });
+            toast.show(t('«{name}» ya está en tu armario', { name: item.name }), { tone: 'ok', icon: 'hanger' });
             navigate(`/armario?w=${wardrobeId}`);
           }}
         />
       ) : (
         <p className="wl-bought-hint" id="armario">
-          ¿Ya lo tienes?{' '}
+          {t('¿Ya lo tienes?')}{' '}
           <button type="button" className="link-btn" onClick={() => void setStatus('PURCHASED')} disabled={statusBusy}>
-            Márcalo como comprado
+            {t('Márcalo como comprado')}
           </button>{' '}
-          y pásalo a tu armario.
+          {t('y pásalo a tu armario.')}
         </p>
       )}
 
-      <PricesPanel item={item} currency={cur} onChange={setItem} />
+      <PricesPanel item={item} currency={cur} onChange={setItem} n={item.wishlistStatus === 'PURCHASED' ? 2 : 1} />
 
       {editing && (
         <WishForm
@@ -278,13 +289,13 @@ export function WishItemPage() {
             setItem(u);
             setEditing(false);
             play('success');
-            toast.show('Cambios guardados', { tone: 'ok' });
+            toast.show(t('Cambios guardados'), { tone: 'ok' });
           }}
         />
       )}
       {confirmDelete && (
-        <ConfirmDialog title={`¿Quitar «${item.name}»?`} confirmLabel="Quitar" danger busy={deleting} onConfirm={() => void remove()} onClose={() => setConfirmDelete(false)}>
-          Se borra de tu wishlist con su historial de precios. Los outfits en los que lo probaste lo pierden.
+        <ConfirmDialog title={t('¿Quitar «{name}»?', { name: item.name })} confirmLabel={t('Quitar')} danger busy={deleting} onConfirm={() => void remove()} onClose={() => setConfirmDelete(false)}>
+          {t('Se borra de tu wishlist con su historial de precios. Los outfits en los que lo probaste lo pierden.')}
         </ConfirmDialog>
       )}
     </section>
@@ -292,7 +303,7 @@ export function WishItemPage() {
 }
 
 /** Historial: gráfica, apuntar un precio nuevo y borrar uno mal puesto. */
-function PricesPanel({ item, currency, onChange }: { item: WishlistItem; currency: string; onChange: (i: WishlistItem) => void }) {
+function PricesPanel({ item, currency, onChange, n }: { item: WishlistItem; currency: string; onChange: (i: WishlistItem) => void; n: number }) {
   const toast = useToast();
   const [value, setValue] = useState('');
   const [note, setNote] = useState('');
@@ -305,7 +316,7 @@ function PricesPanel({ item, currency, onChange }: { item: WishlistItem; currenc
     e.preventDefault();
     const n = Number(value.replace(',', '.'));
     if (value.trim() === '' || !Number.isFinite(n) || n < 0) {
-      setError(new Error('Escribe un precio válido.'));
+      setError(new Error(t('Escribe un precio válido.')));
       play('error');
       return;
     }
@@ -321,7 +332,7 @@ function PricesPanel({ item, currency, onChange }: { item: WishlistItem; currenc
       const dropped = before !== null && n < before;
       play(dropped ? 'success' : 'pop');
       toast.show(
-        u.targetPrice && n <= Number(u.targetPrice) ? '¡Está en tu precio objetivo!' : dropped ? `Ha bajado ${money(before! - n, currency)}` : 'Precio apuntado',
+        u.targetPrice && n <= Number(u.targetPrice) ? t('¡Está en tu precio objetivo!') : dropped ? t('Ha bajado {money}', { money: money(before! - n, currency) }) : t('Precio apuntado'),
         { tone: 'ok', icon: dropped ? 'trendDown' : 'tag' },
       );
     } catch (err) {
@@ -338,37 +349,33 @@ function PricesPanel({ item, currency, onChange }: { item: WishlistItem; currenc
       onChange(u);
       play('swoosh');
     } catch (err) {
-      toast.show(err instanceof Error ? err.message : 'No se pudo borrar', { tone: 'danger', sound: 'error' });
+      toast.show(err instanceof Error ? err.message : t('No se pudo borrar'), { tone: 'danger', sound: 'error' });
     }
   }
 
   return (
     <section className="wl-prices" aria-labelledby="wl-prices-h">
-      <header className="wl-prices-head">
-        <h2 id="wl-prices-h">
-          <Icon name="history" size={16} /> Historial de precios
-        </h2>
-        <small className="muted">Los apuntas tú cuando los ves. La app no consulta tiendas.</small>
-      </header>
+      <SectionHead n={n} title={t('Historial de precios')} id="wl-prices-h" />
+      <p className="muted small wl-prices-note">{t('Los apuntas tú cuando los ves. La app no consulta tiendas.')}</p>
 
       <div className="wl-prices-grid">
         <div>
           {item.prices.length ? (
             <PriceChart prices={item.prices} target={num(item.targetPrice)} currency={currency} />
           ) : (
-            <p className="wl-empty-chart">Todavía no hay precios. Apunta el primero cuando lo veas en una tienda.</p>
+            <p className="wl-empty-chart">{t('Todavía no hay precios. Apunta el primero cuando lo veas en una tienda.')}</p>
           )}
           <form className="wl-record" onSubmit={submit}>
             <label className="field">
-              <span>Nuevo precio ({currency})</span>
+              <span>{t('Nuevo precio ({currency})', { currency })}</span>
               <input inputMode="decimal" placeholder="0,00" value={value} onChange={(e) => setValue(e.target.value)} />
             </label>
             <label className="field wl-record-note">
-              <span>Nota</span>
-              <input maxLength={200} placeholder="Rebajas, otra tienda…" value={note} onChange={(e) => setNote(e.target.value)} />
+              <span>{t('Nota')}</span>
+              <input maxLength={200} placeholder={t('Rebajas, otra tienda…')} value={note} onChange={(e) => setNote(e.target.value)} />
             </label>
-            <button type="submit" className="btn btn-primary btn-street" disabled={busy}>
-              <Icon name="plus" size={14} /> {busy ? 'Apuntando…' : 'Apuntar precio'}
+            <button type="submit" className="btn wd-add" disabled={busy}>
+              <Icon name="plus" size={14} /> {busy ? t('Apuntando…') : t('Apuntar precio')}
             </button>
           </form>
           <ErrorNote error={error} />
@@ -392,15 +399,15 @@ function PricesPanel({ item, currency, onChange }: { item: WishlistItem; currenc
                 )}
                 <span className="wl-history-note">
                   {p.note ?? ''}
-                  {p.source === 'TRACKER' && <em> · seguimiento</em>}
+                  {p.source === 'TRACKER' && <em> {t('· seguimiento')}</em>}
                 </span>
-                <button type="button" className="icon-btn" aria-label={`Borrar el precio del ${new Date(p.recordedAt).toLocaleDateString(LOCALE_TAG)}`} title="Borrar" onClick={() => void removePrice(p.id)}>
+                <button type="button" className="icon-btn" aria-label={t('Borrar el precio del {toLocaleDateString}', { toLocaleDateString: new Date(p.recordedAt).toLocaleDateString(LOCALE_TAG) })} title={t('Borrar')} onClick={() => void removePrice(p.id)}>
                   <Icon name="close" size={12} />
                 </button>
               </li>
             );
           })}
-          {item.prices.length >= 12 && <li className="wl-history-more">Se muestran los 12 últimos.</li>}
+          {item.prices.length >= 12 && <li className="wl-history-more">{t('Se muestran los 12 últimos.')}</li>}
         </ol>
       </div>
     </section>
@@ -430,7 +437,7 @@ function MovePanel({
     e.preventDefault();
     const n = paid.trim() === '' ? undefined : Number(paid.replace(',', '.'));
     if (n !== undefined && (!Number.isFinite(n) || n < 0)) {
-      setError(new Error('Escribe un precio válido.'));
+      setError(new Error(t('Escribe un precio válido.')));
       return;
     }
     setBusy(true);
@@ -453,29 +460,34 @@ function MovePanel({
           <Icon name="hanger" size={22} />
         </span>
         <div>
-          <h2>Pásalo a tu armario</h2>
-          <p>Deja de estar en la wishlist y pasa a ser tuyo: lo verás en el armario, el estilista y la analítica.</p>
+          <h2 className="ux-panel-title">
+            <span className="hm-section-n" aria-hidden="true">
+              01
+            </span>{' '}
+            {t('Pásalo a tu armario')}
+          </h2>
+          <p>{t('Deja de estar en la wishlist y pasa a ser tuyo: lo verás en el armario, el estilista y la analítica.')}</p>
         </div>
       </div>
       <div className="wl-move-fields">
         <div className="field">
-          <span id="wl-mw">Armario</span>
+          <span id="wl-mw">{t('Armario')}</span>
           <Select labelledBy="wl-mw" value={wardrobeId} options={options.map((w) => ({ value: w.id, label: w.name }))} onChange={setWardrobeId} />
         </div>
         <label className="field">
-          <span>Lo que pagaste ({currency})</span>
+          <span>{t('Lo que pagaste ({currency})', { currency })}</span>
           <input inputMode="decimal" value={paid} placeholder="—" onChange={(e) => setPaid(e.target.value)} />
         </label>
         <label className="field">
-          <span>Fecha de compra</span>
+          <span>{t('Fecha de compra')}</span>
           <input type="date" value={date} max={todayKey()} onChange={(e) => setDate(e.target.value)} />
         </label>
         <label className="field">
-          <span>Tienda</span>
+          <span>{t('Tienda')}</span>
           <input maxLength={80} value={store} onChange={(e) => setStore(e.target.value)} />
         </label>
-        <button type="submit" className="btn btn-primary btn-street wl-move-go" disabled={busy}>
-          <Icon name="check" size={14} /> {busy ? 'Pasando…' : 'Pasar al armario'}
+        <button type="submit" className="btn wd-add wl-move-go" disabled={busy}>
+          <Icon name="check" size={14} /> {busy ? t('Pasando…') : t('Pasar al armario')}
         </button>
       </div>
       <ErrorNote error={error} />

@@ -6,7 +6,7 @@ import { money } from '../../lib/wishlist';
 import { BarRow } from '../analytics/Charts';
 import { Icon } from '../Icon';
 import { CountUp } from '../street/Street';
-import { LOCALE_TAG } from '../../i18n';
+import { LOCALE_TAG, t, tn } from '../../i18n';
 
 /**
  * Dashboard de SNEAKER COLLECTION. Todo sale de tus pares, tus outfits
@@ -17,8 +17,8 @@ export function SneakerDashboard({ stats: s }: { stats: SneakerStats }) {
   if (s.total === 0) {
     return (
       <div className="fits-empty snk-empty">
-        <span className="fits-empty-tag">Sin datos todavía</span>
-        <p>Cuando añadas zapatillas a tu colección, aquí verás tus marcas, colores, gasto y cuáles combinan con más outfits.</p>
+        <span className="fits-empty-tag">{t('Sin datos todavía')}</span>
+        <p>{t('Cuando añadas zapatillas a tu colección, aquí verás tus marcas, colores, gasto y cuáles combinan con más outfits.')}</p>
       </div>
     );
   }
@@ -30,55 +30,54 @@ export function SneakerDashboard({ stats: s }: { stats: SneakerStats }) {
     <div className="snk-dash">
       <dl className="snk-kpis">
         <div className="snk-kpi is-hero" style={{ '--i': 0 } as CSSProperties}>
-          <dt>Pares en la colección</dt>
+          <dt>{t('Pares en la colección')}</dt>
           <dd>
             <CountUp value={s.total} />
           </dd>
           <span>
-            {s.totalUses} {s.totalUses === 1 ? 'uso' : 'usos'} en total
-            {s.wishlist.count > 0 && ` · ${s.wishlist.count} en la wishlist`}
+            {t('{totalUses} {v} en total{v2}', { totalUses: s.totalUses, v: s.totalUses === 1 ? t('uso') : t('usos'), v2: s.wishlist.count > 0 && t(' · {count} en la wishlist', { count: s.wishlist.count }) })}
           </span>
         </div>
         <div className="snk-kpi" style={{ '--i': 1 } as CSSProperties}>
-          <dt>Marca más repetida</dt>
-          <dd className="is-text">{!s.topBrand ? '—' : s.topBrand.tie > 1 ? 'Empate' : s.topBrand.label}</dd>
+          <dt>{t('Marca más repetida')}</dt>
+          <dd className="is-text">{!s.topBrand ? '—' : s.topBrand.tie > 1 ? t('Empate') : s.topBrand.label}</dd>
           <span>
             {!s.topBrand
               ? ''
               : s.topBrand.tie > 1
-                ? `${s.topBrand.tie} marcas con ${s.topBrand.count} ${s.topBrand.count === 1 ? 'par' : 'pares'}`
-                : `${s.topBrand.count} ${s.topBrand.count === 1 ? 'par' : 'pares'} · ${s.topBrand.share.toLocaleString(LOCALE_TAG)} %`}
+                ? t('{tie} marcas con {count} {v}', { tie: s.topBrand.tie, count: s.topBrand.count, v: s.topBrand.count === 1 ? t('par') : t('pares') })
+                : `${tn(s.topBrand.count, '{n} par', '{n} pares')} · ${s.topBrand.share.toLocaleString(LOCALE_TAG)} %`}
           </span>
         </div>
         <div className="snk-kpi" style={{ '--i': 2 } as CSSProperties}>
-          <dt>Color predominante</dt>
+          <dt>{t('Color predominante')}</dt>
           <dd className="is-text">
             {s.topColor && s.topColor.tie === 1 && <i className="snk-kpi-swatch" style={{ background: s.topColor.hex }} aria-hidden="true" />}
-            <span className="cap">{!s.topColor ? '—' : s.topColor.tie > 1 ? 'Empate' : s.topColor.name}</span>
+            <span className="cap">{!s.topColor ? '—' : s.topColor.tie > 1 ? t('Empate') : s.topColor.name}</span>
           </dd>
           <span>
             {!s.topColor
               ? ''
               : s.topColor.tie > 1
-                ? `${s.colors.slice(0, s.topColor.tie).map((c) => c.name).join(', ')}: ${s.topColor.count} ${s.topColor.count === 1 ? 'par' : 'pares'} cada uno`
-                : `${s.topColor.count} de ${s.total} pares`}
+                ? t('{join}: {count} {v} cada uno', { join: s.colors.slice(0, s.topColor.tie).map((c) => c.name).join(', '), count: s.topColor.count, v: s.topColor.count === 1 ? t('par') : t('pares') })
+                : t('{count} de {total} pares', { count: s.topColor.count, total: s.total })}
           </span>
         </div>
         <div className="snk-kpi" style={{ '--i': 3 } as CSSProperties}>
-          <dt>Precio total de adquisición</dt>
+          <dt>{t('Precio total de adquisición')}</dt>
           <dd className="is-text">{s.spent.length ? money(s.spent[0].total, s.spent[0].currency) : '—'}</dd>
           <span>
             {s.spent.slice(1).map((m) => `+ ${money(m.total, m.currency)}`).join(' ')}
-            {s.unpriced > 0 && ` ${s.spent.length > 1 ? '· ' : ''}${s.unpriced} sin precio`}
+            {s.unpriced > 0 && t(' {v}{unpriced} sin precio', { v: s.spent.length > 1 ? '· ' : '', unpriced: s.unpriced })}
           </span>
         </div>
         <div className="snk-kpi" style={{ '--i': 4 } as CSSProperties}>
-          <dt>Modelo más utilizado</dt>
+          <dt>{t('Modelo más utilizado')}</dt>
           <dd className="is-text">{s.topModel ? `${s.topModel.label} ${s.topModel.model}` : '—'}</dd>
-          <span>{s.topModel ? `${s.topModel.uses} usos${s.topModel.pairs > 1 ? ` · ${s.topModel.pairs} pares` : ''}` : 'Apunta usos para verlo'}</span>
+          <span>{s.topModel ? `${s.topModel.uses} usos${s.topModel.pairs > 1 ? ` · ${s.topModel.pairs} pares` : ''}` : t('Apunta usos para verlo')}</span>
         </div>
         <div className="snk-kpi" style={{ '--i': 5 } as CSSProperties}>
-          <dt>Menos utilizada</dt>
+          <dt>{t('Menos utilizada')}</dt>
           <dd className="is-text">
             {s.leastUsed ? (
               <Link to={`/sneakers/${s.leastUsed.id}`}>
@@ -88,13 +87,13 @@ export function SneakerDashboard({ stats: s }: { stats: SneakerStats }) {
               '—'
             )}
           </dd>
-          <span>{s.leastUsed ? (s.leastUsed.uses === 0 ? 'Sin estrenar todavía' : `${s.leastUsed.uses} ${s.leastUsed.uses === 1 ? 'uso' : 'usos'}`) : ''}</span>
+          <span>{s.leastUsed ? (s.leastUsed.uses === 0 ? t('Sin estrenar todavía') : tn(s.leastUsed.uses, '{n} uso', '{n} usos')) : ''}</span>
         </div>
       </dl>
 
       <div className="snk-dash-grid">
         <section className="snk-panel" aria-labelledby="snk-brands-h">
-          <h2 id="snk-brands-h">Distribución por marcas</h2>
+          <h2 id="snk-brands-h">{t('Distribución por marcas')}</h2>
           <ul className="bar-list">
             {s.byBrand.map((b, i) => (
               <BarRow
@@ -113,15 +112,15 @@ export function SneakerDashboard({ stats: s }: { stats: SneakerStats }) {
           </ul>
           {s.brands.some((b) => b.brand === 'OTHER') && (
             <p className="snk-panel-note">
-              En «Otras»: {s.brands.filter((b) => b.brand === 'OTHER').map((b) => `${b.label} (${b.count})`).join(', ')}.
+              {t('En «Otras»: {join}.', { join: s.brands.filter((b) => b.brand === 'OTHER').map((b) => `${b.label} (${b.count})`).join(', ') })}
             </p>
           )}
         </section>
 
         <section className="snk-panel" aria-labelledby="snk-combos-h">
-          <h2 id="snk-combos-h">Las que combinan con más outfits</h2>
+          <h2 id="snk-combos-h">{t('Las que combinan con más outfits')}</h2>
           {s.combos.length === 0 ? (
-            <p className="snk-panel-note">Todavía no hay outfits guardados con tus zapatillas. Crea alguno en el vestidor y aquí verás cuáles combinan más.</p>
+            <p className="snk-panel-note">{t('Todavía no hay outfits guardados con tus zapatillas. Crea alguno en el vestidor y aquí verás cuáles combinan más.')}</p>
           ) : (
             <ol className="snk-combos">
               {s.combos.map((c, i) => (
@@ -133,13 +132,13 @@ export function SneakerDashboard({ stats: s }: { stats: SneakerStats }) {
                       {c.label} {c.model}
                     </Link>
                     <small>
-                      {c.outfits} {c.outfits === 1 ? 'outfit' : 'outfits'} · con {c.partners} {c.partners === 1 ? 'prenda distinta' : 'prendas distintas'}
+                      {t('{outfits} {v} · con {partners} {v2}', { outfits: c.outfits, v: c.outfits === 1 ? t('outfit') : t('outfits'), partners: c.partners, v2: c.partners === 1 ? t('prenda distinta') : t('prendas distintas') })}
                     </small>
                     <span className="snk-combo-bar" aria-hidden="true" />
                   </span>
-                  <Link to={`/outfits?item=${c.id}`} className="snk-combo-go" title="Ver esos outfits">
+                  <Link to={`/outfits?item=${c.id}`} className="snk-combo-go" title={t('Ver esos outfits')}>
                     <Icon name="forward" size={14} />
-                    <span className="visually-hidden">Ver outfits con {c.model}</span>
+                    <span className="visually-hidden">{t('Ver outfits con {model}', { model: c.model })}</span>
                   </Link>
                 </li>
               ))}
@@ -147,13 +146,13 @@ export function SneakerDashboard({ stats: s }: { stats: SneakerStats }) {
           )}
           {s.neverCombined > 0 && (
             <p className="snk-panel-note">
-              {s.neverCombined} {s.neverCombined === 1 ? 'par no sale' : 'pares no salen'} en ningún outfit guardado.
+              {t('{neverCombined} {v} en ningún outfit guardado.', { neverCombined: s.neverCombined, v: s.neverCombined === 1 ? t('par no sale') : t('pares no salen') })}
             </p>
           )}
         </section>
 
         <section className="snk-panel" aria-labelledby="snk-colors-h">
-          <h2 id="snk-colors-h">Colores</h2>
+          <h2 id="snk-colors-h">{t('Colores')}</h2>
           <ul className="snk-colors">
             {s.colors.slice(0, 10).map((c, i) => (
               <li key={c.name} style={{ '--i': i } as CSSProperties}>
@@ -166,7 +165,7 @@ export function SneakerDashboard({ stats: s }: { stats: SneakerStats }) {
         </section>
 
         <section className="snk-panel" aria-labelledby="snk-cond-h">
-          <h2 id="snk-cond-h">Estado de conservación</h2>
+          <h2 id="snk-cond-h">{t('Estado de conservación')}</h2>
           <ul className="bar-list">
             {s.byCondition.map((c, i) => (
               <BarRow key={c.condition} index={i} label={CONDITION[c.condition].label} share={(c.count / maxCond) * 100} fill="#8c8a85" value={c.count} />
@@ -174,8 +173,7 @@ export function SneakerDashboard({ stats: s }: { stats: SneakerStats }) {
           </ul>
           {s.wishlist.count > 0 && (
             <p className="snk-panel-note">
-              <Icon name="heart" size={12} /> Wishlist: {s.wishlist.count} {s.wishlist.count === 1 ? 'par' : 'pares'}
-              {s.wishlist.value.length > 0 && ` · ${s.wishlist.value.map((v) => money(v.total, v.currency)).join(' + ')}`}
+              <Icon name="heart" size={12} /> {t('Wishlist: {count} {v}{v2}', { count: s.wishlist.count, v: s.wishlist.count === 1 ? t('par') : t('pares'), v2: s.wishlist.value.length > 0 && ` · ${s.wishlist.value.map((v) => money(v.total, v.currency)).join(' + ')}` })}
             </p>
           )}
         </section>

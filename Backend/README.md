@@ -601,7 +601,7 @@ npm run test:e2e       # incluye test/sneakers.e2e-spec.ts
 | `backend` | `Backend/` | `/api/*` | API NestJS (Vercel Functions). Recibe la ruta completa (`/api/...`), que coincide con `setGlobalPrefix('api')`. |
 | `frontend` | `Frontend/` | todo lo demás | Web estática de Vite (`dist/`). Las rutas del cliente (`/outfits/o1`...) caen en `index.html`. |
 
-El navegador llama a `/api` en el mismo dominio (`VITE_API_URL` sin definir), así que no hay llamadas de servidor a servidor ni *bindings*.
+Dirección fija de producción: **https://myout.vercel.app** (siempre apunta al último despliegue; las URL largas de cada despliegue se quedan con su versión). El navegador llama a `/api` en el mismo dominio (`VITE_API_URL` sin definir), así que no hay llamadas de servidor a servidor ni *bindings*.
 
 Variables de entorno del servicio `backend` (en el panel de Vercel, nunca en el repositorio): `DATABASE_URL` (PostgreSQL accesible desde internet), `JWT_SECRET`, `CORS_ORIGIN`, `FRONTEND_URL` y `OAUTH_PUBLIC_API_URL` (con el dominio de Vercel), y las de Google / Apple si se usan.
 

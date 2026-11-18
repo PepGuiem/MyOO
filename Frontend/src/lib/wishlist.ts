@@ -1,6 +1,6 @@
 import type { IconName } from '../components/Icon';
 import type { WishlistCategory, WishlistItem, WishlistSort, WishlistStatus } from '../api/types';
-import { LOCALE_TAG } from '../i18n';
+import { LOCALE_TAG, t } from '../i18n';
 
 /**
  * WISHLIST: textos, iconos y colores de estados y categorías, y formato de
@@ -9,29 +9,29 @@ import { LOCALE_TAG } from '../i18n';
 export const WISH_STATUSES: WishlistStatus[] = ['WANT', 'SAVING', 'PENDING', 'PURCHASED'];
 
 export const WISH_STATUS: Record<WishlistStatus, { label: string; short: string; icon: IconName; color: string; hint: string }> = {
-  WANT: { label: 'Lo quiero', short: 'Lo quiero', icon: 'heart', color: '#ff4f8b', hint: 'Te gusta y lo tienes fichado.' },
-  SAVING: { label: 'Ahorrando', short: 'Ahorrando', icon: 'wallet', color: '#ffb020', hint: 'Estás juntando el dinero.' },
-  PENDING: { label: 'Pendiente de comprar', short: 'Pendiente', icon: 'bag', color: '#3987e5', hint: 'Decidido: solo falta comprarlo.' },
-  PURCHASED: { label: 'Comprado', short: 'Comprado', icon: 'check', color: '#c6ff2e', hint: 'Ya es tuyo: pásalo al armario.' },
+  WANT: { label: t('Lo quiero'), short: t('Lo quiero'), icon: 'heart', color: '#ff4f8b', hint: t('Te gusta y lo tienes fichado.') },
+  SAVING: { label: t('Ahorrando'), short: t('Ahorrando'), icon: 'wallet', color: '#ffb020', hint: t('Estás juntando el dinero.') },
+  PENDING: { label: t('Pendiente de comprar'), short: t('Pendiente'), icon: 'bag', color: '#3987e5', hint: t('Decidido: solo falta comprarlo.') },
+  PURCHASED: { label: t('Comprado'), short: t('Comprado'), icon: 'check', color: '#c6ff2e', hint: t('Ya es tuyo: pásalo al armario.') },
 };
 
 export const WISH_CATEGORIES: WishlistCategory[] = ['SNEAKERS', 'HOODIES', 'TSHIRTS', 'PANTS', 'JACKETS', 'ACCESSORIES', 'OTHER'];
 
 export const WISH_CATEGORY: Record<WishlistCategory, { label: string; icon: IconName; garment: string | null }> = {
-  SNEAKERS: { label: 'Sneakers', icon: 'shoe', garment: 'SNEAKERS' },
-  HOODIES: { label: 'Sudaderas', icon: 'hoodie', garment: 'SWEATER' },
-  TSHIRTS: { label: 'Camisetas', icon: 'tshirt', garment: 'T_SHIRT' },
-  PANTS: { label: 'Pantalones', icon: 'pants', garment: 'PANTS' },
-  JACKETS: { label: 'Chaquetas', icon: 'jacket', garment: 'JACKET' },
-  ACCESSORIES: { label: 'Accesorios', icon: 'cap', garment: 'CAP' },
-  OTHER: { label: 'Otros', icon: 'tag', garment: null },
+  SNEAKERS: { label: t('Sneakers'), icon: 'shoe', garment: 'SNEAKERS' },
+  HOODIES: { label: t('Sudaderas'), icon: 'hoodie', garment: 'SWEATER' },
+  TSHIRTS: { label: t('Camisetas'), icon: 'tshirt', garment: 'T_SHIRT' },
+  PANTS: { label: t('Pantalones'), icon: 'pants', garment: 'PANTS' },
+  JACKETS: { label: t('Chaquetas'), icon: 'jacket', garment: 'JACKET' },
+  ACCESSORIES: { label: t('Accesorios'), icon: 'cap', garment: 'CAP' },
+  OTHER: { label: t('Otros'), icon: 'tag', garment: null },
 };
 
 export const WISH_SORTS: { id: WishlistSort; label: string }[] = [
-  { id: 'new', label: 'Recientes' },
-  { id: 'price_asc', label: 'Precio ↑' },
-  { id: 'price_desc', label: 'Precio ↓' },
-  { id: 'name', label: 'Nombre' },
+  { id: 'new', label: t('Recientes') },
+  { id: 'price_asc', label: t('Precio ↑') },
+  { id: 'price_desc', label: t('Precio ↓') },
+  { id: 'name', label: t('Nombre') },
 ];
 
 /** Monedas habituales en el selector (se acepta cualquier código ISO de 3 letras). */
