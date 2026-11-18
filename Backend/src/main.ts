@@ -1,3 +1,6 @@
+// Primero: arreglos para Vercel (rutas de node_modules y dependencias).
+import './vercel-module-paths';
+import './vercel-deps';
 import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
