@@ -5,8 +5,9 @@ coverage/
 *.tsbuildinfo
 
 # Archivos subidos por los usuarios (almacenamiento local de desarrollo)
-storage/
-storage-test/
+# (con «/» delante: solo las carpetas de Backend/, no src/storage, que es código)
+/storage/
+/storage-test/
 
 # Secretos y configuración local (NUNCA se suben al repositorio)
 .env
