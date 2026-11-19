@@ -101,6 +101,8 @@ export const authApi = {
     api<AuthResponse>('POST', '/auth/login', { body }),
   /** Con sesión: devuelve un token nuevo con la caducidad completa. */
   renew: () => api<AuthResponse>('POST', '/auth/renew'),
+  /** Cierra la sesión en el servidor: el token deja de valer en todos los dispositivos. */
+  logout: () => api<void>('POST', '/auth/logout'),
 };
 
 /** Login con Google/Apple y cuentas conectadas (el backend habla con el proveedor). */
@@ -117,6 +119,8 @@ export const oauthApi = {
 
 export const usersApi = {
   me: () => api<User>('GET', '/users/me'),
+  /** «Descargar mis datos»: todo lo de la cuenta en JSON (sin contraseñas ni tokens). */
+  exportData: () => api<Record<string, unknown>>('GET', '/users/me/export'),
   update: (body: ProfileInput) => api<User>('PATCH', '/users/me', { body }),
   usernameAvailable: (username: string) =>
     api<{ username: string; available: boolean; valid: boolean }>('GET', '/users/me/username-available', { query: { username } }),

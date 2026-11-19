@@ -1,0 +1,54 @@
+# Comprobaciones automáticas en cada push y pull request a main.
+# No despliega nada (eso lo hace Vercel) ni toca ninguna base de datos.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  frontend:
+    name: Frontend (tipos, traducciones y build)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: Frontend/package-lock.json
+      - run: npm ci
+      - name: Traducciones (ningún texto sin inglés)
+        run: npm run i18n:check
+      - name: Tipos y build
+        run: npm run build
+
+  backend:
+    name: Backend (tipos y tests unitarios)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: Backend/package-lock.json
+      # npm install (no npm ci): @vercel/blob se añadió sin poder actualizar
+      # el package-lock desde aquí; npm ci fallaría hasta regenerarlo.
+      - run: npm install --no-audit --no-fund
+      - name: Tipos
+        run: npm run typecheck
+      - name: Tests unitarios
+        run: npm test -- --ci

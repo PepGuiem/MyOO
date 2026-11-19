@@ -28,24 +28,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(() => tokenStore.get() !== null);
   const [banned, setBanned] = useState<BanInfo | null>(null);
 
-  const logout = useCallback(() => {
-    // Con JWT el "logout" consiste en olvidar el token en el cliente.
+  /** Olvida la sesión en este navegador (sin llamar al servidor). */
+  const clearSession = useCallback(() => {
     tokenStore.set(null);
     setUser(null);
   }, []);
 
+  /**
+   * Cerrar sesión: el servidor invalida el token (en todos los dispositivos de
+   * la cuenta) y aquí se olvida. Si la llamada falla, la sesión se cierra igual.
+   */
+  const logout = useCallback(() => {
+    if (tokenStore.get()) authApi.logout().catch(() => undefined);
+    clearSession();
+  }, [clearSession]);
+
   useEffect(() => {
-    setUnauthorizedHandler(logout);
+    setUnauthorizedHandler(clearSession);
     // Cuenta suspendida: fuera de la sesión y, en la pantalla de acceso, el motivo.
     setBannedHandler((info) => {
       setBanned(info);
-      logout();
+      clearSession();
     });
     return () => {
       setUnauthorizedHandler(null);
       setBannedHandler(null);
     };
-  }, [logout]);
+  }, [clearSession]);
 
   useEffect(() => {
     if (!tokenStore.get()) return;
@@ -76,7 +85,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         } catch (err) {
           if (cancelled) return;
           if (err instanceof ApiError && (err.status === 401 || err.status === 403)) {
-            logout();
+            clearSession();
             return;
           }
           if (attempt >= 3) return;
@@ -90,7 +99,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => {
       cancelled = true;
     };
-  }, [logout]);
+  }, [clearSession]);
 
   // Con la web abierta mucho tiempo, renueva también cada 12 h.
   const userId = user?.id;

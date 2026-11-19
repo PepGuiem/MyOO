@@ -27,15 +27,4 @@ export class AuthController {
     return this.auth.login(dto);
   }
 
-  /**
-   * "Logout" con JWT: el servidor no guarda sesiones, así que el token NO
-   * queda invalidado al instante; sigue siendo válido hasta que caduca.
-   * El cliente debe borrarlo. (Para revocación real haría falta una lista
-   * de tokens revocados o refresh tokens en base de datos.)
-   */
-  @Post('logout')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  logout(): void {
-    // Intencionadamente vacío: ver comentario.
-  }
 }

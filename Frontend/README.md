@@ -568,6 +568,14 @@ Panel con tus cifras, destacados, STYLE INSIGHTS, estilos (barra rayada = estilo
   - En el móvil, el menú es un panel lateral deslizante (botón ☰).
 - **Rendimiento y accesibilidad:** sin inclinación ni luces de hover en pantallas táctiles; con «reducir movimiento» del sistema, todo queda quieto; el polvo se para cuando la pestaña no se ve.
 
+## Rendimiento, chat y datos
+
+- Cada página se carga la primera vez que se abre (`React.lazy` en `App.tsx`, con un `Suspense` alrededor del `Outlet` del menú). En el paquete inicial quedan inicio, acceso y la vuelta del login.
+- Chat sin WebSocket (en Vercel no hay conexión en tiempo real): mientras `useRealtime().status` no es `online`, la conversación abierta pide los mensajes nuevos cada 4 s, la lista cada 10 s y los contadores (mensajes, solicitudes, avisos) cada 30 s, solo con la pestaña a la vista.
+- «Cerrar sesión» avisa al servidor (`POST /auth/logout`): el token deja de valer en todos los dispositivos.
+- Cuenta → «Descargar mis datos»: baja un JSON con todo lo de la cuenta.
+- GitHub Actions (`.github/workflows/ci.yml`): en cada push a main se comprueban las traducciones, los tipos y el build del frontend, y los tipos y los tests unitarios del backend.
+
 ## Marca: MyOO
 
 - El proyecto se llama **MyOO** (antes MyOut). Cambian los textos visibles, el título de la página, el nombre de la app nativa (`appName`) y el título de la API.

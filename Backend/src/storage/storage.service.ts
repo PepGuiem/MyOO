@@ -10,7 +10,9 @@ import type { AppConfig } from '../config/env.validation';
  * La base de datos solo guarda la CLAVE del archivo (p. ej. "assets/<uuid>"),
  * nunca el contenido. Esta clase abstracta permite cambiar de almacenamiento
  * sin tocar el resto: en desarrollo se usa el disco local (LocalDiskStorage);
- * en producción se implementaría con un servicio de objetos (S3, MinIO, R2...).
+ * en Vercel, un almacén PRIVADO de Vercel Blob (VercelBlobStorage). Las
+ * imágenes nunca se enlazan directamente: la API las lee y las sirve tras
+ * comprobar quién puede verlas, igual que con el disco.
  */
 export abstract class StorageService {
   abstract put(key: string, data: Buffer): Promise<void>;
@@ -56,5 +58,67 @@ export class LocalDiskStorage extends StorageService {
 
   async delete(key: string): Promise<void> {
     await rm(this.pathFor(key), { force: true });
+  }
+}
+
+/** Lo que usamos del SDK oficial `@vercel/blob` (se carga solo en Vercel). */
+interface BlobSdk {
+  put(
+    pathname: string,
+    body: Buffer,
+    options: { access: 'private'; addRandomSuffix: boolean; allowOverwrite: boolean; contentType: string },
+  ): Promise<unknown>;
+  get(
+    pathname: string,
+    options: { access: 'private' },
+  ): Promise<{ statusCode: number; stream: ReadableStream<Uint8Array> | null } | null>;
+  del(pathname: string): Promise<void>;
+}
+
+/** ¿Hay un almacén de Vercel Blob conectado al proyecto? */
+export function hasVercelBlob(): boolean {
+  return !!(process.env.BLOB_READ_WRITE_TOKEN || process.env.BLOB_STORE_ID);
+}
+
+/**
+ * Imágenes en Vercel Blob (almacén privado). El disco de las funciones de
+ * Vercel se borra en cada despliegue, así que en producción no sirve. Las
+ * credenciales las pone Vercel al conectar el almacén al proyecto
+ * (BLOB_READ_WRITE_TOKEN, o BLOB_STORE_ID con el token OIDC de la función).
+ */
+@Injectable()
+export class VercelBlobStorage extends StorageService {
+  private readonly sdk: BlobSdk;
+
+  constructor() {
+    super();
+    // require (y no import): el paquete solo está instalado en Vercel.
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    this.sdk = require('@vercel/blob') as BlobSdk;
+  }
+
+  private check(key: string): string {
+    if (!SAFE_KEY.test(key)) throw new Error('Invalid storage key');
+    return key;
+  }
+
+  async put(key: string, data: Buffer): Promise<void> {
+    // Igual que en disco: las claves son únicas y nunca se sobrescriben.
+    await this.sdk.put(this.check(key), data, {
+      access: 'private',
+      addRandomSuffix: false,
+      allowOverwrite: false,
+      contentType: 'application/octet-stream',
+    });
+  }
+
+  async get(key: string): Promise<Buffer | null> {
+    const res = await this.sdk.get(this.check(key), { access: 'private' });
+    if (!res || res.statusCode !== 200 || !res.stream) return null;
+    return Buffer.from(await new Response(res.stream).arrayBuffer());
+  }
+
+  async delete(key: string): Promise<void> {
+    await this.sdk.del(this.check(key));
   }
 }

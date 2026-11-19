@@ -24,4 +24,14 @@ export class AuthSessionController {
   renew(@CurrentUser() user: AuthenticatedUser): Promise<AuthResponse> {
     return this.auth.issue(user.id);
   }
+
+  /**
+   * Cerrar sesión: el token deja de valer en el servidor al momento, en este
+   * y en los demás dispositivos de la cuenta.
+   */
+  @Post('logout')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  logout(@CurrentUser() user: AuthenticatedUser): Promise<void> {
+    return this.auth.logout(user.id);
+  }
 }

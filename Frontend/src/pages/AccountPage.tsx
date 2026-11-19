@@ -64,6 +64,30 @@ export function AccountPage() {
   const [changing, setChanging] = useState<string | null>(null);
   const [changedTo, setChangedTo] = useState<string | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const [exporting, setExporting] = useState(false);
+  const [exportError, setExportError] = useState<unknown>(null);
+
+  /** Descarga un JSON con todo lo de la cuenta (lo genera el servidor). */
+  async function downloadData() {
+    setExporting(true);
+    setExportError(null);
+    try {
+      const data = await usersApi.exportData();
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `myoo-${t('datos')}-${new Date().toISOString().slice(0, 10)}.json`;
+      document.body.append(a);
+      a.click();
+      a.remove();
+      window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    } catch (err) {
+      setExportError(err);
+    } finally {
+      setExporting(false);
+    }
+  }
   // Vuelta de confirmar con Google/Apple para borrar una cuenta sin contraseña.
   const [proof, setProof] = useState<string | null>(null);
   const avatar = useAssetUrl(user?.avatarAssetId);
@@ -210,7 +234,11 @@ export function AccountPage() {
             <Link to="/perfil" className="btn wd-btn-line">
               <Icon name="edit" size={14} /> <span>{t('Editar perfil, foto y cuentas')}</span>
             </Link>
+            <button type="button" className="btn wd-btn-line" disabled={exporting} onClick={() => void downloadData()}>
+              <Icon name="download" size={14} /> <span>{exporting ? t('Preparando…') : t('Descargar mis datos')}</span>
+            </button>
           </div>
+          {exportError ? <ErrorNote error={exportError} /> : null}
         </section>
       </div>
 

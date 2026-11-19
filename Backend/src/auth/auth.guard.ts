@@ -20,7 +20,8 @@ import { PrismaService } from '../prisma/prisma.service';
  * 1. Si el endpoint tiene @Public(), deja pasar.
  * 2. Si no, exige la cabecera `Authorization: Bearer <token>`.
  * 3. Verifica firma y caducidad del JWT.
- * 4. Comprueba que el usuario sigue existiendo y que no está baneado.
+ * 4. Comprueba que el usuario sigue existiendo, que la sesión no se ha
+ *    cerrado (versión de sesión del token) y que no está baneado.
  * 5. Guarda { id, email, role } en request.user para @CurrentUser().
  */
 @Injectable()
@@ -54,9 +55,10 @@ export class AuthGuard implements CanActivate {
 
     const user = await this.prisma.user.findUnique({
       where: { id: payload.sub },
-      select: { id: true, email: true, role: true, ...banSelect },
+      select: { id: true, email: true, role: true, sessionVersion: true, ...banSelect },
     });
-    if (!user) {
+    // Sesión cerrada después de emitir el token (logout).
+    if (!user || (payload.sv ?? 0) !== user.sessionVersion) {
       throw new UnauthorizedException('Invalid or expired access token');
     }
     // Un baneo se aplica al momento: el token sigue siendo válido, pero la

@@ -74,6 +74,17 @@ export function ChatPage() {
   }, []);
   useEffect(load, [load]);
 
+  // Sin conexión en tiempo real (en Vercel no hay WebSocket): la lista se
+  // vuelve a pedir cada 10 s mientras la pestaña está a la vista.
+  const { status: rtStatus } = useRealtime();
+  useEffect(() => {
+    if (rtStatus === 'online') return;
+    const timer = window.setInterval(() => {
+      if (document.visibilityState === 'visible') chatApi.list().then(setConvs).catch(() => undefined);
+    }, 10_000);
+    return () => window.clearInterval(timer);
+  }, [rtStatus]);
+
   useRealtimeEvent((e) => {
     if (e.type === 'ready' || e.type === 'conversation') load();
     if (e.type === 'message') {
@@ -200,9 +211,11 @@ export function ChatPage() {
 // ---------------------------------------------------------------------------
 
 function Thread({ id, me, onSeen, onLeft }: { id: string; me: string; onSeen: (id: string) => void; onLeft: () => void }) {
-  const { send: sendRt } = useRealtime();
+  const { send: sendRt, status: rtStatus } = useRealtime();
   const [detail, setDetail] = useState<ConversationDetail | null>(null);
   const [messages, setMessages] = useState<ChatMessage[] | null>(null);
+  const messagesRef = useRef<ChatMessage[] | null>(null);
+  messagesRef.current = messages;
   const [more, setMore] = useState(false);
   const [error, setError] = useState<unknown>(null);
   const [typing, setTyping] = useState<Record<string, number>>({});
@@ -238,6 +251,36 @@ function Thread({ id, me, onSeen, onLeft }: { id: string; me: string; onSeen: (i
       })
       .catch(setError);
   }, [id, loadDetail, markRead]);
+
+  // Sin conexión en tiempo real: cada 4 s se piden los últimos mensajes y se
+  // añaden los nuevos (y se marcan los borrados), mientras se vea la pestaña.
+  useEffect(() => {
+    if (rtStatus === 'online') return;
+    const timer = window.setInterval(() => {
+      if (document.visibilityState !== 'visible') return;
+      chatApi
+        .messages(id)
+        .then((latest) => {
+          const cur = messagesRef.current;
+          if (!cur) return;
+          const known = new Set(cur.map((m) => m.id));
+          const fresh = latest.filter((m) => !known.has(m.id));
+          const gone = new Set(latest.filter((m) => m.deleted).map((m) => m.id));
+          const changed = cur.some((m) => gone.has(m.id) && !m.deleted);
+          if (fresh.length === 0 && !changed) return;
+          setMessages((l) => {
+            if (!l) return l;
+            const ids = new Set(l.map((m) => m.id));
+            const updated = changed ? l.map((m) => (gone.has(m.id) ? { ...m, deleted: true, body: null, outfit: null } : m)) : l;
+            return [...updated, ...fresh.filter((m) => !ids.has(m.id))];
+          });
+          if (fresh.some((m) => m.sender?.id !== me)) markRead();
+          if (fresh.some((m) => m.kind === 'SYSTEM')) loadDetail();
+        })
+        .catch(() => undefined);
+    }, 4000);
+    return () => window.clearInterval(timer);
+  }, [rtStatus, id, me, markRead, loadDetail]);
 
   // Al volver a la pestaña, lo que llegó mientras tanto queda leído.
   useEffect(() => {

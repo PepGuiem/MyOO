@@ -85,6 +85,17 @@ export class AuthService {
    * hash de la contraseña). Lo usan el registro, el login y el login con
    * Google/Apple.
    */
+  /**
+   * Cierra la sesión de verdad: sube la versión y todos los tokens emitidos
+   * hasta ahora (en este y en otros dispositivos) dejan de valer.
+   */
+  async logout(userId: string): Promise<void> {
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { sessionVersion: { increment: 1 } },
+    });
+  }
+
   async issue(userId: string): Promise<AuthResponse> {
     // Una cuenta baneada no recibe token (ni con contraseña ni con Google/Apple).
     const ban = await this.prisma.user.findUnique({
@@ -94,7 +105,11 @@ export class AuthService {
     if (ban && isBanned(ban)) throw bannedError(ban);
     const user = await loadProfile(this.prisma, userId);
     if (!user) throw new NotFoundException('User not found');
-    const payload: JwtPayload = { sub: user.id, email: user.email };
+    const { sessionVersion } = await this.prisma.user.findUniqueOrThrow({
+      where: { id: userId },
+      select: { sessionVersion: true },
+    });
+    const payload: JwtPayload = { sub: user.id, email: user.email, sv: sessionVersion };
     const accessToken = await this.jwt.signAsync(payload);
     return {
       accessToken,

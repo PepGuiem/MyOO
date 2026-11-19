@@ -16,4 +16,6 @@ export interface AuthenticatedRequest extends Request {
 export interface JwtPayload {
   sub: string;
   email: string;
+  /** Versión de la sesión (User.sessionVersion). Sin ella cuenta como 0. */
+  sv?: number;
 }

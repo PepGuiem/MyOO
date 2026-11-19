@@ -5,40 +5,42 @@ import { GlobalFx } from './components/fx/GlobalFx';
 import { NeonScene } from './components/fx/NeonScene';
 import { Layout } from './components/Layout';
 import { BodyProvider } from './lib/bodyPref';
-import { AccountPage } from './pages/AccountPage';
 import { AuthCallbackPage } from './pages/AuthCallbackPage';
 import { AuthPage } from './pages/AuthPage';
-import { CalendarPage } from './pages/CalendarPage';
-import { AnalyticsPage } from './pages/AnalyticsPage';
-import { WishlistPage } from './pages/WishlistPage';
-import { WishItemPage } from './pages/WishItemPage';
-import { SneakersPage } from './pages/SneakersPage';
-import { SneakerItemPage } from './pages/SneakerItemPage';
-import { BattlesPage } from './pages/BattlesPage';
-import { BattlePage } from './pages/BattlePage';
-import { MarketPage } from './pages/MarketPage';
 import { FEATURES } from './lib/features';
-import { ListingPage } from './pages/ListingPage';
 import { HomePage } from './pages/HomePage';
-import { MannequinsPage } from './pages/MannequinsPage';
-import { OutfitEditorPage } from './pages/OutfitEditorPage';
-import { OutfitsPage } from './pages/OutfitsPage';
-import { AdminPage } from './pages/AdminPage';
-import { ChatPage } from './pages/ChatPage';
-import { IdeasPage } from './pages/IdeasPage';
-import { MonitorPage } from './pages/MonitorPage';
-import { ReleasesPage } from './pages/ReleasesPage';
-import { PeoplePage } from './pages/PeoplePage';
-import { PublicProfilePage } from './pages/PublicProfilePage';
 import { RealtimeProvider } from './lib/realtime';
-import { ProfilePage } from './pages/ProfilePage';
-import { StylistPage } from './pages/StylistPage';
-import { WardrobePage } from './pages/WardrobePage';
 import { Spinner } from './components/Spinner';
 import { t } from './i18n';
 
-// El visor 3D completo se carga solo cuando se abre (carga diferida).
+// Carga diferida: cada página (y el visor 3D) se descarga la primera vez que
+// se abre, así la web arranca con mucho menos código. Inicio, acceso y la
+// vuelta del login van en el paquete principal.
 const ItemShowcasePage = lazy(() => import('./pages/ItemShowcasePage'));
+const AccountPage = lazy(() => import('./pages/AccountPage').then((m) => ({ default: m.AccountPage })));
+const CalendarPage = lazy(() => import('./pages/CalendarPage').then((m) => ({ default: m.CalendarPage })));
+const AnalyticsPage = lazy(() => import('./pages/AnalyticsPage').then((m) => ({ default: m.AnalyticsPage })));
+const WishlistPage = lazy(() => import('./pages/WishlistPage').then((m) => ({ default: m.WishlistPage })));
+const WishItemPage = lazy(() => import('./pages/WishItemPage').then((m) => ({ default: m.WishItemPage })));
+const SneakersPage = lazy(() => import('./pages/SneakersPage').then((m) => ({ default: m.SneakersPage })));
+const SneakerItemPage = lazy(() => import('./pages/SneakerItemPage').then((m) => ({ default: m.SneakerItemPage })));
+const BattlesPage = lazy(() => import('./pages/BattlesPage').then((m) => ({ default: m.BattlesPage })));
+const BattlePage = lazy(() => import('./pages/BattlePage').then((m) => ({ default: m.BattlePage })));
+const MarketPage = lazy(() => import('./pages/MarketPage').then((m) => ({ default: m.MarketPage })));
+const ListingPage = lazy(() => import('./pages/ListingPage').then((m) => ({ default: m.ListingPage })));
+const MannequinsPage = lazy(() => import('./pages/MannequinsPage').then((m) => ({ default: m.MannequinsPage })));
+const OutfitEditorPage = lazy(() => import('./pages/OutfitEditorPage').then((m) => ({ default: m.OutfitEditorPage })));
+const OutfitsPage = lazy(() => import('./pages/OutfitsPage').then((m) => ({ default: m.OutfitsPage })));
+const AdminPage = lazy(() => import('./pages/AdminPage').then((m) => ({ default: m.AdminPage })));
+const ChatPage = lazy(() => import('./pages/ChatPage').then((m) => ({ default: m.ChatPage })));
+const IdeasPage = lazy(() => import('./pages/IdeasPage').then((m) => ({ default: m.IdeasPage })));
+const MonitorPage = lazy(() => import('./pages/MonitorPage').then((m) => ({ default: m.MonitorPage })));
+const ReleasesPage = lazy(() => import('./pages/ReleasesPage').then((m) => ({ default: m.ReleasesPage })));
+const PeoplePage = lazy(() => import('./pages/PeoplePage').then((m) => ({ default: m.PeoplePage })));
+const PublicProfilePage = lazy(() => import('./pages/PublicProfilePage').then((m) => ({ default: m.PublicProfilePage })));
+const ProfilePage = lazy(() => import('./pages/ProfilePage').then((m) => ({ default: m.ProfilePage })));
+const StylistPage = lazy(() => import('./pages/StylistPage').then((m) => ({ default: m.StylistPage })));
+const WardrobePage = lazy(() => import('./pages/WardrobePage').then((m) => ({ default: m.WardrobePage })));
 
 function RequireAuth({ children }: { children: ReactNode }) {
   const { user, loading } = useAuth();

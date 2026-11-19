@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from 'react';
+import { Suspense, useEffect, useState, type FormEvent } from 'react';
 import { Link, NavLink, Outlet, useLocation, useOutletContext, useSearchParams } from 'react-router-dom';
 import { garmentTypesApi, wardrobesApi } from '../api/endpoints';
 import type { GarmentType, Wardrobe } from '../api/types';
@@ -13,6 +13,7 @@ import { Icon } from './Icon';
 import { FEATURES } from '../lib/features';
 import { ToastProvider } from './fx/Toast';
 import { Logo } from './Logo';
+import { Spinner } from './Spinner';
 import { t } from '../i18n';
 
 export interface AppData {
@@ -218,7 +219,9 @@ export function Layout() {
       <main className="main">
         {wardrobes.error ? <ErrorNote error={wardrobes.error} /> : null}
         <div key={section} className="route-anim">
-          <Outlet context={data} />
+          <Suspense fallback={<div className="boot"><Spinner size={26} label={t('Cargando…')} /></div>}>
+            <Outlet context={data} />
+          </Suspense>
         </div>
       </main>
 

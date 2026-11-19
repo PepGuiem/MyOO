@@ -155,6 +155,19 @@ export function RealtimeProvider({ children }: { children: ReactNode }) {
     };
   }, [userId, refreshUnread, refreshRequests, refreshNotifications, refreshUser]);
 
+  // Sin conexión en tiempo real (en Vercel no hay WebSocket), los contadores
+  // de mensajes, solicitudes y avisos se actualizan cada 30 s.
+  useEffect(() => {
+    if (!userId || status === 'online') return;
+    const timer = window.setInterval(() => {
+      if (document.visibilityState !== 'visible') return;
+      refreshUnread();
+      refreshRequests();
+      refreshNotifications();
+    }, 30_000);
+    return () => window.clearInterval(timer);
+  }, [userId, status, refreshUnread, refreshRequests, refreshNotifications]);
+
   const value = useMemo<RealtimeState>(
     () => ({
       status,

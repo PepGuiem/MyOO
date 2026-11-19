@@ -46,6 +46,16 @@ export class UsersController {
     return this.users.getProfile(user.id);
   }
 
+  /**
+   * Descargar mis datos: todo lo de la cuenta en JSON (sin contraseñas ni
+   * tokens). Limitado como el resto de acciones pesadas.
+   */
+  @Get('me/export')
+  @UseGuards(ThrottlerGuard)
+  exportData(@CurrentUser() user: AuthenticatedUser) {
+    return this.users.exportData(user.id);
+  }
+
   /** Actualiza el perfil: nombre, @usuario, bio, foto, portada, estilos, tallas... */
   @Patch('me')
   update(

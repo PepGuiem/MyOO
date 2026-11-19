@@ -22,3 +22,12 @@ import 'helmet';
 import 'reflect-metadata';
 import 'rxjs';
 import 'ws';
+
+// Vercel Blob (imágenes en producción). Solo se instala en el build de
+// Vercel; en local no hace falta y se usa el disco.
+try {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  require('@vercel/blob');
+} catch {
+  // sin Vercel Blob
+}

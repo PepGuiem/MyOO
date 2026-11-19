@@ -18,6 +18,7 @@ import { SetPasswordDto } from './dto/set-password.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { loadProfile, type ProfileView } from './profile';
 import { isValidUsername, RESERVED_USERNAMES } from './profile-options';
+import { exportUserData } from './data-export';
 
 @Injectable()
 export class UsersService {
@@ -31,6 +32,11 @@ export class UsersService {
     private readonly oauth: OAuthService,
     private readonly realtime?: RealtimeService,
   ) {}
+
+  /** «Descargar mis datos»: ver data-export.ts. */
+  exportData(userId: string): Promise<Record<string, unknown>> {
+    return exportUserData(this.prisma, userId);
+  }
 
   async getProfile(userId: string): Promise<ProfileView> {
     const user = await loadProfile(this.prisma, userId);

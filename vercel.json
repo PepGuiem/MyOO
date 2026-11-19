@@ -4,7 +4,7 @@
     "backend": {
       "root": "Backend",
       "framework": "nestjs",
-      "buildCommand": "DATABASE_URL=\"$DATABASE_URL_UNPOOLED\" npm run vercel:migrate && npm run build"
+      "buildCommand": "if [ \"$VERCEL_ENV\" = production ]; then DATABASE_URL=\"$DATABASE_URL_UNPOOLED\" npm run vercel:migrate; else echo \"Preview: sin migraciones (la base de datos es la de produccion)\"; fi && npm run build"
     },
     "frontend": {
       "root": "Frontend",
