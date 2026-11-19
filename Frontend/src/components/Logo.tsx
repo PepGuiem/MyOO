@@ -1,8 +1,7 @@
 /**
- * Logo de MyOO: pieza de grafiti en cromo: «OO» en letras de burbuja que
- * gotean, con un aro de neón dentro, colgadas de un gancho de percha, y «MY»
- * en una pegatina naranja. Es un SVG estático en public/brand (mark.svg es el
- * icono: solo las dos O).
+ * Logo de MyOO: throw-up de grafiti, «MYOO» en letras de burbuja cromadas
+ * que gotean, con borde naranja-rojo. Es un SVG estático en public/brand
+ * (mark.svg es el icono: solo las dos O, en el mismo estilo).
  */
 const BASE = import.meta.env.BASE_URL;
 
@@ -15,8 +14,8 @@ export function Logo({ className = '', decorative = false }: { className?: strin
       className={`logo ${className}`}
       src={LOGO_URL}
       alt={decorative ? '' : 'MyOO'}
-      width={936}
-      height={781}
+      width={944}
+      height={451}
       draggable={false}
       decoding="async"
     />

@@ -572,7 +572,7 @@ Panel con tus cifras, destacados, STYLE INSIGHTS, estilos (barra rayada = estilo
 
 - El proyecto se llama **MyOO** (antes MyOut). Cambian los textos visibles, el título de la página, el nombre de la app nativa (`appName`) y el título de la API.
 - Se mantienen a propósito: las claves del navegador (`myout.token`, `myout.locale`, `myout.body…`, para no cerrar sesiones ni perder preferencias), el `appId` de Capacitor (`com.myout.app`), la carpeta local, el dominio `myout.vercel.app` y el usuario de demo local.
-- Logo (`public/brand/logo.svg`): «OO» de burbuja en cromo que gotean, con un aro de neón naranja dentro, colgadas de un gancho de percha, y «MY» en una pegatina naranja. Icono (`public/brand/mark.svg`): solo las dos O. Es SVG propio, sin fuentes externas, para que también sirva de máscara en la pared del login.
+- Logo (`public/brand/logo.svg`): throw-up de grafiti, «MYOO» en letras de burbuja cromadas que gotean, con borde naranja-rojo. Icono (`public/brand/mark.svg`): las dos O en el mismo estilo. Es SVG propio, sin fuentes externas, para que también sirva de máscara en la pared del login.
 
 ## Estructura
 
