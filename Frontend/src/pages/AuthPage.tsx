@@ -1,5 +1,5 @@
 import { useId, useState, type CSSProperties, type FormEvent, type KeyboardEvent } from 'react';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { oauthApi } from '../api/endpoints';
 import type { GarmentLike, ProviderSlug } from '../api/types';
 import { useAuth } from '../auth/AuthContext';
@@ -66,8 +66,12 @@ export function AuthPage({ mode }: { mode: 'login' | 'register' }) {
   const ids = useId();
   const providers = useAsync(() => oauthApi.providers(), []);
   const [leaving, setLeaving] = useState<ProviderSlug | null>(null);
+  // Al entrar se vuelve a la página que se quería abrir (p. ej. un perfil
+  // escaneado con su QR), no siempre al inicio.
+  const location = useLocation();
+  const back = returnPath(location.state);
 
-  if (user) return <Navigate to="/" replace />;
+  if (user) return <Navigate to={back} replace />;
 
   const social = (['google', 'apple'] as const).filter((p) => providers.data?.[p]);
 
@@ -85,7 +89,7 @@ export function AuthPage({ mode }: { mode: 'login' | 'register' }) {
     try {
       if (isLogin) await login(email.trim(), password);
       else await register(email.trim(), password, displayName.trim());
-      navigate('/', { replace: true });
+      navigate(back, { replace: true });
     } catch (err) {
       setError(err);
     } finally {
@@ -136,10 +140,10 @@ export function AuthPage({ mode }: { mode: 'login' | 'register' }) {
           <p className="auth-lead">{t('Tu armario, prenda a prenda, en 3D.')}</p>
 
           <nav className="auth-tabs" aria-label={t('Acceso')}>
-            <Link to="/login" className="auth-tab" aria-current={isLogin ? 'page' : undefined} replace>
+            <Link to="/login" state={location.state} className="auth-tab" aria-current={isLogin ? 'page' : undefined} replace>
               {t('Entrar')}
             </Link>
-            <Link to="/register" className="auth-tab" aria-current={!isLogin ? 'page' : undefined} replace>
+            <Link to="/register" state={location.state} className="auth-tab" aria-current={!isLogin ? 'page' : undefined} replace>
               {t('Crear cuenta')}
             </Link>
           </nav>
@@ -278,14 +282,14 @@ export function AuthPage({ mode }: { mode: 'login' | 'register' }) {
             {isLogin ? (
               <>
                 {t('¿Aún no tienes cuenta?')}{' '}
-                <Link to="/register" replace>
+                <Link to="/register" state={location.state} replace>
                   {t('Crea una gratis')}
                 </Link>
               </>
             ) : (
               <>
                 {t('¿Ya tienes cuenta?')}{' '}
-                <Link to="/login" replace>
+                <Link to="/login" state={location.state} replace>
                   {t('Entra')}
                 </Link>
               </>
@@ -295,4 +299,12 @@ export function AuthPage({ mode }: { mode: 'login' | 'register' }) {
       </main>
     </div>
   );
+}
+
+/** Ruta a la que volver tras entrar (la guarda RequireAuth); solo rutas internas. */
+function returnPath(state: unknown): string {
+  const from = (state as { from?: { pathname?: string; search?: string } } | null)?.from;
+  const path = from?.pathname;
+  if (!path || !path.startsWith('/') || path.startsWith('//') || path === '/login' || path === '/register') return '/';
+  return path + (from?.search ?? '');
 }

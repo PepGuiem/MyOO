@@ -8,6 +8,7 @@ import { ReportDialog } from '../components/community/ReportDialog';
 import { ErrorNote } from '../components/ErrorNote';
 import { Icon } from '../components/Icon';
 import { FollowButton } from '../components/social/FollowButton';
+import { ProfileQrDialog } from '../components/social/ProfileQr';
 import { NoMatch } from '../components/street/EmptyStage';
 import { SectionHead } from '../components/street/SectionHead';
 import { CountUp, CoverArt, DripEdge, GraffitiName, stickerTilt } from '../components/street/Street';
@@ -41,6 +42,7 @@ export function PublicProfilePage() {
   const [busy, setBusy] = useState(false);
   const [menu, setMenu] = useState(false);
   const [dialog, setDialog] = useState<'report' | 'admin' | null>(null);
+  const [qr, setQr] = useState(false);
   const { user: me } = useAuth();
   const isAdmin = me?.role === 'ADMIN';
 
@@ -136,6 +138,9 @@ export function PublicProfilePage() {
             </p>
           </div>
           <div className="profile-actions">
+            <button type="button" className="btn wd-btn-line pv-qr" onClick={() => setQr(true)} title={t('Código QR del perfil')}>
+              <Icon name="qr" size={14} /> <span>{t('QR')}</span>
+            </button>
             {rel.isSelf ? (
               <Link to="/perfil" className="btn wd-add">
                 <Icon name="edit" size={14} /> <span>{t('Editar tu perfil')}</span>
@@ -287,6 +292,7 @@ export function PublicProfilePage() {
       ) : (
         <Connections handle={p.id} which={tab} />
       )}
+      {qr && <ProfileQrDialog person={p} isSelf={rel.isSelf} onClose={() => setQr(false)} />}
       {dialog === 'report' && <ReportDialog targetType="USER" targetId={p.id} onClose={() => setDialog(null)} />}
       {dialog === 'admin' && <UserDialog id={p.id} onClose={() => setDialog(null)} />}
     </section>

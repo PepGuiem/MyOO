@@ -31,6 +31,7 @@ import { openProvider, pendingAction, PROVIDER_LABEL, setPendingAction, takeReau
 import { STYLE_TAGS } from '../lib/stylist';
 import { useAsync } from '../lib/useAsync';
 import { useInView } from '../lib/useInView';
+import { ProfileQrDialog } from '../components/social/ProfileQr';
 
 /** Colores de spray para el acento del perfil (o el que elijas). */
 const ACCENTS = ['#E6E4DF', '#FF5A1F', '#F2C14E', '#7BD389', '#4FC3F7', '#9C6ADE', '#F06292'];
@@ -256,6 +257,7 @@ function CareLabel({ user }: { user: User }) {
 // ---------------------------------------------------------------------------
 
 function ProfileHero({ user, onChange, onEdit, editing }: { user: User; onChange: (u: User) => void; onEdit: () => void; editing: boolean }) {
+  const [qr, setQr] = useState(false);
   const avatar = useAssetUrl(user.avatarAssetId);
   const cover = useAssetUrl(user.coverAssetId);
   const [busy, setBusy] = useState<'avatar' | 'cover' | null>(null);
@@ -367,12 +369,16 @@ function ProfileHero({ user, onChange, onEdit, editing }: { user: User; onChange
           <button type="button" className={`btn pf-btn-neon${editing ? ' is-on' : ''}`} onClick={onEdit} aria-expanded={editing} aria-controls={EDITOR_ID}>
             <Icon name={editing ? 'close' : 'edit'} size={14} /> <span>{editing ? t('Cerrar edición') : t('Editar perfil')}</span>
           </button>
+          <button type="button" className="btn btn-ghost pf-btn-ghost pf-btn-qr" onClick={() => setQr(true)}>
+            <Icon name="qr" size={14} /> <span>{t('Tu QR')}</span>
+          </button>
           {user.avatarAssetId && (
             <button type="button" className="btn btn-ghost pf-btn-ghost" disabled={busy !== null} onClick={() => remove('avatar')}>
               {t('Quitar foto')}
             </button>
           )}
         </div>
+        {qr && <ProfileQrDialog person={user} isSelf onClose={() => setQr(false)} />}
       </div>
 
       <ErrorNote error={error} />

@@ -31889,3 +31889,85 @@ p.hm-outfit-meta:not(:has(+ ul)) {
     animation: none;
   }
 }
+
+/* =============================================================================
+   QR del perfil (components/social/ProfileQr.tsx)
+   El QR va siempre oscuro sobre claro y con margen: así lo leen todas las
+   cámaras, también en modo oscuro.
+   ========================================================================== */
+.dialog.qr-dialog {
+  width: min(100%, 440px);
+}
+
+.qr-card {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  padding: 22px 18px 18px;
+  border: 1px solid rgba(241, 238, 233, 0.12);
+  border-radius: 18px;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(255, 77, 0, 0.16), transparent 70%),
+    rgba(12, 12, 14, 0.85);
+  text-align: center;
+}
+
+.qr-image {
+  display: block;
+  width: min(100%, 300px);
+  aspect-ratio: 1;
+  border-radius: 14px;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.6),
+    0 0 40px -14px rgba(255, 77, 0, 0.7),
+    0 24px 50px -28px rgba(0, 0, 0, 0.95);
+  animation: wd-rise 0.5s var(--wd-ease, ease) backwards;
+}
+
+.qr-image svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.qr-handle {
+  font-size: 1.15rem;
+  letter-spacing: 0.02em;
+}
+
+.qr-url {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: rgba(241, 238, 233, 0.6);
+}
+
+.qr-help {
+  margin: 14px 0 0;
+  text-align: center;
+}
+
+.qr-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.qr-actions .btn {
+  min-height: 44px;
+}
+
+.qr-note {
+  margin: 10px 0 0;
+  text-align: center;
+  color: var(--wd-orange, #ff4d00);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .qr-image {
+    animation: none;
+  }
+}

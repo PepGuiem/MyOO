@@ -576,6 +576,14 @@ Panel con tus cifras, destacados, STYLE INSIGHTS, estilos (barra rayada = estilo
 - Cuenta → «Descargar mis datos»: baja un JSON con todo lo de la cuenta.
 - GitHub Actions (`.github/workflows/ci.yml`): en cada push a main se comprueban las traducciones, los tipos y el build del frontend, y los tipos y los tests unitarios del backend.
 
+## QR del perfil
+
+- Cada perfil tiene su QR: botón «QR» en `/u/:usuario` (el tuyo y el de los demás) y «Tu QR» en `/perfil`. Al escanearlo se abre `https://<web>/u/<usuario>` (o el id si no tiene @usuario). En la app nativa se usa el origen de `VITE_API_URL`, no `localhost`.
+- `lib/qr.ts` genera el QR sin dependencias (modo byte, corrección H para poder poner el icono de MyOO en el centro). Probado decodificando con OpenCV (lector básico y el de WeChat) en versiones 1-30 y los cuatro niveles, también la captura de pantalla y la imagen descargada.
+- El QR va oscuro sobre claro, con margen y ojos cuadrados clásicos: con ojos redondeados y el logo, algunos lectores fallaban.
+- «Descargar imagen» crea un PNG de 1080 px con el QR y el @usuario; también «Copiar enlace» y «Compartir» (si el navegador lo permite).
+- Si quien escanea no tiene sesión, entra y vuelve a esa página (antes iba siempre al inicio).
+
 ## Marca: MyOO
 
 - El proyecto se llama **MyOO** (antes MyOut). Cambian los textos visibles, el título de la página, el nombre de la app nativa (`appName`) y el título de la API.
