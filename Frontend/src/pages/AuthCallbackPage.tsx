@@ -5,6 +5,7 @@ import { banFromError, banMessage } from '../lib/ban';
 import { oauthApi, usersApi } from '../api/endpoints';
 import type { ProviderSlug } from '../api/types';
 import { useAuth } from '../auth/AuthContext';
+import { Icon } from '../components/Icon';
 import { Logo } from '../components/Logo';
 import { Spinner } from '../components/Spinner';
 import { OAUTH_ERRORS, PROVIDER_LABEL, pendingAction, saveReauthProof, setPendingAction } from '../lib/oauthFlow';
@@ -83,16 +84,21 @@ export function AuthCallbackPage() {
   }, [loading, params, user, completeAuth, refreshUser, navigate]);
 
   return (
-    <div className="callback-page">
+    <div className="callback-page ux cb">
       <div className="callback-card">
         <Logo className="callback-logo" decorative />
         {error ? (
           <>
-            <h1 className="spray-title">{t('No ha podido ser')}</h1>
+            <span className="wd-kicker">
+              <Icon name="key" size={12} /> {t('Sign in')}
+            </span>
+            <h1 className="wd-title ux-title" data-text={t('No ha podido ser')}>
+              {t('No ha podido ser')}
+            </h1>
             <p className="note note-error" role="alert">
               {error}
             </p>
-            <Link className="btn btn-primary" to={user ? '/perfil' : '/login'} replace>
+            <Link className="btn wd-add" to={user ? '/perfil' : '/login'} replace>
               {user ? t('Volver a tu perfil') : t('Volver a entrar')}
             </Link>
           </>

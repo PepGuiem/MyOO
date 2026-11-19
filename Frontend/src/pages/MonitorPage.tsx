@@ -8,8 +8,9 @@ import { Icon, type IconName } from '../components/Icon';
 import { compact, Sparkline, TimeChart, type TooltipRow } from '../components/monitor/TimeChart';
 import { PersonAvatar, personName, profilePath } from '../components/social/PersonAvatar';
 import { Spinner } from '../components/Spinner';
+import { SectionHead } from '../components/street/SectionHead';
 import { REPORT_REASON_LABEL, REPORT_TARGET_LABEL, timeAgo } from '../lib/community';
-import { LOCALE_TAG } from '../i18n';
+import { LOCALE_TAG, t } from '../i18n';
 
 const RANGES: { value: MonitorRange; label: string }[] = [
   { value: '1h', label: '1 h' },
@@ -19,7 +20,7 @@ const RANGES: { value: MonitorRange; label: string }[] = [
 const DAYS = [7, 30, 90] as const;
 type Days = (typeof DAYS)[number];
 
-const LEVEL_LABEL: Record<MonitorLevel, string> = { ok: 'Todo en orden', warning: 'Atención', critical: 'Problema' };
+const LEVEL_LABEL: Record<MonitorLevel, string> = { ok: t('Todo en orden'), warning: t('Atención'), critical: t('Problema') };
 
 // ------------------------------------------------------------------ formatos
 
@@ -107,7 +108,7 @@ function useNowTick(): number {
 /** Monitor: estado de la API, tráfico, base de datos y uso de la app. Solo admins. */
 export function MonitorPage() {
   const { user } = useAuth();
-  if (!user) return <Spinner label="Cargando…" />;
+  if (!user) return <Spinner label={t('Cargando…')} />;
   if (user.role !== 'ADMIN') return <Navigate to="/" replace />;
   return <Monitor />;
 }
@@ -129,14 +130,16 @@ function Monitor() {
   const ago = L.at ? Math.max(0, Math.round((now - L.at) / 1000)) : null;
 
   return (
-    <section className="page monitor">
-      <header className="page-head monitor-head">
+    <section className="page monitor ux mo">
+      <header className="monitor-head ux-head mo-head">
         <div>
-          <p className="eyebrow monitor-eyebrow">
-            <Icon name="shield" size={12} /> Solo admins
-          </p>
-          <h1>Monitor</h1>
-          <p className="muted">Estado de la API, tráfico, base de datos y uso de MyOut, en directo.</p>
+          <span className="wd-kicker">
+            <Icon name="shield" size={12} /> {t('Admins only')}
+          </span>
+          <h1 className="wd-title ux-title" data-text={t('Monitor')}>
+            {t('Monitor')}
+          </h1>
+          <p className="ux-lede">{t('Estado de la API, tráfico, base de datos y uso de MyOut, en directo.')}</p>
         </div>
         <div className="monitor-head-side">
           {level ? (
@@ -145,18 +148,18 @@ function Monitor() {
               {LEVEL_LABEL[level]}
             </span>
           ) : (
-            <span className="monitor-status">Comprobando…</span>
+            <span className="monitor-status">{t('Comprobando…')}</span>
           )}
           <span className="muted small monitor-updated">
-            {ago === null ? '—' : ago < 2 ? 'Actualizado ahora' : `Actualizado hace ${ago} s`}
+            {ago === null ? '—' : ago < 2 ? t('Actualizado ahora') : t('Actualizado hace {ago} s', { ago })}
           </span>
         </div>
       </header>
 
-      <div className="monitor-toolbar" role="toolbar" aria-label="Filtros del monitor">
+      <div className="monitor-toolbar" role="toolbar" aria-label={t('Filtros del monitor')}>
         <div className="monitor-filter">
-          <span className="monitor-filter-label">Ventana</span>
-          <div className="segmented segmented-tabs" role="group" aria-label="Ventana de tiempo">
+          <span className="monitor-filter-label">{t('Ventana')}</span>
+          <div className="segmented segmented-tabs" role="group" aria-label={t('Ventana de tiempo')}>
             {RANGES.map((r) => (
               <button key={r.value} type="button" aria-pressed={range === r.value} onClick={() => setRange(r.value)}>
                 {r.label}
@@ -165,11 +168,11 @@ function Monitor() {
           </div>
         </div>
         <div className="monitor-filter">
-          <span className="monitor-filter-label">Uso</span>
-          <div className="segmented segmented-tabs" role="group" aria-label="Días de uso">
+          <span className="monitor-filter-label">{t('Uso')}</span>
+          <div className="segmented segmented-tabs" role="group" aria-label={t('Días de uso')}>
             {DAYS.map((d) => (
               <button key={d} type="button" aria-pressed={days === d} onClick={() => setDays(d)}>
-                {d} días
+                {t('{d} días', { d })}
               </button>
             ))}
           </div>
@@ -177,11 +180,11 @@ function Monitor() {
         <span className="spacer" />
         <button type="button" className={`btn btn-small monitor-live${live ? ' is-on' : ''}`} aria-pressed={live} onClick={() => setLive((v) => !v)}>
           <span className="monitor-led" aria-hidden="true" />
-          {live ? 'En directo' : 'En pausa'}
+          {live ? t('En directo') : t('En pausa')}
         </button>
         <button
           type="button"
-          className="btn btn-small btn-ghost"
+          className="btn btn-small wd-btn-line"
           onClick={() => {
             void L.reload();
             void D.reload();
@@ -189,15 +192,17 @@ function Monitor() {
             void F.reload();
           }}
         >
-          <Icon name="refresh" size={13} /> Actualizar
+          <Icon name="refresh" size={13} /> {t('Actualizar')}
         </button>
       </div>
 
+      <SectionHead n={1} title={t('Estado y tráfico')} />
       {L.error && !L.data ? <ErrorNote error={L.error} /> : null}
-      {!L.data && !L.error && <Spinner label="Cargando el monitor…" />}
+      {!L.data && !L.error && <Spinner label={t('Cargando el monitor…')} />}
       {L.data && <LiveSection d={L.data} activity={A.data} stale={L.loading && !!L.data} />}
-      {L.error && L.data ? <p className="note note-error small">No se ha podido actualizar: se muestran los últimos datos.</p> : null}
+      {L.error && L.data ? <p className="note note-error small">{t('No se ha podido actualizar: se muestran los últimos datos.')}</p> : null}
 
+      <SectionHead n={2} title={t('Base de datos y actividad')} />
       <div className="monitor-grid monitor-grid-2">
         <DatabasePanel d={D.data} error={D.error} />
         <FeedPanel items={F.data} error={F.error} />
@@ -211,23 +216,23 @@ function Monitor() {
 // ------------------------------------------------------------------- en vivo
 
 function LiveSection({ d, activity, stale }: { d: MonitorLive; activity: MonitorActivity | null; stale: boolean }) {
-  const t = d.traffic.points;
-  const label = (i: number) => hhmm(t[i].t);
+  const tp = d.traffic.points;
+  const label = (i: number) => hhmm(tp[i].t);
   const step = d.traffic.step;
-  const per = step === 1 ? 'por minuto' : `cada ${step} min`;
+  const per = step === 1 ? t('por minuto') : t('cada {step} min', { step });
   const s60 = d.summary.last60;
   const sys = d.system.points;
 
   const trafficTip = (i: number): TooltipRow[] => [
-    { label: 'peticiones', value: num(t[i].requests), key: true },
-    { label: 'errores 4xx', value: num(t[i].s4xx) },
-    { label: 'errores 5xx', value: num(t[i].s5xx) },
-    { label: 'p50 / p95', value: `${ms(t[i].p50)} / ${ms(t[i].p95)}` },
+    { label: t('peticiones'), value: num(tp[i].requests), key: true },
+    { label: t('errores 4xx'), value: num(tp[i].s4xx) },
+    { label: t('errores 5xx'), value: num(tp[i].s5xx) },
+    { label: 'p50 / p95', value: `${ms(tp[i].p50)} / ${ms(tp[i].p95)}` },
   ];
 
   return (
     <>
-      <ul className="monitor-checks" aria-label="Comprobaciones">
+      <ul className="monitor-checks" aria-label={t('Comprobaciones')}>
         {d.status.checks.map((c) => (
           <li key={c.key} className={`monitor-check is-${c.level}`}>
             <span className="monitor-led" aria-hidden="true" />
@@ -241,29 +246,29 @@ function LiveSection({ d, activity, stale }: { d: MonitorLive; activity: Monitor
       </ul>
 
       <div className="monitor-kpis">
-        <Kpi label="En línea ahora" value={num(d.realtime.users)} hint={`${num(d.realtime.connections)} conexiones`} spark={sys.map((p) => p.wsConnections)} />
-        <Kpi label="Peticiones / min" value={compact(d.summary.last5.perMinute)} hint="media de 5 min" spark={t.map((p) => p.requests)} />
+        <Kpi label={t('En línea ahora')} value={num(d.realtime.users)} hint={t('{n} conexiones', { n: num(d.realtime.connections) })} spark={sys.map((p) => p.wsConnections)} />
+        <Kpi label={t('Peticiones / min')} value={compact(d.summary.last5.perMinute)} hint={t('media de 5 min')} spark={tp.map((p) => p.requests)} />
         <Kpi
-          label="Errores 5xx"
+          label={t('Errores 5xx')}
           value={pct(s60.errorRate)}
-          hint={`${num(s60.s5xx)} de ${num(s60.requests)} en 1 h`}
+          hint={t('{num} de {num2} en 1 h', { num: num(s60.s5xx), num2: num(s60.requests) })}
           tone={s60.s5xx > 0 ? 'danger' : 'ink'}
-          spark={t.map((p) => p.s5xx)}
+          spark={tp.map((p) => p.s5xx)}
         />
-        <Kpi label="Latencia p95" value={ms(s60.p95)} hint={`p50 ${ms(s60.p50)} · última hora`} spark={t.map((p) => p.p95)} />
-        <Kpi label="Activos hoy" value={activity ? num(activity.active.dau) : '—'} hint={activity ? `${num(activity.active.wau)} esta semana` : 'cargando…'} />
-        <Kpi label="Denuncias abiertas" value={activity ? num(activity.totals.openReports) : '—'} hint="pendientes de revisar" link="/admin?tab=denuncias" />
+        <Kpi label={t('Latencia p95')} value={ms(s60.p95)} hint={t('p50 {ms} · última hora', { ms: ms(s60.p50) })} spark={tp.map((p) => p.p95)} />
+        <Kpi label={t('Activos hoy')} value={activity ? num(activity.active.dau) : '—'} hint={activity ? t('{n} esta semana', { n: num(activity.active.wau) }) : t('cargando…')} />
+        <Kpi label={t('Denuncias abiertas')} value={activity ? num(activity.totals.openReports) : '—'} hint={t('pendientes de revisar')} link="/admin?tab=denuncias" />
       </div>
 
       <div className="monitor-grid monitor-grid-traffic">
-        <Panel title="Peticiones" sub={per} className="monitor-span-2">
-          <TimeChart label={`Peticiones ${per}`} kind="bars" points={t.map((p, i) => ({ label: label(i), value: p.requests }))} tooltip={trafficTip} height={200} stale={stale} />
+        <Panel title={t('Peticiones')} sub={per} className="monitor-span-2">
+          <TimeChart label={t('Peticiones {per}', { per })} kind="bars" points={tp.map((p, i) => ({ label: label(i), value: p.requests }))} tooltip={trafficTip} height={200} stale={stale} />
         </Panel>
-        <Panel title="Latencia p95" sub="ms">
-          <TimeChart label="Latencia p95 en milisegundos" name="p95" points={t.map((p, i) => ({ label: label(i), value: p.p95 }))} unit=" ms" format={(n) => compact(Math.round(n))} stale={stale} />
+        <Panel title={t('Latencia p95')} sub={t('ms')}>
+          <TimeChart label={t('Latencia p95 en milisegundos')} name="p95" points={tp.map((p, i) => ({ label: label(i), value: p.p95 }))} unit=" ms" format={(n) => compact(Math.round(n))} stale={stale} />
         </Panel>
-        <Panel title="Errores del servidor (5xx)" sub={per} icon="flag">
-          <TimeChart label={`Errores 5xx ${per}`} kind="bars" tone="danger" points={t.map((p, i) => ({ label: label(i), value: p.s5xx }))} tooltip={trafficTip} stale={stale} />
+        <Panel title={t('Errores del servidor (5xx)')} sub={per} icon="flag">
+          <TimeChart label={t('Errores 5xx {per}', { per })} kind="bars" tone="danger" points={tp.map((p, i) => ({ label: label(i), value: p.s5xx }))} tooltip={trafficTip} stale={stale} />
         </Panel>
       </div>
 
@@ -272,26 +277,26 @@ function LiveSection({ d, activity, stale }: { d: MonitorLive; activity: Monitor
         <ErrorsPanel errors={d.errors} />
       </div>
 
-      <Panel title="Proceso del servidor" sub={`Node ${d.process.node} · ${d.process.env}`}>
+      <Panel title={t('Proceso del servidor')} sub={`Node ${d.process.node} · ${d.process.env}`}>
         <div className="monitor-process">
           <dl className="monitor-facts">
-            <Fact k="En marcha" v={uptime(d.process.uptimeSec)} />
-            <Fact k="Memoria (RSS)" v={`${compact(d.process.rssMb)} MB`} />
+            <Fact k={t('En marcha')} v={uptime(d.process.uptimeSec)} />
+            <Fact k={t('Memoria (RSS)')} v={`${compact(d.process.rssMb)} MB`} />
             <Fact k="Heap" v={`${compact(d.process.heapUsedMb)} / ${compact(d.process.heapLimitMb)} MB`} meter={d.process.heapUsedMb / d.process.heapLimitMb} />
-            <Fact k="CPU" v={`${compact(d.process.cpuPct)} %`} sub={`de 1 núcleo · ${d.process.cpuCores} núcleos`} />
-            <Fact k="Bucle de eventos" v={ms(d.process.lagP99Ms)} sub="retardo p99" />
-            <Fact k="Tiempo real" v={`${num(d.realtime.connections)} conexiones`} sub={`${compact(d.realtime.eventsSent)} eventos enviados`} />
-            <Fact k="Base de datos" v={d.database.ok ? ms(d.database.ms) : 'Caída'} sub="ping" />
+            <Fact k="CPU" v={`${compact(d.process.cpuPct)} %`} sub={t('de 1 núcleo · {cpuCores} núcleos', { cpuCores: d.process.cpuCores })} />
+            <Fact k={t('Bucle de eventos')} v={ms(d.process.lagP99Ms)} sub={t('retardo p99')} />
+            <Fact k={t('Tiempo real')} v={t('{n} conexiones', { n: num(d.realtime.connections) })} sub={t('{n} eventos enviados', { n: compact(d.realtime.eventsSent) })} />
+            <Fact k={t('Base de datos')} v={d.database.ok ? ms(d.database.ms) : t('Caída')} sub={t('ping')} />
           </dl>
           {d.system.hasData ? (
             <div className="monitor-small-multiples">
-              <Mini title="Memoria (MB)" values={sys.map((p, i) => ({ label: hhmm(sys[i].t), value: p.rssMb }))} stale={stale} />
-              <Mini title="CPU (%)" values={sys.map((p, i) => ({ label: hhmm(sys[i].t), value: p.cpuPct }))} stale={stale} />
-              <Mini title="Retardo del bucle (ms)" values={sys.map((p, i) => ({ label: hhmm(sys[i].t), value: p.lagP99Ms }))} stale={stale} />
-              <Mini title="Conexiones en tiempo real" values={sys.map((p, i) => ({ label: hhmm(sys[i].t), value: p.wsConnections }))} stale={stale} />
+              <Mini title={t('Memoria (MB)')} values={sys.map((p, i) => ({ label: hhmm(sys[i].t), value: p.rssMb }))} stale={stale} />
+              <Mini title={t('CPU (%)')} values={sys.map((p, i) => ({ label: hhmm(sys[i].t), value: p.cpuPct }))} stale={stale} />
+              <Mini title={t('Retardo del bucle (ms)')} values={sys.map((p, i) => ({ label: hhmm(sys[i].t), value: p.lagP99Ms }))} stale={stale} />
+              <Mini title={t('Conexiones en tiempo real')} values={sys.map((p, i) => ({ label: hhmm(sys[i].t), value: p.wsConnections }))} stale={stale} />
             </div>
           ) : (
-            <p className="muted small">Las gráficas del proceso empiezan a llenarse al minuto de arrancar.</p>
+            <p className="muted small">{t('Las gráficas del proceso empiezan a llenarse al minuto de arrancar.')}</p>
           )}
         </div>
       </Panel>
@@ -362,23 +367,23 @@ function Mini({ title, values, stale }: { title: string; values: { label: string
 function RoutesPanel({ routes }: { routes: MonitorLive['routes'] }) {
   const max = Math.max(1, ...routes.map((r) => r.requests));
   return (
-    <Panel title="Rutas más usadas" sub="última hora">
+    <Panel title={t('Rutas más usadas')} sub={t('última hora')}>
       {routes.length === 0 ? (
-        <p className="muted small">Sin peticiones en la última hora.</p>
+        <p className="muted small">{t('Sin peticiones en la última hora.')}</p>
       ) : (
         <div className="monitor-table-wrap">
           <table className="monitor-table">
             <thead>
               <tr>
-                <th scope="col">Ruta</th>
+                <th scope="col">{t('Ruta')}</th>
                 <th scope="col" className="num">
-                  Peticiones
+                  {t('Peticiones')}
                 </th>
                 <th scope="col" className="num">
-                  4xx
+                  {t('4xx')}
                 </th>
                 <th scope="col" className="num">
-                  5xx
+                  {t('5xx')}
                 </th>
                 <th scope="col" className="num">
                   p95
@@ -413,10 +418,10 @@ function RoutesPanel({ routes }: { routes: MonitorLive['routes'] }) {
 
 function ErrorsPanel({ errors }: { errors: MonitorLive['errors'] }) {
   return (
-    <Panel title="Últimos errores del servidor" sub="5xx · desde que arrancó" icon="flag">
+    <Panel title={t('Últimos errores del servidor')} sub={t('5xx · desde que arrancó')} icon="flag">
       {errors.length === 0 ? (
         <p className="monitor-empty">
-          <Icon name="check" size={14} /> Ningún error 5xx.
+          <Icon name="check" size={14} /> {t('Ningún error 5xx.')}
         </p>
       ) : (
         <ul className="monitor-errors">
@@ -429,7 +434,7 @@ function ErrorsPanel({ errors }: { errors: MonitorLive['errors'] }) {
                   <code>{e.route.replace(/^\/api/, '')}</code>
                 </span>
                 <small className="muted">
-                  {e.error ?? 'Error'} · {Math.round(e.ms)} ms
+                  {t('{v} · {round} ms', { v: e.error ?? t('Error'), round: Math.round(e.ms) })}
                 </small>
               </span>
               <time dateTime={e.at} className="muted small">
@@ -448,27 +453,27 @@ function ErrorsPanel({ errors }: { errors: MonitorLive['errors'] }) {
 function DatabasePanel({ d, error }: { d: MonitorDatabase | null; error: unknown }) {
   const maxBytes = Math.max(1, ...(d?.tables.map((t) => t.bytes) ?? [1]));
   return (
-    <Panel title="Base de datos" sub={d?.version ? `PostgreSQL ${d.version.split(' ')[0]}` : undefined}>
+    <Panel title={t('Base de datos')} sub={d?.version ? `PostgreSQL ${d.version.split(' ')[0]}` : undefined}>
       {error && !d ? <ErrorNote error={error} /> : null}
-      {!d && !error && <Spinner size={16} label="Cargando…" />}
-      {d && !d.ok && <p className="note note-error">La base de datos no responde.</p>}
+      {!d && !error && <Spinner size={16} label={t('Cargando…')} />}
+      {d && !d.ok && <p className="note note-error">{t('La base de datos no responde.')}</p>}
       {d?.ok && (
         <>
           <dl className="monitor-facts monitor-facts-row">
-            <Fact k="Ping" v={ms(d.ms)} />
-            <Fact k="Tamaño" v={bytes(d.sizeBytes)} />
-            <Fact k="Conexiones" v={d.connections === null ? '—' : num(d.connections)} />
+            <Fact k={t('Ping')} v={ms(d.ms)} />
+            <Fact k={t('Tamaño')} v={bytes(d.sizeBytes)} />
+            <Fact k={t('Conexiones')} v={d.connections === null ? '—' : num(d.connections)} />
           </dl>
           <div className="monitor-table-wrap">
             <table className="monitor-table">
               <thead>
                 <tr>
-                  <th scope="col">Tabla</th>
+                  <th scope="col">{t('Tabla')}</th>
                   <th scope="col" className="num">
-                    Filas
+                    {t('Filas')}
                   </th>
                   <th scope="col" className="num">
-                    Tamaño
+                    {t('Tamaño')}
                   </th>
                 </tr>
               </thead>
@@ -498,44 +503,44 @@ function DatabasePanel({ d, error }: { d: MonitorDatabase | null; error: unknown
 
 const FEED_ICON: Record<MonitorFeedItem['kind'], IconName> = { signup: 'users', report: 'flag', idea: 'bulb', release: 'megaphone', admin: 'shield' };
 const ADMIN_ACTION: Record<string, string> = {
-  'user.ban': 'suspendió una cuenta',
-  'user.unban': 'levantó una suspensión',
-  'idea.update': 'actualizó una idea',
-  'idea.delete': 'borró una idea',
-  'report.update': 'revisó una denuncia',
-  'outfit.hide': 'ocultó un outfit',
-  'outfit.unhide': 'volvió a mostrar un outfit',
-  'message.delete': 'borró un mensaje denunciado',
-  'release.create': 'creó una novedad',
-  'release.update': 'editó una novedad',
-  'release.publish': 'publicó una novedad',
-  'release.unpublish': 'retiró una novedad',
-  'release.delete': 'borró una novedad',
+  'user.ban': t('suspendió una cuenta'),
+  'user.unban': t('levantó una suspensión'),
+  'idea.update': t('actualizó una idea'),
+  'idea.delete': t('borró una idea'),
+  'report.update': t('revisó una denuncia'),
+  'outfit.hide': t('ocultó un outfit'),
+  'outfit.unhide': t('volvió a mostrar un outfit'),
+  'message.delete': t('borró un mensaje denunciado'),
+  'release.create': t('creó una novedad'),
+  'release.update': t('editó una novedad'),
+  'release.publish': t('publicó una novedad'),
+  'release.unpublish': t('retiró una novedad'),
+  'release.delete': t('borró una novedad'),
 };
 
 function feedText(i: MonitorFeedItem): { text: string; link?: string } {
   switch (i.kind) {
     case 'signup':
-      return { text: `${personName(i.user)} se ha registrado`, link: i.user ? profilePath(i.user) : undefined };
+      return { text: t('{personName} se ha registrado', { personName: personName(i.user) }), link: i.user ? profilePath(i.user) : undefined };
     case 'report': {
       const [target, reason] = (i.meta ?? '').split(':') as [ReportTarget, ReportReason];
-      return { text: `Denuncia de ${(REPORT_TARGET_LABEL[target] ?? 'contenido').toLowerCase()} · ${REPORT_REASON_LABEL[reason] ?? ''}`, link: '/admin?tab=denuncias' };
+      return { text: t('Denuncia de {toLowerCase} · {v}', { toLowerCase: (REPORT_TARGET_LABEL[target] ?? t('contenido')).toLowerCase(), v: REPORT_REASON_LABEL[reason] ?? '' }), link: '/admin?tab=denuncias' };
     }
     case 'idea':
-      return { text: `Idea: «${i.title}»`, link: i.meta ? `/ideas?idea=${i.meta}` : '/ideas' };
+      return { text: t('Idea: «{title}»', { title: i.title }), link: i.meta ? `/ideas?idea=${i.meta}` : '/ideas' };
     case 'release':
-      return { text: `Novedad publicada: «${i.title}»`, link: '/novedades' };
+      return { text: t('Novedad publicada: «{title}»', { title: i.title }), link: '/novedades' };
     default:
-      return { text: `${i.user ? personName(i.user) : 'Un admin'} ${ADMIN_ACTION[i.title] ?? i.title}`, link: '/admin?tab=registro' };
+      return { text: t('{who} {action}', { who: i.user ? personName(i.user) : t('Un admin'), action: ADMIN_ACTION[i.title] ?? i.title }), link: '/admin?tab=registro' };
   }
 }
 
 function FeedPanel({ items, error }: { items: MonitorFeedItem[] | null; error: unknown }) {
   return (
-    <Panel title="Últimos eventos">
+    <Panel title={t('Últimos eventos')}>
       {error && !items ? <ErrorNote error={error} /> : null}
-      {!items && !error && <Spinner size={16} label="Cargando…" />}
-      {items && items.length === 0 && <p className="muted small">Nada todavía.</p>}
+      {!items && !error && <Spinner size={16} label={t('Cargando…')} />}
+      {items && items.length === 0 && <p className="muted small">{t('Nada todavía.')}</p>}
       {items && items.length > 0 && (
         <ol className="monitor-feed">
           {items.map((i) => {
@@ -566,22 +571,19 @@ const DAILY_ORDER = ['active', 'signups', 'outfits', 'items', 'messages', 'ideas
 function ActivitySection({ d, error, stale }: { d: MonitorActivity | null; error: unknown; stale: boolean }) {
   return (
     <section className="monitor-section" aria-labelledby="mon-uso">
-      <header className="monitor-section-head">
-        <h2 id="mon-uso" className="spray-title">
-          Uso de la app
-        </h2>
-        {d && <span className="muted small">Días en hora de Madrid · {d.days} días</span>}
-      </header>
+      <SectionHead n={3} id="mon-uso" title={t('Uso de la app')}>
+        {d && <span className="ux-section-count">{t('Días en hora de Madrid · {days} días', { days: d.days })}</span>}
+      </SectionHead>
       {error && !d ? <ErrorNote error={error} /> : null}
-      {!d && !error && <Spinner label="Cargando el uso…" />}
+      {!d && !error && <Spinner label={t('Cargando el uso…')} />}
       {d && (
         <>
           <div className="monitor-kpis monitor-kpis-usage">
-            <Kpi label="Activos hoy (DAU)" value={num(d.active.dau)} />
-            <Kpi label="Últimos 7 días (WAU)" value={num(d.active.wau)} />
-            <Kpi label="Últimos 30 días (MAU)" value={num(d.active.mau)} />
-            <Kpi label="Fidelidad (DAU/MAU)" value={d.active.mau ? pct(d.active.dau / d.active.mau) : '—'} hint="vuelven cada día" />
-            <Kpi label="Cuentas" value={num(d.totals.users)} hint={d.totals.banned ? `${num(d.totals.banned)} suspendidas` : 'ninguna suspendida'} />
+            <Kpi label={t('Activos hoy (DAU)')} value={num(d.active.dau)} />
+            <Kpi label={t('Últimos 7 días (WAU)')} value={num(d.active.wau)} />
+            <Kpi label={t('Últimos 30 días (MAU)')} value={num(d.active.mau)} />
+            <Kpi label={t('Fidelidad (DAU/MAU)')} value={d.active.mau ? pct(d.active.dau / d.active.mau) : '—'} hint={t('vuelven cada día')} />
+            <Kpi label={t('Cuentas')} value={num(d.totals.users)} hint={d.totals.banned ? t('{n} suspendidas', { n: num(d.totals.banned) }) : t('ninguna suspendida')} />
           </div>
 
           <div className="monitor-small-multiples monitor-daily">
@@ -594,7 +596,7 @@ function ActivitySection({ d, error, stale }: { d: MonitorActivity | null; error
                     <strong>{num(s.total)}</strong>
                   </span>
                   <TimeChart
-                    label={`${s.label} por día`}
+                    label={t('{label} por día', { label: s.label })}
                     kind="bars"
                     height={120}
                     stale={stale}
@@ -605,16 +607,16 @@ function ActivitySection({ d, error, stale }: { d: MonitorActivity | null; error
             })}
           </div>
 
-          <Panel title="Totales">
+          <Panel title={t('Totales')}>
             <dl className="monitor-totals">
-              <Fact k="Armarios" v={num(d.totals.wardrobes)} />
-              <Fact k="Prendas" v={num(d.totals.items)} />
-              <Fact k="Outfits" v={num(d.totals.outfits)} sub={`${num(d.totals.sharedOutfits)} compartidos`} />
-              <Fact k="Conversaciones" v={num(d.totals.conversations)} />
-              <Fact k="Mensajes" v={num(d.totals.messages)} />
-              <Fact k="Seguimientos" v={num(d.totals.follows)} />
-              <Fact k="Ideas" v={num(d.totals.ideas)} />
-              <Fact k="Imágenes subidas" v={num(d.totals.assets)} sub={bytes(d.totals.assetBytes)} />
+              <Fact k={t('Armarios')} v={num(d.totals.wardrobes)} />
+              <Fact k={t('Prendas')} v={num(d.totals.items)} />
+              <Fact k={t('Outfits')} v={num(d.totals.outfits)} sub={t('{n} compartidos', { n: num(d.totals.sharedOutfits) })} />
+              <Fact k={t('Conversaciones')} v={num(d.totals.conversations)} />
+              <Fact k={t('Mensajes')} v={num(d.totals.messages)} />
+              <Fact k={t('Seguimientos')} v={num(d.totals.follows)} />
+              <Fact k={t('Ideas')} v={num(d.totals.ideas)} />
+              <Fact k={t('Imágenes subidas')} v={num(d.totals.assets)} sub={bytes(d.totals.assetBytes)} />
             </dl>
           </Panel>
         </>

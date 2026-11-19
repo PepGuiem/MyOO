@@ -1,10 +1,12 @@
-import { useEffect, useState, type FormEvent } from 'react';
+import { useEffect, useState, type CSSProperties, type FormEvent } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { plansApi, subscriptionsApi, usersApi } from '../api/endpoints';
 import type { LimitedResource, Plan, ProviderSlug, UsageEntry, User } from '../api/types';
 import { useAuth } from '../auth/AuthContext';
 import { ErrorNote } from '../components/ErrorNote';
-import { Icon } from '../components/Icon';
+import { Icon, type IconName } from '../components/Icon';
+import { SectionHead } from '../components/street/SectionHead';
+import { CountUp } from '../components/street/Street';
 import { LanguageSwitch } from '../components/LanguageSwitch';
 import { Modal } from '../components/Modal';
 import { RESOURCE_LABEL, formatDate } from '../lib/labels';
@@ -37,10 +39,19 @@ function limitText(plan: Plan, resource: LimitedResource): string {
   const label = RESOURCE_LABEL[resource].toLowerCase();
   if (!l) return `${RESOURCE_LABEL[resource]}`;
   // «Prendas» es femenino: ilimitadas; armarios y outfits, ilimitados.
-  const unlimited = resource === 'WARDROBE_ITEMS' ? 'ilimitadas' : 'ilimitados';
-  if (l.isUnlimited) return `${RESOURCE_LABEL[resource]} ${unlimited}`;
+  if (l.isUnlimited)
+    return resource === 'WARDROBE_ITEMS'
+      ? t('{label} ilimitadas', { label: RESOURCE_LABEL[resource], lower: label })
+      : t('{label} ilimitados', { label: RESOURCE_LABEL[resource], lower: label });
   return l.maxCount === 1 ? `1 ${ONE[resource]}` : t('Hasta {maxCount} {label}', { maxCount: l.maxCount, label });
 }
+
+const USAGE_ICON: Record<LimitedResource, IconName> = {
+  WARDROBES: 'wardrobe',
+  WARDROBE_ITEMS: 'tshirt',
+  OUTFITS: 'layers',
+  MANNEQUINS: 'userCheck',
+};
 
 export function AccountPage() {
   const { user, logout } = useAuth();
@@ -89,28 +100,51 @@ export function AccountPage() {
   const currentPrice = current ? priceParts(current) : null;
 
   return (
-    <section className="page account">
-      <header className="account-hero">
+    <section className="page account ux ac">
+      <header className="account-hero ux-head">
         <span className={`avatar${avatar ? ' has-image' : ''}`} aria-hidden="true">
           {avatar ? <img src={avatar} alt="" /> : initial}
         </span>
         <div className="account-who">
-          <h1>{name}</h1>
-          <p className="muted">
+          <span className="wd-kicker">
+            <Icon name="key" size={12} /> {t('Your account')}
+          </span>
+          <h1 className="wd-title ux-title" data-text={name}>
+            {name}
+          </h1>
+          <p className="ux-lede">
             {user?.email}
             {user?.createdAt ? t(' · Miembro desde {formatDate}', { formatDate: formatDate(user.createdAt) }) : ''}
           </p>
         </div>
-        <Link to="/perfil" className="btn">
-          {t('Ver tu perfil')}
-        </Link>
-        <button type="button" className="btn btn-ghost" onClick={logout}>
-          {t('Cerrar sesión')}
-        </button>
+        <div className="wd-head-actions">
+          <Link to="/perfil" className="btn wd-btn-line">
+            <Icon name="eye" size={14} /> <span>{t('Ver tu perfil')}</span>
+          </Link>
+          <button type="button" className="btn wd-btn-line" onClick={logout}>
+            <Icon name="back" size={14} /> <span>{t('Cerrar sesión')}</span>
+          </button>
+        </div>
       </header>
+
+      {mine.data && (
+        <ul className="wd-stats ux-stats" aria-label={t('Resumen')}>
+          {mine.data.usage.map((u, i) => (
+            <li key={u.resource} style={{ '--i': i } as CSSProperties}>
+              <Icon name={USAGE_ICON[u.resource]} size={16} />
+              <strong>
+                <CountUp value={u.used} delay={i * 120} />
+                <small>/{u.isUnlimited ? '∞' : u.max}</small>
+              </strong>
+              <span>{RESOURCE_LABEL[u.resource]}</span>
+            </li>
+          ))}
+        </ul>
+      )}
 
       <ErrorNote error={error ?? mine.error ?? plans.error} />
 
+      <SectionHead n={1} title={t('Tu cuenta')} />
       <div className="account-grid">
         <section className="panel plan-now" aria-labelledby="plan-now-title">
           <div className="plan-now-head">
@@ -173,8 +207,8 @@ export function AccountPage() {
             </div>
           </dl>
           <div className="actions">
-            <Link to="/perfil" className="btn">
-              {t('Editar perfil, foto y cuentas')}
+            <Link to="/perfil" className="btn wd-btn-line">
+              <Icon name="edit" size={14} /> <span>{t('Editar perfil, foto y cuentas')}</span>
             </Link>
           </div>
         </section>
@@ -185,7 +219,7 @@ export function AccountPage() {
       {!isNative && (
       <section className="plans-section" aria-labelledby="plans-title">
         <div className="plans-intro">
-          <h2 id="plans-title">{t('Elige tu plan')}</h2>
+          <SectionHead n={2} id="plans-title" title={t('Elige tu plan')} />
           <p className="muted">{t('Cambia cuando quieras. El cambio es simulado: no se realiza ningún cobro.')}</p>
           {changedTo && (
             <p className="note plans-note" role="status">
@@ -219,13 +253,13 @@ export function AccountPage() {
                 </ul>
                 <div className="plan-cta">
                   {isCurrent ? (
-                    <button type="button" className="btn btn-block" disabled>
+                    <button type="button" className="btn btn-block wd-btn-line" disabled>
                       {t('Plan actual')}
                     </button>
                   ) : (
                     <button
                       type="button"
-                      className={`btn btn-block${upgrade && recommended ? ' btn-primary' : ''}`}
+                      className={`btn btn-block${upgrade && recommended ? ' wd-add' : ' wd-btn-line'}`}
                       disabled={changing !== null || !current}
                       onClick={() => changePlan(plan)}
                     >
@@ -251,7 +285,7 @@ export function AccountPage() {
       )}
 
       <section className="panel history" aria-labelledby="history-title">
-        <h2 id="history-title">{t('Historial de suscripciones')}</h2>
+        <SectionHead n={isNative ? 2 : 3} id="history-title" title={t('Historial de suscripciones')} />
         {history.data && history.data.length > 0 ? (
           <table className="table">
             <thead>
@@ -284,7 +318,7 @@ export function AccountPage() {
 
       <section className="panel danger-zone" aria-labelledby="delete-title">
         <div>
-          <h2 id="delete-title">{t('Eliminar la cuenta')}</h2>
+          <SectionHead n={isNative ? 3 : 4} id="delete-title" title={t('Eliminar la cuenta')} />
           <p className="muted">
             {t('Se borran para siempre tu cuenta, tus armarios, prendas, outfits e imágenes. No se puede deshacer.')}
           </p>

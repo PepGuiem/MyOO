@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, type FormEvent } from 'react';
+import { useCallback, useEffect, useState, type CSSProperties, type FormEvent } from 'react';
 import { Link, Navigate, useSearchParams } from 'react-router-dom';
 import { adminApi } from '../api/endpoints';
 import type {
@@ -30,17 +30,21 @@ import {
   REPORT_TARGET_LABEL,
   timeAgo,
 } from '../lib/community';
+import { NoMatch } from '../components/street/EmptyStage';
+import { SectionHead } from '../components/street/SectionHead';
+import { CountUp } from '../components/street/Street';
 import { IdeaBoard } from './IdeasPage';
 import { ReleaseBody } from './ReleasesPage';
+import { t, tn } from '../i18n';
 
 type Tab = 'resumen' | 'usuarios' | 'ideas' | 'denuncias' | 'novedades' | 'registro';
 const TABS: { key: Tab; label: string }[] = [
-  { key: 'resumen', label: 'Resumen' },
-  { key: 'usuarios', label: 'Usuarios' },
-  { key: 'ideas', label: 'Ideas' },
-  { key: 'denuncias', label: 'Denuncias' },
-  { key: 'novedades', label: 'Novedades' },
-  { key: 'registro', label: 'Registro' },
+  { key: 'resumen', label: t('Resumen') },
+  { key: 'usuarios', label: t('Usuarios') },
+  { key: 'ideas', label: t('Ideas') },
+  { key: 'denuncias', label: t('Denuncias') },
+  { key: 'novedades', label: t('Novedades') },
+  { key: 'registro', label: t('Registro') },
 ];
 
 /** Panel de administración: solo para cuentas con rol ADMIN. */
@@ -51,23 +55,28 @@ export function AdminPage() {
   const go = (t: Tab) => setParams(t === 'resumen' ? {} : { tab: t });
 
   // El backend también lo comprueba (403); esto solo evita enseñar la página.
-  if (!user) return <Spinner label="Cargando…" />;
+  if (!user) return <Spinner label={t('Cargando…')} />;
   if (user.role !== 'ADMIN') return <Navigate to="/" replace />;
 
   return (
-    <section className="page admin-page">
-      <header className="page-head">
+    <section className="page admin-page ux adm">
+      <header className="ux-head adm-head">
         <div>
-          <h1>Admin</h1>
-          <p className="muted">Usuarios, ideas, denuncias y novedades. Todo lo que hagas aquí queda en el registro.</p>
+          <span className="wd-kicker">
+            <Icon name="shield" size={12} /> {t('Control room')}
+          </span>
+          <h1 className="wd-title ux-title" data-text={t('Admin')}>
+            {t('Admin')}
+          </h1>
+          <p className="ux-lede">{t('Usuarios, ideas, denuncias y novedades. Todo lo que hagas aquí queda en el registro.')}</p>
         </div>
-        <div className="head-actions">
-          <Link to="/monitor" className="btn">
-            <Icon name="pulse" size={14} /> Abrir el monitor
+        <div className="wd-head-actions">
+          <Link to="/monitor" className="btn wd-btn-line">
+            <Icon name="pulse" size={14} /> <span>{t('Abrir el monitor')}</span>
           </Link>
         </div>
       </header>
-      <nav className="profile-tabs admin-tabs" aria-label="Secciones del panel">
+      <nav className="profile-tabs admin-tabs" aria-label={t('Secciones del panel')}>
         {TABS.map((t) => (
           <button key={t.key} type="button" className="profile-tab" aria-current={tab === t.key ? 'page' : undefined} onClick={() => go(t.key)}>
             {t.label}
@@ -75,9 +84,10 @@ export function AdminPage() {
         ))}
       </nav>
       <div className="admin-body">
+        <SectionHead n={TABS.findIndex((x) => x.key === tab) + 1} title={TABS.find((x) => x.key === tab)!.label} />
         {tab === 'resumen' && <Overview go={go} />}
         {tab === 'usuarios' && <Users />}
-        {tab === 'ideas' && <IdeaBoard defaultSort="new" defaultStatus="NEW" />}
+        {tab === 'ideas' && <IdeaBoard defaultSort="new" defaultStatus="NEW" numbered={false} />}
         {tab === 'denuncias' && <Reports />}
         {tab === 'novedades' && <Releases />}
         {tab === 'registro' && <ActionLog />}
@@ -95,19 +105,27 @@ function Overview({ go }: { go: (t: Tab) => void }) {
     adminApi.stats().then(setS).catch(setError);
   }, []);
   if (error) return <ErrorNote error={error} />;
-  if (!s) return <Spinner label="Cargando…" />;
+  if (!s) return <Spinner label={t('Cargando…')} />;
   const tiles: { label: string; value: number; hint?: string; tab: Tab; alert?: boolean }[] = [
-    { label: 'Denuncias abiertas', value: s.openReports, tab: 'denuncias', alert: s.openReports > 0 },
-    { label: 'Ideas nuevas', value: s.newIdeas, hint: `de ${s.ideas} en total`, tab: 'ideas' },
-    { label: 'Cuentas', value: s.users, hint: `${s.newUsers} esta semana`, tab: 'usuarios' },
-    { label: 'Suspendidas', value: s.banned, tab: 'usuarios' },
-    { label: 'Novedades publicadas', value: s.releases.published, hint: s.releases.drafts ? `${s.releases.drafts} borradores` : undefined, tab: 'novedades' },
+    { label: t('Denuncias abiertas'), value: s.openReports, tab: 'denuncias', alert: s.openReports > 0 },
+    { label: t('Ideas nuevas'), value: s.newIdeas, hint: t('de {ideas} en total', { ideas: s.ideas }), tab: 'ideas' },
+    { label: t('Cuentas'), value: s.users, hint: t('{n} esta semana', { n: s.newUsers }), tab: 'usuarios' },
+    { label: t('Suspendidas'), value: s.banned, tab: 'usuarios' },
+    { label: t('Novedades publicadas'), value: s.releases.published, hint: s.releases.drafts ? tn(s.releases.drafts, '{n} borrador', '{n} borradores') : undefined, tab: 'novedades' },
   ];
   return (
     <div className="admin-stats">
-      {tiles.map((t) => (
-        <button key={t.label} type="button" className={`admin-stat${t.alert ? ' is-alert' : ''}`} onClick={() => go(t.tab)}>
-          <span className="admin-stat-value">{t.value}</span>
+      {tiles.map((t, i) => (
+        <button
+          key={t.label}
+          type="button"
+          className={`admin-stat${t.alert ? ' is-alert' : ''}`}
+          style={{ '--i': i } as CSSProperties}
+          onClick={() => go(t.tab)}
+        >
+          <span className="admin-stat-value">
+            <CountUp value={t.value} delay={i * 90} />
+          </span>
           <span className="admin-stat-label">{t.label}</span>
           {t.hint && <span className="admin-stat-hint">{t.hint}</span>}
         </button>
@@ -120,15 +138,15 @@ function Overview({ go }: { go: (t: Tab) => void }) {
 
 type UserFilter = 'all' | 'reported' | 'banned' | 'admins';
 const USER_FILTERS: { value: UserFilter; label: string }[] = [
-  { value: 'all', label: 'Todas' },
-  { value: 'reported', label: 'Con denuncias' },
-  { value: 'banned', label: 'Suspendidas' },
-  { value: 'admins', label: 'Admins' },
+  { value: 'all', label: t('Todas') },
+  { value: 'reported', label: t('Con denuncias') },
+  { value: 'banned', label: t('Suspendidas') },
+  { value: 'admins', label: t('Admins') },
 ];
 
 function banLabel(u: Pick<AdminUser, 'banned' | 'bannedUntil'>): string {
   if (!u.banned) return '';
-  return u.bannedUntil ? `Suspendida hasta el ${longDate(u.bannedUntil)}` : 'Suspendida indefinidamente';
+  return u.bannedUntil ? t('Suspendida hasta el {longDate}', { longDate: longDate(u.bannedUntil) }) : t('Suspendida indefinidamente');
 }
 
 function Users() {
@@ -162,9 +180,9 @@ function Users() {
       <div className="idea-toolbar">
         <label className="search">
           <Icon name="search" size={15} />
-          <input type="search" value={q} placeholder="Email, @usuario o nombre" aria-label="Buscar cuentas" onChange={(e) => setQ(e.target.value)} />
+          <input type="search" value={q} placeholder={t('Email, @usuario o nombre')} aria-label={t('Buscar cuentas')} onChange={(e) => setQ(e.target.value)} />
         </label>
-        <div className="chips chips-small" role="group" aria-label="Filtrar">
+        <div className="chips chips-small" role="group" aria-label={t('Filtrar')}>
           {USER_FILTERS.map((f) => (
             <button
               key={f.value}
@@ -182,8 +200,8 @@ function Users() {
         </div>
       </div>
       <ErrorNote error={error} />
-      {!data && !error && <Spinner label="Cargando cuentas…" />}
-      {data && data.data.length === 0 && <p className="muted">Ninguna cuenta con ese filtro.</p>}
+      {!data && !error && <Spinner label={t('Cargando cuentas…')} />}
+      {data && data.data.length === 0 && <NoMatch icon="users" title={t('Sin cuentas')} text={t('Ninguna cuenta con ese filtro.')} />}
       {data && data.data.length > 0 && (
         <ul className="admin-users panel">
           {data.data.map((u) => (
@@ -195,13 +213,13 @@ function Users() {
                     {personName(u)} {u.username && <span className="muted">@{u.username}</span>}
                   </strong>
                   <small className="muted">
-                    {u.email} · desde {longDate(u.createdAt)}
+                    {t('{email} · desde {longDate}', { email: u.email, longDate: longDate(u.createdAt) })}
                   </small>
                 </span>
                 <span className="admin-user-flags">
-                  {u.role === 'ADMIN' && <span className="admin-pill">Admin</span>}
-                  {u.openReports > 0 && <span className="admin-pill is-warn">{u.openReports === 1 ? '1 denuncia' : `${u.openReports} denuncias`}</span>}
-                  {u.banned && <span className="admin-pill is-danger">Suspendida</span>}
+                  {u.role === 'ADMIN' && <span className="admin-pill">{t('Admin')}</span>}
+                  {u.openReports > 0 && <span className="admin-pill is-warn">{tn(u.openReports, '{n} denuncia', '{n} denuncias')}</span>}
+                  {u.banned && <span className="admin-pill is-danger">{t('Suspendida')}</span>}
                 </span>
               </button>
             </li>
@@ -221,10 +239,10 @@ function Users() {
 }
 
 const BAN_DURATIONS = [
-  { days: 1, label: '1 día' },
-  { days: 7, label: '7 días' },
-  { days: 30, label: '30 días' },
-  { days: 0, label: 'Indefinida' },
+  { days: 1, label: t('1 día') },
+  { days: 7, label: t('7 días') },
+  { days: 30, label: t('30 días') },
+  { days: 0, label: t('Indefinida') },
 ];
 
 /** Ficha de una cuenta: datos, denuncias, historial y suspender/levantar. */
@@ -272,8 +290,8 @@ export function UserDialog({ id, onClose, onChanged }: { id: string; onClose: ()
   }
 
   return (
-    <Modal title={u ? personName(u) : 'Cuenta'} onClose={onClose} wide className="admin-user-dialog">
-      {!u && !error && <Spinner label="Cargando…" />}
+    <Modal title={u ? personName(u) : t('Cuenta')} onClose={onClose} wide className="admin-user-dialog">
+      {!u && !error && <Spinner label={t('Cargando…')} />}
       <ErrorNote error={error} />
       {u && (
         <div className="admin-user-detail">
@@ -285,21 +303,21 @@ export function UserDialog({ id, onClose, onChanged }: { id: string; onClose: ()
                 {u.username ? `@${u.username} · ` : ''}
                 {u.email}
               </p>
-              <p className="muted small">Cuenta creada el {longDate(u.createdAt)}</p>
+              <p className="muted small">{t('Cuenta creada el {longDate}', { longDate: longDate(u.createdAt) })}</p>
               <Link to={profilePath(u)} className="small" onClick={onClose}>
-                Ver perfil público
+                {t('Ver perfil público')}
               </Link>
             </div>
           </div>
           <dl className="admin-counts">
             {(
               [
-                ['Outfits', u.counts.outfits],
-                ['Armarios', u.counts.wardrobes],
-                ['Seguidores', u.counts.followers],
-                ['Siguiendo', u.counts.following],
-                ['Ideas', u.counts.ideas],
-                ['Denuncias hechas', u.counts.reportsMade],
+                [t('Outfits'), u.counts.outfits],
+                [t('Armarios'), u.counts.wardrobes],
+                [t('Seguidores'), u.counts.followers],
+                [t('Siguiendo'), u.counts.following],
+                [t('Ideas'), u.counts.ideas],
+                [t('Denuncias hechas'), u.counts.reportsMade],
               ] as const
             ).map(([k, v]) => (
               <div key={k}>
@@ -310,37 +328,37 @@ export function UserDialog({ id, onClose, onChanged }: { id: string; onClose: ()
           </dl>
 
           <section className="admin-section">
-            <h3 className="panel-title">Suspensión</h3>
+            <h3 className="panel-title">{t('Suspensión')}</h3>
             {u.banned ? (
               <div className="stack">
                 <p className="danger-text">
-                  {banLabel(u)}.{u.banReason && ` Motivo: ${u.banReason}`}
+                  {banLabel(u)}.{u.banReason && ` ${t('Motivo: {reason}', { reason: u.banReason })}`}
                 </p>
                 <div>
                   <button type="button" className="btn" disabled={busy} onClick={() => void unban()}>
-                    {busy ? <Busy text="Levantando…" /> : 'Levantar la suspensión'}
+                    {busy ? <Busy text={t('Levantando…')} /> : t('Levantar la suspensión')}
                   </button>
                 </div>
               </div>
             ) : u.role === 'ADMIN' || u.id === me?.id ? (
-              <p className="muted small">Las cuentas de admin no se pueden suspender (primero se le quita el rol en el servidor).</p>
+              <p className="muted small">{t('Las cuentas de admin no se pueden suspender (primero se le quita el rol en el servidor).')}</p>
             ) : (
               <form className="stack" onSubmit={ban}>
                 <label className="field">
-                  <span>Motivo (lo verá la persona al intentar entrar)</span>
-                  <input value={reason} maxLength={300} minLength={3} required onChange={(e) => setReason(e.target.value)} placeholder="Ej.: spam repetido en mensajes" />
+                  <span>{t('Motivo (lo verá la persona al intentar entrar)')}</span>
+                  <input value={reason} maxLength={300} minLength={3} required onChange={(e) => setReason(e.target.value)} placeholder={t('Ej.: spam repetido en mensajes')} />
                 </label>
-                <div className="chips chips-small" role="radiogroup" aria-label="Duración">
+                <div className="chips chips-small" role="radiogroup" aria-label={t('Duración')}>
                   {BAN_DURATIONS.map((d) => (
                     <button key={d.days} type="button" role="radio" aria-checked={days === d.days} className={`chip${days === d.days ? ' is-active' : ''}`} onClick={() => setDays(d.days)}>
                       {d.label}
                     </button>
                   ))}
                 </div>
-                <p className="muted small">Se cierra su sesión al momento y no podrá entrar (ni con Google/Apple) hasta que acabe o la levantes. Su perfil deja de verse.</p>
+                <p className="muted small">{t('Se cierra su sesión al momento y no podrá entrar (ni con Google/Apple) hasta que acabe o la levantes. Su perfil deja de verse.')}</p>
                 <div>
                   <button type="submit" className="btn btn-danger-solid" disabled={busy || reason.trim().length < 3}>
-                    {busy ? <Busy text="Suspendiendo…" /> : 'Suspender la cuenta'}
+                    {busy ? <Busy text={t('Suspendiendo…')} /> : t('Suspender la cuenta')}
                   </button>
                 </div>
               </form>
@@ -348,9 +366,9 @@ export function UserDialog({ id, onClose, onChanged }: { id: string; onClose: ()
           </section>
 
           <section className="admin-section">
-            <h3 className="panel-title">Denuncias recibidas ({u.reports.length})</h3>
+            <h3 className="panel-title">{t('Denuncias recibidas ({n})', { n: u.reports.length })}</h3>
             {u.reports.length === 0 ? (
-              <p className="muted small">Ninguna.</p>
+              <p className="muted small">{t('Ninguna.')}</p>
             ) : (
               <ul className="admin-mini-list">
                 {u.reports.map((r) => (
@@ -365,8 +383,8 @@ export function UserDialog({ id, onClose, onChanged }: { id: string; onClose: ()
           </section>
 
           <section className="admin-section">
-            <h3 className="panel-title">Historial de moderación</h3>
-            {u.actions.length === 0 ? <p className="muted small">Nada todavía.</p> : <ActionList actions={u.actions} />}
+            <h3 className="panel-title">{t('Historial de moderación')}</h3>
+            {u.actions.length === 0 ? <p className="muted small">{t('Nada todavía.')}</p> : <ActionList actions={u.actions} />}
           </section>
         </div>
       )}
@@ -380,7 +398,7 @@ function Snapshot({ type, snapshot }: { type: ReportTarget; snapshot: Record<str
   if (!snapshot) return null;
   const s = (k: string) => (typeof snapshot[k] === 'string' ? (snapshot[k] as string) : null);
   let text: string | null = null;
-  if (type === 'MESSAGE') text = s('body') ?? (s('outfitName') ? `Outfit enviado: ${s('outfitName')}` : null);
+  if (type === 'MESSAGE') text = s('body') ?? (s('outfitName') ? t('Outfit enviado: {name}', { name: s('outfitName') ?? '' }) : null);
   if (type === 'OUTFIT') text = [s('name'), s('description')].filter(Boolean).join(' — ');
   if (type === 'IDEA') text = [s('title'), s('body')].filter(Boolean).join(' — ');
   if (type === 'LISTING') text = [s('title'), s('price') && `${s('price')} ${s('currency') ?? ''}`.trim(), s('description')].filter(Boolean).join(' — ');
@@ -390,10 +408,10 @@ function Snapshot({ type, snapshot }: { type: ReportTarget; snapshot: Record<str
 }
 
 const REPORT_FILTERS: { value: ReportStatus | ''; label: string }[] = [
-  { value: 'OPEN', label: 'Abiertas' },
-  { value: 'RESOLVED', label: 'Resueltas' },
-  { value: 'DISMISSED', label: 'Descartadas' },
-  { value: '', label: 'Todas' },
+  { value: 'OPEN', label: t('Abiertas') },
+  { value: 'RESOLVED', label: t('Resueltas') },
+  { value: 'DISMISSED', label: t('Descartadas') },
+  { value: '', label: t('Todas') },
 ];
 
 function Reports() {
@@ -414,7 +432,7 @@ function Reports() {
 
   return (
     <div className="stack">
-      <div className="chips chips-small" role="group" aria-label="Filtrar">
+      <div className="chips chips-small" role="group" aria-label={t('Filtrar')}>
         {REPORT_FILTERS.map((f) => (
           <button
             key={f.label}
@@ -430,10 +448,12 @@ function Reports() {
           </button>
         ))}
       </div>
-      <p className="muted small">Por privacidad no puedes leer los chats: de un mensaje solo ves la copia que se guardó al denunciarlo.</p>
+      <p className="muted small">{t('Por privacidad no puedes leer los chats: de un mensaje solo ves la copia que se guardó al denunciarlo.')}</p>
       <ErrorNote error={error} />
-      {!data && !error && <Spinner label="Cargando denuncias…" />}
-      {data && data.data.length === 0 && <p className="muted">{status === 'OPEN' ? 'No hay denuncias pendientes. 👌' : 'Nada por aquí.'}</p>}
+      {!data && !error && <Spinner label={t('Cargando denuncias…')} />}
+      {data && data.data.length === 0 && (
+        <NoMatch icon="flag" title={status === 'OPEN' ? t('Todo revisado') : t('Sin denuncias')} text={status === 'OPEN' ? t('No hay denuncias pendientes. 👌') : t('Nada por aquí.')} />
+      )}
       {data && data.data.length > 0 && (
         <ul className="admin-reports">
           {data.data.map((r) => (
@@ -477,67 +497,67 @@ function ReportCard({ report: r, onChanged, onOpenUser }: { report: AdminReport;
         <strong>{REPORT_REASON_LABEL[r.reason]}</strong>
         <span className="muted small">· {timeAgo(r.createdAt)}</span>
         {r.status !== 'OPEN' && <span className="admin-pill">{REPORT_STATUS_LABEL[r.status]}</span>}
-        {r.targetState !== 'visible' && <span className="admin-pill is-muted">{r.targetState === 'hidden' ? 'Ya oculto' : 'Ya borrado'}</span>}
+        {r.targetState !== 'visible' && <span className="admin-pill is-muted">{r.targetState === 'hidden' ? t('Ya oculto') : t('Ya borrado')}</span>}
       </header>
 
       <p className="small">
-        <span className="muted">Denunciado: </span>
+        <span className="muted">{t('Denunciado:')} </span>
         {r.targetUser ? (
           <button type="button" className="btn-link" onClick={() => onOpenUser(r.targetUser!.id)}>
             {personName(r.targetUser)}
             {r.targetUser.username ? ` (@${r.targetUser.username})` : ''}
           </button>
         ) : (
-          'cuenta eliminada'
+          t('cuenta eliminada')
         )}
-        {r.targetUser?.banned && <span className="admin-pill is-danger"> Suspendida</span>}
-        <span className="muted"> · por </span>
-        {r.reporter ? personName(r.reporter) : 'cuenta eliminada'}
+        {r.targetUser?.banned && <span className="admin-pill is-danger"> {t('Suspendida')}</span>}
+        <span className="muted"> {t('· por')} </span>
+        {r.reporter ? personName(r.reporter) : t('cuenta eliminada')}
       </p>
       <Snapshot type={r.targetType} snapshot={r.snapshot} />
       {r.details && <p className="small">«{r.details}»</p>}
-      {r.resolution && <p className="small muted">Resolución: {r.resolution}</p>}
+      {r.resolution && <p className="small muted">{t('Resolución: {resolution}', { resolution: r.resolution })}</p>}
 
       {r.status === 'OPEN' && (
         <div className="stack admin-report-actions">
           <div className="actions">
             {r.targetType === 'MESSAGE' && r.targetState === 'visible' && (
               <button type="button" className="btn btn-small btn-danger" disabled={busy} onClick={() => void run(() => adminApi.deleteMessage(r.targetId))}>
-                <Icon name="trash" size={13} /> Borrar el mensaje
+                <Icon name="trash" size={13} /> {t('Borrar el mensaje')}
               </button>
             )}
             {r.targetType === 'OUTFIT' && r.targetState !== 'deleted' && (
               <button type="button" className="btn btn-small" disabled={busy} onClick={() => void run(() => adminApi.hideOutfit(r.targetId, r.targetState !== 'hidden'))}>
-                <Icon name="eyeOff" size={13} /> {r.targetState === 'hidden' ? 'Volver a mostrar el outfit' : 'Ocultar el outfit'}
+                <Icon name="eyeOff" size={13} /> {r.targetState === 'hidden' ? t('Volver a mostrar el outfit') : t('Ocultar el outfit')}
               </button>
             )}
             {r.targetType === 'LISTING' && r.targetState !== 'deleted' && (
               <button type="button" className="btn btn-small" disabled={busy} onClick={() => void run(() => adminApi.hideListing(r.targetId, r.targetState !== 'hidden'))}>
-                <Icon name="eyeOff" size={13} /> {r.targetState === 'hidden' ? 'Volver a mostrar el anuncio' : 'Ocultar el anuncio'}
+                <Icon name="eyeOff" size={13} /> {r.targetState === 'hidden' ? t('Volver a mostrar el anuncio') : t('Ocultar el anuncio')}
               </button>
             )}
             {r.targetType === 'IDEA' && r.targetState !== 'deleted' && (
               <button type="button" className="btn btn-small" disabled={busy} onClick={() => void run(() => adminApi.updateIdea(r.targetId, { hidden: r.targetState !== 'hidden' }))}>
-                <Icon name="eyeOff" size={13} /> {r.targetState === 'hidden' ? 'Volver a mostrar la idea' : 'Ocultar la idea'}
+                <Icon name="eyeOff" size={13} /> {r.targetState === 'hidden' ? t('Volver a mostrar la idea') : t('Ocultar la idea')}
               </button>
             )}
             {r.targetUser && !r.targetUser.banned && r.targetUser.role !== 'ADMIN' && (
               <button type="button" className="btn btn-small btn-danger" onClick={() => onOpenUser(r.targetUser!.id)}>
-                Suspender…
+                {t('Suspender…')}
               </button>
             )}
           </div>
-          <input value={resolution} maxLength={300} placeholder="Nota interna (opcional): qué se ha hecho" aria-label="Nota de la resolución" onChange={(e) => setResolution(e.target.value)} />
+          <input value={resolution} maxLength={300} placeholder={t('Nota interna (opcional): qué se ha hecho')} aria-label={t('Nota de la resolución')} onChange={(e) => setResolution(e.target.value)} />
           <div className="actions">
             <label className="check">
-              <input type="checkbox" checked={notify} onChange={(e) => setNotify(e.target.checked)} /> Avisar a quien denunció
+              <input type="checkbox" checked={notify} onChange={(e) => setNotify(e.target.checked)} /> {t('Avisar a quien denunció')}
             </label>
             <span className="spacer" />
             <button type="button" className="btn btn-small btn-ghost" disabled={busy} onClick={() => void close('DISMISSED')}>
-              Descartar
+              {t('Descartar')}
             </button>
             <button type="button" className="btn btn-small btn-primary" disabled={busy} onClick={() => void close('RESOLVED')}>
-              Resuelta
+              {t('Resuelta')}
             </button>
           </div>
         </div>
@@ -545,7 +565,7 @@ function ReportCard({ report: r, onChanged, onOpenUser }: { report: AdminReport;
       {r.status !== 'OPEN' && (
         <div className="actions">
           <button type="button" className="btn btn-small btn-ghost" disabled={busy} onClick={() => void run(() => adminApi.updateReport(r.id, { status: 'OPEN', notifyReporter: false }))}>
-            Reabrir
+            {t('Reabrir')}
           </button>
         </div>
       )}
@@ -584,41 +604,41 @@ function Releases() {
   return (
     <div className="stack">
       <div className="actions">
-        <button type="button" className="btn btn-primary" onClick={() => setEditing('new')}>
-          <Icon name="plus" size={14} /> Nueva novedad
+        <button type="button" className="btn wd-add" onClick={() => setEditing('new')}>
+          <Icon name="plus" size={14} /> <span>{t('Nueva novedad')}</span>
         </button>
-        <Link to="/novedades" className="btn btn-ghost">
-          Ver la página pública
+        <Link to="/novedades" className="btn wd-btn-line">
+          <Icon name="eye" size={14} /> <span>{t('Ver la página pública')}</span>
         </Link>
       </div>
       {notice && <p className="note">{notice}</p>}
       <ErrorNote error={error} />
-      {!data && !error && <Spinner label="Cargando…" />}
-      {data && data.data.length === 0 && <p className="muted">Aún no hay ninguna. Escribe la primera: se guarda como borrador hasta que la publiques.</p>}
+      {!data && !error && <Spinner label={t('Cargando…')} />}
+      {data && data.data.length === 0 && <NoMatch icon="megaphone" title={t('Sin novedades')} text={t('Aún no hay ninguna. Escribe la primera: se guarda como borrador hasta que la publiques.')} />}
       {data && data.data.length > 0 && (
         <ul className="admin-releases">
           {data.data.map((r) => (
             <li key={r.id} className={`admin-release panel${r.publishedAt ? '' : ' is-draft'}`}>
               <div className="admin-release-head">
                 <div>
-                  <span className={`admin-pill${r.publishedAt ? '' : ' is-warn'}`}>{r.publishedAt ? `Publicada el ${longDate(r.publishedAt)}` : 'Borrador'}</span>
+                  <span className={`admin-pill${r.publishedAt ? '' : ' is-warn'}`}>{r.publishedAt ? t('Publicada el {longDate}', { longDate: longDate(r.publishedAt) }) : t('Borrador')}</span>
                   {r.version && <span className="muted small"> v{r.version.replace(/^v/i, '')}</span>}
                   <h3>{r.title}</h3>
                 </div>
                 <div className="actions">
                   <button type="button" className="btn btn-small" onClick={() => setEditing(r)}>
-                    <Icon name="edit" size={13} /> Editar
+                    <Icon name="edit" size={13} /> {t('Editar')}
                   </button>
                   {r.publishedAt ? (
                     <button type="button" className="btn btn-small btn-ghost" onClick={() => void run(() => adminApi.unpublishRelease(r.id))}>
-                      Retirar
+                      {t('Retirar')}
                     </button>
                   ) : (
                     <button type="button" className="btn btn-small btn-primary" onClick={() => setPublishing(r)}>
-                      <Icon name="megaphone" size={13} /> Publicar
+                      <Icon name="megaphone" size={13} /> {t('Publicar')}
                     </button>
                   )}
-                  <button type="button" className="icon-btn" aria-label={`Borrar «${r.title}»`} onClick={() => setDeleting(r)}>
+                  <button type="button" className="icon-btn" aria-label={t('Borrar «{title}»', { title: r.title })} onClick={() => setDeleting(r)}>
                     <Icon name="trash" size={15} />
                   </button>
                 </div>
@@ -646,20 +666,20 @@ function Releases() {
           onClose={() => setPublishing(null)}
           onDone={(n) => {
             setPublishing(null);
-            setNotice(n > 0 ? `Publicada. Aviso enviado a ${n} ${n === 1 ? 'cuenta' : 'cuentas'}.` : 'Publicada.');
+            setNotice(n > 0 ? t('Publicada. Aviso enviado a {n} {v}.', { n, v: n === 1 ? t('cuenta') : t('cuentas') }) : t('Publicada.'));
             load();
           }}
         />
       )}
       {deleting && (
-        <Modal title="Borrar novedad" onClose={() => setDeleting(null)}>
+        <Modal title={t('Borrar novedad')} onClose={() => setDeleting(null)}>
           <div className="stack">
             <p>
-              ¿Borrar «{deleting.title}»? {deleting.publishedAt ? 'Dejará de verse en Novedades. ' : ''}No se puede deshacer.
+              {t('¿Borrar «{title}»? {v}No se puede deshacer.', { title: deleting.title, v: deleting.publishedAt ? t('Dejará de verse en Novedades. ') : '' })}
             </p>
             <div className="dialog-actions">
               <button type="button" className="btn btn-ghost" onClick={() => setDeleting(null)}>
-                Cancelar
+                {t('Cancelar')}
               </button>
               <button
                 type="button"
@@ -670,7 +690,7 @@ function Releases() {
                   void run(() => adminApi.deleteRelease(r.id));
                 }}
               >
-                Borrar
+                {t('Borrar')}
               </button>
             </div>
           </div>
@@ -707,20 +727,20 @@ function ReleaseEditor({ release, onClose, onSaved }: { release: Release | null;
   const toggle = (t: ReleaseTag) => setTags((l) => (l.includes(t) ? l.filter((x) => x !== t) : [...l, t]));
 
   return (
-    <Modal title={release ? 'Editar novedad' : 'Nueva novedad'} onClose={onClose} wide>
+    <Modal title={release ? t('Editar novedad') : t('Nueva novedad')} onClose={onClose} wide>
       <form className="stack" onSubmit={save}>
         <div className="row release-editor-row">
           <label className="field">
-            <span>Título</span>
-            <input value={title} maxLength={120} required onChange={(e) => setTitle(e.target.value)} placeholder="Chats en tiempo real" />
+            <span>{t('Título')}</span>
+            <input value={title} maxLength={120} required onChange={(e) => setTitle(e.target.value)} placeholder={t('Chats en tiempo real')} />
           </label>
           <label className="field">
-            <span>Versión (opcional)</span>
+            <span>{t('Versión (opcional)')}</span>
             <input value={version} maxLength={30} onChange={(e) => setVersion(e.target.value)} placeholder="1.4" />
           </label>
         </div>
         <fieldset className="field">
-          <legend>Tipo</legend>
+          <legend>{t('Tipo')}</legend>
           <div className="chips chips-small">
             {RELEASE_TAGS.map((t) => (
               <button key={t} type="button" className={`chip${tags.includes(t) ? ' is-active' : ''}`} aria-pressed={tags.includes(t)} onClick={() => toggle(t)}>
@@ -731,13 +751,13 @@ function ReleaseEditor({ release, onClose, onSaved }: { release: Release | null;
         </fieldset>
         <div className="field">
           <span className="release-editor-label">
-            Texto
+            {t('Texto')}
             <button type="button" className="link-btn" onClick={() => setPreview((v) => !v)}>
-              {preview ? 'Editar' : 'Vista previa'}
+              {preview ? t('Editar') : t('Vista previa')}
             </button>
           </span>
           {preview ? (
-            <div className="release-preview">{body.trim() ? <ReleaseBody text={body} /> : <p className="muted">Nada que ver todavía.</p>}</div>
+            <div className="release-preview">{body.trim() ? <ReleaseBody text={body} /> : <p className="muted">{t('Nada que ver todavía.')}</p>}</div>
           ) : (
             <textarea
               rows={10}
@@ -745,18 +765,18 @@ function ReleaseEditor({ release, onClose, onSaved }: { release: Release | null;
               required
               value={body}
               onChange={(e) => setBody(e.target.value)}
-              placeholder={'Ya puedes hablar con tus amigos dentro de MyOut.\n\n- Chats 1 a 1 y de grupo\n- Envía outfits por mensaje'}
+              placeholder={t('Ya puedes hablar con tus amigos dentro de MyOut.\n\n- Chats 1 a 1 y de grupo\n- Envía outfits por mensaje')}
             />
           )}
-          <small className="muted">Una línea en blanco separa párrafos; las líneas que empiezan por «- » forman una lista.</small>
+          <small className="muted">{t('Una línea en blanco separa párrafos; las líneas que empiezan por «- » forman una lista.')}</small>
         </div>
         <ErrorNote error={error} />
         <div className="dialog-actions">
           <button type="button" className="btn btn-ghost" onClick={onClose}>
-            Cancelar
+            {t('Cancelar')}
           </button>
           <button type="submit" className="btn btn-primary" disabled={busy || title.trim().length < 3 || body.trim().length < 10}>
-            {busy ? <Busy text="Guardando…" /> : release ? 'Guardar' : 'Guardar borrador'}
+            {busy ? <Busy text={t('Guardando…')} /> : release ? t('Guardar') : t('Guardar borrador')}
           </button>
         </div>
       </form>
@@ -782,22 +802,22 @@ function PublishDialog({ release, onClose, onDone }: { release: Release; onClose
   }
 
   return (
-    <Modal title="Publicar novedad" onClose={onClose}>
+    <Modal title={t('Publicar novedad')} onClose={onClose}>
       <div className="stack">
         <p>
-          «{release.title}» aparecerá en <strong>Novedades</strong>.
+          {t('«{title}» aparecerá en', { title: release.title })} <strong>{t('Novedades')}</strong>.
         </p>
         <label className="check">
-          <input type="checkbox" checked={notify} onChange={(e) => setNotify(e.target.checked)} /> Mandar un aviso a todas las cuentas
+          <input type="checkbox" checked={notify} onChange={(e) => setNotify(e.target.checked)} /> {t('Mandar un aviso a todas las cuentas')}
         </label>
-        <p className="muted small">El aviso solo se manda la primera vez que se publica.</p>
+        <p className="muted small">{t('El aviso solo se manda la primera vez que se publica.')}</p>
         <ErrorNote error={error} />
         <div className="dialog-actions">
           <button type="button" className="btn btn-ghost" onClick={onClose}>
-            Cancelar
+            {t('Cancelar')}
           </button>
           <button type="button" className="btn btn-primary" disabled={busy} onClick={() => void publish()}>
-            {busy ? <Busy text="Publicando…" /> : 'Publicar'}
+            {busy ? <Busy text={t('Publicando…')} /> : t('Publicar')}
           </button>
         </div>
       </div>
@@ -808,27 +828,27 @@ function PublishDialog({ release, onClose, onDone }: { release: Release; onClose
 // ---------------------------------------------------------------- registro
 
 const ACTION_LABEL: Record<string, string> = {
-  'user.ban': 'suspendió a',
-  'user.unban': 'levantó la suspensión de',
-  'idea.update': 'actualizó una idea de',
-  'idea.delete': 'borró una idea de',
-  'report.update': 'revisó una denuncia sobre',
-  'outfit.hide': 'ocultó un outfit de',
-  'outfit.unhide': 'volvió a mostrar un outfit de',
-  'message.delete': 'borró un mensaje de',
-  'release.create': 'creó la novedad',
-  'release.update': 'editó la novedad',
-  'release.publish': 'publicó la novedad',
-  'release.unpublish': 'retiró la novedad',
-  'release.delete': 'borró la novedad',
+  'user.ban': t('suspendió a'),
+  'user.unban': t('levantó la suspensión de'),
+  'idea.update': t('actualizó una idea de'),
+  'idea.delete': t('borró una idea de'),
+  'report.update': t('revisó una denuncia sobre'),
+  'outfit.hide': t('ocultó un outfit de'),
+  'outfit.unhide': t('volvió a mostrar un outfit de'),
+  'message.delete': t('borró un mensaje de'),
+  'release.create': t('creó la novedad'),
+  'release.update': t('editó la novedad'),
+  'release.publish': t('publicó la novedad'),
+  'release.unpublish': t('retiró la novedad'),
+  'release.delete': t('borró la novedad'),
 };
 
 function actionDetail(a: AdminAction): string {
   const d = a.details ?? {};
   const str = (k: string) => (typeof d[k] === 'string' ? (d[k] as string) : null);
   if (a.action.startsWith('release.')) return str('title') ? `«${str('title')}»` : '';
-  if (a.action === 'user.ban') return [str('reason') && `Motivo: ${str('reason')}`, typeof d.days === 'number' ? `${d.days} días` : 'indefinida'].filter(Boolean).join(' · ');
-  if (a.action === 'idea.update' && typeof d.status === 'string') return `Estado: ${IDEA_STATUS_LABEL[d.status as keyof typeof IDEA_STATUS_LABEL] ?? d.status}`;
+  if (a.action === 'user.ban') return [str('reason') && t('Motivo: {str}', { str: str('reason') }), typeof d.days === 'number' ? t('{days} días', { days: d.days }) : t('indefinida')].filter(Boolean).join(' · ');
+  if (a.action === 'idea.update' && typeof d.status === 'string') return t('Estado: {v}', { v: IDEA_STATUS_LABEL[d.status as keyof typeof IDEA_STATUS_LABEL] ?? d.status });
   if (a.action === 'report.update' && typeof d.status === 'string') return REPORT_STATUS_LABEL[d.status as ReportStatus] ?? '';
   if (a.action.startsWith('outfit.') || a.action === 'idea.delete') return str('name') ?? str('title') ?? '';
   return '';
@@ -845,14 +865,14 @@ function ActionList({ actions }: { actions: AdminAction[] }) {
               {timeAgo(a.createdAt)}
             </time>
             <span>
-              <strong>{a.admin ? personName(a.admin) : 'Un admin'}</strong> {ACTION_LABEL[a.action] ?? a.action}
+              <strong>{a.admin ? personName(a.admin) : t('Un admin')}</strong> {ACTION_LABEL[a.action] ?? a.action}
               {!a.action.startsWith('release.') &&
                 (a.targetUser === undefined ? (
-                  ' esta cuenta'
+                  t(' esta cuenta')
                 ) : (
                   <>
                     {' '}
-                    <strong>{a.targetUser ? personName(a.targetUser) : 'una cuenta eliminada'}</strong>
+                    <strong>{a.targetUser ? personName(a.targetUser) : t('una cuenta eliminada')}</strong>
                   </>
                 ))}
               {detail && (a.action.startsWith('release.') ? <> {detail}</> : <span className="muted"> · {detail}</span>)}
@@ -872,8 +892,8 @@ function ActionLog() {
     adminApi.actions(page).then(setData).catch(setError);
   }, [page]);
   if (error) return <ErrorNote error={error} />;
-  if (!data) return <Spinner label="Cargando…" />;
-  if (data.data.length === 0) return <p className="muted">Aún no se ha hecho nada desde el panel.</p>;
+  if (!data) return <Spinner label={t('Cargando…')} />;
+  if (data.data.length === 0) return <NoMatch icon="history" title={t('Registro vacío')} text={t('Aún no se ha hecho nada desde el panel.')} />;
   return (
     <div className="stack">
       <div className="panel">
@@ -887,15 +907,15 @@ function ActionLog() {
 function Pager({ page, totalPages, onPage }: { page: number; totalPages: number; onPage: (p: number) => void }) {
   if (totalPages <= 1) return null;
   return (
-    <nav className="pager" aria-label="Páginas">
+    <nav className="pager" aria-label={t('Páginas')}>
       <button type="button" className="btn btn-small btn-ghost" disabled={page <= 1} onClick={() => onPage(page - 1)}>
-        <Icon name="back" size={13} /> Anterior
+        <Icon name="back" size={13} /> {t('Anterior')}
       </button>
       <span className="muted small">
-        {page} de {totalPages}
+        {t('{page} de {totalPages}', { page, totalPages })}
       </span>
       <button type="button" className="btn btn-small btn-ghost" disabled={page >= totalPages} onClick={() => onPage(page + 1)}>
-        Siguiente <Icon name="forward" size={13} />
+        {t('Siguiente')} <Icon name="forward" size={13} />
       </button>
     </nav>
   );

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useId, useMemo, useRef, useState, type KeyboardEvent, type PointerEvent, type RefObject } from 'react';
-import { LOCALE_TAG } from '../../i18n';
+import { LOCALE_TAG, t } from '../../i18n';
 
 export interface ChartPoint {
   /** Etiqueta del eje X (hora o día) ya formateada. */
@@ -140,7 +140,7 @@ export function TimeChart({
           width={width}
           height={height}
           role="img"
-          aria-label={`${label}. ${last ? `Último valor: ${format(last.value!)}${unit}.` : 'Sin datos.'} Usa las flechas para recorrer los puntos.`}
+          aria-label={t('{label}. {v} Usa las flechas para recorrer los puntos.', { label, v: last ? t('Último valor: {format}{unit}.', { format: format(last.value!), unit }) : t('Sin datos.') })}
           tabIndex={0}
           onKeyDown={onKey}
           onBlur={() => setHover(null)}

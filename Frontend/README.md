@@ -610,3 +610,13 @@ Outfits, vestidor (`/outfits/new`, `/outfits/:id`), calendario y ficha de prenda
 - Maniquíes: cabecera como el inicio, cifras (maniquíes y límite del plan), «Tus maniquíes» (01) y «Medidas» / «Nuevo maniquí» (02). En una columna las fichas pasan a filas sin cortarse.
 - Perfil público: se mantienen la portada, el avatar con cinta y el nombre en grafiti; las pestañas Outfits / Seguidores / Siguiendo son ahora la barra de cifras (con CountUp) y siguen cambiando de pestaña. Bloqueo, cuenta privada y listas vacías usan `NoMatch`.
 - Traducidos los textos que faltaban (tiempo restante y avisos de voto de las batallas, etiquetas de las denuncias del perfil).
+
+### Tanda 4: Cuenta, Ideas, Novedades, Admin, Monitor y vuelta del login
+
+- Prefijos: `.ac` (`/account`), `.ia` (`/ideas`), `.nv` (`/novedades`), `.adm` (`/admin`), `.mo` (`/monitor`) y `.cb` (`/auth/callback`).
+- Cuenta: pegatina y nombre como el inicio, cifras de uso del plan (con CountUp), secciones 01-04 (tu cuenta, planes, historial, eliminar). Los planes y precios son los de la base de datos; el cambio de plan sigue siendo simulado.
+- Ideas: el tablón (`IdeaBoard`) lleva una sección numerada con el orden elegido y el número de ideas; en el panel de admin se usa con `numbered={false}` porque ya la pone la pestaña.
+- Novedades: «Próximamente» (01) y «Publicadas» (02) en línea de tiempo naranja.
+- Admin: pestañas como botones, sección numerada por pestaña, cifras del resumen con CountUp y estados vacíos con `NoMatch`.
+- Monitor: secciones Estado y tráfico / Base de datos y actividad / Uso de la app; las gráficas usan el naranja (los errores siguen en rojo).
+- Admin, Monitor, Ideas y la tarjeta de ideas estaban sin traducir: ya van con `t()` / `tn()`, igual que «hace 5 min» / «ayer». Siguen en español los textos que manda el servidor (comprobaciones del monitor) y lo que escribe la gente (ideas, novedades).

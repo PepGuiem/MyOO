@@ -7,12 +7,15 @@ import { IdeaCard, ProposeIdeaDialog } from '../components/community/IdeaCard';
 import { ErrorNote } from '../components/ErrorNote';
 import { Icon } from '../components/Icon';
 import { Spinner } from '../components/Spinner';
+import { NoMatch } from '../components/street/EmptyStage';
+import { SectionHead } from '../components/street/SectionHead';
 import { IDEA_STATUSES, IDEA_STATUS_LABEL } from '../lib/community';
+import { t, tn } from '../i18n';
 
 const SORTS: { value: IdeaSort; label: string }[] = [
-  { value: 'top', label: 'Más votadas' },
-  { value: 'new', label: 'Recientes' },
-  { value: 'mine', label: 'Mías' },
+  { value: 'top', label: t('Más votadas') },
+  { value: 'new', label: t('Recientes') },
+  { value: 'mine', label: t('Mías') },
 ];
 
 /** Tablón de ideas: /ideas (y /ideas?idea=<id> para ir a una concreta). */
@@ -23,15 +26,20 @@ export function IdeasPage() {
   const [created, setCreated] = useState<Idea | null>(null);
 
   return (
-    <section className="page ideas-page">
-      <header className="page-head">
+    <section className="page ideas-page ux ia">
+      <header className="ux-head ia-head">
         <div>
-          <h1>Ideas</h1>
-          <p className="muted">¿Qué echas de menos en MyOut? Propónlo o vota lo que ya han propuesto. El equipo lo lee todo y contesta aquí.</p>
+          <span className="wd-kicker">
+            <Icon name="bulb" size={12} /> {t('Community board')}
+          </span>
+          <h1 className="wd-title ux-title" data-text={t('Ideas')}>
+            {t('Ideas')}
+          </h1>
+          <p className="ux-lede">{t('¿Qué echas de menos en MyOut? Propónlo o vota lo que ya han propuesto. El equipo lo lee todo y contesta aquí.')}</p>
         </div>
-        <div className="head-actions">
-          <button type="button" className="btn btn-primary" onClick={() => setProposing(true)}>
-            <Icon name="bulb" size={15} /> Proponer una idea
+        <div className="wd-head-actions">
+          <button type="button" className="btn wd-add" onClick={() => setProposing(true)}>
+            <Icon name="bulb" size={15} /> <span>{t('Proponer una idea')}</span>
           </button>
         </div>
       </header>
@@ -67,12 +75,15 @@ export function IdeaBoard({
   focusId,
   prepend,
   onFocusDone,
+  numbered = true,
 }: {
   defaultSort?: IdeaSort;
   defaultStatus?: IdeaStatus | '';
   focusId?: string | null;
   prepend?: Idea | null;
   onFocusDone?: () => void;
+  /** Con título de sección numerado (en el panel de admin ya lo pone la pestaña). */
+  numbered?: boolean;
 }) {
   const { user } = useAuth();
   const isAdmin = user?.role === 'ADMIN';
@@ -173,7 +184,7 @@ export function IdeaBoard({
   return (
     <div className="idea-board">
       <div className="idea-toolbar">
-        <div className="segmented segmented-tabs" role="group" aria-label="Ordenar">
+        <div className="segmented segmented-tabs" role="group" aria-label={t('Ordenar')}>
           {SORTS.map((s) => (
             <button key={s.value} type="button" aria-pressed={sort === s.value} onClick={() => setSort(s.value)}>
               {s.label}
@@ -182,12 +193,12 @@ export function IdeaBoard({
         </div>
         <label className="search">
           <Icon name="search" size={15} />
-          <input type="search" value={q} placeholder="Buscar ideas" aria-label="Buscar ideas" onChange={(e) => setQ(e.target.value)} />
+          <input type="search" value={q} placeholder={t('Buscar ideas')} aria-label={t('Buscar ideas')} onChange={(e) => setQ(e.target.value)} />
         </label>
       </div>
-      <div className="chips chips-small idea-filters" role="group" aria-label="Filtrar por estado">
+      <div className="chips chips-small idea-filters" role="group" aria-label={t('Filtrar por estado')}>
         <button type="button" className={`chip${status === '' ? ' is-active' : ''}`} aria-pressed={status === ''} onClick={() => setStatus('')}>
-          Todas
+          {t('Todas')}
         </button>
         {IDEA_STATUSES.map((s) => (
           <button key={s} type="button" className={`chip${status === s ? ' is-active' : ''}`} aria-pressed={status === s} onClick={() => setStatus(s)}>
@@ -197,23 +208,31 @@ export function IdeaBoard({
       </div>
 
       <ErrorNote error={error} />
-      {!list && !error && <Spinner label="Cargando ideas…" />}
+      {!list && !error && <Spinner label={t('Cargando ideas…')} />}
+      {numbered ? (
+        <SectionHead n={1} title={SORTS.find((x) => x.value === sort)?.label ?? t('Ideas')}>
+          {list && list.length > 0 && <span className="ux-section-count idea-count">{tn(total, '{n} idea', '{n} ideas')}</span>}
+        </SectionHead>
+      ) : (
+        list && list.length > 0 && <p className="muted small idea-count">{tn(total, '{n} idea', '{n} ideas')}</p>
+      )}
       {list && list.length === 0 && (
-        <div className="empty">
-          <p>{sort === 'mine' ? 'Aún no has propuesto ninguna idea.' : search || status ? 'No hay ideas con ese filtro.' : 'Todavía no hay ideas. ¡Estrena el tablón!'}</p>
-        </div>
+        <NoMatch
+          icon="bulb"
+          title={sort === 'mine' ? t('Sin ideas tuyas') : search || status ? t('Sin resultados') : t('Tablón vacío')}
+          text={sort === 'mine' ? t('Aún no has propuesto ninguna idea.') : search || status ? t('No hay ideas con ese filtro.') : t('Todavía no hay ideas. ¡Estrena el tablón!')}
+        />
       )}
       {list && list.length > 0 && (
         <>
-          <p className="muted small idea-count">{total === 1 ? '1 idea' : `${total} ideas`}</p>
           <div className="idea-list">
             {list.map((i) => (
               <IdeaCard key={i.id} idea={i} isAdmin={isAdmin} highlighted={highlight === i.id} onChange={update} onRemove={remove} />
             ))}
           </div>
           {page < totalPages && (
-            <button type="button" className="btn idea-load-more" disabled={loadingMore} onClick={() => void more()}>
-              {loadingMore ? 'Cargando…' : 'Cargar más'}
+            <button type="button" className="btn wd-btn-line idea-load-more" disabled={loadingMore} onClick={() => void more()}>
+              {loadingMore ? t('Cargando…') : t('Cargar más')}
             </button>
           )}
         </>

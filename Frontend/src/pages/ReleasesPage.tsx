@@ -4,6 +4,8 @@ import type { Release } from '../api/types';
 import { ErrorNote } from '../components/ErrorNote';
 import { Icon } from '../components/Icon';
 import { Spinner } from '../components/Spinner';
+import { NoMatch } from '../components/street/EmptyStage';
+import { SectionHead } from '../components/street/SectionHead';
 import { UPCOMING } from '../lib/features';
 import { longDate, RELEASE_TAG_LABEL } from '../lib/community';
 import { t } from '../i18n';
@@ -40,19 +42,24 @@ export function ReleasesPage() {
   }
 
   return (
-    <section className="page releases-page">
-      <header className="page-head">
+    <section className="page releases-page ux nv">
+      <header className="ux-head nv-head">
         <div>
-          <h1>{t('Novedades')}</h1>
-          <p className="muted">{t('Lo nuevo de MyOut. Cuando publiquemos algo te llegará un aviso a la campanita.')}</p>
+          <span className="wd-kicker">
+            <Icon name="megaphone" size={12} /> {t('Changelog')}
+          </span>
+          <h1 className="wd-title ux-title" data-text={t('Novedades')}>
+            {t('Novedades')}
+          </h1>
+          <p className="ux-lede">{t('Lo nuevo de MyOut. Cuando publiquemos algo te llegará un aviso a la campanita.')}</p>
         </div>
       </header>
 
       {UPCOMING.length > 0 && (
         <section id="proximamente" className="upcoming" aria-labelledby="upcoming-title">
-          <h2 id="upcoming-title" className="upcoming-title">
-            <span className="rec-dot" aria-hidden="true" /> {t('Próximamente')}
-          </h2>
+          <SectionHead n={1} id="upcoming-title" title={t('Próximamente')}>
+            <span className="rec-dot" aria-hidden="true" />
+          </SectionHead>
           <ul className="upcoming-list">
             {UPCOMING.map((u) => (
               <li key={u.id} className="upcoming-card">
@@ -75,13 +82,10 @@ export function ReleasesPage() {
         </section>
       )}
 
+      <SectionHead n={UPCOMING.length > 0 ? 2 : 1} title={t('Publicadas')} />
       <ErrorNote error={error} />
       {!items && !error && <Spinner label={t('Cargando novedades…')} />}
-      {items && items.length === 0 && (
-        <div className="empty">
-          <p>{t('Aún no hay novedades publicadas.')}</p>
-        </div>
-      )}
+      {items && items.length === 0 && <NoMatch icon="megaphone" title={t('Sin novedades')} text={t('Aún no hay novedades publicadas.')} />}
       {items && items.length > 0 && (
         <ol className="release-list">
           {items.map((r) => (
@@ -92,7 +96,7 @@ export function ReleasesPage() {
         </ol>
       )}
       {items && page < totalPages && (
-        <button type="button" className="btn" onClick={() => void more()}>
+        <button type="button" className="btn wd-btn-line nv-more" onClick={() => void more()}>
           {t('Ver anteriores')}
         </button>
       )}

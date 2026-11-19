@@ -10,6 +10,7 @@ import { Select } from '../Select';
 import { PersonAvatar, personName, profilePath } from '../social/PersonAvatar';
 import { Busy } from '../Spinner';
 import { ReportDialog } from './ReportDialog';
+import { t, tn } from '../../i18n';
 
 export function IdeaStatusBadge({ status }: { status: IdeaStatus }) {
   return <span className={`idea-status idea-status-${status.toLowerCase()}`}>{IDEA_STATUS_LABEL[status]}</span>;
@@ -78,7 +79,7 @@ export function IdeaCard({
         type="button"
         className={`idea-vote${idea.votedByMe ? ' is-voted' : ''}`}
         aria-pressed={idea.votedByMe}
-        aria-label={`${idea.votedByMe ? 'Quitar tu voto' : 'Votar'}. ${idea.voteCount} votos`}
+        aria-label={`${idea.votedByMe ? t('Quitar tu voto') : t('Votar')}. ${tn(idea.voteCount, '{n} voto', '{n} votos')}`}
         onClick={() => void vote()}
         disabled={voting}
       >
@@ -91,14 +92,14 @@ export function IdeaCard({
           <div className="idea-badges">
             {idea.pinned && (
               <span className="idea-flag">
-                <Icon name="pin" size={12} /> Fijada
+                <Icon name="pin" size={12} /> {t('Fijada')}
               </span>
             )}
             <IdeaStatusBadge status={idea.status} />
             <span className="idea-cat">{IDEA_CATEGORY_LABEL[idea.category]}</span>
             {idea.hidden && (
               <span className="idea-flag">
-                <Icon name="eyeOff" size={12} /> Oculta
+                <Icon name="eyeOff" size={12} /> {t('Oculta')}
               </span>
             )}
           </div>
@@ -106,23 +107,23 @@ export function IdeaCard({
             <span className="menu-wrap">
               <button type="button" className="icon-btn" aria-expanded={menu} aria-haspopup="menu" onClick={() => setMenu((v) => !v)} onBlur={(e) => !e.currentTarget.parentElement?.contains(e.relatedTarget) && setMenu(false)}>
                 <Icon name="more" size={16} />
-                <span className="visually-hidden">Más opciones</span>
+                <span className="visually-hidden">{t('Más opciones')}</span>
               </button>
               {menu && (
                 <span className="menu" role="menu">
                   {isAdmin && (
                     <button type="button" role="menuitem" onClick={() => (setMenu(false), setDialog('manage'))}>
-                      Gestionar (admin)
+                      {t('Gestionar (admin)')}
                     </button>
                   )}
                   {canDelete && (
                     <button type="button" role="menuitem" className="danger-text" onClick={() => void remove()}>
-                      Borrar mi idea
+                      {t('Borrar mi idea')}
                     </button>
                   )}
                   {!idea.mine && (
                     <button type="button" role="menuitem" onClick={() => (setMenu(false), setDialog('report'))}>
-                      Denunciar
+                      {t('Denunciar')}
                     </button>
                   )}
                 </span>
@@ -137,14 +138,14 @@ export function IdeaCard({
         <p className={`idea-body${long && !expanded ? ' is-clamped' : ''}`}>{idea.body}</p>
         {long && (
           <button type="button" className="link-btn idea-more" onClick={() => setExpanded((v) => !v)}>
-            {expanded ? 'Ver menos' : 'Leer más'}
+            {expanded ? t('Ver menos') : t('Leer más')}
           </button>
         )}
 
         {idea.adminReply && (
           <div className="idea-reply">
             <span className="idea-reply-label">
-              <Icon name="shield" size={12} /> Respuesta del equipo
+              <Icon name="shield" size={12} /> {t('Respuesta del equipo')}
               {idea.repliedAt && <time dateTime={idea.repliedAt}> · {timeAgo(idea.repliedAt)}</time>}
             </span>
             <p>{idea.adminReply}</p>
@@ -152,7 +153,7 @@ export function IdeaCard({
         )}
         {idea.duplicateOfId && (
           <p className="small muted">
-            Repetida: <Link to={`/ideas?idea=${idea.duplicateOfId}`}>ver la idea original</Link> y vota allí.
+            {t('Repetida:')} <Link to={`/ideas?idea=${idea.duplicateOfId}`}>{t('ver la idea original')}</Link> {t('y vota allí.')}
           </p>
         )}
 
@@ -160,10 +161,10 @@ export function IdeaCard({
           {idea.author ? (
             <Link to={profilePath(idea.author)} className="idea-author">
               <PersonAvatar person={idea.author} size={20} />
-              {idea.mine ? 'Tú' : personName(idea.author)}
+              {idea.mine ? t('Tú') : personName(idea.author)}
             </Link>
           ) : (
-            <span className="idea-author muted">Cuenta eliminada</span>
+            <span className="idea-author muted">{t('Cuenta eliminada')}</span>
           )}
           <time dateTime={idea.createdAt} className="muted">
             {timeAgo(idea.createdAt)}
@@ -233,57 +234,55 @@ export function IdeaAdminDialog({ idea, onClose, onSaved, onDeleted }: { idea: I
   const replyChanged = (reply.trim() || null) !== idea.adminReply;
 
   return (
-    <Modal title="Gestionar idea" onClose={onClose}>
+    <Modal title={t('Gestionar idea')} onClose={onClose}>
       <form className="stack" onSubmit={save}>
         <p className="idea-admin-title">
-          <strong>{idea.title}</strong> <span className="muted">· {idea.voteCount} votos</span>
+          <strong>{idea.title}</strong> <span className="muted">{t('· {voteCount} votos', { voteCount: idea.voteCount })}</span>
         </p>
         <div className="field">
-          <span id={`${ids}-status`}>Estado</span>
+          <span id={`${ids}-status`}>{t('Estado')}</span>
           <Select value={status} labelledBy={`${ids}-status`} options={IDEA_STATUSES.map((s) => ({ value: s, label: IDEA_STATUS_LABEL[s] }))} onChange={(v) => setStatus(v as IdeaStatus)} />
         </div>
         <label className="field">
-          <span>Respuesta del equipo (pública)</span>
-          <textarea rows={4} maxLength={2000} value={reply} onChange={(e) => setReply(e.target.value)} placeholder="Gracias por la idea. La tenemos en cuenta para…" />
+          <span>{t('Respuesta del equipo (pública)')}</span>
+          <textarea rows={4} maxLength={2000} value={reply} onChange={(e) => setReply(e.target.value)} placeholder={t('Gracias por la idea. La tenemos en cuenta para…')} />
         </label>
         <div className="row">
           <label className="check">
-            <input type="checkbox" checked={pinned} onChange={(e) => setPinned(e.target.checked)} /> Fijar arriba
+            <input type="checkbox" checked={pinned} onChange={(e) => setPinned(e.target.checked)} /> {t('Fijar arriba')}
           </label>
           <label className="check">
-            <input type="checkbox" checked={hidden} onChange={(e) => setHidden(e.target.checked)} /> Ocultar del tablón
+            <input type="checkbox" checked={hidden} onChange={(e) => setHidden(e.target.checked)} /> {t('Ocultar del tablón')}
           </label>
         </div>
         {(statusChanged || replyChanged) && (
           <p className="note small">
-            Al guardar se avisará {replyChanged && reply.trim() ? 'a quien la propuso' : ''}
-            {replyChanged && reply.trim() && statusChanged ? ' y ' : ''}
-            {statusChanged ? 'a quien la votó' : ''}.
+            {t('Al guardar se avisará {v}{v2}{v3}.', { v: replyChanged && reply.trim() ? t('a quien la propuso') : '', v2: replyChanged && reply.trim() && statusChanged ? t(' y ') : '', v3: statusChanged ? t('a quien la votó') : '' })}
           </p>
         )}
         <ErrorNote error={error} />
         <div className="dialog-actions">
           {confirmDelete ? (
             <>
-              <span className="small danger-text">¿Borrar la idea y sus votos? No se puede deshacer.</span>
+              <span className="small danger-text">{t('¿Borrar la idea y sus votos? No se puede deshacer.')}</span>
               <button type="button" className="btn btn-ghost" onClick={() => setConfirmDelete(false)}>
-                No
+                {t('No')}
               </button>
               <button type="button" className="btn btn-danger-solid" disabled={busy} onClick={() => void remove()}>
-                Sí, borrar
+                {t('Sí, borrar')}
               </button>
             </>
           ) : (
             <>
               <button type="button" className="btn btn-danger" onClick={() => setConfirmDelete(true)}>
-                <Icon name="trash" size={14} /> Borrar
+                <Icon name="trash" size={14} /> {t('Borrar')}
               </button>
               <span className="spacer" />
               <button type="button" className="btn btn-ghost" onClick={onClose}>
-                Cancelar
+                {t('Cancelar')}
               </button>
               <button type="submit" className="btn btn-primary" disabled={busy}>
-                {busy ? <Busy text="Guardando…" /> : 'Guardar'}
+                {busy ? <Busy text={t('Guardando…')} /> : t('Guardar')}
               </button>
             </>
           )}
@@ -338,29 +337,29 @@ export function ProposeIdeaDialog({ onClose, onCreated }: { onClose: () => void;
   const valid = title.trim().length >= 5 && body.trim().length >= 10;
 
   return (
-    <Modal title="Proponer una idea" onClose={onClose}>
+    <Modal title={t('Proponer una idea')} onClose={onClose}>
       <form className="stack" onSubmit={submit}>
         <label className="field">
-          <span>Título</span>
-          <input value={title} maxLength={120} onChange={(e) => setTitle(e.target.value)} placeholder="Ej.: Calendario para planear los outfits de la semana" required />
+          <span>{t('Título')}</span>
+          <input value={title} maxLength={120} onChange={(e) => setTitle(e.target.value)} placeholder={t('Ej.: Calendario para planear los outfits de la semana')} required />
         </label>
         {similar.length > 0 && (
           <div className="idea-similar">
-            <span className="small muted">¿Es alguna de estas? Vota la que ya existe:</span>
+            <span className="small muted">{t('¿Es alguna de estas? Vota la que ya existe:')}</span>
             <ul>
               {similar.map((i) => (
                 <li key={i.id}>
                   <Link to={`/ideas?idea=${i.id}`} onClick={onClose}>
                     {i.title}
                   </Link>{' '}
-                  <span className="muted small">· {i.voteCount} votos</span>
+                  <span className="muted small">{t('· {voteCount} votos', { voteCount: i.voteCount })}</span>
                 </li>
               ))}
             </ul>
           </div>
         )}
         <fieldset className="field">
-          <legend id={`${ids}-cat`}>Tipo</legend>
+          <legend id={`${ids}-cat`}>{t('Tipo')}</legend>
           <div className="chips chips-small" role="radiogroup" aria-labelledby={`${ids}-cat`}>
             {IDEA_CATEGORIES.map((c) => (
               <button key={c} type="button" role="radio" aria-checked={category === c} className={`chip${category === c ? ' is-active' : ''}`} onClick={() => setCategory(c)}>
@@ -370,17 +369,17 @@ export function ProposeIdeaDialog({ onClose, onCreated }: { onClose: () => void;
           </div>
         </fieldset>
         <label className="field">
-          <span>Cuéntala</span>
-          <textarea rows={5} maxLength={2000} value={body} onChange={(e) => setBody(e.target.value)} placeholder="¿Qué te gustaría poder hacer y para qué te serviría?" required />
+          <span>{t('Cuéntala')}</span>
+          <textarea rows={5} maxLength={2000} value={body} onChange={(e) => setBody(e.target.value)} placeholder={t('¿Qué te gustaría poder hacer y para qué te serviría?')} required />
           <small className="muted field-count">{body.length}/2000</small>
         </label>
         <ErrorNote error={error} />
         <div className="dialog-actions">
           <button type="button" className="btn btn-ghost" onClick={onClose}>
-            Cancelar
+            {t('Cancelar')}
           </button>
           <button type="submit" className="btn btn-primary" disabled={!valid || busy}>
-            {busy ? <Busy text="Publicando…" /> : 'Publicar idea'}
+            {busy ? <Busy text={t('Publicando…')} /> : t('Publicar idea')}
           </button>
         </div>
       </form>

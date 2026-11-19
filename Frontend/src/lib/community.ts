@@ -68,13 +68,13 @@ export const NOTIFICATION_ICON: Record<NotificationType, IconName> = {
 export function timeAgo(iso: string, now = Date.now()): string {
   const d = new Date(iso);
   const s = Math.max(0, Math.round((now - d.getTime()) / 1000));
-  if (s < 60) return 'ahora';
+  if (s < 60) return t('ahora');
   const m = Math.round(s / 60);
-  if (m < 60) return `hace ${m} min`;
+  if (m < 60) return t('hace {m} min', { m });
   const h = Math.round(m / 60);
-  if (h < 24) return `hace ${h} h`;
+  if (h < 24) return t('hace {h} h', { h });
   const days = Math.round(h / 24);
-  if (days === 1) return 'ayer';
+  if (days === 1) return t('ayer');
   if (days < 7) return t('hace {days} días', { days });
   return d.toLocaleDateString(LOCALE_TAG, { day: 'numeric', month: 'short', ...(d.getFullYear() !== new Date(now).getFullYear() ? { year: 'numeric' } : {}) });
 }
