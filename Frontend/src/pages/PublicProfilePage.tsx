@@ -8,7 +8,9 @@ import { ReportDialog } from '../components/community/ReportDialog';
 import { ErrorNote } from '../components/ErrorNote';
 import { Icon } from '../components/Icon';
 import { FollowButton } from '../components/social/FollowButton';
-import { CoverArt, DripEdge, GraffitiName, stickerTilt } from '../components/street/Street';
+import { NoMatch } from '../components/street/EmptyStage';
+import { SectionHead } from '../components/street/SectionHead';
+import { CountUp, CoverArt, DripEdge, GraffitiName, stickerTilt } from '../components/street/Street';
 import { initialsOf } from './ProfilePage';
 import { PersonAvatar, personName } from '../components/social/PersonAvatar';
 import { PersonRow } from '../components/social/PersonRow';
@@ -23,6 +25,7 @@ import { UserDialog } from './AdminPage';
 import { OUTFIT_TILE_DISTANCE } from './OutfitsPage';
 import { InfiniteSentinel } from '../components/InfiniteSentinel';
 import { usePagedList } from '../lib/usePagedList';
+import { t } from '../i18n';
 
 const STYLE_LABEL: Record<string, string> = Object.fromEntries(STYLE_TAGS.map((s) => [s.value, s.label]));
 type Tab = 'outfits' | 'followers' | 'following';
@@ -60,21 +63,20 @@ export function PublicProfilePage() {
   if (error) {
     const notFound = error instanceof ApiError && error.status === 404;
     return (
-      <section className="page profile">
+      <section className="page profile ux pv">
         {notFound ? (
-          <div className="empty">
-            <p>Esta persona no existe o no está disponible.</p>
-            <Link to="/personas" className="btn">
-              Buscar personas
+          <NoMatch icon="users" title={t('Perfil no disponible')} text={t('Esta persona no existe o no está disponible.')}>
+            <Link to="/personas" className="btn wd-add">
+              <Icon name="search" size={14} /> <span>{t('Buscar personas')}</span>
             </Link>
-          </div>
+          </NoMatch>
         ) : (
           <ErrorNote error={error} />
         )}
       </section>
     );
   }
-  if (!profile) return <Spinner size={22} label="Cargando perfil…" />;
+  if (!profile) return <Spinner size={22} label={t('Cargando perfil…')} />;
 
   const p = profile;
   const rel = p.relationship;
@@ -104,7 +106,7 @@ export function PublicProfilePage() {
   }
 
   return (
-    <section className="page profile" style={p.accentColor ? ({ '--accent': p.accentColor } as CSSProperties) : undefined}>
+    <section className="page profile ux pv" style={p.accentColor ? ({ '--accent': p.accentColor } as CSSProperties) : undefined}>
       <header className="profile-hero">
         <div className={`profile-cover${cover ? ' has-image' : ''}`} style={cover ? { backgroundImage: `url(${cover})` } : undefined}>
           {!cover && <CoverArt seed={p.id} initials={initialsOf(personName(p))} />}
@@ -118,6 +120,9 @@ export function PublicProfilePage() {
             <PersonAvatar person={p} size={112} className="profile-avatar" />
           </div>
           <div className="profile-who">
+            <span className="wd-kicker">
+              <Icon name="userCheck" size={12} /> {t('Street profile')}
+            </span>
             <GraffitiName text={personName(p)} className="profile-name" />
             <p className="profile-handle">
               {p.username && <span className="handle-tag">@{p.username}</span>}
@@ -125,19 +130,19 @@ export function PublicProfilePage() {
               {p.location && <span>{p.location}</span>}
               {p.isPrivate && (
                 <span className="lock-label">
-                  <Icon name="lock" size={12} /> Privada
+                  <Icon name="lock" size={12} /> {t('Privada')}
                 </span>
               )}
             </p>
           </div>
           <div className="profile-actions">
             {rel.isSelf ? (
-              <Link to="/perfil" className="btn btn-primary">
-                <Icon name="edit" size={14} /> Editar tu perfil
+              <Link to="/perfil" className="btn wd-add">
+                <Icon name="edit" size={14} /> <span>{t('Editar tu perfil')}</span>
               </Link>
             ) : rel.blockedByMe ? (
-              <button type="button" className="btn" disabled={busy} onClick={() => void act(() => peopleApi.unblock(p.id))}>
-                Desbloquear
+              <button type="button" className="btn wd-btn-line" disabled={busy} onClick={() => void act(() => peopleApi.unblock(p.id))}>
+                {t('Desbloquear')}
               </button>
             ) : (
               <>
@@ -151,40 +156,40 @@ export function PublicProfilePage() {
                   }}
                 />
                 {p.canMessage && (
-                  <button type="button" className="btn" disabled={busy} onClick={() => void message()}>
-                    {busy ? <Busy text="Abriendo…" /> : (
+                  <button type="button" className="btn wd-btn-line" disabled={busy} onClick={() => void message()}>
+                    {busy ? <Busy text={t('Abriendo…')} /> : (
                       <>
-                        <Icon name="chat" size={14} /> Mensaje
+                        <Icon name="chat" size={14} /> {t('Mensaje')}
                       </>
                     )}
                   </button>
                 )}
                 {p.canView && (
-                  <Link to={`/batallas?retar=${p.id}`} className="btn" title="Retarle a una Streetwear Battle">
-                    <Icon name="bolt" size={14} /> Retar
+                  <Link to={`/batallas?retar=${p.id}`} className="btn wd-btn-line" title={t('Retarle a una Streetwear Battle')}>
+                    <Icon name="bolt" size={14} /> {t('Retar')}
                   </Link>
                 )}
                 <span className="menu-wrap">
                   <button type="button" className="btn btn-ghost" aria-expanded={menu} aria-haspopup="menu" onClick={() => setMenu((v) => !v)}>
                     <Icon name="more" size={16} />
-                    <span className="visually-hidden">Más opciones</span>
+                    <span className="visually-hidden">{t('Más opciones')}</span>
                   </button>
                   {menu && (
                     <span className="menu" role="menu">
                       {rel.followedBy !== 'none' && (
                         <button type="button" role="menuitem" onClick={() => void act(() => peopleApi.removeFollower(p.id))}>
-                          {rel.followedBy === 'pending' ? 'Rechazar su solicitud' : 'Eliminar de tus seguidores'}
+                          {rel.followedBy === 'pending' ? t('Rechazar su solicitud') : t('Eliminar de tus seguidores')}
                         </button>
                       )}
                       <button type="button" role="menuitem" className="danger-text" onClick={() => void act(() => peopleApi.block(p.id))}>
-                        Bloquear
+                        {t('Bloquear')}
                       </button>
                       <button type="button" role="menuitem" onClick={() => (setMenu(false), setDialog('report'))}>
-                        Denunciar perfil
+                        {t('Denunciar perfil')}
                       </button>
                       {isAdmin && (
                         <button type="button" role="menuitem" onClick={() => (setMenu(false), setDialog('admin'))}>
-                          Abrir en el panel de admin
+                          {t('Abrir en el panel de admin')}
                         </button>
                       )}
                     </span>
@@ -198,7 +203,7 @@ export function PublicProfilePage() {
         {rel.followedBy === 'accepted' && !rel.isSelf && (
           <p className="profile-follows-you">
             <span className="sticker sticker-small" style={{ '--r': '-4deg', '--i': 0 } as CSSProperties}>
-              Te sigue
+              {t('Te sigue')}
             </span>
           </p>
         )}
@@ -206,7 +211,7 @@ export function PublicProfilePage() {
         <div className="profile-about">
           {p.bio && <p className="profile-bio">{p.bio}</p>}
           {p.styleTags.length > 0 && (
-            <ul className="profile-tags sticker-row" aria-label="Estilos">
+            <ul className="profile-tags sticker-row" aria-label={t('Estilos')}>
               {p.styleTags.map((t, i) => (
                 <li key={t} className="sticker" style={{ '--r': `${stickerTilt(t)}deg`, '--i': i } as CSSProperties}>
                   {STYLE_LABEL[t] ?? t}
@@ -222,11 +227,11 @@ export function PublicProfilePage() {
             )}
             {p.instagramHandle && (
               <a href={`https://www.instagram.com/${encodeURIComponent(p.instagramHandle)}/`} target="_blank" rel="noopener noreferrer nofollow">
-                <Icon name="external" size={13} /> Instagram @{p.instagramHandle}
+                <Icon name="external" size={13} /> {t('Instagram @{instagramHandle}', { instagramHandle: p.instagramHandle })}
               </a>
             )}
             {p.favoriteColors.length > 0 && (
-              <span className="profile-colors" aria-label="Colores favoritos">
+              <span className="profile-colors" aria-label={t('Colores favoritos')}>
                 {p.favoriteColors.map((c, i) => (
                   <span key={c} className="splat" style={{ '--c': c, '--i': i } as CSSProperties} title={c} />
                 ))}
@@ -236,40 +241,47 @@ export function PublicProfilePage() {
         </div>
       </header>
 
-      <nav className="profile-tabs" aria-label="Contenido del perfil">
+      <nav className="profile-tabs wd-stats ux-stats pv-stats" aria-label={t('Contenido del perfil')}>
         {(
           [
-            ['outfits', `${p.counts.outfits} outfits`],
-            ['followers', plural(p.counts.followers, 'seguidor', 'seguidores')],
-            ['following', `${p.counts.following} siguiendo`],
+            ['outfits', p.counts.outfits, p.counts.outfits === 1 ? t('outfit') : t('outfits'), 'tshirt'],
+            ['followers', p.counts.followers, p.counts.followers === 1 ? t('seguidor') : t('seguidores'), 'users'],
+            ['following', p.counts.following, t('siguiendo'), 'userCheck'],
           ] as const
-        ).map(([key, label]) => (
+        ).map(([key, count, label, icon], i) => (
           <button
             key={key}
             type="button"
             className="profile-tab"
+            style={{ '--i': i } as CSSProperties}
             aria-current={tab === key ? 'page' : undefined}
             disabled={!p.canView}
             onClick={() => setParams(key === 'outfits' ? {} : { tab: key }, { replace: true })}
           >
-            {label}
+            <Icon name={icon} size={16} />
+            <strong>
+              <CountUp value={count} delay={i * 120} />
+            </strong>
+            <span>{label}</span>
           </button>
         ))}
       </nav>
 
+      {!rel.blockedByMe && p.canView && (
+        <SectionHead
+          n={1}
+          title={tab === 'outfits' ? t('Outfits compartidos') : tab === 'followers' ? t('Seguidores') : t('Siguiendo')}
+        />
+      )}
+
       {rel.blockedByMe ? (
-        <div className="empty">
-          <p>Has bloqueado a esta persona: no os veis ni os podéis escribir.</p>
-        </div>
+        <NoMatch icon="eyeOff" title={t('Bloqueada')} text={t('Has bloqueado a esta persona: no os veis ni os podéis escribir.')} />
       ) : !p.canView ? (
-        <div className="empty private-wall">
-          <Icon name="lock" size={28} />
-          <p>
-            <strong>Esta cuenta es privada.</strong>
-            <br />
-            {rel.following === 'pending' ? 'Tu solicitud está pendiente.' : 'Síguela para ver sus outfits y a quién sigue.'}
-          </p>
-        </div>
+        <NoMatch
+          icon="lock"
+          title={t('Esta cuenta es privada.')}
+          text={rel.following === 'pending' ? t('Tu solicitud está pendiente.') : t('Síguela para ver sus outfits y a quién sigue.')}
+        />
       ) : tab === 'outfits' ? (
         <SharedOutfits handle={p.id} isSelf={rel.isSelf} isAdmin={isAdmin} />
       ) : (
@@ -285,17 +297,20 @@ function SharedOutfits({ handle, isSelf, isAdmin }: { handle: string; isSelf: bo
   const list = usePagedList((page) => peopleApi.outfits(handle, page), [handle]);
   const { items, loading, error } = list;
   if (error && items.length === 0) return <ErrorNote error={error} />;
-  if (loading && items.length === 0) return <Spinner label="Cargando outfits…" />;
+  if (loading && items.length === 0) return <Spinner label={t('Cargando outfits…')} />;
   if (items.length === 0) {
     return (
-      <div className="empty">
-        <p>{isSelf ? 'Aún no compartes ningún outfit. Marca «Compartir en mi perfil» al editar uno.' : 'Todavía no comparte outfits.'}</p>
+      <NoMatch
+        icon="hanger"
+        title={t('Sin outfits compartidos')}
+        text={isSelf ? t('Aún no compartes ningún outfit. Marca «Compartir en mi perfil» al editar uno.') : t('Todavía no comparte outfits.')}
+      >
         {isSelf && (
-          <Link to="/outfits" className="btn">
-            Ir a mis outfits
+          <Link to="/outfits" className="btn wd-add">
+            <Icon name="tshirt" size={14} /> <span>{t('Ir a mis outfits')}</span>
           </Link>
         )}
-      </div>
+      </NoMatch>
     );
   }
   return (
@@ -345,7 +360,7 @@ function SharedOutfitCard({
 
   const { shape } = useBodyShape();
   const garments = useMemo(() => outfit.items.map((i) => ({ ...i.wardrobeItem, styling: i.styling })), [outfit.items]);
-  const meta = [outfit.occasion, outfit.season ? SEASON_LABEL[outfit.season] : null, plural(garments.length, 'prenda', 'prendas')]
+  const meta = [outfit.occasion, outfit.season ? SEASON_LABEL[outfit.season] : null, plural(garments.length, t('prenda'), t('prendas'))]
     .filter(Boolean)
     .join(', ');
   return (
@@ -370,12 +385,12 @@ function SharedOutfitCard({
       {(canReport || isAdmin) && (
         <span className="tile-tools">
           {canReport && (
-            <button type="button" className="icon-btn" title="Denunciar outfit" aria-label={`Denunciar «${outfit.name}»`} onClick={() => setReporting(true)}>
+            <button type="button" className="icon-btn" title={t('Denunciar outfit')} aria-label={t('Denunciar «{name}»', { name: outfit.name })} onClick={() => setReporting(true)}>
               <Icon name="flag" size={14} />
             </button>
           )}
           {isAdmin && (
-            <button type="button" className="icon-btn" title="Ocultar (admin)" aria-label={`Ocultar «${outfit.name}» (admin)`} onClick={() => void hide()}>
+            <button type="button" className="icon-btn" title={t('Ocultar (admin)')} aria-label={t('Ocultar «{name}» (admin)', { name: outfit.name })} onClick={() => void hide()}>
               <Icon name="eyeOff" size={14} />
             </button>
           )}
@@ -398,8 +413,15 @@ function Connections({ handle, which }: { handle: string; which: 'followers' | '
       .catch(setError);
   }, [handle, which]);
   if (error) return <ErrorNote error={error} />;
-  if (!people) return <Spinner label="Cargando…" />;
-  if (people.length === 0) return <p className="muted">{which === 'followers' ? 'Sin seguidores todavía.' : 'No sigue a nadie todavía.'}</p>;
+  if (!people) return <Spinner label={t('Cargando…')} />;
+  if (people.length === 0)
+    return (
+      <NoMatch
+        icon={which === 'followers' ? 'users' : 'userCheck'}
+        title={which === 'followers' ? t('Sin seguidores') : t('Sin seguidos')}
+        text={which === 'followers' ? t('Sin seguidores todavía.') : t('No sigue a nadie todavía.')}
+      />
+    );
   return (
     <ul className="person-list panel">
       {people.map((person) => (

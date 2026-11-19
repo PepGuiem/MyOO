@@ -6,6 +6,7 @@ import { useBodyShape } from '../../lib/bodyPref';
 import { OutfitView } from '../../three/OutfitMannequin';
 import { Icon } from '../Icon';
 import { PersonAvatar } from '../social/PersonAvatar';
+import { t } from '../../i18n';
 
 export function garmentsOf(o: SharedOutfit | null) {
   return o ? o.items.map((i) => ({ ...i.wardrobeItem, styling: i.styling })) : [];
@@ -18,13 +19,13 @@ export function VoteBar({ battle, big = false }: { battle: Battle; big?: boolean
     return (
       <div className={`bt-bar is-hidden${big ? ' is-big' : ''}`}>
         <span>
-          <Icon name="lock" size={12} /> {battle.totalVotes} {battle.totalVotes === 1 ? 'voto' : 'votos'} · el marcador se ve al votar
+          <Icon name="lock" size={12} /> {t('{totalVotes} {v} · el marcador se ve al votar', { totalVotes: battle.totalVotes, v: battle.totalVotes === 1 ? t('voto') : t('votos') })}
         </span>
       </div>
     );
   }
   return (
-    <div className={`bt-bar${big ? ' is-big' : ''}`} style={{ '--a': `${v.shareA}%` } as CSSProperties} aria-label={`${v.a} votos contra ${v.b}`}>
+    <div className={`bt-bar${big ? ' is-big' : ''}`} style={{ '--a': `${v.shareA}%` } as CSSProperties} aria-label={t('{a} votos contra {b}', { a: v.a, b: v.b })}>
       <span className="bt-bar-a" />
       <span className="bt-bar-b" />
       <b className="bt-bar-na">{v.a}</b>
@@ -51,7 +52,7 @@ function Side({ battle, side, active }: { battle: Battle; side: BattleSide; acti
           </span>
         )}
         {won && (
-          <span className="bt-crown" aria-label="Ganador">
+          <span className="bt-crown" aria-label={t('Ganador')}>
             <Icon name="crown" size={18} />
           </span>
         )}
@@ -86,7 +87,7 @@ export function BattleCard({ battle, index }: { battle: Battle; index: number })
         </span>
         {battle.canVote ? (
           <span className="bt-cta">
-            <Icon name="bolt" size={12} /> Vota
+            <Icon name="bolt" size={12} /> {t('Vota')}
           </span>
         ) : (
           left && <span className="bt-left">{left}</span>
@@ -96,14 +97,14 @@ export function BattleCard({ battle, index }: { battle: Battle; index: number })
       <div className="bt-arena is-mini">
         <Side battle={battle} side="A" active={active} />
         <span className="bt-vs" aria-hidden="true">
-          VS
+          {t('VS')}
         </span>
         <Side battle={battle} side="B" active={active} />
       </div>
       {battle.status === 'ACTIVE' || battle.status === 'FINISHED' ? (
         <VoteBar battle={battle} />
       ) : (
-        <p className="bt-wait">{battle.isOpen ? 'Reto abierto: cualquiera puede aceptarlo' : 'Esperando respuesta'}</p>
+        <p className="bt-wait">{battle.isOpen ? t('Reto abierto: cualquiera puede aceptarlo') : t('Esperando respuesta')}</p>
       )}
     </Link>
   );

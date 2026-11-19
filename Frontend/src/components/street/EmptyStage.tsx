@@ -69,10 +69,10 @@ export function EmptyStage({
 }
 
 /** Sin resultados para los filtros: icono, título y cómo salir. */
-export function NoMatch({ title, text, children }: { title: string; text: string; children?: ReactNode }) {
+export function NoMatch({ title, text, icon = 'search', children }: { title: string; text: string; icon?: IconName; children?: ReactNode }) {
   return (
     <div className="wd-nomatch ux-nomatch">
-      <Icon name="search" size={28} />
+      <Icon name={icon} size={28} />
       <h2>{title}</h2>
       <p className="muted">{text}</p>
       {children}

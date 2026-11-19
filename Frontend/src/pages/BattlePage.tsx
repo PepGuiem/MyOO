@@ -17,6 +17,7 @@ import { useBodyShape } from '../lib/bodyPref';
 import { burst, burstAt, reducedMotion } from '../lib/motion';
 import { play } from '../lib/sfx';
 import { OutfitView } from '../three/OutfitMannequin';
+import { t } from '../i18n';
 
 /** Cada cuánto se refresca el marcador mientras se vota. */
 const REFRESH_MS = 20_000;
@@ -80,12 +81,12 @@ export function BattlePage() {
 
   if (!b) {
     return (
-      <section className="page bt bt-item">
+      <section className="page bt bt-item ux ba">
         <Link to="/batallas" className="wl-back">
-          <Icon name="back" size={14} /> Batallas
+          <Icon name="back" size={14} /> {t('Batallas')}
         </Link>
         <ErrorNote error={error} />
-        {!error && <SprayLoader label="Subiendo al ring…" />}
+        {!error && <SprayLoader label={t('Subiendo al ring…')} />}
       </section>
     );
   }
@@ -100,7 +101,7 @@ export function BattlePage() {
       setJustVoted(side);
       setB(u);
     } catch (err) {
-      toast.show(errorText(err, BATTLE_ERRORS, 'No se pudo votar'), { tone: 'danger', sound: 'error' });
+      toast.show(errorText(err, BATTLE_ERRORS, t('No se pudo votar')), { tone: 'danger', sound: 'error' });
       load();
     } finally {
       setBusy(false);
@@ -113,15 +114,15 @@ export function BattlePage() {
     try {
       if (kind === 'cancel') {
         await battlesApi.cancel(b.id);
-        toast.show('Reto retirado', { tone: 'info' });
+        toast.show(t('Reto retirado'), { tone: 'info' });
         load();
       } else {
         setB(await battlesApi.decline(b.id));
-        toast.show('Reto rechazado', { tone: 'info' });
+        toast.show(t('Reto rechazado'), { tone: 'info' });
       }
       play('swoosh');
     } catch (err) {
-      toast.show(errorText(err, BATTLE_ERRORS, 'No se pudo hacer'), { tone: 'danger', sound: 'error' });
+      toast.show(errorText(err, BATTLE_ERRORS, t('No se pudo hacer')), { tone: 'danger', sound: 'error' });
     } finally {
       setBusy(false);
       setConfirm(null);
@@ -135,20 +136,25 @@ export function BattlePage() {
   const finished = b.status === 'FINISHED';
 
   return (
-    <section className={`page bt bt-item is-${st.tone}`}>
+    <section className={`page bt bt-item ux ba is-${st.tone}`}>
       <Link to="/batallas" className="wl-back">
-        <Icon name="back" size={14} /> Batallas
+        <Icon name="back" size={14} /> {t('Batallas')}
       </Link>
 
-      <header className="bt-item-head">
+      <header className="bt-item-head ux-head">
+        <span className="wd-kicker">
+          <Icon name="bolt" size={12} /> {t('Streetwear battle')}
+        </span>
         <span className={`bt-status is-${st.tone}`}>
           {st.tone === 'live' && <i className="bt-live-dot" aria-hidden="true" />}
           {st.label}
         </span>
-        <h1 className="bt-item-h1">{b.theme ? `«${b.theme}»` : 'Streetwear Battle'}</h1>
+        <h1 className="wd-title ux-title" data-text={b.theme ? `«${b.theme}»` : t('Streetwear Battle')}>
+          {b.theme ? `«${b.theme}»` : t('Streetwear Battle')}
+        </h1>
         {left && <span className="bt-left">{left}</span>}
         {b.status === 'ACTIVE' && (
-          <div className="bt-time" role="progressbar" aria-label="Tiempo de votación" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(progress * 100)}>
+          <div className="bt-time" role="progressbar" aria-label={t('Tiempo de votación')} aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(progress * 100)}>
             <span style={{ width: `${progress * 100}%` }} />
           </div>
         )}
@@ -157,7 +163,7 @@ export function BattlePage() {
       <div ref={arena} className={`bt-arena is-big${finished ? ' is-finished' : ''}${finished && !b.winner ? ' is-tie' : ''}`}>
         <BigSide battle={b} side="A" busy={busy} justVoted={justVoted === 'A'} onVote={vote} />
         <div className="bt-vs-wrap" aria-hidden="true">
-          <span className="bt-vs is-big">VS</span>
+          <span className="bt-vs is-big">{t('VS')}</span>
           <span className="bt-shock" />
         </div>
         <BigSide battle={b} side="B" busy={busy} justVoted={justVoted === 'B'} onVote={vote} />
@@ -178,18 +184,18 @@ export function BattlePage() {
             </div>
           ) : (
             <p className="bt-score-hidden">
-              <Icon name="lock" size={14} /> {b.totalVotes} {b.totalVotes === 1 ? 'voto' : 'votos'} hasta ahora. El marcador se ve cuando votas.
+              <Icon name="lock" size={14} /> {t('{totalVotes} {v} hasta ahora. El marcador se ve cuando votas.', { totalVotes: b.totalVotes, v: b.totalVotes === 1 ? t('voto') : t('votos') })}
             </p>
           )}
           {finished && (
             <p className="bt-result">
               {b.winner ? (
                 <>
-                  <Icon name="trophy" size={16} /> Gana <b>{sideName(b, b.winner)}</b>
-                  {b.mySide === b.winner ? ' · ¡Enhorabuena!' : ''}
+                  <Icon name="trophy" size={16} /> {t('Gana')} <b>{sideName(b, b.winner)}</b>
+                  {b.mySide === b.winner ? t(' · ¡Enhorabuena!') : ''}
                 </>
               ) : (
-                'Empate: mismos votos para los dos outfits.'
+                t('Empate: mismos votos para los dos outfits.')
               )}
             </p>
           )}
@@ -202,27 +208,27 @@ export function BattlePage() {
           <p>
             {b.mySide === 'A'
               ? b.isOpen
-                ? 'Tu reto está abierto: cualquiera puede aceptarlo con su outfit.'
-                : `Esperando a que ${sideName(b, 'B')} responda.`
+                ? t('Tu reto está abierto: cualquiera puede aceptarlo con su outfit.')
+                : t('Esperando a que {sideName} responda.', { sideName: sideName(b, 'B') })
               : b.isOpen
-                ? `${sideName(b, 'A')} busca rival. Acepta con uno de tus outfits.`
-                : `${sideName(b, 'A')} te reta. Responde con uno de tus outfits.`}{' '}
-            {left && <span className="muted">({left} para aceptar)</span>}
+                ? t('{sideName} busca rival. Acepta con uno de tus outfits.', { sideName: sideName(b, 'A') })
+                : t('{sideName} te reta. Responde con uno de tus outfits.', { sideName: sideName(b, 'A') })}{' '}
+            {left && <span className="muted">{t('({left} para aceptar)', { left })}</span>}
           </p>
           <div className="actions">
             {b.canAccept && (
-              <button type="button" className="btn btn-primary btn-street" onClick={() => setAccepting(true)}>
-                <Icon name="bolt" size={14} /> Aceptar el reto
+              <button type="button" className="btn wd-add" onClick={() => setAccepting(true)}>
+                <Icon name="bolt" size={14} /> <span>{t('Aceptar el reto')}</span>
               </button>
             )}
             {b.canDecline && (
-              <button type="button" className="btn btn-ghost" disabled={busy} onClick={() => setConfirm('decline')}>
-                Rechazar
+              <button type="button" className="btn wd-btn-line" disabled={busy} onClick={() => setConfirm('decline')}>
+                {t('Rechazar')}
               </button>
             )}
             {b.canCancel && (
               <button type="button" className="btn btn-danger" disabled={busy} onClick={() => setConfirm('cancel')}>
-                Retirar reto
+                {t('Retirar reto')}
               </button>
             )}
           </div>
@@ -231,8 +237,8 @@ export function BattlePage() {
 
       {(b.status === 'DECLINED' || b.status === 'CANCELLED' || b.status === 'EXPIRED') && (
         <p className="bt-off panel">
-          {b.status === 'DECLINED' ? 'El reto fue rechazado.' : b.status === 'CANCELLED' ? 'El reto se retiró.' : 'Nadie aceptó el reto a tiempo.'}{' '}
-          <Link to="/batallas">Volver a las batallas</Link>
+          {b.status === 'DECLINED' ? t('El reto fue rechazado.') : b.status === 'CANCELLED' ? t('El reto se retiró.') : t('Nadie aceptó el reto a tiempo.')}{' '}
+          <Link to="/batallas">{t('Volver a las batallas')}</Link>
         </p>
       )}
 
@@ -244,21 +250,21 @@ export function BattlePage() {
             setAccepting(false);
             setB(u);
             play('success');
-            toast.show('¡Reto aceptado! Empieza la votación', { tone: 'ok', icon: 'bolt' });
+            toast.show(t('¡Reto aceptado! Empieza la votación'), { tone: 'ok', icon: 'bolt' });
             window.setTimeout(() => burstAt(arena.current?.querySelector('.bt-vs'), { count: 22, spread: 140 }), 200);
           }}
         />
       )}
       {confirm && (
         <ConfirmDialog
-          title={confirm === 'cancel' ? '¿Retirar el reto?' : '¿Rechazar el reto?'}
-          confirmLabel={confirm === 'cancel' ? 'Retirar' : 'Rechazar'}
+          title={confirm === 'cancel' ? t('¿Retirar el reto?') : t('¿Rechazar el reto?')}
+          confirmLabel={confirm === 'cancel' ? t('Retirar') : t('Rechazar')}
           danger
           busy={busy}
           onConfirm={() => void act(confirm)}
           onClose={() => setConfirm(null)}
         >
-          {confirm === 'cancel' ? 'Nadie podrá aceptarlo ya.' : `${sideName(b, 'A')} verá que has dicho que no.`}
+          {confirm === 'cancel' ? t('Nadie podrá aceptarlo ya.') : t('{sideName} verá que has dicho que no.', { sideName: sideName(b, 'A') })}
         </ConfirmDialog>
       )}
     </section>
@@ -298,7 +304,7 @@ function BigSide({
           </span>
         )}
         {won && (
-          <span className="bt-crown is-big" aria-label="Ganador">
+          <span className="bt-crown is-big" aria-label={t('Ganador')}>
             <Icon name="crown" size={26} />
           </span>
         )}
@@ -317,20 +323,20 @@ function BigSide({
         ) : (
           <span className="bt-side-who">
             <span className="bt-side-dot" />
-            <span>Rival por llegar</span>
+            <span>{t('Rival por llegar')}</span>
           </span>
         )}
         {outfit && <small className="muted">{outfit.name}</small>}
-        {mine && <span className="bt-tag">Tú</span>}
+        {mine && <span className="bt-tag">{t('Tú')}</span>}
         {myVote && (
           <span className="bt-tag is-vote">
-            <Icon name="check" size={11} /> Tu voto
+            <Icon name="check" size={11} /> {t('Tu voto')}
           </span>
         )}
       </div>
       {battle.canVote && outfit && (
-        <button type="button" className="btn btn-primary btn-street bt-vote" disabled={busy} onClick={(e) => onVote(side, e.currentTarget)}>
-          <Icon name="bolt" size={14} /> Votar este
+        <button type="button" className="btn wd-add bt-vote" disabled={busy} onClick={(e) => onVote(side, e.currentTarget)}>
+          <Icon name="bolt" size={14} /> {t('Votar este')}
         </button>
       )}
     </div>

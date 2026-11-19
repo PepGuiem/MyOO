@@ -31050,3 +31050,379 @@ p.hm-outfit-meta:not(:has(+ ul)) {
 .ux:is(.sc, .dr, .wl-item, .snk-item) .ux-title::before {
   display: none;
 }
+
+/* =============================================================================
+   Estilo unificado, tanda 3: Batallas (.ba), Maniquíes (.mn) y Perfil público (.pv)
+   Igual que en las tandas 1 y 2: solo presentación; la paleta, el título, las
+   cifras y los botones vienen de `.ux`.
+   ========================================================================== */
+
+/* Paneles de cristal */
+.ba :is(.bt-card, .bt-board, .bt-pending),
+.mn :is(.mq-card, .mq-stage, .mq-form),
+.pv :is(.profile-hero, .person-list) {
+  border: 1px solid var(--wd-edge);
+  border-radius: 16px;
+  background: var(--ux-glass);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 24px 50px -28px rgba(0, 0, 0, 0.95);
+  transition:
+    border-color 0.3s,
+    box-shadow 0.3s,
+    transform 0.3s var(--wd-spring);
+}
+
+.ba :is(.bt-card, .bt-board):hover,
+.mn :is(.mq-card, .mq-form):hover,
+.mn .mq-card.is-active {
+  border-color: rgba(255, 77, 0, 0.32);
+  box-shadow:
+    0 0 0 1px rgba(255, 77, 0, 0.12),
+    0 0 32px -12px rgba(255, 77, 0, 0.55),
+    0 24px 50px -28px rgba(0, 0, 0, 0.95);
+}
+
+/* ---- Batallas ---- */
+.ba .bt-hero {
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px 28px;
+  margin-bottom: 18px;
+}
+
+.ba .ux-stats {
+  margin-bottom: 22px;
+}
+
+.ba .bt-tabs {
+  margin-bottom: 26px;
+  animation: wd-rise 0.6s 0.25s var(--wd-ease) backwards;
+}
+
+.ba .snk-tab {
+  border-radius: 12px;
+}
+
+.ba .snk-tab[aria-selected='true'] {
+  border-color: var(--wd-orange);
+  box-shadow: 0 0 22px -8px rgba(255, 77, 0, 0.9);
+}
+
+.ba .bt-card {
+  animation: wd-card-in 0.6s calc(var(--i, 0) * 55ms) var(--wd-ease) backwards;
+}
+
+.ba .bt-card:hover {
+  transform: translateY(-4px);
+}
+
+.ba .bt-card.is-live {
+  border-color: rgba(255, 23, 68, 0.45);
+}
+
+.ba .bt-board .hm-section-head {
+  margin-bottom: 4px;
+}
+
+.ba .bt-podium li.is-1 {
+  border-color: var(--wd-orange);
+  box-shadow: 0 0 24px -10px rgba(255, 77, 0, 0.9);
+}
+
+.ba .bt-me {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+}
+
+.ba.bt-item .bt-vote {
+  border-radius: 12px;
+}
+
+/* ---- Maniquíes ---- */
+.mn .mn-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 16px 28px;
+  margin-bottom: 18px;
+}
+
+/* La cifra ya está en la barra de datos */
+.mn .mq-usage {
+  display: none;
+}
+
+.mn .ux-stats {
+  margin-bottom: 26px;
+}
+
+.mn .mq-limit {
+  margin-bottom: 20px;
+  border-radius: 12px;
+}
+
+@container (min-width: 1081px) {
+  .mn .mq-layout {
+    grid-template-columns: 260px minmax(0, 1fr);
+  }
+}
+
+/* En una columna: el título encima y las fichas en filas (sin cortar) */
+@container (max-width: 1080px) {
+  .mn .mq-list {
+    flex-wrap: wrap;
+    overflow: visible;
+  }
+
+  .mn .mq-list .hm-section-head {
+    flex: 1 0 100%;
+    margin-bottom: 4px;
+  }
+
+  .mn .mq-card {
+    flex: 1 1 220px;
+    min-width: 0;
+    max-width: 100%;
+  }
+}
+
+.mn .mq-list .hm-section-head h2 {
+  font-size: 1.35rem;
+}
+
+.mn .mq-card {
+  padding: 14px 16px;
+  animation: wd-card-in 0.6s var(--wd-ease) backwards;
+}
+
+.mn .mq-card:hover {
+  transform: translateY(-2px);
+}
+
+.mn .mq-card.is-active .mq-card-name {
+  color: var(--wd-orange);
+}
+
+.mn .mq-badge {
+  color: var(--wd-black);
+  background: var(--wd-orange);
+  box-shadow: 0 0 14px -4px rgba(255, 77, 0, 0.7);
+}
+
+.mn .mq-stage {
+  background:
+    radial-gradient(ellipse at 50% 40%, rgba(255, 77, 0, 0.08), transparent 60%),
+    var(--ux-glass);
+}
+
+.mn .mq-form {
+  padding: 22px;
+}
+
+.mn .mq-form .segmented [aria-pressed='true'],
+.mn .mq-form .segmented [aria-checked='true'] {
+  color: var(--wd-black);
+  background: var(--wd-orange);
+}
+
+.mn .mq-measure input[type='range'] {
+  accent-color: var(--wd-orange);
+}
+
+.mn .mq-layout > .wd-nomatch {
+  min-height: 320px;
+}
+
+/* ---- Perfil público ---- */
+.pv .profile-hero {
+  overflow: hidden;
+  margin-bottom: 18px;
+}
+
+.pv .profile-who .wd-kicker {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  width: max-content;
+  max-width: 100%;
+  margin-bottom: 8px;
+}
+
+.pv .profile-actions .btn {
+  min-height: 44px;
+}
+
+/* Seguir / Siguiendo con el mismo trazo que el resto de botones */
+.ux.ux.pv .profile-actions .follow-btn-wrap > .btn:not(.btn-danger) {
+  color: rgba(241, 238, 233, 0.86);
+  background: rgba(8, 8, 8, 0.5);
+  border: 1px solid rgba(241, 238, 233, 0.18);
+  border-radius: 12px;
+}
+
+.ux.ux.pv .profile-actions .follow-btn-wrap > .btn.btn-primary {
+  color: var(--wd-bone);
+  border-color: var(--wd-orange);
+  box-shadow: 0 0 22px -6px rgba(255, 77, 0, 0.75);
+}
+
+.ux.ux.pv .profile-actions .follow-btn-wrap > .btn:hover:not(:disabled) {
+  border-color: var(--wd-orange);
+  box-shadow: 0 0 18px -6px rgba(255, 77, 0, 0.9);
+}
+
+/* Las pestañas son la barra de datos: cifra animada + etiqueta */
+.pv .pv-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-bottom: 28px;
+  border-bottom: 1px solid var(--wd-edge);
+}
+
+.pv .pv-stats .profile-tab {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
+  align-items: center;
+  gap: 0 12px;
+  min-width: 0;
+  margin: 0;
+  padding: 14px 18px;
+  text-align: left;
+  color: var(--wd-bone);
+  border: 0;
+  border-left: 1px solid var(--wd-edge);
+  border-radius: 0;
+  animation: wd-rise 0.6s calc(0.3s + var(--i, 0) * 0.08s) var(--wd-ease) backwards;
+  transition:
+    background 0.3s,
+    box-shadow 0.3s;
+}
+
+.pv .pv-stats .profile-tab:first-child {
+  border-left: 0;
+}
+
+.pv .pv-stats .profile-tab::after {
+  display: none;
+}
+
+.pv .pv-stats .profile-tab > .icon {
+  grid-row: span 2;
+  width: 34px;
+  height: 34px;
+  padding: 8px;
+  border-radius: 10px;
+  color: var(--wd-orange);
+  background: rgba(255, 77, 0, 0.12);
+  border: 1px solid rgba(255, 77, 0, 0.28);
+}
+
+.pv .pv-stats .profile-tab:hover:not(:disabled) {
+  background: rgba(255, 77, 0, 0.07);
+}
+
+.pv .pv-stats .profile-tab[aria-current='page'] {
+  background: linear-gradient(180deg, rgba(255, 77, 0, 0.14), rgba(255, 77, 0, 0.04));
+  box-shadow: inset 0 -2px 0 var(--wd-orange);
+}
+
+.pv .pv-stats .profile-tab[aria-current='page'] > .icon {
+  color: var(--wd-black);
+  background: var(--wd-orange);
+}
+
+.pv .pv-stats .profile-tab:disabled {
+  opacity: 0.55;
+}
+
+.pv .person-list {
+  padding: 6px;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 960px) {
+  :is(.ba .bt-hero, .mn .mn-head) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+}
+
+@media (max-width: 600px) {
+  .ba .ux-stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .ba .ux-stats li:nth-child(n) {
+    border-top: 0;
+    border-left: 1px solid var(--wd-edge);
+  }
+
+  .ba .ux-stats li:first-child {
+    border-left: 0;
+  }
+
+  .ba .bt-tabs {
+    flex-wrap: nowrap;
+    min-width: 0;
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .ba .bt-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .ba .bt-tabs > * {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  .ba :is(.bt-card, .bt-board, .bt-pending),
+  .mn :is(.mq-card, .mq-stage, .mq-form),
+  .pv .profile-hero {
+    border-radius: 14px;
+  }
+
+  .mn .mq-form {
+    padding: 16px 14px;
+  }
+
+  .mn .ux-stats li:nth-child(n) {
+    border-top: 0;
+  }
+
+  .mn .ux-stats li:nth-child(2) {
+    border-left: 1px solid var(--wd-edge);
+  }
+
+  .pv .pv-stats .profile-tab {
+    grid-template-columns: 1fr;
+    padding: 10px 12px;
+  }
+
+  .pv .pv-stats .profile-tab > .icon {
+    display: none;
+  }
+
+  .pv .pv-stats strong {
+    font-size: 1.3rem;
+  }
+}
+
+@media (hover: none) {
+  .ba .bt-card:hover,
+  .mn .mq-card:hover {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ba :is(.bt-card, .bt-tabs),
+  .mn .mq-card,
+  .pv .pv-stats .profile-tab {
+    animation: none;
+  }
+}

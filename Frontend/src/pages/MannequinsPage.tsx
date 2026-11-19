@@ -1,9 +1,12 @@
-import { useDeferredValue, useEffect, useMemo, useState, type FormEvent } from 'react';
+import { useDeferredValue, useEffect, useMemo, useState, type CSSProperties, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { mannequinsApi, plansApi } from '../api/endpoints';
 import type { GarmentLike, Mannequin } from '../api/types';
 import { ErrorNote } from '../components/ErrorNote';
 import { Icon } from '../components/Icon';
+import { NoMatch } from '../components/street/EmptyStage';
+import { SectionHead } from '../components/street/SectionHead';
+import { CountUp } from '../components/street/Street';
 import { mannequinSelectionId, useBodyShape } from '../lib/bodyPref';
 import { isNative } from '../lib/native';
 import { useAsync } from '../lib/useAsync';
@@ -21,6 +24,7 @@ import {
 } from '../three/bodyMeasures';
 import { OutfitStage } from '../three/OutfitMannequin';
 import { Busy } from '../components/Spinner';
+import { t } from '../i18n';
 
 /** Ropa de prueba para ver cómo queda en el maniquí (no viene de la API). */
 const SAMPLE: Record<Sex, GarmentLike[]> = {
@@ -45,7 +49,7 @@ interface Draft {
 
 const newDraft = (sex: Sex, n: number): Draft => ({
   id: null,
-  name: n === 0 ? 'Mis medidas' : `Maniquí ${n + 1}`,
+  name: n === 0 ? t('Mis medidas') : t('Maniquí {v}', { v: n + 1 }),
   sex,
   measures: defaultMeasures(sex),
   isDefault: n === 0,
@@ -84,46 +88,65 @@ export function MannequinsPage() {
   }
 
   return (
-    <section className="page mannequins">
-      <header className="page-head">
+    <section className="page mannequins ux mn">
+      <header className="ux-head mn-head">
         <div>
-          <h1>Maniquíes</h1>
-          <p className="muted">
-            Tu maniquí con tus medidas reales: la ropa se ajusta a él en el armario, el visor y tus outfits.
+          <span className="wd-kicker">
+            <Icon name="userCheck" size={12} /> {t('Body double')}
+          </span>
+          <h1 className="wd-title ux-title" data-text={t('Maniquíes')}>
+            {t('Maniquíes')}
+          </h1>
+          <p className="ux-lede">
+            {t('Tu maniquí con tus medidas reales: la ropa se ajusta a él en el armario, el visor y tus outfits.')}
           </p>
         </div>
-        <div className="head-actions">
+        <div className="head-actions wd-head-actions">
           {usage && (
             <span className="muted small mq-usage">
-              {usage.used} de {usage.isUnlimited ? '∞' : usage.max} · plan {planName}
+              {t('{used} de {v} · plan {planName}', { used: usage.used, v: usage.isUnlimited ? '∞' : usage.max, planName })}
             </span>
           )}
           <button
             type="button"
-            className="btn btn-primary"
+            className="btn wd-add"
             disabled={atLimit || (draft !== null && draft.id === null)}
             onClick={() => setDraft(newDraft(draft?.sex ?? 'male', mannequins.length))}
           >
-            <Icon name="plus" /> Nuevo maniquí
+            <Icon name="plus" /> <span>{t('Nuevo maniquí')}</span>
           </button>
         </div>
       </header>
 
+      <ul className="wd-stats ux-stats" aria-label={t('Resumen')}>
+        <li style={{ '--i': 0 } as CSSProperties}>
+          <Icon name="userCheck" size={16} />
+          <strong>{mannequinsLoaded ? <CountUp value={mannequins.length} /> : '–'}</strong>
+          <span>{t('Maniquíes')}</span>
+        </li>
+        <li style={{ '--i': 1 } as CSSProperties}>
+          <Icon name="layers" size={16} />
+          <strong>{usage ? (usage.isUnlimited ? '∞' : usage.max) : '–'}</strong>
+          <span>{planName ? t('Límite del plan {planName}', { planName }) : t('Límite del plan')}</span>
+        </li>
+      </ul>
+
       {atLimit && (
         <p className="note mq-limit">
-          Tu plan {planName} permite {usage?.max === 1 ? 'un maniquí' : `${usage?.max} maniquíes`}.{' '}
+          {t('Tu plan {planName} permite {v}.', { planName, v: usage?.max === 1 ? t('un maniquí') : t('{max} maniquíes', { max: usage?.max }) })}{' '}
           {isNative ? (
-            'Con un plan superior podrás tener más.'
+            t('Con un plan superior podrás tener más.')
           ) : (
             <>
-              <Link to="/account">Mejora tu plan</Link> para tener más (para tu pareja, tu familia o distintas tallas).
+              <Link to="/account">{t('Mejora tu plan')}</Link> {t('para tener más (para tu pareja, tu familia o distintas tallas).')}
             </>
           )}
         </p>
       )}
 
       <div className="mq-layout">
-        <aside className="mq-list" aria-label="Tus maniquíes">
+        <aside className="mq-list" aria-label={t('Tus maniquíes')}>
+          <SectionHead n={1} title={t('Tus maniquíes')} />
           {mannequins.map((m) => {
             const active = draft?.id === m.id;
             const inUse = selectedId === mannequinSelectionId(m.id);
@@ -137,14 +160,14 @@ export function MannequinsPage() {
               >
                 <span className="mq-card-name">{m.name}</span>
                 <span className="mq-card-meta">
-                  {m.sex === 'male' ? 'Hombre' : 'Mujer'} · {summary(m.measures)}
+                  {m.sex === 'male' ? t('Hombre') : t('Mujer')} · {summary(m.measures)}
                 </span>
-                {(m.isDefault || inUse) && <span className="mq-badge">{inUse ? 'En uso' : 'Predeterminado'}</span>}
+                {(m.isDefault || inUse) && <span className="mq-badge">{inUse ? t('En uso') : t('Predeterminado')}</span>}
               </button>
             );
           })}
           {mannequinsLoaded && mannequins.length === 0 && (
-            <p className="muted small">Aún no tienes maniquíes propios: crea el primero con tus medidas.</p>
+            <p className="muted small">{t('Aún no tienes maniquíes propios: crea el primero con tus medidas.')}</p>
           )}
         </aside>
 
@@ -158,9 +181,7 @@ export function MannequinsPage() {
             canCancel={mannequins.length > 0}
           />
         ) : (
-          <div className="mq-empty panel">
-            <p>Elige un maniquí para cambiar sus medidas o crea uno nuevo.</p>
-          </div>
+          <NoMatch icon="userCheck" title={t('Elige un maniquí')} text={t('Elige un maniquí para cambiar sus medidas o crea uno nuevo.')} />
         )}
       </div>
     </section>
@@ -235,19 +256,20 @@ function MannequinEditor({
         <OutfitStage garments={withClothes ? SAMPLE[draft.sex] : []} shape={shape} distance={3.9} />
         <label className="check mq-stage-toggle">
           <input type="checkbox" checked={withClothes} onChange={(e) => setWithClothes(e.target.checked)} />
-          Con ropa de prueba
+          {t('Con ropa de prueba')}
         </label>
       </div>
 
       <form className="mq-form panel" onSubmit={save}>
+        <SectionHead n={2} title={draft.id ? t('Medidas') : t('Nuevo maniquí')} />
         <label className="field">
-          <span>Nombre</span>
+          <span>{t('Nombre')}</span>
           <input required maxLength={60} value={draft.name} onChange={(e) => set({ name: e.target.value })} />
         </label>
 
         <div className="field">
-          <span className="field-label">Cuerpo</span>
-          <div className="segmented" role="group" aria-label="Hombre o mujer">
+          <span className="field-label">{t('Cuerpo')}</span>
+          <div className="segmented" role="group" aria-label={t('Hombre o mujer')}>
             {(['male', 'female'] as Sex[]).map((s) => (
               <button
                 key={s}
@@ -255,14 +277,14 @@ function MannequinEditor({
                 aria-pressed={draft.sex === s}
                 onClick={() => draft.sex !== s && set({ sex: s, measures: defaultMeasures(s) })}
               >
-                {s === 'male' ? 'Hombre' : 'Mujer'}
+                {s === 'male' ? t('Hombre') : t('Mujer')}
               </button>
             ))}
           </div>
         </div>
 
         <div className="field">
-          <span className="field-label">Partir de una silueta</span>
+          <span className="field-label">{t('Partir de una silueta')}</span>
           <div className="chips chips-small">
             {presets.map((p) => (
               <button key={p.id} type="button" className="chip" onClick={() => set({ measures: clampMeasures(measuresFromShape(p)) })}>
@@ -273,7 +295,7 @@ function MannequinEditor({
         </div>
 
         <fieldset className="mq-measures">
-          <legend>Medidas reales · arrastra para estirar o escribe en cm</legend>
+          <legend>{t('Medidas reales · arrastra para estirar o escribe en cm')}</legend>
           {MEASURE_KEYS.map((key) => {
             const lim = MEASURE_LIMITS[key];
             const value = draft.measures[key];
@@ -300,7 +322,7 @@ function MannequinEditor({
                     min={lim.min}
                     max={lim.max}
                     step={0.5}
-                    aria-label={`${lim.label} en centímetros`}
+                    aria-label={t('{label} en centímetros', { label: lim.label })}
                     value={typing[key] ?? String(value)}
                     onChange={(e) => {
                       setTyping({ ...typing, [key]: e.target.value });
@@ -312,7 +334,7 @@ function MannequinEditor({
                       setMeasure(key, clampMeasures(draft.measures)[key]);
                     }}
                   />
-                  cm
+                  {t('cm')}
                 </span>
               </div>
             );
@@ -321,28 +343,28 @@ function MannequinEditor({
 
         <label className="check">
           <input type="checkbox" checked={draft.isDefault} onChange={(e) => set({ isDefault: e.target.checked })} />
-          Usarlo por defecto en la cuenta
+          {t('Usarlo por defecto en la cuenta')}
         </label>
 
         <ErrorNote error={error} />
 
         <div className="actions">
-          <button type="submit" className="btn btn-primary" disabled={busy || !draft.name.trim()}>
-            {busy ? <Busy text="Guardando…" /> : draft.id ? 'Guardar cambios' : 'Crear maniquí'}
+          <button type="submit" className="btn wd-add" disabled={busy || !draft.name.trim()}>
+            {busy ? <Busy text={t('Guardando…')} /> : draft.id ? t('Guardar cambios') : t('Crear maniquí')}
           </button>
           {canCancel && (
-            <button type="button" className="btn btn-ghost" onClick={onCancel} disabled={busy}>
-              Cerrar
+            <button type="button" className="btn wd-btn-line" onClick={onCancel} disabled={busy}>
+              {t('Cerrar')}
             </button>
           )}
           {draft.id &&
             (confirmDelete ? (
               <button type="button" className="btn btn-danger" onClick={remove} disabled={busy}>
-                Sí, eliminar
+                {t('Sí, eliminar')}
               </button>
             ) : (
               <button type="button" className="btn btn-danger" onClick={() => setConfirmDelete(true)} disabled={busy}>
-                Eliminar
+                {t('Eliminar')}
               </button>
             ))}
         </div>

@@ -7,6 +7,7 @@ import { OutfitView } from '../../three/OutfitMannequin';
 import { ErrorNote } from '../ErrorNote';
 import { Icon } from '../Icon';
 import { Spinner } from '../Spinner';
+import { t } from '../../i18n';
 
 /**
  * Elige uno de tus outfits para una batalla. Se ve en 3D el que tienes
@@ -26,8 +27,8 @@ export function OutfitChooser({ value, onChange }: { value: string | null; onCha
   const garments = useMemo(() => picked?.items.map((i) => ({ ...i.wardrobeItem, styling: i.styling })) ?? [], [picked]);
 
   if (error) return <ErrorNote error={error} />;
-  if (!outfits) return <Spinner label="Cargando tus outfits…" />;
-  if (outfits.length === 0) return <p className="muted">Aún no tienes outfits con prendas. Crea uno en Outfits y vuelve.</p>;
+  if (!outfits) return <Spinner label={t('Cargando tus outfits…')} />;
+  if (outfits.length === 0) return <p className="muted">{t('Aún no tienes outfits con prendas. Crea uno en Outfits y vuelve.')}</p>;
   return (
     <div className="bt-chooser">
       <div className="bt-chooser-stage">
@@ -36,11 +37,11 @@ export function OutfitChooser({ value, onChange }: { value: string | null; onCha
         ) : (
           <span className="bt-chooser-empty">
             <Icon name="hanger" size={34} />
-            <small>Elige tu outfit</small>
+            <small>{t('Elige tu outfit')}</small>
           </span>
         )}
       </div>
-      <ul className="bt-chooser-list" role="listbox" aria-label="Tus outfits">
+      <ul className="bt-chooser-list" role="listbox" aria-label={t('Tus outfits')}>
         {outfits.map((o) => (
           <li key={o.id}>
             <button

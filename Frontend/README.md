@@ -602,3 +602,11 @@ Outfits, vestidor (`/outfits/new`, `/outfits/:id`), calendario y ficha de prenda
 - Cabecera, cifras (`.wd-stats`), botones, estados vacíos (`EmptyStage` / `NoMatch`) y secciones numeradas como en la tanda 1. Las reglas comunes de la tanda 1 se han ampliado con `:is(.ft, .wh, .sk)` en vez de copiarlas.
 - Se conservan los elementos propios: colores de estado de la wishlist, presupuesto y medidores, historial de precios, dashboard de zapatillas y gráficas de la analítica (sus cifras pasan a una barra como `.wd-stats` y cada tarjeta lleva su número con un contador CSS).
 - Estas páginas y sus formularios estaban sin traducir: ya van con `t()` / `tn()`. Las marcas de zapatillas (Nike, Adidas…) no se traducen. Siguen en español los textos que genera el servidor (consejos de la analítica, nombres de colores).
+
+### Tanda 3: Batallas, Maniquíes y Perfil público
+
+- Prefijos: `.ba` (`/batallas` y `/batallas/:id`), `.mn` (`/maniquies`) y `.pv` (`/u/:usuario`).
+- Batallas: pegatina «Streetwear battles», cifras reales del resumen (victorias, racha, en juego), sección numerada por pestaña y ranking como sección 02; pestañas vacías con `NoMatch` (acepta ya un `icon`). Las tarjetas, el ranking y el reto pendiente son paneles de cristal.
+- Maniquíes: cabecera como el inicio, cifras (maniquíes y límite del plan), «Tus maniquíes» (01) y «Medidas» / «Nuevo maniquí» (02). En una columna las fichas pasan a filas sin cortarse.
+- Perfil público: se mantienen la portada, el avatar con cinta y el nombre en grafiti; las pestañas Outfits / Seguidores / Siguiendo son ahora la barra de cifras (con CountUp) y siguen cambiando de pestaña. Bloqueo, cuenta privada y listas vacías usan `NoMatch`.
+- Traducidos los textos que faltaban (tiempo restante y avisos de voto de las batallas, etiquetas de las denuncias del perfil).

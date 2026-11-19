@@ -10,6 +10,7 @@ import { Modal } from '../Modal';
 import { PeoplePicker } from '../social/PeoplePicker';
 import { PersonAvatar, personName } from '../social/PersonAvatar';
 import { OutfitChooser } from './OutfitChooser';
+import { t } from '../../i18n';
 
 /** Lanzar un reto: a alguien en concreto o abierto a quien quiera. */
 export function CreateBattleDialog({ initialOpponent = null, onClose, onCreated }: { initialOpponent?: UserBrief | null; onClose: () => void; onCreated: (b: Battle) => void }) {
@@ -38,30 +39,30 @@ export function CreateBattleDialog({ initialOpponent = null, onClose, onCreated 
   }
 
   return (
-    <Modal title="Lanzar un reto" onClose={onClose} wide className="bt-dialog">
+    <Modal title={t('Lanzar un reto')} onClose={onClose} wide className="bt-dialog">
       <form className="bt-form" onSubmit={submit}>
         <div className="bt-form-col">
-          <span className="wl-label">1 · Tu outfit</span>
+          <span className="wl-label">{t('1 · Tu outfit')}</span>
           <OutfitChooser value={outfitId} onChange={(o) => setOutfitId(o.id)} />
         </div>
         <div className="bt-form-col">
-          <span className="wl-label">2 · Contra quién</span>
-          <div className="mk-kind-pick" role="radiogroup" aria-label="Tipo de reto">
+          <span className="wl-label">{t('2 · Contra quién')}</span>
+          <div className="mk-kind-pick" role="radiogroup" aria-label={t('Tipo de reto')}>
             <button type="button" role="radio" aria-checked={mode === 'open'} className={`wl-cat-chip${mode === 'open' ? ' is-active' : ''}`} onClick={() => setMode('open')}>
-              <Icon name="flag" size={14} /> Reto abierto
+              <Icon name="flag" size={14} /> {t('Reto abierto')}
             </button>
             <button type="button" role="radio" aria-checked={mode === 'person'} className={`wl-cat-chip${mode === 'person' ? ' is-active' : ''}`} onClick={() => setMode('person')}>
-              <Icon name="users" size={14} /> Retar a alguien
+              <Icon name="users" size={14} /> {t('Retar a alguien')}
             </button>
           </div>
           {mode === 'open' ? (
-            <p className="muted bt-hint">Cualquiera podrá aceptarlo durante 72 h con uno de sus outfits.</p>
+            <p className="muted bt-hint">{t('Cualquiera podrá aceptarlo durante 72 h con uno de sus outfits.')}</p>
           ) : opponent ? (
             <div className="bt-opponent">
               <PersonAvatar person={opponent} size={36} />
               <strong>{personName(opponent)}</strong>
               <button type="button" className="link-btn" onClick={() => setOpponent(null)}>
-                Cambiar
+                {t('Cambiar')}
               </button>
             </div>
           ) : (
@@ -69,20 +70,20 @@ export function CreateBattleDialog({ initialOpponent = null, onClose, onCreated 
           )}
 
           <label className="field">
-            <span className="wl-label">3 · Tema (opcional)</span>
-            <input value={theme} maxLength={60} placeholder="Noche de club, todo negro, invierno…" onChange={(e) => setTheme(e.target.value)} />
+            <span className="wl-label">{t('3 · Tema (opcional)')}</span>
+            <input value={theme} maxLength={60} placeholder={t('Noche de club, todo negro, invierno…')} onChange={(e) => setTheme(e.target.value)} />
           </label>
 
           <p className="wl-form-note">
-            <Icon name="users" size={13} /> Tu outfit se verá en público dentro de MyOut mientras dure la batalla. La comunidad vota 48 h; nadie puede votar en su propia batalla.
+            <Icon name="users" size={13} /> {t('Tu outfit se verá en público dentro de MyOut mientras dure la batalla. La comunidad vota 48 h; nadie puede votar en su propia batalla.')}
           </p>
           <ErrorNote error={error} />
           <div className="actions">
             <button type="button" className="btn btn-ghost" onClick={onClose}>
-              Cancelar
+              {t('Cancelar')}
             </button>
             <button type="submit" className="btn btn-primary btn-street" disabled={!ready || busy}>
-              <Icon name="bolt" size={14} /> {busy ? 'Lanzando…' : 'Lanzar reto'}
+              <Icon name="bolt" size={14} /> {busy ? t('Lanzando…') : t('Lanzar reto')}
             </button>
           </div>
         </div>
@@ -112,24 +113,24 @@ export function AcceptBattleDialog({ battle, onClose, onAccepted }: { battle: Ba
   }
 
   return (
-    <Modal title={`Responder a ${personName(battle.challenger)}`} onClose={onClose} wide className="bt-dialog">
+    <Modal title={t('Responder a {personName}', { personName: personName(battle.challenger) })} onClose={onClose} wide className="bt-dialog">
       <form className="bt-form is-single" onSubmit={submit}>
         {battle.theme && (
           <p className="bt-theme-note">
-            <Icon name="bolt" size={14} /> Tema: <b>{battle.theme}</b>
+            <Icon name="bolt" size={14} /> {t('Tema:')} <b>{battle.theme}</b>
           </p>
         )}
         <OutfitChooser value={outfitId} onChange={(o) => setOutfitId(o.id)} />
         <p className="wl-form-note">
-          <Icon name="users" size={13} /> Al aceptar empieza la votación (48 h) y tu outfit se verá en público dentro de MyOut.
+          <Icon name="users" size={13} /> {t('Al aceptar empieza la votación (48 h) y tu outfit se verá en público dentro de MyOut.')}
         </p>
         <ErrorNote error={error} />
         <div className="actions">
           <button type="button" className="btn btn-ghost" onClick={onClose}>
-            Cancelar
+            {t('Cancelar')}
           </button>
           <button type="submit" className="btn btn-primary btn-street" disabled={!outfitId || busy}>
-            <Icon name="bolt" size={14} /> {busy ? 'Aceptando…' : 'Aceptar el reto'}
+            <Icon name="bolt" size={14} /> {busy ? t('Aceptando…') : t('Aceptar el reto')}
           </button>
         </div>
       </form>

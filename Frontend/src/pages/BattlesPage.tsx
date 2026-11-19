@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, type CSSProperties } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { battlesApi, peopleApi } from '../api/endpoints';
 import type { BattleSummary, BattleTab, Leaderboard, UserBrief } from '../api/types';
@@ -10,11 +10,14 @@ import { useToast } from '../components/fx/Toast';
 import { Icon } from '../components/Icon';
 import { InfiniteSentinel } from '../components/InfiniteSentinel';
 import { PersonAvatar, personName, profilePath } from '../components/social/PersonAvatar';
+import { NoMatch } from '../components/street/EmptyStage';
+import { SectionHead } from '../components/street/SectionHead';
 import { CountUp } from '../components/street/Street';
 import { BATTLE_TABS } from '../lib/battles';
 import { withTransition } from '../lib/motion';
 import { play } from '../lib/sfx';
 import { usePagedList } from '../lib/usePagedList';
+import { t } from '../i18n';
 
 /**
  * STREETWEAR BATTLES: retos 1 vs 1 entre outfits. Lanzas un reto (a alguien
@@ -62,48 +65,52 @@ export function BattlesPage() {
   const tabInfo = BATTLE_TABS.find((t) => t.id === tab)!;
 
   return (
-    <section className="page bt">
-      <header className="fits-hero bt-hero">
+    <section className="page bt ux ba">
+      <header className="fits-hero bt-hero ux-head">
         <div className="fits-title">
-          <span className="fits-kicker">
-            <span className="rec-dot" aria-hidden="true" /> 1 vs 1 · la comunidad decide · 48 h
+          <span className="wd-kicker">
+            <Icon name="bolt" size={12} /> {t('Streetwear battles')}
           </span>
-          <h1 className="fits-h1" data-text="Batallas">
-            Batallas
+          <h1 className="wd-title ux-title" data-text={t('Batallas')}>
+            {t('Batallas')}
           </h1>
-          <p className="fits-sub">Reta a alguien con tu outfit, vota los de los demás y sube en el ranking.</p>
+          <p className="ux-lede">{t('Reta a alguien con tu outfit, vota los de los demás y sube en el ranking.')}</p>
+          <p className="ux-lede sc-path">{t('1 vs 1 · la comunidad decide · 48 h')}</p>
         </div>
 
-        <dl className="fits-stats">
-          <div>
-            <dt>Victorias</dt>
-            <dd>{summary ? <CountUp value={summary.record.wins} /> : '—'}</dd>
-          </div>
-          <div>
-            <dt>Racha</dt>
-            <dd>{summary ? <CountUp value={summary.streak} delay={120} /> : '—'}</dd>
-          </div>
-          <div>
-            <dt>En juego</dt>
-            <dd>{summary ? <CountUp value={summary.live} delay={240} /> : '—'}</dd>
-          </div>
-        </dl>
-
-        <div className="fits-actions">
+        <div className="wd-head-actions">
           <button
             type="button"
-            className="btn btn-primary btn-street btn-new bt-launch"
+            className="btn wd-add bt-launch"
             onClick={() => {
               play('spray');
               setCreating({ opponent: null });
             }}
           >
-            <Icon name="bolt" size={16} /> Lanzar reto
+            <Icon name="bolt" size={16} /> <span>{t('Lanzar reto')}</span>
           </button>
         </div>
       </header>
 
-      <div className="snk-tabs bt-tabs" role="tablist" aria-label="Batallas">
+      <ul className="wd-stats ux-stats" aria-label={t('Resumen')}>
+        <li style={{ '--i': 0 } as CSSProperties}>
+          <Icon name="trophy" size={16} />
+          <strong>{summary ? <CountUp value={summary.record.wins} /> : '–'}</strong>
+          <span>{t('Victorias')}</span>
+        </li>
+        <li style={{ '--i': 1 } as CSSProperties}>
+          <Icon name="flame" size={16} />
+          <strong>{summary ? <CountUp value={summary.streak} delay={120} /> : '–'}</strong>
+          <span>{t('Racha')}</span>
+        </li>
+        <li style={{ '--i': 2 } as CSSProperties}>
+          <Icon name="bolt" size={16} />
+          <strong>{summary ? <CountUp value={summary.live} delay={240} /> : '–'}</strong>
+          <span>{t('En juego')}</span>
+        </li>
+      </ul>
+
+      <div className="snk-tabs bt-tabs" role="tablist" aria-label={t('Batallas')}>
         {BATTLE_TABS.map((t) => {
           const n = t.id === 'challenges' ? summary?.challenges : t.id === 'live' ? summary?.live : undefined;
           return (
@@ -127,18 +134,17 @@ export function BattlesPage() {
 
       <div className="bt-layout">
         <div className="bt-main">
+          <SectionHead n={1} title={tabInfo.label} />
           {!!error && items.length === 0 && <ErrorNote error={error} />}
-          {loading && items.length === 0 && !error && <SprayLoader label="Preparando el ring…" />}
+          {loading && items.length === 0 && !error && <SprayLoader label={t('Preparando el ring…')} />}
           {!loading && !error && items.length === 0 && (
-            <div className="empty bt-empty">
-              <Icon name={tabInfo.icon} size={34} />
-              <p>{tabInfo.empty}</p>
+            <NoMatch icon={tabInfo.icon} title={tabInfo.label} text={tabInfo.empty}>
               {(tab === 'live' || tab === 'open' || tab === 'mine') && (
-                <button type="button" className="btn btn-street" onClick={() => setCreating({ opponent: null })}>
-                  <Icon name="bolt" size={14} /> Lanzar reto
+                <button type="button" className="btn wd-add" onClick={() => setCreating({ opponent: null })}>
+                  <Icon name="bolt" size={14} /> <span>{t('Lanzar reto')}</span>
                 </button>
               )}
-            </div>
+            </NoMatch>
           )}
           <div key={tab} className="bt-grid">
             {items.map((b, i) => (
@@ -148,14 +154,12 @@ export function BattlesPage() {
           <InfiniteSentinel hasMore={list.hasMore} loading={loading} error={error} onMore={list.loadMore} count={items.length} />
         </div>
 
-        <aside className="bt-board panel" aria-label="Ranking de ganadores">
-          <h2>
-            <Icon name="trophy" size={16} /> Ranking
-          </h2>
+        <aside className="bt-board panel" aria-label={t('Ranking de ganadores')}>
+          <SectionHead n={2} title={t('Ranking')} />
           {!board ? (
-            <SprayLoader label="Contando victorias…" />
+            <SprayLoader label={t('Contando victorias…')} />
           ) : board.top.length === 0 ? (
-            <p className="muted">Aún no hay ganadores. La primera batalla que termine abre el ranking.</p>
+            <p className="muted">{t('Aún no hay ganadores. La primera batalla que termine abre el ranking.')}</p>
           ) : (
             <>
               <ol className="bt-podium">
@@ -165,7 +169,7 @@ export function BattlesPage() {
                       <PersonAvatar person={r.user} size={r.rank === 1 ? 56 : 44} />
                       <strong>{personName(r.user)}</strong>
                       <span>
-                        <CountUp value={r.wins} /> {r.wins === 1 ? 'victoria' : 'victorias'}
+                        <CountUp value={r.wins} /> {r.wins === 1 ? t('victoria') : t('victorias')}
                       </span>
                     </Link>
                     <b className="bt-podium-rank">{r.rank}</b>
@@ -191,8 +195,8 @@ export function BattlesPage() {
           {board && (
             <p className="bt-me">
               {board.me.played === 0
-                ? 'Todavía no has jugado ninguna batalla.'
-                : `Tú: ${board.me.wins} ${board.me.wins === 1 ? 'victoria' : 'victorias'}, ${board.me.losses} ${board.me.losses === 1 ? 'derrota' : 'derrotas'}${board.me.ties ? `, ${board.me.ties} ${board.me.ties === 1 ? 'empate' : 'empates'}` : ''}${board.me.rank ? ` · puesto ${board.me.rank}` : ''}`}
+                ? t('Todavía no has jugado ninguna batalla.')
+                : t('Tú: {wins} {v}, {losses} {v2}{v3}{v4}', { wins: board.me.wins, v: board.me.wins === 1 ? t('victoria') : t('victorias'), losses: board.me.losses, v2: board.me.losses === 1 ? t('derrota') : t('derrotas'), v3: board.me.ties ? `, ${board.me.ties} ${board.me.ties === 1 ? t('empate') : t('empates')}` : '', v4: board.me.rank ? t(' · puesto {rank}', { rank: board.me.rank }) : '' })}
             </p>
           )}
         </aside>
@@ -205,7 +209,7 @@ export function BattlesPage() {
           onCreated={(b) => {
             setCreating(null);
             play('success');
-            toast.show(b.isOpen ? 'Reto abierto lanzado' : `Reto enviado a ${personName(b.opponent)}`, { tone: 'ok', icon: 'bolt' });
+            toast.show(b.isOpen ? t('Reto abierto lanzado') : t('Reto enviado a {personName}', { personName: personName(b.opponent) }), { tone: 'ok', icon: 'bolt' });
             navigate(`/batallas/${b.id}`);
           }}
         />
