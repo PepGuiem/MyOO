@@ -99,6 +99,8 @@ export const authApi = {
     api<AuthResponse>('POST', '/auth/register', { body }),
   login: (body: { email: string; password: string }) =>
     api<AuthResponse>('POST', '/auth/login', { body }),
+  /** Con sesión: devuelve un token nuevo con la caducidad completa. */
+  renew: () => api<AuthResponse>('POST', '/auth/renew'),
 };
 
 /** Login con Google/Apple y cuentas conectadas (el backend habla con el proveedor). */

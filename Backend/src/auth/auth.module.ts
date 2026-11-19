@@ -4,6 +4,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
 import type { AppConfig } from '../config/env.validation';
 import { AuthController } from './auth.controller';
+import { AuthSessionController } from './auth-session.controller';
 import { AuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
 import { PasswordService } from './password.service';
@@ -20,7 +21,7 @@ import { PasswordService } from './password.service';
       }),
     }),
   ],
-  controllers: [AuthController],
+  controllers: [AuthController, AuthSessionController],
   providers: [
     AuthService,
     PasswordService,

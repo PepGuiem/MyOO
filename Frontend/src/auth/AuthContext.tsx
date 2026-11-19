@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
-import { setBannedHandler, setUnauthorizedHandler, tokenStore, type BanInfo } from '../api/client';
+import { ApiError, setBannedHandler, setUnauthorizedHandler, tokenStore, type BanInfo } from '../api/client';
 import { authApi, usersApi } from '../api/endpoints';
 import type { AuthResponse, User } from '../api/types';
 import { locale, syncLocale, toAccountLocale } from '../i18n';
@@ -49,16 +49,61 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (!tokenStore.get()) return;
-    usersApi
-      .me()
-      .then((u) => {
-        // El idioma de la cuenta manda (si difiere, la página se recarga en ese idioma).
-        syncLocale(u.locale);
-        setUser(u);
-      })
-      .catch(() => logout())
-      .finally(() => setLoading(false));
+    let cancelled = false;
+    // Al abrir la web se renueva el token (vuelve a durar el plazo completo),
+    // así quien entra a menudo no tiene que iniciar sesión otra vez. Solo un
+    // 401/403 cierra la sesión: si el servidor aún arranca (justo después de
+    // un despliegue) o falla la red, se reintenta y el token NO se borra.
+    const restore = async () => {
+      for (let attempt = 0; ; attempt++) {
+        try {
+          let u: User;
+          try {
+            const res = await authApi.renew();
+            if (cancelled) return;
+            tokenStore.set(res.accessToken);
+            u = res.user;
+          } catch (err) {
+            // Backend anterior sin /auth/renew: basta con el perfil.
+            if (!(err instanceof ApiError && err.status === 404)) throw err;
+            u = await usersApi.me();
+          }
+          if (cancelled) return;
+          // El idioma de la cuenta manda (si difiere, la página se recarga en ese idioma).
+          syncLocale(u.locale);
+          setUser(u);
+          return;
+        } catch (err) {
+          if (cancelled) return;
+          if (err instanceof ApiError && (err.status === 401 || err.status === 403)) {
+            logout();
+            return;
+          }
+          if (attempt >= 3) return;
+          await new Promise((r) => setTimeout(r, 1500 * (attempt + 1)));
+        }
+      }
+    };
+    void restore().finally(() => {
+      if (!cancelled) setLoading(false);
+    });
+    return () => {
+      cancelled = true;
+    };
   }, [logout]);
+
+  // Con la web abierta mucho tiempo, renueva también cada 12 h.
+  const userId = user?.id;
+  useEffect(() => {
+    if (!userId) return;
+    const timer = window.setInterval(() => {
+      authApi
+        .renew()
+        .then((res) => tokenStore.set(res.accessToken))
+        .catch(() => undefined);
+    }, 12 * 60 * 60 * 1000);
+    return () => window.clearInterval(timer);
+  }, [userId]);
 
   const handleAuth = useCallback((res: AuthResponse) => {
     tokenStore.set(res.accessToken);
