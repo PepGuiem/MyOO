@@ -81,7 +81,7 @@ export function DetailList({
   );
 }
 
-/** «Parche · MYOUT», «Estampado (imagen)», «Dibujo»… */
+/** «Parche · MYOO», «Estampado (imagen)», «Dibujo»… */
 export function detailTitle(d: CustomDetail): string {
   const kind = DETAIL_KIND_LABEL[d.kind];
   if (d.text) return `${kind} · ${d.text}`;

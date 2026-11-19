@@ -1,7 +1,7 @@
 import { flushSync } from 'react-dom';
 
 /**
- * Sistema de animaciones de MyOut (sin librerías: CSS + Web Animations API).
+ * Sistema de animaciones de MyOO (sin librerías: CSS + Web Animations API).
  *
  * - Las animaciones usan transform y opacity (las mueve la GPU, no
  *   recalculan el diseño de la página).

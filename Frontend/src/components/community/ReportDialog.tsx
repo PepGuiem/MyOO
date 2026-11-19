@@ -16,7 +16,7 @@ const WHAT: Record<ReportTarget, string> = {
 };
 
 /**
- * Denunciar algo. Lo ve solo el equipo de MyOut, junto con una copia de lo
+ * Denunciar algo. Lo ve solo el equipo de MyOO, junto con una copia de lo
  * denunciado; la otra persona no sabe quién la ha denunciado.
  */
 export function ReportDialog({ targetType, targetId, onClose }: { targetType: ReportTarget; targetId: string; onClose: () => void }) {

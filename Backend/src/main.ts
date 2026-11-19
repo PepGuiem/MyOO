@@ -18,7 +18,7 @@ async function bootstrap(): Promise<void> {
   // Documentación interactiva de la API (no se publica en producción).
   if (config.getOrThrow<string>('NODE_ENV') !== 'production') {
     const swaggerConfig = new DocumentBuilder()
-      .setTitle('MyOut API')
+      .setTitle('MyOO API')
       .setDescription('Armarios, prendas y outfits')
       .setVersion('0.1.0')
       .addBearerAuth()

@@ -35,7 +35,7 @@ export function IdeasPage() {
           <h1 className="wd-title ux-title" data-text={t('Ideas')}>
             {t('Ideas')}
           </h1>
-          <p className="ux-lede">{t('¿Qué echas de menos en MyOut? Propónlo o vota lo que ya han propuesto. El equipo lo lee todo y contesta aquí.')}</p>
+          <p className="ux-lede">{t('¿Qué echas de menos en MyOO? Propónlo o vota lo que ya han propuesto. El equipo lo lee todo y contesta aquí.')}</p>
         </div>
         <div className="wd-head-actions">
           <button type="button" className="btn wd-add" onClick={() => setProposing(true)}>

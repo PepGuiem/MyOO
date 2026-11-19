@@ -85,5 +85,5 @@ export const OAUTH_ERRORS: Record<string, string> = {
   email_unverified: t('Tu proveedor no ha verificado tu email. Entra con tu contraseña y conéctalo desde tu perfil.'),
   email_missing: t('El proveedor no ha compartido tu email.'),
   provider_already_linked: t('Tu cuenta ya tiene otra cuenta de ese proveedor conectada. Desconéctala primero.'),
-  linked_to_other_user: t('Esa cuenta ya está conectada a otro perfil de MyOut.'),
+  linked_to_other_user: t('Esa cuenta ya está conectada a otro perfil de MyOO.'),
 };

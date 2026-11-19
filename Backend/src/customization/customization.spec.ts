@@ -9,7 +9,7 @@ const detail = (over: Record<string, unknown> = {}) => ({
   rotation: 0,
   size: 0.06,
   color: '#151517',
-  text: 'MyOut',
+  text: 'MyOO',
   font: 'script',
   ...over,
 });

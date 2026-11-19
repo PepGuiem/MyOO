@@ -143,7 +143,7 @@ export class OAuthController {
     this.finish(res, target, HttpStatus.SEE_OTHER);
   }
 
-  /** Canjea el código de la vuelta por la sesión de MyOut (login). */
+  /** Canjea el código de la vuelta por la sesión de MyOO (login). */
   @Public()
   @Post('exchange')
   @HttpCode(HttpStatus.OK)

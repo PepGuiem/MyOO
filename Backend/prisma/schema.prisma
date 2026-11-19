@@ -1,5 +1,5 @@
 // =============================================================================
-// Esquema de base de datos de MyOut (Prisma ORM 6 + PostgreSQL)
+// Esquema de base de datos de MyOO (Prisma ORM 6 + PostgreSQL)
 // -----------------------------------------------------------------------------
 // - Cada `model` se convierte en una tabla.
 // - Los cambios en este archivo se aplican con migraciones:

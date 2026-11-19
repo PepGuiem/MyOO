@@ -238,7 +238,7 @@ function CareLabel({ user }: { user: User }) {
   }, [user.id]);
   return (
     <div className="pf-label" aria-hidden="true">
-      <span className="pf-label-brand">MYOUT</span>
+      <span className="pf-label-brand">MYOO</span>
       <span>{t('Miembro desde {year}', { year: new Date(user.createdAt).getFullYear() })}</span>
       {user.username && <span>@{user.username}</span>}
       <span className="pf-label-bars">
@@ -358,7 +358,7 @@ function ProfileHero({ user, onChange, onEdit, editing }: { user: User; onChange
               </li>
             )}
             <li>
-              <Icon name="history" size={13} /> {t('En MyOut desde {date}', { date: formatDate(user.createdAt) })}
+              <Icon name="history" size={13} /> {t('En MyOO desde {date}', { date: formatDate(user.createdAt) })}
             </li>
           </ul>
         </div>
@@ -620,7 +620,7 @@ function ProfileEditor({ user, onSaved, onCancel }: { user: User; onSaved: (u: U
   }
 
   const hint: Record<typeof nameCheck, ReactNode> = {
-    idle: <>{t('Tu nombre único en MyOut: 3-30 letras minúsculas, números, punto o guion bajo.')}</>,
+    idle: <>{t('Tu nombre único en MyOO: 3-30 letras minúsculas, números, punto o guion bajo.')}</>,
     checking: <Busy text={t('Comprobando…')} />,
     free: (
       <span className="ok-text">

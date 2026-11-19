@@ -1,7 +1,7 @@
 {
   "name": "myout-backend",
   "version": "0.1.0",
-  "description": "API de MyOut: armarios, prendas y outfits (NestJS + Prisma + PostgreSQL)",
+  "description": "API de MyOO: armarios, prendas y outfits (NestJS + Prisma + PostgreSQL)",
   "private": true,
   "license": "UNLICENSED",
   "engines": {

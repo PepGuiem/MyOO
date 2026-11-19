@@ -26,7 +26,7 @@ type LiveSocket = WebSocket & { isAlive?: boolean };
 /**
  * Servidor WebSocket con la librería `ws`, colgado del mismo servidor HTTP
  * que la API (mismo puerto). Solo hace de "tubería":
- *  1. Al abrir: comprueba el origen (que sea la web de MyOut) y el ticket.
+ *  1. Al abrir: comprueba el origen (que sea la web de MyOO) y el ticket.
  *  2. Registra la conexión en RealtimeService.
  *  3. Lo que llega del navegador (JSON pequeño) se pasa a RealtimeService.dispatch.
  *  4. Ping cada 30 s; si no contesta, se corta. Al caducar la sesión, se cierra.

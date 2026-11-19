@@ -93,7 +93,7 @@ export class InstagramService {
     }
   }
 
-  /** Pone la foto de perfil de Instagram como foto de perfil de MyOut. */
+  /** Pone la foto de perfil de Instagram como foto de perfil de MyOO. */
   async useProfilePhoto(userId: string): Promise<{ avatarAssetId: string }> {
     const acc = await this.account(userId);
     if (!acc) throw new NotFoundException('Instagram is not connected');

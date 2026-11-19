@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { prefersReducedMotion, seeded } from '../street/Street';
 
 /** Firmas de la pared: inventadas, sin marcas reales. */
-const TAGS = ['MYOUT', 'DRIP', 'NO RULES', 'FITS', '24/7', 'CREW', 'RAW', 'LATE NITE', 'STAY REAL', 'OG', 'VSTDR', 'FRESH', 'X', 'BCN', 'TAKE IT'];
+const TAGS = ['MYOO', 'DRIP', 'NO RULES', 'FITS', '24/7', 'CREW', 'RAW', 'LATE NITE', 'STAY REAL', 'OG', 'VSTDR', 'FRESH', 'X', 'BCN', 'TAKE IT'];
 const INKS = ['#0b0b0c', '#0b0b0c', '#0b0b0c', '#ff4f8b', '#c6ff2e', '#f2efe8', '#ff2d4a', '#ff7a1a'];
 
 /**

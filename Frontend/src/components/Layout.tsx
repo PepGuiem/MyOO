@@ -81,7 +81,7 @@ export function Layout() {
     <div className="shell">
       <aside className={`sidebar${menuOpen ? ' is-open' : ''}`}>
         <div className="sidebar-head">
-          <Link to="/" className="sidebar-brand" aria-label={t('MyOut, inicio')}>
+          <Link to="/" className="sidebar-brand" aria-label={t('MyOO, inicio')}>
             <Logo decorative />
           </Link>
           <NotificationBell />

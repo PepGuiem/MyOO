@@ -83,9 +83,9 @@ export const MAX_DRAWING_SIZE = 1.0;
 
 /** Tamaño inicial (metros) y colores por defecto de cada detalle nuevo. */
 export const DETAIL_DEFAULTS: Record<DetailKind, { size: number; color: string; secondaryColor?: string; text?: string }> = {
-  patch: { size: 0.07, color: '#1C1C1E', secondaryColor: '#E8E8E8', text: 'MYOUT' },
-  embroidery: { size: 0.05, color: '#E8E8E8', text: t('MyOut') },
-  print: { size: 0.12, color: '#151517', text: 'MYOUT' },
+  patch: { size: 0.07, color: '#1C1C1E', secondaryColor: '#E8E8E8', text: 'MYOO' },
+  embroidery: { size: 0.05, color: '#E8E8E8', text: t('MyOO') },
+  print: { size: 0.12, color: '#151517', text: 'MYOO' },
   label: { size: 0.035, color: '#151517', secondaryColor: '#E8E8E8', text: 'MO' },
   button: { size: 0.016, color: '#2E2E33' },
   rivet: { size: 0.007, color: '#B87333' },

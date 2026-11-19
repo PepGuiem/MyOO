@@ -93,7 +93,7 @@ export function HomePage() {
   if (wardrobes.length === 0 && data && data.itemTotal === 0) {
     return (
       <section className="page home hm">
-        <HomeHead today={today} title={title} name={name} summary={t('Bienvenido a MyOut. Tres pasos para empezar:')} />
+        <HomeHead today={today} title={title} name={name} summary={t('Bienvenido a MyOO. Tres pasos para empezar:')} />
         <ol className="home-steps hm-steps">
           <li className="is-current">
             <span className="step-n">1</span>

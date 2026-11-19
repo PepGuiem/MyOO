@@ -1,7 +1,7 @@
 import { EN } from './en';
 
 /**
- * Idiomas de MyOut: español (el original) e inglés.
+ * Idiomas de MyOO: español (el original) e inglés.
  *
  * - El texto en español ES la clave: `t('Guardar')` devuelve «Save» en inglés.
  *   Si falta una traducción se ve el español (nunca un hueco).

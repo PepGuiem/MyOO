@@ -1,6 +1,8 @@
 /**
- * Logo de MyOut: pieza de grafiti en cromo («my» en firma + «OUT» en letras
- * de burbuja, con la T hecha percha). Es un SVG estático en public/brand.
+ * Logo de MyOO: pieza de grafiti en cromo: «OO» en letras de burbuja que
+ * gotean, con un aro de neón dentro, colgadas de un gancho de percha, y «MY»
+ * en una pegatina naranja. Es un SVG estático en public/brand (mark.svg es el
+ * icono: solo las dos O).
  */
 const BASE = import.meta.env.BASE_URL;
 
@@ -12,9 +14,9 @@ export function Logo({ className = '', decorative = false }: { className?: strin
     <img
       className={`logo ${className}`}
       src={LOGO_URL}
-      alt={decorative ? '' : 'MyOut'}
-      width={1010}
-      height={650}
+      alt={decorative ? '' : 'MyOO'}
+      width={936}
+      height={781}
       draggable={false}
       decoding="async"
     />

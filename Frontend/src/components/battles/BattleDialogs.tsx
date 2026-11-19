@@ -75,7 +75,7 @@ export function CreateBattleDialog({ initialOpponent = null, onClose, onCreated 
           </label>
 
           <p className="wl-form-note">
-            <Icon name="users" size={13} /> {t('Tu outfit se verá en público dentro de MyOut mientras dure la batalla. La comunidad vota 48 h; nadie puede votar en su propia batalla.')}
+            <Icon name="users" size={13} /> {t('Tu outfit se verá en público dentro de MyOO mientras dure la batalla. La comunidad vota 48 h; nadie puede votar en su propia batalla.')}
           </p>
           <ErrorNote error={error} />
           <div className="actions">
@@ -122,7 +122,7 @@ export function AcceptBattleDialog({ battle, onClose, onAccepted }: { battle: Ba
         )}
         <OutfitChooser value={outfitId} onChange={(o) => setOutfitId(o.id)} />
         <p className="wl-form-note">
-          <Icon name="users" size={13} /> {t('Al aceptar empieza la votación (48 h) y tu outfit se verá en público dentro de MyOut.')}
+          <Icon name="users" size={13} /> {t('Al aceptar empieza la votación (48 h) y tu outfit se verá en público dentro de MyOO.')}
         </p>
         <ErrorNote error={error} />
         <div className="actions">

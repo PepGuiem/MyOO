@@ -99,7 +99,7 @@ export const GOOGLE_PHOTO_HOSTS = ['googleusercontent.com'];
  *     token. Se guarda la identidad y se manda al frontend un código de un
  *     solo uso en el fragmento (#) de la URL, que no llega a ningún servidor.
  *  3. exchange: el frontend canjea ese código por el token de sesión de
- *     MyOut (LOGIN), o, con su sesión, conecta la cuenta (LINK) o recibe una
+ *     MyOO (LOGIN), o, con su sesión, conecta la cuenta (LINK) o recibe una
  *     prueba de identidad (REAUTH).
  */
 @Injectable()
@@ -369,7 +369,7 @@ export class OAuthService {
   // 3. Canje en el frontend
   // ---------------------------------------------------------------------------
 
-  /** LOGIN: canjea el código de un solo uso por la sesión de MyOut. */
+  /** LOGIN: canjea el código de un solo uso por la sesión de MyOO. */
   async exchangeLogin(result: string): Promise<LoginExchangeResult> {
     const flow = await this.take(result);
     if (!flow || flow.intent !== OAuthIntent.LOGIN || !flow.outcome)
@@ -468,7 +468,7 @@ export class OAuthService {
    *  1. Si esa cuenta del proveedor ya está conectada → ese usuario.
    *  2. Si no, y existe un usuario con el mismo email, se conectan SOLO si el
    *     proveedor confirma que el email es suyo (email_verified).
-   *     Protección extra ("pre-account takeover"): MyOut no verifica el email
+   *     Protección extra ("pre-account takeover"): MyOO no verifica el email
    *     al registrarse con contraseña, así que alguien podría haber creado la
    *     cuenta con TU email antes que tú. Si esa cuenta tiene contraseña y su
    *     email nunca se verificó, se quita la contraseña al conectarla: así
@@ -542,7 +542,7 @@ export class OAuthService {
       });
       if (other) {
         throw new ConflictException({
-          message: `Your MyOut account is connected to a different ${PROVIDER_NAME[provider]} account`,
+          message: `Your MyOO account is connected to a different ${PROVIDER_NAME[provider]} account`,
           code: 'provider_already_linked',
         });
       }
@@ -602,7 +602,7 @@ export class OAuthService {
         if (existing) {
           if (existing.userId === userId) return;
           throw new ConflictException({
-            message: `This ${name} account is already connected to another MyOut account`,
+            message: `This ${name} account is already connected to another MyOO account`,
             code: 'linked_to_other_user',
           });
         }
@@ -671,7 +671,7 @@ export class OAuthService {
       ) {
         throw new ConflictException({
           message:
-            'This Instagram account is already connected to another MyOut account',
+            'This Instagram account is already connected to another MyOO account',
           code: 'linked_to_other_user',
         });
       }

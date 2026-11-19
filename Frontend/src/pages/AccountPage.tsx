@@ -397,7 +397,7 @@ function DeleteAccountDialog({
     <Modal title={t('Eliminar la cuenta')} onClose={busy ? () => undefined : onClose}>
       <form className="stack" onSubmit={confirm}>
         <p>
-          {t('Vas a borrar tu cuenta y')} <strong>{t('todo')}</strong> {t('lo que tienes en MyOut. Esta acción no se puede deshacer.')}
+          {t('Vas a borrar tu cuenta y')} <strong>{t('todo')}</strong> {t('lo que tienes en MyOO. Esta acción no se puede deshacer.')}
         </p>
         {withPassword ? (
           <label className="field">

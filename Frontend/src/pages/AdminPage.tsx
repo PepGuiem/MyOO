@@ -765,7 +765,7 @@ function ReleaseEditor({ release, onClose, onSaved }: { release: Release | null;
               required
               value={body}
               onChange={(e) => setBody(e.target.value)}
-              placeholder={t('Ya puedes hablar con tus amigos dentro de MyOut.\n\n- Chats 1 a 1 y de grupo\n- Envía outfits por mensaje')}
+              placeholder={t('Ya puedes hablar con tus amigos dentro de MyOO.\n\n- Chats 1 a 1 y de grupo\n- Envía outfits por mensaje')}
             />
           )}
           <small className="muted">{t('Una línea en blanco separa párrafos; las líneas que empiezan por «- » forman una lista.')}</small>

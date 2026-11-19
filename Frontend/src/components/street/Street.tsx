@@ -100,7 +100,7 @@ export function CoverArt({ seed, initials }: { seed: string; initials: string })
       ))}
       <g className="cover-stencil" transform="translate(1390 410) rotate(-2)">
         <text x="0" y="0" textAnchor="end">
-          {t('MYOUT · {getFullYear}', { getFullYear: new Date().getFullYear() })}
+          {t('MYOO · {getFullYear}', { getFullYear: new Date().getFullYear() })}
         </text>
       </g>
       <path className="cover-arrow" d="M150 380c60-40 140-52 230-36m0 0-28-22m28 22-30 18" />

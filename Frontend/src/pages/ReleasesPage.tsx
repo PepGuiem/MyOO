@@ -10,7 +10,7 @@ import { UPCOMING } from '../lib/features';
 import { longDate, RELEASE_TAG_LABEL } from '../lib/community';
 import { t } from '../i18n';
 
-/** Novedades: lo nuevo de MyOut, de lo más reciente a lo más antiguo. */
+/** Novedades: lo nuevo de MyOO, de lo más reciente a lo más antiguo. */
 export function ReleasesPage() {
   const [items, setItems] = useState<Release[] | null>(null);
   const [page, setPage] = useState(1);
@@ -51,7 +51,7 @@ export function ReleasesPage() {
           <h1 className="wd-title ux-title" data-text={t('Novedades')}>
             {t('Novedades')}
           </h1>
-          <p className="ux-lede">{t('Lo nuevo de MyOut. Cuando publiquemos algo te llegará un aviso a la campanita.')}</p>
+          <p className="ux-lede">{t('Lo nuevo de MyOO. Cuando publiquemos algo te llegará un aviso a la campanita.')}</p>
         </div>
       </header>
 

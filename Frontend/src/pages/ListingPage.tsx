@@ -291,7 +291,7 @@ export function ListingPage() {
               <button type="submit" className="btn btn-primary btn-street" disabled={busy}>
                 <Icon name="chat" size={14} /> {busy ? 'Enviando…' : 'Contactar por chat'}
               </button>
-              <small className="muted">El pago y la entrega los acordáis vosotros: MyOut no cobra ni guarda datos de pago.</small>
+              <small className="muted">El pago y la entrega los acordáis vosotros: MyOO no cobra ni guarda datos de pago.</small>
             </form>
           ) : (
             <p className="mk-contact-off muted">

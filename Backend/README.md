@@ -1,4 +1,4 @@
-# MyOut: backend
+# MyOO: backend
 
 API REST para gestionar armarios, prendas y outfits. NestJS 11, Prisma ORM 6 y PostgreSQL 17 (en Docker).
 
@@ -297,7 +297,7 @@ Limitación: las filas de `StylistFeedback` no se purgan todavía (solo se leen 
 1. El navegador va a `GET /api/auth/oauth/google/start`. El backend crea un `OAuthFlow` con un `state` aleatorio (en la base de datos solo su **hash**), un `nonce` y un **PKCE** (Google), pone una cookie `HttpOnly` que ata el flujo a ese navegador y redirige a Google.
 2. Google vuelve a `/api/auth/oauth/google/callback?code=…&state=…` (Apple vuelve con un **POST** de formulario). El backend comprueba state, caducidad, que no se haya usado y la cookie; **canjea el código en el servidor** (el secreto nunca llega al navegador) y **verifica el ID token**: firma con las claves públicas del proveedor, `iss`, `aud`, `exp` y `nonce` (`src/oauth/oidc.ts`).
 3. Redirige al frontend con un código de **un solo uso** en el fragmento: `/auth/callback#result=…`. El fragmento no se envía a ningún servidor ni queda en los logs.
-4. El frontend lo canjea: `POST /api/auth/oauth/exchange` (login → token de MyOut) o, con sesión, `POST /api/auth/oauth/exchange/me` (conectar cuenta o confirmar identidad). Conectar una cuenta exige la sesión del **mismo** usuario que empezó: si alguien te manda su enlace, no se conecta nada.
+4. El frontend lo canjea: `POST /api/auth/oauth/exchange` (login → token de MyOO) o, con sesión, `POST /api/auth/oauth/exchange/me` (conectar cuenta o confirmar identidad). Conectar una cuenta exige la sesión del **mismo** usuario que empezó: si alguien te manda su enlace, no se conecta nada.
 
 ### Decisiones de seguridad
 
@@ -350,7 +350,7 @@ npm run test:e2e        # e2e (incluye test/profile-oauth.e2e-spec.ts)
 
 ### Cómo funciona el WebSocket (paso a paso)
 1. El navegador no puede enviar `Authorization` al abrir un WebSocket. Pide un **ticket** con su token: `POST /api/realtime/ticket` (30 s, un solo uso, solo se guarda su hash).
-2. Abre `ws(s)://<web>/api/ws?ticket=...`. El servidor comprueba el **Origin** (que sea la web de MyOut: evita que otra página use tu sesión) y gasta el ticket.
+2. Abre `ws(s)://<web>/api/ws?ticket=...`. El servidor comprueba el **Origin** (que sea la web de MyOO: evita que otra página use tu sesión) y gasta el ticket.
 3. Los envíos van por REST (validados con DTO, con sus errores HTTP) y el servidor **avisa** por el WebSocket a los miembros: `message`, `message_deleted`, `read`, `typing`, `conversation`, `follow_request`, `new_follower`, `follow_accepted`.
 4. Del navegador solo llega `typing` (y `ping`). Límites: 4 KB por mensaje, 40 por 10 s, 6 conexiones por usuario, 15 mensajes de chat por 10 s.
 5. Ping cada 30 s (se cortan las conexiones muertas) y la conexión se cierra cuando caduca el token de sesión; el frontend reconecta solo.

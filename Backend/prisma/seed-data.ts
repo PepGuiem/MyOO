@@ -319,7 +319,7 @@ export const DEMO_ITEMS: DemoItem[] = [
           size: 0.07,
           color: '#1C1C1E',
           secondaryColor: '#E8E8E8',
-          text: 'MYOUT',
+          text: 'MYOO',
           font: 'college',
           shape: 'shield',
         },

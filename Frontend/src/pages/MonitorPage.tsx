@@ -139,7 +139,7 @@ function Monitor() {
           <h1 className="wd-title ux-title" data-text={t('Monitor')}>
             {t('Monitor')}
           </h1>
-          <p className="ux-lede">{t('Estado de la API, tráfico, base de datos y uso de MyOut, en directo.')}</p>
+          <p className="ux-lede">{t('Estado de la API, tráfico, base de datos y uso de MyOO, en directo.')}</p>
         </div>
         <div className="monitor-head-side">
           {level ? (

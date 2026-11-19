@@ -292,7 +292,7 @@ export function ListingForm({ mode, onClose, onSaved }: { mode: ListingFormMode;
           </label>
 
           <p className="wl-form-note mk-form-note">
-            <Icon name="chat" size={13} /> Quien esté interesado te escribirá por Mensajes. En MyOut no hay pagos: el trato lo cerráis vosotros. Si tu ajuste de
+            <Icon name="chat" size={13} /> Quien esté interesado te escribirá por Mensajes. En MyOO no hay pagos: el trato lo cerráis vosotros. Si tu ajuste de
             mensajes es «Nadie», no podrán contactarte.
           </p>
 

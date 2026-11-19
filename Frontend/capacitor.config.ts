@@ -11,7 +11,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 const config: CapacitorConfig = {
   // Identificador único en las tiendas. No se puede cambiar después de publicar.
   appId: 'com.myout.app',
-  appName: 'MyOut',
+  appName: 'MyOO',
   webDir: 'dist',
   backgroundColor: '#19191b',
   android: {

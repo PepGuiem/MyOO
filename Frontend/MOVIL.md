@@ -1,4 +1,4 @@
-# MyOut en Android e iOS (Capacitor)
+# MyOO en Android e iOS (Capacitor)
 
 La app del móvil es la misma web envuelta con [Capacitor](https://capacitorjs.com): Capacitor mete la web compilada (`dist/`) dentro de una app nativa de Android y de iOS. Todo lo que cambies en la web llega a la app al volver a compilarla.
 
@@ -11,7 +11,7 @@ La app del móvil es la misma web envuelta con [Capacitor](https://capacitorjs.c
 
 | Archivo | Qué hace |
 | --- | --- |
-| `capacitor.config.ts` | Identificador `com.myout.app`, nombre «MyOut», fondo oscuro, barras del sistema con texto claro y pantalla de carga |
+| `capacitor.config.ts` | Identificador `com.myout.app`, nombre «MyOO», fondo oscuro, barras del sistema con texto claro y pantalla de carga |
 | `package.json` | Dependencias de Capacitor 8 y los scripts `cap:sync`, `cap:android`, `cap:ios` y `cap:assets` |
 | `src/lib/native.ts` | Dentro de la app (no en la web): marca `<html class="is-native">`, pone la app a pantalla completa respetando la muesca y la barra de gestos, hace que el botón «atrás» de Android vuelva atrás (y salga en la primera pantalla) y quita la pantalla de carga al arrancar |
 | `src/styles.css` (sección «App de Android/iOS») | Zonas seguras (barra de estado, muesca, barra de gestos) |

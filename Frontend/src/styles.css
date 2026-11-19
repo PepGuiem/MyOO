@@ -1,5 +1,5 @@
 /* =============================================================================
-   MyOut: interfaz en grises grafito. La interfaz es acromática a propósito:
+   MyOO: interfaz en grises grafito. La interfaz es acromática a propósito:
    el único color de la pantalla es el de las prendas.
    ========================================================================== */
 
@@ -3183,7 +3183,7 @@ input:disabled {
   /* La acera de la imagen (72 % de su alto) cae justo bajo los pies */
   .auth-street {
     background-position: 30% 0;
-    background-size: auto calc((var(--pw) * 0.5 + 42vh) * 0.93 / 0.72);
+    background-size: auto calc((var(--pw) * 0.65 + 42vh) * 0.93 / 0.72);
   }
 
   .auth {
@@ -3194,11 +3194,11 @@ input:disabled {
 
   .auth-stage {
     min-height: 0;
-    height: calc(var(--pw) * 0.5 + 42vh);
+    height: calc(var(--pw) * 0.65 + 42vh);
   }
 
   .auth-stage > div {
-    inset: calc(var(--pw) * 0.5) 0 0 0;
+    inset: calc(var(--pw) * 0.65) 0 0 0;
   }
 
   .auth-panel {
@@ -3241,7 +3241,7 @@ input:disabled {
   }
 
   .sidebar-brand .logo {
-    width: 112px;
+    width: 100px;
   }
 
   .nav {
@@ -7465,7 +7465,7 @@ a.idea-author:hover {
   }
 
   .sidebar-head .sidebar-brand .logo {
-    width: 112px;
+    width: 100px;
   }
 
   .nav-admin {

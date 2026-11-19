@@ -25,11 +25,11 @@ export const UPCOMING: Upcoming[] = FEATURES.market
         id: 'street-market',
         icon: 'store',
         title: t('Street Market'),
-        body: t('Compra, vende e intercambia ropa y zapatillas con la comunidad de MyOut.'),
+        body: t('Compra, vende e intercambia ropa y zapatillas con la comunidad de MyOO.'),
         points: [
           t('Anuncios con fotos, precio, talla, estado y ciudad.'),
           t('«Vender» directamente desde una prenda de tu armario o tus zapatillas.'),
-          t('Habla con quien vende por el chat de la app; sin pagos dentro de MyOut.'),
+          t('Habla con quien vende por el chat de la app; sin pagos dentro de MyOO.'),
           t('Favoritos, filtros por categoría, talla y precio.'),
         ],
       },

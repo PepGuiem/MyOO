@@ -144,7 +144,7 @@ export function NotificationBell() {
             {!items && !error && <Spinner size={16} label={t('Cargando avisos…')} />}
             {items && items.length === 0 && (
               <p className="notif-empty muted">
-                {t('Nada por aquí todavía. Te avisaremos de las novedades de MyOut, de las respuestas a tus ideas y de quién te sigue.')}
+                {t('Nada por aquí todavía. Te avisaremos de las novedades de MyOO, de las respuestas a tus ideas y de quién te sigue.')}
               </p>
             )}
             {items && items.length > 0 && (
