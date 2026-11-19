@@ -1,4 +1,4 @@
-# MyOO: frontend
+# MyOut: frontend
 
 React 19, Vite, TypeScript y React Three Fiber. Interfaz minimalista en grises grafito: el único color de la pantalla es el de las prendas, que se dibujan como modelos 3D.
 
@@ -41,6 +41,13 @@ La misma web, empaquetada como app nativa con Capacitor 8 (`capacitor.config.ts`
 | `/novedades` | **Novedades**: línea de tiempo con lo publicado (versión, etiquetas Nuevo / Mejorado / Arreglado) |
 | `/admin` (`?tab=`) | **Panel de admin** (solo rol `ADMIN`): resumen, usuarios, ideas, denuncias, novedades y registro |
 | `/monitor` | **Monitor** (solo rol `ADMIN`): estado de la API, tráfico, latencia, errores, rutas, proceso, base de datos, uso de la app y últimos eventos, en directo |
+
+## Menú lateral (`components/Layout.tsx`)
+
+- Arriba, siempre visibles: **Inicio** y **Armario** (la flecha despliega tus armarios y «+ Nuevo armario»).
+- Grupos plegables: **Estilo** (Outfits, Calendario, Estilista, Maniquíes), **Colección** (Sneakers, Wishlist, Analítica), **Comunidad** (Mensajes, Personas, Batallas, Market si está activo, Ideas, Novedades) y **Admin** (Panel y Monitor, solo con rol `ADMIN`).
+- El grupo de la página en la que estás se abre solo; lo que abres o cierras se recuerda en el navegador (`localStorage`, clave `myout.nav.open`). Un grupo cerrado muestra la suma de sus avisos (mensajes sin leer, solicitudes).
+- Al pie: tu perfil (avatar y nombre) y el acceso a Cuenta. En el móvil es el mismo menú dentro del panel lateral, con zonas táctiles de 44 px.
 
 ## Cómo funciona el 3D
 
@@ -568,28 +575,6 @@ Panel con tus cifras, destacados, STYLE INSIGHTS, estilos (barra rayada = estilo
   - En el móvil, el menú es un panel lateral deslizante (botón ☰).
 - **Rendimiento y accesibilidad:** sin inclinación ni luces de hover en pantallas táctiles; con «reducir movimiento» del sistema, todo queda quieto; el polvo se para cuando la pestaña no se ve.
 
-## Rendimiento, chat y datos
-
-- Cada página se carga la primera vez que se abre (`React.lazy` en `App.tsx`, con un `Suspense` alrededor del `Outlet` del menú). En el paquete inicial quedan inicio, acceso y la vuelta del login.
-- Chat sin WebSocket (en Vercel no hay conexión en tiempo real): mientras `useRealtime().status` no es `online`, la conversación abierta pide los mensajes nuevos cada 4 s, la lista cada 10 s y los contadores (mensajes, solicitudes, avisos) cada 30 s, solo con la pestaña a la vista.
-- «Cerrar sesión» avisa al servidor (`POST /auth/logout`): el token deja de valer en todos los dispositivos.
-- Cuenta → «Descargar mis datos»: baja un JSON con todo lo de la cuenta.
-- GitHub Actions (`.github/workflows/ci.yml`): en cada push a main se comprueban las traducciones, los tipos y el build del frontend, y los tipos y los tests unitarios del backend.
-
-## QR del perfil
-
-- Cada perfil tiene su QR: botón «QR» en `/u/:usuario` (el tuyo y el de los demás) y «Tu QR» en `/perfil`. Al escanearlo se abre `https://<web>/u/<usuario>` (o el id si no tiene @usuario). En la app nativa se usa el origen de `VITE_API_URL`, no `localhost`.
-- `lib/qr.ts` genera el QR sin dependencias (modo byte, corrección H para poder poner el icono de MyOO en el centro). Probado decodificando con OpenCV (lector básico y el de WeChat) en versiones 1-30 y los cuatro niveles, también la captura de pantalla y la imagen descargada.
-- El QR va oscuro sobre claro, con margen y ojos cuadrados clásicos: con ojos redondeados y el logo, algunos lectores fallaban.
-- «Descargar imagen» crea un PNG de 1080 px con el QR y el @usuario; también «Copiar enlace» y «Compartir» (si el navegador lo permite).
-- Si quien escanea no tiene sesión, entra y vuelve a esa página (antes iba siempre al inicio).
-
-## Marca: MyOO
-
-- El proyecto se llama **MyOO** (antes MyOut). Cambian los textos visibles, el título de la página, el nombre de la app nativa (`appName`) y el título de la API.
-- Se mantienen a propósito: las claves del navegador (`myout.token`, `myout.locale`, `myout.body…`, para no cerrar sesiones ni perder preferencias), el `appId` de Capacitor (`com.myout.app`), la carpeta local, el dominio `myout.vercel.app` y el usuario de demo local.
-- Logo (`public/brand/logo.svg`): throw-up de grafiti, «MYOO» en letras de burbuja cromadas que gotean, con borde naranja-rojo. Icono (`public/brand/mark.svg`): las dos O en el mismo estilo. Es SVG propio, sin fuentes externas, para que también sirva de máscara en la pared del login.
-
 ## Estructura
 
 ```
@@ -606,39 +591,9 @@ src/
 
 **Nota de seguridad:** guardar el token en `localStorage` es sencillo, pero cualquier script de la página puede leerlo. Por eso es clave evitar XSS (React ya escapa el contenido). Una alternativa más robusta, para una fase posterior, es una cookie `httpOnly`.
 
-## Estilo unificado (`.ux`): tanda 1
-
-Outfits, vestidor (`/outfits/new`, `/outfits/:id`), calendario y ficha de prenda (`/items/:id`) usan ya el estilo del inicio. Cada página lleva `ux` y su prefijo junto a la clase antigua: `.ft` (outfits), `.dr` (vestidor), `.cl` (calendario y su panel del día) y `.sc` (ficha).
-
-- `.ux` define la paleta `--wd-*` y redirige las variables antiguas (`--fx-neon`, `--fx-panel`...) a la nueva, así las piezas propias (filtros, fichas, celdas del calendario) cambian de color sin tocarlas. El verde «usado» del calendario se mantiene como señal de estado.
-- Cabecera: `.wd-kicker` + `.wd-title.ux-title` + `.ux-lede`; cifras reales en `.wd-stats.ux-stats` (outfits: fits, favoritos, estilos; calendario: usados en 30 días, racha, cumplidos, sin estrenar, que salen de la columna lateral).
-- Secciones numeradas con `components/street/SectionHead.tsx`; en paneles estrechos (columna del calendario, panel de la ficha, vestidor) el número sale de un contador CSS.
-- Estados vacíos con `components/street/EmptyStage.tsx` (la composición del armario) y `NoMatch`.
-- Botones `wd-add` / `wd-btn-line`: el fondo va por `--wd-bg` con `.ux.ux.ux .btn.btn:is(...)` para ganar a `.main .btn:not(...)`.
-- A 390 px: sin scroll horizontal, filtros desplazables y zonas táctiles de 44 px. Con «reducir movimiento» no hay animaciones.
-- El calendario ya está traducido (antes tenía los textos fijos en español).
-
 ### Tanda 2: Wishlist, Sneakers y Analítica
 
 - Prefijos: `.wh` (wishlist y su ficha), `.sk` (sneakers y su ficha) y `.at` (analítica), junto a sus clases de siempre (`.wl`, `.snk`, `.an`).
 - Cabecera, cifras (`.wd-stats`), botones, estados vacíos (`EmptyStage` / `NoMatch`) y secciones numeradas como en la tanda 1. Las reglas comunes de la tanda 1 se han ampliado con `:is(.ft, .wh, .sk)` en vez de copiarlas.
-- Se conservan los elementos propios: colores de estado de la wishlist, presupuesto y medidores, historial de precios, dashboard de zapatillas y gráficas de la analítica (sus cifras pasan a una barra como `.wd-stats` y cada tarjeta lleva su número con un contador CSS).
+- Se conservan los elementos propios: colores de estado de la wishlist, presupuesto y medidores, historial de precios, dashboard de zapatillas, gráficas de la analítica (las cifras pasan a una barra como `.wd-stats` y cada tarjeta lleva su número con un contador CSS).
 - Estas páginas y sus formularios estaban sin traducir: ya van con `t()` / `tn()`. Las marcas de zapatillas (Nike, Adidas…) no se traducen. Siguen en español los textos que genera el servidor (consejos de la analítica, nombres de colores).
-
-### Tanda 3: Batallas, Maniquíes y Perfil público
-
-- Prefijos: `.ba` (`/batallas` y `/batallas/:id`), `.mn` (`/maniquies`) y `.pv` (`/u/:usuario`).
-- Batallas: pegatina «Streetwear battles», cifras reales del resumen (victorias, racha, en juego), sección numerada por pestaña y ranking como sección 02; pestañas vacías con `NoMatch` (acepta ya un `icon`). Las tarjetas, el ranking y el reto pendiente son paneles de cristal.
-- Maniquíes: cabecera como el inicio, cifras (maniquíes y límite del plan), «Tus maniquíes» (01) y «Medidas» / «Nuevo maniquí» (02). En una columna las fichas pasan a filas sin cortarse.
-- Perfil público: se mantienen la portada, el avatar con cinta y el nombre en grafiti; las pestañas Outfits / Seguidores / Siguiendo son ahora la barra de cifras (con CountUp) y siguen cambiando de pestaña. Bloqueo, cuenta privada y listas vacías usan `NoMatch`.
-- Traducidos los textos que faltaban (tiempo restante y avisos de voto de las batallas, etiquetas de las denuncias del perfil).
-
-### Tanda 4: Cuenta, Ideas, Novedades, Admin, Monitor y vuelta del login
-
-- Prefijos: `.ac` (`/account`), `.ia` (`/ideas`), `.nv` (`/novedades`), `.adm` (`/admin`), `.mo` (`/monitor`) y `.cb` (`/auth/callback`).
-- Cuenta: pegatina y nombre como el inicio, cifras de uso del plan (con CountUp), secciones 01-04 (tu cuenta, planes, historial, eliminar). Los planes y precios son los de la base de datos; el cambio de plan sigue siendo simulado.
-- Ideas: el tablón (`IdeaBoard`) lleva una sección numerada con el orden elegido y el número de ideas; en el panel de admin se usa con `numbered={false}` porque ya la pone la pestaña.
-- Novedades: «Próximamente» (01) y «Publicadas» (02) en línea de tiempo naranja.
-- Admin: pestañas como botones, sección numerada por pestaña, cifras del resumen con CountUp y estados vacíos con `NoMatch`.
-- Monitor: secciones Estado y tráfico / Base de datos y actividad / Uso de la app; las gráficas usan el naranja (los errores siguen en rojo).
-- Admin, Monitor, Ideas y la tarjeta de ideas estaban sin traducir: ya van con `t()` / `tn()`, igual que «hace 5 min» / «ayer». Siguen en español los textos que manda el servidor (comprobaciones del monitor) y lo que escribe la gente (ideas, novedades).

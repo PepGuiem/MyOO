@@ -7,6 +7,7 @@ const PATHS = {
   back: 'M12.5 8h-9M7 4.5 3.5 8 7 11.5',
   forward: 'M3.5 8h9M9 4.5 12.5 8 9 11.5',
   down: 'M4 6l4 4 4-4',
+  home: 'M2.5 7.5 8 3l5.5 4.5v6H10v-4H6v4H2.5z',
   download: 'M8 2.5v8M4.8 7.5 8 10.7l3.2-3.2M3 13.5h10',
   close: 'M4.5 4.5l7 7M11.5 4.5l-7 7',
   grip: 'M6 4h.01M10 4h.01M6 8h.01M10 8h.01M6 12h.01M10 12h.01',

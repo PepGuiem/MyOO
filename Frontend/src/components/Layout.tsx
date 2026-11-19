@@ -9,7 +9,7 @@ import { useAsync } from '../lib/useAsync';
 import { ViewCanvas } from '../three/ViewCanvas';
 import { NotificationBell } from './community/NotificationBell';
 import { ErrorNote } from './ErrorNote';
-import { Icon } from './Icon';
+import { Icon, type IconName } from './Icon';
 import { FEATURES } from '../lib/features';
 import { ToastProvider } from './fx/Toast';
 import { Logo } from './Logo';
@@ -71,6 +71,72 @@ export function Layout() {
     }
   }
 
+  // Menú agrupado: cada grupo se pliega; el de la página actual se abre solo
+  // y lo que abres o cierras se recuerda en este navegador.
+  const groups: NavGroupDef[] = [
+    {
+      id: 'estilo',
+      label: t('Estilo'),
+      icon: 'sparkles',
+      items: [
+        { to: '/outfits', icon: 'layers', label: t('Outfits') },
+        { to: '/calendario', icon: 'calendar', label: t('Calendario') },
+        { to: '/estilista', icon: 'sparkles', label: t('Estilista') },
+        { to: '/maniquies', icon: 'userCheck', label: t('Maniquíes') },
+      ],
+    },
+    {
+      id: 'coleccion',
+      label: t('Colección'),
+      icon: 'gem',
+      items: [
+        { to: '/sneakers', icon: 'shoe', label: t('Sneakers') },
+        { to: '/wishlist', icon: 'heart', label: t('Wishlist') },
+        { to: '/analitica', icon: 'trendUp', label: t('Analítica') },
+      ],
+    },
+    {
+      id: 'comunidad',
+      label: t('Comunidad'),
+      icon: 'users',
+      items: [
+        { to: '/mensajes', icon: 'chat', label: t('Mensajes'), badge: unread, badgeLabel: t('{unread} sin leer', { unread }) },
+        { to: '/personas', icon: 'users', label: t('Personas'), badge: requests, badgeLabel: t('{n} solicitudes', { n: requests }) },
+        { to: '/batallas', icon: 'bolt', label: t('Batallas') },
+        ...(FEATURES.market ? [{ to: '/market', icon: 'store' as IconName, label: t('Market') }] : []),
+        { to: '/ideas', icon: 'bulb', label: t('Ideas') },
+        { to: '/novedades', icon: 'megaphone', label: t('Novedades') },
+      ],
+    },
+    ...(user?.role === 'ADMIN'
+      ? [
+          {
+            id: 'admin',
+            label: t('Admin'),
+            icon: 'shield' as IconName,
+            items: [
+              { to: '/admin', icon: 'shield' as IconName, label: t('Panel') },
+              { to: '/monitor', icon: 'pulse' as IconName, label: t('Monitor') },
+            ],
+          },
+        ]
+      : []),
+  ];
+  const isActive = (to: string) => location.pathname === to || location.pathname.startsWith(`${to}/`);
+  const [open, setOpen] = useState<Record<string, boolean>>(() => readOpenGroups());
+  const toggle = (id: string) =>
+    setOpen((cur) => {
+      const next = { ...cur, [id]: !cur[id] };
+      saveOpenGroups(next);
+      return next;
+    });
+  // Al llegar a una página, su grupo se abre (sin cerrar los demás).
+  const activeGroup = section === 'armario' ? 'armario' : groups.find((g) => g.items.some((i) => isActive(i.to)))?.id;
+  useEffect(() => {
+    if (!activeGroup) return;
+    setOpen((cur) => (cur[activeGroup] ? cur : { ...cur, [activeGroup]: true }));
+  }, [activeGroup]);
+
   const data: AppData = {
     wardrobes: wardrobes.data?.data ?? [],
     garmentTypes: types.data ?? [],
@@ -99,121 +165,105 @@ export function Layout() {
         </div>
 
         <button type="button" className="nav-scrim" aria-label={t('Cerrar menú')} tabIndex={menuOpen ? 0 : -1} onClick={() => setMenuOpen(false)} />
-        <nav id="main-nav" className="nav" aria-label={t('Principal')}>
-          <NavLink to="/" end className="nav-link">
-            {t('Inicio')}
-          </NavLink>
-          <NavLink to="/armario" className="nav-link">
-            {t('Armario')}
-          </NavLink>
-          <ul className="wardrobe-list">
-            {data.wardrobes.map((w) => (
-              <li key={w.id}>
-                <Link
-                  to={`/armario?w=${w.id}`}
-                  className={`wardrobe-link${activeWardrobe === w.id ? ' is-active' : ''}`}
-                >
-                  <span>{w.name}</span>
-                  <span className="count">{w.itemCount}</span>
-                </Link>
-              </li>
-            ))}
-            <li>
-              {creating ? (
-                <form onSubmit={createWardrobe} className="inline-form">
-                  <input
-                    autoFocus
-                    value={newName}
-                    maxLength={80}
-                    placeholder={t('Nombre del armario')}
-                    aria-label={t('Nombre del armario')}
-                    onChange={(e) => setNewName(e.target.value)}
-                    onKeyDown={(e) => e.key === 'Escape' && setCreating(false)}
-                  />
-                </form>
-              ) : (
-                <button type="button" className="link-btn" onClick={() => setCreating(true)}>
-                  {t('+ Nuevo armario')}
-                </button>
-              )}
-              {createError ? <ErrorNote error={createError} /> : null}
-            </li>
-          </ul>
-          <NavLink to="/outfits" className="nav-link">
-            {t('Outfits')}
-          </NavLink>
-          <NavLink to="/calendario" className="nav-link">
-            {t('Calendario')}
-          </NavLink>
-          <NavLink to="/analitica" className="nav-link">
-            {t('Analítica')}
-          </NavLink>
-          <NavLink to="/sneakers" className="nav-link">
-            {t('Sneakers')}
-          </NavLink>
-          <NavLink to="/wishlist" className="nav-link">
-            {t('Wishlist')}
-          </NavLink>
-          <NavLink to="/batallas" className="nav-link">
-            {t('Batallas')}
-          </NavLink>
-          {FEATURES.market && (
-            <NavLink to="/market" className="nav-link">
-              {t('Market')}
-            </NavLink>
-          )}
-          <NavLink to="/estilista" className="nav-link">
-            {t('Estilista')}
-          </NavLink>
-          <NavLink to="/maniquies" className="nav-link">
-            {t('Maniquíes')}
-          </NavLink>
-          <NavLink to="/mensajes" className="nav-link">
-            {t('Mensajes')}
-            {unread > 0 && (
-              <span className="badge" aria-label={t('{unread} sin leer', { unread })}>
-                {unread > 99 ? '99+' : unread}
-              </span>
-            )}
-          </NavLink>
-          <NavLink to="/personas" className="nav-link">
-            {t('Personas')}
-            {requests > 0 && (
-              <span className="badge" aria-label={`${requests} solicitudes`}>
-                {requests}
-              </span>
-            )}
-          </NavLink>
-          <NavLink to="/ideas" className="nav-link">
-            {t('Ideas')}
-          </NavLink>
-          <NavLink to="/novedades" className="nav-link">
-            {t('Novedades')}
-          </NavLink>
-          <NavLink to="/perfil" className="nav-link">
-            {t('Perfil')}
-          </NavLink>
-          <NavLink to="/account" className="nav-link">
-            {t('Cuenta')}
-          </NavLink>
-          {user?.role === 'ADMIN' && (
-            <>
-              <NavLink to="/admin" className="nav-link nav-admin">
-                <Icon name="shield" size={13} /> {t('Admin')}
-              </NavLink>
-              <NavLink to="/monitor" className="nav-link nav-admin-sub">
-                <Icon name="pulse" size={13} /> {t('Monitor')}
-              </NavLink>
-            </>
-          )}
-        </nav>
+        <nav id="main-nav" className="nav nx" aria-label={t('Principal')}>
+          <NavItem to="/" end icon="home" label={t('Inicio')} />
 
-        <Link to="/perfil" className="sidebar-user" title={t('Tu perfil')}>
-          <span className={`avatar avatar-xs${avatar ? ' has-image' : ''}`} aria-hidden="true">
-            {avatar ? <img src={avatar} alt="" /> : shownName.replace('@', '').charAt(0).toUpperCase()}
-          </span>
-          <span className="sidebar-user-name">{shownName}</span>
-        </Link>
+          <div className={`nx-row${open.armario ? ' is-open' : ''}`}>
+            <NavItem to="/armario" icon="wardrobe" label={t('Armario')} />
+            <button
+              type="button"
+              className="nx-caret"
+              aria-expanded={!!open.armario}
+              aria-controls="nx-wardrobes"
+              aria-label={open.armario ? t('Ocultar armarios') : t('Ver armarios')}
+              onClick={() => toggle('armario')}
+            >
+              <Icon name="down" size={14} />
+            </button>
+          </div>
+          <div id="nx-wardrobes" className={`nx-fold${open.armario ? ' is-open' : ''}`} inert={!open.armario}>
+            <ul className="wardrobe-list nx-wardrobes">
+              {data.wardrobes.map((w) => (
+                <li key={w.id}>
+                  <Link to={`/armario?w=${w.id}`} className={`wardrobe-link${activeWardrobe === w.id ? ' is-active' : ''}`}>
+                    <span>{w.name}</span>
+                    <span className="count">{w.itemCount}</span>
+                  </Link>
+                </li>
+              ))}
+              <li>
+                {creating ? (
+                  <form onSubmit={createWardrobe} className="inline-form">
+                    <input
+                      autoFocus
+                      value={newName}
+                      maxLength={80}
+                      placeholder={t('Nombre del armario')}
+                      aria-label={t('Nombre del armario')}
+                      onChange={(e) => setNewName(e.target.value)}
+                      onKeyDown={(e) => e.key === 'Escape' && setCreating(false)}
+                    />
+                  </form>
+                ) : (
+                  <button type="button" className="link-btn" onClick={() => setCreating(true)}>
+                    {t('+ Nuevo armario')}
+                  </button>
+                )}
+                {createError ? <ErrorNote error={createError} /> : null}
+              </li>
+            </ul>
+          </div>
+
+          {groups.map((g) => {
+            const isOpen = !!open[g.id];
+            const pending = g.items.reduce((n, i) => n + (i.badge ?? 0), 0);
+            return (
+              <section key={g.id} className={`nx-group${isOpen ? ' is-open' : ''}${g.id === 'admin' ? ' nx-admin' : ''}`}>
+                <button
+                  type="button"
+                  className={`nx-head${g.items.some((i) => isActive(i.to)) ? ' has-active' : ''}`}
+                  aria-expanded={isOpen}
+                  aria-controls={`nx-${g.id}`}
+                  onClick={() => toggle(g.id)}
+                >
+                  <Icon name={g.icon} size={14} />
+                  <span className="nx-head-label">{g.label}</span>
+                  {!isOpen && pending > 0 && (
+                    <span className="badge" aria-label={t('{n} pendientes', { n: pending })}>
+                      {pending > 99 ? '99+' : pending}
+                    </span>
+                  )}
+                  <Icon name="down" size={13} className="nx-chevron" />
+                </button>
+                <div id={`nx-${g.id}`} className={`nx-fold${isOpen ? ' is-open' : ''}`} inert={!isOpen}>
+                  <ul className="nx-list">
+                    {g.items.map((i) => (
+                      <li key={i.to}>
+                        <NavItem {...i} />
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </section>
+            );
+          })}
+
+          {/* Tú: perfil y cuenta, siempre a mano al final */}
+          <div className="nx-me">
+            <NavLink to="/perfil" className="nx-me-link" title={t('Tu perfil')}>
+              <span className={`avatar avatar-xs${avatar ? ' has-image' : ''}`} aria-hidden="true">
+                {avatar ? <img src={avatar} alt="" /> : shownName.replace('@', '').charAt(0).toUpperCase()}
+              </span>
+              <span className="nx-me-text">
+                <span className="nx-me-name">{shownName}</span>
+                <span className="nx-me-sub">{t('Tu perfil')}</span>
+              </span>
+            </NavLink>
+            <NavLink to="/account" className="nx-me-account" title={t('Cuenta')} aria-label={t('Cuenta')}>
+              <Icon name="key" size={16} />
+            </NavLink>
+          </div>
+        </nav>
       </aside>
 
       <main className="main">
@@ -229,4 +279,54 @@ export function Layout() {
     </div>
     </ToastProvider>
   );
+}
+
+interface NavItemDef {
+  to: string;
+  icon: IconName;
+  label: string;
+  end?: boolean;
+  badge?: number;
+  badgeLabel?: string;
+}
+
+interface NavGroupDef {
+  id: string;
+  label: string;
+  icon: IconName;
+  items: NavItemDef[];
+}
+
+/** Enlace del menú: icono + texto + aviso (mensajes sin leer, solicitudes...). */
+function NavItem({ to, icon, label, end, badge, badgeLabel }: NavItemDef) {
+  return (
+    <NavLink to={to} end={end} className="nav-link nx-link">
+      <Icon name={icon} size={15} />
+      <span className="nx-label">{label}</span>
+      {!!badge && badge > 0 && (
+        <span className="badge" aria-label={badgeLabel}>
+          {badge > 99 ? '99+' : badge}
+        </span>
+      )}
+    </NavLink>
+  );
+}
+
+const OPEN_KEY = 'myout.nav.open';
+
+function readOpenGroups(): Record<string, boolean> {
+  try {
+    const raw = localStorage.getItem(OPEN_KEY);
+    return raw ? (JSON.parse(raw) as Record<string, boolean>) : {};
+  } catch {
+    return {};
+  }
+}
+
+function saveOpenGroups(value: Record<string, boolean>): void {
+  try {
+    localStorage.setItem(OPEN_KEY, JSON.stringify(value));
+  } catch {
+    // sin almacenamiento (modo privado): no se recuerda, sin más
+  }
 }

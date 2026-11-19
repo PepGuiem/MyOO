@@ -31971,3 +31971,353 @@ p.hm-outfit-meta:not(:has(+ ul)) {
     animation: none;
   }
 }
+
+/* =============================================================================
+   Menú lateral agrupado (.nx): Inicio y Armario arriba; Estilo, Colección,
+   Comunidad (y Admin) como grupos plegables; tu perfil y la cuenta al pie.
+   Mismos enlaces y rutas de siempre; solo cambia cómo se ordenan y se ven.
+   ========================================================================== */
+
+.nav.nx {
+  --nx-accent: #ff4d00;
+  --nx-hot: linear-gradient(100deg, #ff4d00, #ff1744 60%, #ff3d6e);
+  --nx-mono: ui-monospace, 'SFMono-Regular', 'Cascadia Mono', Consolas, monospace;
+  flex: 1 1 auto;
+  gap: 1px;
+  min-height: 0;
+}
+
+.nx .nx-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 36px;
+  padding: 7px 10px;
+  border-radius: var(--radius-m);
+  font-size: 0.93rem;
+}
+
+.nx .nx-link .icon {
+  flex: none;
+  color: var(--faint);
+  transition: color 0.15s;
+}
+
+.nx .nx-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nx .nx-link .badge,
+.nx .nx-head .badge {
+  margin-left: auto;
+  background: var(--nx-hot);
+  color: #fff;
+}
+
+.nx .nx-link:hover {
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.nx .nx-link:hover .icon {
+  color: var(--text);
+}
+
+.nx .nx-link.active {
+  color: var(--text);
+  background:
+    linear-gradient(90deg, rgba(255, 77, 0, 0.17), rgba(255, 77, 0, 0.03) 70%, transparent),
+    rgba(255, 255, 255, 0.02);
+  box-shadow: inset 2px 0 0 var(--nx-accent);
+  animation: none;
+}
+
+.nx .nx-link.active .icon {
+  color: var(--nx-accent);
+}
+
+/* Armario + flecha para ver tus armarios */
+.nx-row {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.nx-row .nx-link {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.nx-caret {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-s);
+  background: transparent;
+  color: var(--faint);
+  cursor: pointer;
+}
+
+.nx-caret:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.nx-caret .icon,
+.nx-head .nx-chevron {
+  transform: rotate(-90deg);
+  transition: transform 0.25s var(--mo-ease, ease);
+}
+
+.nx-row.is-open .nx-caret .icon,
+.nx-group.is-open .nx-head .nx-chevron {
+  transform: none;
+}
+
+/* Plegado suave (filas de rejilla de 0 a 1fr) */
+.nx-fold {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.28s var(--mo-ease, ease);
+}
+
+.nx-fold.is-open {
+  grid-template-rows: 1fr;
+}
+
+.nx-fold > * {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.nx .nx-wardrobes {
+  margin: 0;
+  padding: 0 0 0 27px;
+}
+
+/* El hueco va dentro de los elementos: con el grupo plegado no asoma nada */
+.nx .nx-wardrobes > li:first-child,
+.nx-list > li:first-child {
+  padding-top: 2px;
+}
+
+.nx .nx-wardrobes > li:last-child {
+  padding-bottom: 8px;
+}
+
+.nx-list > li:last-child {
+  padding-bottom: 4px;
+}
+
+/* Cabecera de cada grupo */
+.nx-group {
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.nx-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 32px;
+  padding: 6px 10px;
+  border: 0;
+  border-radius: var(--radius-s);
+  background: transparent;
+  color: var(--faint);
+  font: 600 0.68rem/1 var(--nx-mono);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-align: left;
+  cursor: pointer;
+}
+
+.nx-head:hover,
+.nx-group.is-open .nx-head {
+  color: var(--muted);
+}
+
+.nx-head.has-active {
+  color: var(--text);
+}
+
+.nx-head.has-active > .icon:first-child {
+  color: var(--nx-accent);
+}
+
+.nx-head-label {
+  flex: 1 1 auto;
+}
+
+.nx-head .badge {
+  margin-left: 0;
+  font-family: var(--font);
+  letter-spacing: 0;
+}
+
+.nx-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.nx-admin .nx-head {
+  color: var(--warn, #d9b77e);
+}
+
+/* Tú: perfil y cuenta, al pie del menú */
+.nx-me {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.nx-group + .nx-me,
+.nx-fold + .nx-me {
+  margin-top: auto;
+}
+
+.nx-me-link {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  padding: 6px 8px;
+  border-radius: var(--radius-m);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.nx-me-link:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.nx-me-link.active {
+  box-shadow: inset 0 0 0 1px rgba(255, 77, 0, 0.45);
+}
+
+.nx-me-link .avatar {
+  flex: none;
+}
+
+.nx-me-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.nx-me-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.nx-me-sub {
+  color: var(--faint);
+  font: 500 0.6rem/1 var(--nx-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.nx-me-account {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-m);
+  color: var(--muted);
+}
+
+.nx-me-account:hover {
+  color: var(--text);
+  border-color: var(--line-strong);
+}
+
+.nx-me-account.active {
+  color: var(--nx-accent);
+  border-color: rgba(255, 77, 0, 0.55);
+}
+
+/* Móvil: panel lateral con zonas táctiles de 44 px */
+@media (max-width: 720px) {
+  .sidebar .nav.nx {
+    gap: 1px;
+  }
+
+  .sidebar .nav.nx .nx-link {
+    min-height: 44px;
+    padding: 10px 12px;
+  }
+
+  .nx-caret,
+  .nx-me-account {
+    width: 44px;
+    height: 44px;
+  }
+
+  .nx-head {
+    min-height: 44px;
+    padding: 10px 12px;
+    font-size: 0.72rem;
+  }
+
+  .sidebar .nav.nx .nx-wardrobes {
+    display: flex;
+  }
+
+  .nx .wardrobe-link,
+  .nx .nx-wardrobes .link-btn {
+    min-height: 44px;
+    align-items: center;
+  }
+
+  .nx-me {
+    padding-bottom: 4px;
+  }
+
+  .nx-me-link {
+    min-height: 48px;
+  }
+
+  /* La entrada escalonada: ahora por bloques (filas y grupos) */
+  .sidebar.is-open .nav.nx > * {
+    animation: mo-rise 0.38s var(--mo-ease) backwards;
+  }
+
+  .sidebar.is-open .nav.nx .nx-link {
+    animation: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nx-fold,
+  .nx-caret .icon,
+  .nx-head .nx-chevron {
+    transition: none;
+  }
+
+  .sidebar.is-open .nav.nx > * {
+    animation: none;
+  }
+}
