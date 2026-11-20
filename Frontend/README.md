@@ -583,6 +583,15 @@ Panel con tus cifras, destacados, STYLE INSIGHTS, estilos (barra rayada = estilo
 - Cuenta → «Descargar mis datos»: baja un JSON con todo lo de la cuenta.
 - GitHub Actions (`.github/workflows/ci.yml`): en cada push a main se comprueban las traducciones, los tipos y el build del frontend, y los tipos y los tests unitarios del backend.
 
+## Miniaturas 3D: canvas compartido (`three/ViewCanvas.tsx`, `three/SceneView.tsx`)
+
+- Todas las miniaturas (prendas y outfits de las listas) se pintan en un único canvas WebGL. Cada miniatura es un `<SceneView>` que marca su hueco en el HTML (sustituye al `View` de drei).
+- **Sin bailes al hacer scroll:** el canvas ya no es fijo; va en una capa que ocupa toda la página (`.view-layer`, recorta lo que sobra) y se recoloca donde está la pantalla en cada fotograma. Así el navegador lo desplaza junto con las tarjetas aunque aún no se haya repintado. Es un 35 % más alto que la pantalla por arriba y por abajo, y solo se repinta al pasar medio margen.
+- Cada miniatura se recorta con sus contenedores con scroll (carruseles, paneles), y el scroll dentro de ellos repinta al momento.
+- **Solo se dibuja cuando algo cambia** (`frameloop="demand"`): en reposo no hay trabajo. Un vigilante ligero (`requestAnimationFrame`) pide un fotograma si una tarjeta se mueve o cambia de tamaño (hover, animaciones de entrada); el giro (`Turntable`) pide fotogramas solo mientras gira y se ve.
+- **Solo lo que está cerca:** el 3D de cada miniatura se monta al acercarse a la pantalla (60 % de margen), dos por fotograma y primero las del centro, y se desmonta a más de 2,2 pantallas. Una lista de 60 prendas ya no carga ni construye las 60 de golpe.
+- Resolución máxima 2× en escritorio y 1,5× en pantallas táctiles.
+
 ## QR del perfil
 
 - Cada perfil tiene su QR: botón «QR» en `/u/:usuario` (el tuyo y el de los demás) y «Tu QR» en `/perfil`. Al escanearlo se abre `https://<web>/u/<usuario>` (o el id si no tiene @usuario). En la app nativa se usa el origen de `VITE_API_URL`, no `localhost`.

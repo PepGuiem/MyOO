@@ -1,11 +1,12 @@
-import { PerspectiveCamera, View } from '@react-three/drei';
+import { PerspectiveCamera } from '@react-three/drei';
 import type { GarmentLike } from '../api/types';
 import { Fit, GarmentModel, StudioLights, Turntable } from './GarmentModel';
+import { SceneView } from './SceneView';
 
 /** Miniatura 3D de una prenda (se pinta en el ViewCanvas compartido). */
 export function ItemView({ garment, active, className }: { garment: GarmentLike; active: boolean; className?: string }) {
   return (
-    <View className={className}>
+    <SceneView className={className}>
       <PerspectiveCamera makeDefault position={[0, 0, 3.4]} fov={32} />
       <StudioLights />
       <Turntable active={active}>
@@ -13,6 +14,6 @@ export function ItemView({ garment, active, className }: { garment: GarmentLike;
           <GarmentModel garment={garment} presentation />
         </Fit>
       </Turntable>
-    </View>
+    </SceneView>
   );
 }

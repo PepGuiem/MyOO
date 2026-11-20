@@ -32321,3 +32321,32 @@ p.hm-outfit-meta:not(:has(+ ul)) {
     animation: none;
   }
 }
+
+/* =============================================================================
+   Canvas compartido de las miniaturas 3D (three/ViewCanvas.tsx).
+   La capa ocupa toda la página y recorta lo que sobra (no alarga el scroll);
+   el canvas va dentro y se recoloca donde está la pantalla en cada fotograma,
+   así se desplaza pegado a las tarjetas.
+   ========================================================================== */
+
+.shell {
+  position: relative;
+}
+
+.view-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  overflow: hidden;
+  overflow: clip;
+  pointer-events: none;
+}
+
+.view-stage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  will-change: transform;
+  contain: strict;
+}

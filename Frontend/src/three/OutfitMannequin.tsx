@@ -1,4 +1,4 @@
-import { ContactShadows, OrbitControls, PerspectiveCamera, View } from '@react-three/drei';
+import { ContactShadows, OrbitControls, PerspectiveCamera } from '@react-three/drei';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import * as THREE from 'three';
@@ -6,6 +6,7 @@ import type { GarmentCategory, GarmentLike } from '../api/types';
 import { makeBody, type BodyShape } from './body';
 import { setupRenderer } from './env';
 import { GarmentModel, StudioLights, Turntable } from './GarmentModel';
+import { SceneView } from './SceneView';
 import type { GarmentBuild } from './garments';
 import type { OutfitContext } from './styling';
 import { FRONT_GAP, jacketForStyling, libraryModel } from './libraryCatalog';
@@ -164,13 +165,13 @@ export function OutfitView({
   distance?: number;
 }) {
   return (
-    <View className={className}>
+    <SceneView className={className}>
       <PerspectiveCamera makeDefault position={[0, EYE_Y, distance]} fov={30} />
       <StudioLights />
       <Turntable active={active} base={-0.3} speed={speed}>
         <Dressed garments={garments} shape={shape} />
       </Turntable>
-    </View>
+    </SceneView>
   );
 }
 

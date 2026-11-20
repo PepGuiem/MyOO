@@ -1,5 +1,5 @@
 import { useFrame, useThree, type ThreeEvent } from '@react-three/fiber';
-import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { useContext, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import * as THREE from 'three';
 import type { GarmentLike, Styling } from '../api/types';
 import { useReportLoading } from '../lib/loading';
@@ -16,6 +16,7 @@ import { applyStyling, stylingNeeded, type OutfitContext } from './styling';
 import { buildLibraryGarment, libraryModel, libraryUrl, loadLibrary, type LibraryDetail, type LibraryPart } from './garmentLibrary';
 import { isBlenderModel, LIBRARY_PART_ROLE } from './libraryCatalog';
 import { tightenCollar } from './libraryFit';
+import { ViewEntryContext } from './viewStore';
 
 /** Prendas con escote o cuello que se ciñen al cuello del maniquí. */
 const COLLARED = ['tshirt', 'shirt', 'sweater', 'jacket', 'coat', 'dress'];
@@ -476,7 +477,10 @@ export function Fit({ size = 1.5, children }: { size?: number; children: ReactNo
     signature.current = '';
     measure();
   });
+  // En las miniaturas, solo mientras están cerca de la pantalla.
+  const view = useContext(ViewEntryContext);
   useFrame((state) => {
+    if (view && !view.near) return;
     if (measure()) state.invalidate();
   });
 
@@ -507,19 +511,31 @@ export function Turntable({
 }) {
   const ref = useRef<THREE.Group>(null);
   const reduced = useMemo(prefersReducedMotion, []);
+  const view = useContext(ViewEntryContext);
 
-  useFrame((_, delta) => {
+  // Se pinta a demanda: mientras gira (y se ve) pide el siguiente fotograma.
+  useFrame((state, rawDelta) => {
     const g = ref.current;
     if (!g) return;
+    const delta = Math.min(rawDelta, 1 / 20);
     if (active && !reduced) {
       g.rotation.y += delta * speed;
+      if (!view || view.onCanvas) state.invalidate();
     } else {
       // Vuelve a la pose base por el camino más corto.
       const twoPi = Math.PI * 2;
       const diff = ((((base - g.rotation.y) % twoPi) + twoPi + Math.PI) % twoPi) - Math.PI;
+      if (Math.abs(diff) < 0.002) {
+        g.rotation.y += diff;
+        return;
+      }
       g.rotation.y += diff * Math.min(1, delta * 6);
+      state.invalidate();
     }
   });
+  // Al empezar o terminar el giro, un fotograma para arrancar el bucle.
+  const invalidate = useThree((s) => s.invalidate);
+  useEffect(() => invalidate(), [active, invalidate]);
 
   return (
     <group ref={ref} rotation={[0, base, 0]}>
