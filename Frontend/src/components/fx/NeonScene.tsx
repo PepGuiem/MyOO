@@ -1,10 +1,15 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { createPortal } from 'react-dom';
+import { usePreferenceVersion } from '../../lib/preferences';
 import { prefersReducedMotion, seeded } from '../street/Street';
+
+/** Fondo quieto: reducir movimiento o «Fondo: quieto / liso». */
+const still = () => prefersReducedMotion() || (document.documentElement.dataset.bg ?? 'animated') !== 'animated';
 
 /** Firmas de la pared: inventadas, sin marcas reales. */
 const TAGS = ['MYOO', 'DRIP', 'NO RULES', 'FITS', '24/7', 'CREW', 'RAW', 'LATE NITE', 'STAY REAL', 'OG', 'VSTDR', 'FRESH', 'X', 'BCN', 'TAKE IT'];
-const INKS = ['#0b0b0c', '#0b0b0c', '#0b0b0c', '#ff4f8b', '#c6ff2e', '#f2efe8', '#ff2d4a', '#ff7a1a'];
+// Las tintas de color siguen el color neón de «Personalizar» (variables CSS).
+const INKS = ['#0b0b0c', '#0b0b0c', '#0b0b0c', 'var(--neon-5)', '#c6ff2e', '#f2efe8', 'var(--neon-3)', 'var(--neon-hi)'];
 
 /**
  * Fondo del vestidor: un baño de hormigón lleno de firmas, con tubos de neón
@@ -16,6 +21,8 @@ const INKS = ['#0b0b0c', '#0b0b0c', '#0b0b0c', '#ff4f8b', '#c6ff2e', '#f2efe8', 
 export function NeonScene() {
   const root = useRef<HTMLDivElement>(null);
   const dust = useRef<HTMLCanvasElement>(null);
+  // «Personalizar › Fondo»: animado, quieto o liso (se vuelve a montar al cambiarlo).
+  const prefsV = usePreferenceVersion();
 
   const tags = useMemo(() => {
     const r = seeded('myout-neon-wall');
@@ -37,7 +44,7 @@ export function NeonScene() {
 
   useEffect(() => {
     const el = root.current;
-    if (!el || prefersReducedMotion()) return;
+    if (!el || still()) return;
     let frame = 0;
     let px = 0;
     let py = 0;
@@ -71,14 +78,15 @@ export function NeonScene() {
       window.removeEventListener('scroll', queue);
       cancelAnimationFrame(frame);
     };
-  }, []);
+  }, [prefsV]);
 
   // Polvo: unas pocas motas en un canvas 2D a baja resolución.
   useEffect(() => {
     const canvas = dust.current;
     const ctx = canvas?.getContext('2d');
     if (!canvas || !ctx) return;
-    const reduced = prefersReducedMotion();
+    if (document.documentElement.dataset.bg === 'off') return; // fondo liso: sin polvo
+    const reduced = still();
     const r = seeded('dust');
     let w = 0;
     let h = 0;
@@ -134,8 +142,9 @@ export function NeonScene() {
       cancelAnimationFrame(raf);
       window.removeEventListener('resize', resize);
       document.removeEventListener('visibilitychange', onVisible);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
     };
-  }, []);
+  }, [prefsV]);
 
   return createPortal(
     <div ref={root} className="neon-scene" aria-hidden="true">
@@ -143,18 +152,18 @@ export function NeonScene() {
       <svg className="neon-tags" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
         {tags.map((t, i) => (
           <g key={i} transform={`translate(${t.x.toFixed(0)} ${t.y.toFixed(0)}) rotate(${t.rot.toFixed(1)})`} opacity={t.o.toFixed(2)}>
-            <text fontSize={t.size.toFixed(0)} fill={t.ink}>
+            <text fontSize={t.size.toFixed(0)} style={{ fill: t.ink }}>
               {t.text}
             </text>
-            {t.drip && <path d={`M${(t.size * 0.4).toFixed(0)} 6 v${(t.size * 0.5).toFixed(0)}`} stroke={t.ink} strokeWidth="3" strokeLinecap="round" />}
+            {t.drip && <path d={`M${(t.size * 0.4).toFixed(0)} 6 v${(t.size * 0.5).toFixed(0)}`} style={{ stroke: t.ink }} strokeWidth="3" strokeLinecap="round" />}
           </g>
         ))}
         {/* Garabatos sueltos: corona, flecha, estrella y una X tachada */}
         <g className="neon-doodles" fill="none" strokeLinecap="round" strokeLinejoin="round">
           <path d="M1210 140 l20 -34 l18 26 l18 -30 l18 30 l18 -26 l20 34 z" stroke="#f2efe8" strokeWidth="4" opacity=".28" />
           <path d="M140 640 c60 -40 140 -40 210 -6 m-24 -24 l24 24 l-30 12" stroke="#c6ff2e" strokeWidth="5" opacity=".22" />
-          <path d="M820 120 l12 26 28 4 -20 20 5 28 -25 -13 -25 13 5 -28 -20 -20 28 -4z" stroke="#ff4f8b" strokeWidth="4" opacity=".3" />
-          <path d="M1440 560 l60 60 m0 -60 l-60 60" stroke="#ff2d4a" strokeWidth="9" opacity=".3" />
+          <path d="M820 120 l12 26 28 4 -20 20 5 28 -25 -13 -25 13 5 -28 -20 -20 28 -4z" style={{ stroke: 'var(--neon-5)' }} strokeWidth="4" opacity=".3" />
+          <path d="M1440 560 l60 60 m0 -60 l-60 60" style={{ stroke: 'var(--neon-3)' }} strokeWidth="9" opacity=".3" />
         </g>
       </svg>
       <div className="neon-floor" />

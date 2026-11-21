@@ -10,7 +10,8 @@ import { ViewCanvas } from '../three/ViewCanvas';
 import { NotificationBell } from './community/NotificationBell';
 import { ErrorNote } from './ErrorNote';
 import { Icon, type IconName } from './Icon';
-import { FEATURES } from '../lib/features';
+import { availableNavItems, NAV_GROUP_META, type NavCatalogItem } from './navCatalog';
+import { usePreferences, type NavGroupId, type NavItemId } from '../lib/preferences';
 import { ToastProvider } from './fx/Toast';
 import { Logo } from './Logo';
 import { Spinner } from './Spinner';
@@ -73,41 +74,29 @@ export function Layout() {
 
   // Menú agrupado: cada grupo se pliega; el de la página actual se abre solo
   // y lo que abres o cierras se recuerda en este navegador.
+  // Menú según «Personalizar»: entradas ocultas fuera, las fijadas arriba y
+  // los grupos en el orden elegido. Admin siempre al final (solo admins).
+  const { prefs } = usePreferences();
+  const menu = prefs.menu;
+  const badges: Partial<Record<NavItemId, { badge: number; badgeLabel: string }>> = {
+    messages: { badge: unread, badgeLabel: t('{unread} sin leer', { unread }) },
+    people: { badge: requests, badgeLabel: t('{n} solicitudes', { n: requests }) },
+  };
+  const toItem = (i: NavCatalogItem): NavItemDef => ({ to: i.to, icon: i.icon, label: i.label(), ...badges[i.id] });
+  const visible = availableNavItems().filter((i) => !menu.hidden.includes(i.id));
+  const pinned = menu.pinned
+    .map((id) => visible.find((i) => i.id === id))
+    .filter((i): i is NavCatalogItem => !!i)
+    .map(toItem);
   const groups: NavGroupDef[] = [
-    {
-      id: 'estilo',
-      label: t('Estilo'),
-      icon: 'sparkles',
-      items: [
-        { to: '/outfits', icon: 'layers', label: t('Outfits') },
-        { to: '/calendario', icon: 'calendar', label: t('Calendario') },
-        { to: '/estilista', icon: 'sparkles', label: t('Estilista') },
-        { to: '/maniquies', icon: 'userCheck', label: t('Maniquíes') },
-      ],
-    },
-    {
-      id: 'coleccion',
-      label: t('Colección'),
-      icon: 'gem',
-      items: [
-        { to: '/sneakers', icon: 'shoe', label: t('Sneakers') },
-        { to: '/wishlist', icon: 'heart', label: t('Wishlist') },
-        { to: '/analitica', icon: 'trendUp', label: t('Analítica') },
-      ],
-    },
-    {
-      id: 'comunidad',
-      label: t('Comunidad'),
-      icon: 'users',
-      items: [
-        { to: '/mensajes', icon: 'chat', label: t('Mensajes'), badge: unread, badgeLabel: t('{unread} sin leer', { unread }) },
-        { to: '/personas', icon: 'users', label: t('Personas'), badge: requests, badgeLabel: t('{n} solicitudes', { n: requests }) },
-        { to: '/batallas', icon: 'bolt', label: t('Batallas') },
-        ...(FEATURES.market ? [{ to: '/market', icon: 'store' as IconName, label: t('Market') }] : []),
-        { to: '/ideas', icon: 'bulb', label: t('Ideas') },
-        { to: '/novedades', icon: 'megaphone', label: t('Novedades') },
-      ],
-    },
+    ...menu.groupOrder
+      .map((g) => ({
+        id: LEGACY_GROUP_ID[g],
+        label: NAV_GROUP_META[g].label(),
+        icon: NAV_GROUP_META[g].icon,
+        items: visible.filter((i) => i.group === g && !menu.pinned.includes(i.id)).map(toItem),
+      }))
+      .filter((g) => g.items.length > 0),
     ...(user?.role === 'ADMIN'
       ? [
           {
@@ -122,6 +111,7 @@ export function Layout() {
         ]
       : []),
   ];
+  const compact = menu.compact;
   const isActive = (to: string) => location.pathname === to || location.pathname.startsWith(`${to}/`);
   const [open, setOpen] = useState<Record<string, boolean>>(() => readOpenGroups());
   const toggle = (id: string) =>
@@ -165,7 +155,7 @@ export function Layout() {
         </div>
 
         <button type="button" className="nav-scrim" aria-label={t('Cerrar menú')} tabIndex={menuOpen ? 0 : -1} onClick={() => setMenuOpen(false)} />
-        <nav id="main-nav" className="nav nx" aria-label={t('Principal')}>
+        <nav id="main-nav" className={`nav nx${compact ? ' is-compact' : ''}`} aria-label={t('Principal')}>
           <NavItem to="/" end icon="home" label={t('Inicio')} />
 
           <div className={`nx-row${open.armario ? ' is-open' : ''}`}>
@@ -214,8 +204,18 @@ export function Layout() {
             </ul>
           </div>
 
+          {pinned.length > 0 && (
+            <ul className="nx-list nx-pinned" aria-label={t('Fijadas')}>
+              {pinned.map((i) => (
+                <li key={i.to}>
+                  <NavItem {...i} />
+                </li>
+              ))}
+            </ul>
+          )}
+
           {groups.map((g) => {
-            const isOpen = !!open[g.id];
+            const isOpen = compact || !!open[g.id];
             const pending = g.items.reduce((n, i) => n + (i.badge ?? 0), 0);
             return (
               <section key={g.id} className={`nx-group${isOpen ? ' is-open' : ''}${g.id === 'admin' ? ' nx-admin' : ''}`}>
@@ -259,6 +259,9 @@ export function Layout() {
                 <span className="nx-me-sub">{t('Tu perfil')}</span>
               </span>
             </NavLink>
+            <NavLink to="/personalizar" className="nx-me-account" title={t('Personalizar')} aria-label={t('Personalizar')}>
+              <Icon name="palette" size={16} />
+            </NavLink>
             <NavLink to="/account" className="nx-me-account" title={t('Cuenta')} aria-label={t('Cuenta')}>
               <Icon name="key" size={16} />
             </NavLink>
@@ -300,7 +303,7 @@ interface NavGroupDef {
 /** Enlace del menú: icono + texto + aviso (mensajes sin leer, solicitudes...). */
 function NavItem({ to, icon, label, end, badge, badgeLabel }: NavItemDef) {
   return (
-    <NavLink to={to} end={end} className="nav-link nx-link">
+    <NavLink to={to} end={end} className="nav-link nx-link" title={label}>
       <Icon name={icon} size={15} />
       <span className="nx-label">{label}</span>
       {!!badge && badge > 0 && (
@@ -313,6 +316,9 @@ function NavItem({ to, icon, label, end, badge, badgeLabel }: NavItemDef) {
 }
 
 const OPEN_KEY = 'myout.nav.open';
+
+/** Ids de grupo que ya se guardaban abiertos/cerrados en este navegador. */
+const LEGACY_GROUP_ID: Record<NavGroupId, string> = { style: 'estilo', collection: 'coleccion', community: 'comunidad' };
 
 function readOpenGroups(): Record<string, boolean> {
   try {

@@ -5,6 +5,7 @@ import {
   Prisma,
   UserRole,
 } from '@prisma/client';
+import { readPreferences, type Preferences } from './preferences';
 
 /**
  * Lo que la API devuelve del usuario: datos de la cuenta y del perfil.
@@ -35,6 +36,7 @@ export const profileSelect = {
   isPrivate: true,
   messagePolicy: true,
   locale: true,
+  preferences: true,
   role: true,
   createdAt: true,
   authAccounts: {
@@ -75,6 +77,8 @@ export interface ProfileView {
   messagePolicy: MessagePolicy;
   /** Idioma de la web (ES o EN). */
   locale: Locale;
+  /** Ajustes de «Personalizar» (null = los de por defecto). */
+  preferences: Preferences | null;
   /** USER o ADMIN (el frontend enseña el panel de admin). */
   role: UserRole;
   createdAt: Date;
@@ -103,6 +107,7 @@ export function toProfileView(u: ProfileRow): ProfileView {
     isPrivate: u.isPrivate,
     messagePolicy: u.messagePolicy,
     locale: u.locale,
+    preferences: readPreferences(u.preferences),
     role: u.role,
     createdAt: u.createdAt,
     accounts: u.authAccounts.map((a) => ({

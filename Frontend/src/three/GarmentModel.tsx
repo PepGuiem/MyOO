@@ -505,7 +505,7 @@ export function Fit({ size = 1.5, children }: { size?: number; children: ReactNo
 }
 
 const prefersReducedMotion = () =>
-  typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+  typeof window !== 'undefined' && (document.documentElement.dataset.motion === 'reduced' || !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches);
 
 /**
  * Gira el contenido mientras `active` sea true y vuelve suavemente a la pose

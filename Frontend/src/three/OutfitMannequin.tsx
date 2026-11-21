@@ -193,7 +193,7 @@ export function OutfitStage({
   rig?: StageRig;
 }) {
   const reduced =
-    typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    typeof window !== 'undefined' && (document.documentElement.dataset.motion === 'reduced' || !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches);
   const spin = rig ? rig.spin : true;
   return (
     <LoadingScope label="Vistiendo el maniquí…">

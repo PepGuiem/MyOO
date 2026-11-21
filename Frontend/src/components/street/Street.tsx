@@ -25,7 +25,8 @@ export function seeded(text: string): () => number {
 }
 
 export function prefersReducedMotion(): boolean {
-  return typeof window !== 'undefined' && !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+  // El sistema o «Personalizar › Animaciones: reducidas».
+  return typeof window !== 'undefined' && (document.documentElement.dataset.motion === 'reduced' || !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches);
 }
 
 /**

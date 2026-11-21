@@ -145,6 +145,9 @@ export function AccountPage() {
           <Link to="/perfil" className="btn wd-btn-line">
             <Icon name="eye" size={14} /> <span>{t('Ver tu perfil')}</span>
           </Link>
+          <Link to="/personalizar" className="btn wd-btn-line">
+            <Icon name="palette" size={14} /> <span>{t('Personalizar')}</span>
+          </Link>
           <button type="button" className="btn wd-btn-line" onClick={logout}>
             <Icon name="back" size={14} /> <span>{t('Cerrar sesión')}</span>
           </button>

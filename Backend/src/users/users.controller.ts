@@ -9,11 +9,12 @@ import {
   ParseEnumPipe,
   Patch,
   Post,
+  Put,
   Query,
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { ThrottlerGuard } from '@nestjs/throttler';
+import { Throttle, ThrottlerGuard } from '@nestjs/throttler';
 import { AuthProvider } from '@prisma/client';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import type { AuthenticatedUser } from '../common/types/authenticated-user';
@@ -63,6 +64,21 @@ export class UsersController {
     @Body() dto: UpdateProfileDto,
   ) {
     return this.users.updateProfile(user.id, dto);
+  }
+
+  /**
+   * Guarda los ajustes de «Personalizar» (se sustituyen enteros). Formato
+   * cerrado: cualquier clave o valor desconocido es un 400.
+   */
+  @Put('me/preferences')
+  @UseGuards(ThrottlerGuard)
+  // Se guarda al tocar cada ajuste (con una pequeña espera): más margen que el resto.
+  @Throttle({ default: { limit: 60, ttl: 60_000 } })
+  savePreferences(
+    @CurrentUser() user: AuthenticatedUser,
+    @Body() body: Record<string, unknown>,
+  ) {
+    return this.users.savePreferences(user.id, body);
   }
 
   /** ¿Está libre un @usuario? */

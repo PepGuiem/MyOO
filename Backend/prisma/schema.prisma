@@ -115,6 +115,11 @@ model User {
   /// Idioma de la web y de lo que genera el servidor (avisos, estilista...).
   locale          Locale        @default(ES)
 
+  // --- Personalizar ----------------------------------------------------------
+  /// Ajustes de la web (color neón, menú, efectos, lectura, calidad 3D).
+  /// JSON con formato cerrado: ver src/users/preferences.ts. Null = por defecto.
+  preferences     Json?
+
   // --- Administración --------------------------------------------------------
   /// ADMIN solo se da con el comando `npm run admin:grant` (nunca por la API).
   role            UserRole  @default(USER)

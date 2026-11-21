@@ -15,7 +15,8 @@ import { flushSync } from 'react-dom';
  */
 
 export function reducedMotion(): boolean {
-  return typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+  // El sistema o «Personalizar › Animaciones: reducidas».
+  return typeof window !== 'undefined' && (document.documentElement.dataset.motion === 'reduced' || !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches);
 }
 
 /** Ratón o trackpad (no pantalla táctil): solo ahí tienen sentido los hover. */

@@ -1,6 +1,7 @@
 import { lazy, Suspense, type ReactNode } from 'react';
 import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { AuthProvider, useAuth } from './auth/AuthContext';
+import { PreferencesProvider } from './lib/preferences';
 import { GlobalFx } from './components/fx/GlobalFx';
 import { NeonScene } from './components/fx/NeonScene';
 import { Layout } from './components/Layout';
@@ -17,6 +18,7 @@ import { t } from './i18n';
 // se abre, así la web arranca con mucho menos código. Inicio, acceso y la
 // vuelta del login van en el paquete principal.
 const ItemShowcasePage = lazy(() => import('./pages/ItemShowcasePage'));
+const PersonalizePage = lazy(() => import('./pages/PersonalizePage').then((m) => ({ default: m.PersonalizePage })));
 const AccountPage = lazy(() => import('./pages/AccountPage').then((m) => ({ default: m.AccountPage })));
 const CalendarPage = lazy(() => import('./pages/CalendarPage').then((m) => ({ default: m.CalendarPage })));
 const AnalyticsPage = lazy(() => import('./pages/AnalyticsPage').then((m) => ({ default: m.AnalyticsPage })));
@@ -57,6 +59,7 @@ export function App() {
       <NeonScene />
       <GlobalFx />
       <AuthProvider>
+        <PreferencesProvider>
         <BodyProvider>
         <Routes>
           <Route path="/login" element={<AuthPage mode="login" />} />
@@ -109,10 +112,12 @@ export function App() {
             <Route path="admin" element={<AdminPage />} />
             <Route path="monitor" element={<MonitorPage />} />
             <Route path="account" element={<AccountPage />} />
+            <Route path="personalizar" element={<PersonalizePage />} />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
         </BodyProvider>
+        </PreferencesProvider>
       </AuthProvider>
     </BrowserRouter>
   );

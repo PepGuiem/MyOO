@@ -21,15 +21,20 @@ const REDUCED = '(prefers-reduced-motion: reduce)';
 
 /** true si el sistema pide reducir animaciones (se actualiza en vivo). */
 export function usePrefersReducedMotion(): boolean {
-  const [reduced, setReduced] = useState(
-    () => typeof window !== 'undefined' && !!window.matchMedia?.(REDUCED).matches,
-  );
+  // El sistema o «Personalizar › Animaciones: reducidas» (data-motion en <html>).
+  const read = () =>
+    typeof window !== 'undefined' &&
+    (document.documentElement.dataset.motion === 'reduced' || !!window.matchMedia?.(REDUCED).matches);
+  const [reduced, setReduced] = useState(read);
   useEffect(() => {
+    const on = () => setReduced(read());
     const mq = window.matchMedia?.(REDUCED);
-    if (!mq) return;
-    const on = () => setReduced(mq.matches);
-    mq.addEventListener('change', on);
-    return () => mq.removeEventListener('change', on);
+    mq?.addEventListener('change', on);
+    window.addEventListener('myout:prefs', on);
+    return () => {
+      mq?.removeEventListener('change', on);
+      window.removeEventListener('myout:prefs', on);
+    };
   }, []);
   return reduced;
 }

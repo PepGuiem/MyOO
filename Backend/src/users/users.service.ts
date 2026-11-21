@@ -17,6 +17,7 @@ import { DeleteAccountDto } from './dto/delete-account.dto';
 import { SetPasswordDto } from './dto/set-password.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { loadProfile, type ProfileView } from './profile';
+import { parsePreferences, type Preferences } from './preferences';
 import { isValidUsername, RESERVED_USERNAMES } from './profile-options';
 import { exportUserData } from './data-export';
 
@@ -36,6 +37,16 @@ export class UsersService {
   /** «Descargar mis datos»: ver data-export.ts. */
   exportData(userId: string): Promise<Record<string, unknown>> {
     return exportUserData(this.prisma, userId);
+  }
+
+  /** Ajustes de «Personalizar»: se validan y se guardan enteros. */
+  async savePreferences(userId: string, input: unknown): Promise<Preferences> {
+    const prefs = parsePreferences(input);
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { preferences: prefs as unknown as Prisma.InputJsonValue },
+    });
+    return prefs;
   }
 
   async getProfile(userId: string): Promise<ProfileView> {

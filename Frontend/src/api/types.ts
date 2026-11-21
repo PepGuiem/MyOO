@@ -1,3 +1,4 @@
+import type { Preferences } from '../lib/preferences';
 // Tipos de las respuestas de la API (reflejan los `select` del backend).
 
 export type GarmentCategory =
@@ -56,6 +57,8 @@ export interface User {
   role: UserRole;
   createdAt: string;
   accounts: ConnectedAccount[];
+  /** Ajustes de «Personalizar» (null = los de por defecto). */
+  preferences?: Preferences | null;
 }
 
 export type UserRole = 'USER' | 'ADMIN';

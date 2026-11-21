@@ -583,6 +583,19 @@ Panel con tus cifras, destacados, STYLE INSIGHTS, estilos (barra rayada = estilo
 - Cuenta → «Descargar mis datos»: baja un JSON con todo lo de la cuenta.
 - GitHub Actions (`.github/workflows/ci.yml`): en cada push a main se comprueban las traducciones, los tipos y el build del frontend, y los tipos y los tests unitarios del backend.
 
+## Personalizar (`/personalizar`, `lib/preferences.tsx`)
+
+- Cada usuario configura la web: **color neón** (naranja, rojo, rosa, violeta, azul, verde o un color propio), **menú** (menú compacto de solo iconos en escritorio, entradas ocultas, favoritas fijadas arriba con su orden y orden de los grupos), **efectos** (brillo neón completo/suave/apagado, fondo animado/quieto/liso, animaciones todas/reducidas) y **lectura y 3D** (tamaño del texto, densidad cómoda/compacta, calidad 3D alta/ahorro de batería).
+- Se guarda en la cuenta: `PUT /api/users/me/preferences` (formato cerrado, validado en `Backend/src/users/preferences.ts`; llega con `GET /users/me` en `preferences`). También se guarda en este navegador (`myout.prefs`, con el id de la cuenta) y se aplica antes del primer pintado. Si la cuenta aún no tiene ajustes, se usan los del navegador solo si eran de esa misma cuenta.
+- Se aplica con variables CSS en `<html>`: paleta `--neon`…`--neon-5` (y `-rgb` para transparencias: `rgb(var(--neon-rgb) / 0.5)`), `--neon-hi` y `--neon-deep`; y atributos `data-neon`, `data-bg`, `data-motion`, `data-text`, `data-density`, `data-menu`, `data-quality` (bloque «Personalizar» al final de `styles.css`). **Para colores de acento nuevos, usa siempre estas variables**, nunca el naranja escrito a mano.
+- El menú sale de `components/navCatalog.ts` (los `id` se guardan en las cuentas: no renombrarlos). Inicio, Armario, tu perfil y Admin no se pueden ocultar.
+- Los colores propios muy claros se oscurecen lo justo para que el texto blanco encima se lea (contraste ≥ 3:1).
+
+## Iconos de la web y de la app
+
+- Web: `public/brand/mark.svg` (las «OO» del logo) como favicon, más PNG en `public/brand/icons/` (32 px, `apple-touch-icon` de 180 px, 192/512 px y 512 px *maskable*), `public/favicon.ico` y `public/manifest.webmanifest`.
+- App (Capacitor): `assets/icon-only.png`, `icon-foreground.png`, `icon-background.png`, `splash.png` y `splash-dark.png`, con el logo nuevo sobre fondo grafito. `npm run cap:assets` genera todos los tamaños.
+
 ## Miniaturas 3D: canvas compartido (`three/ViewCanvas.tsx`, `three/SceneView.tsx`)
 
 - Todas las miniaturas (prendas y outfits de las listas) se pintan en un único canvas WebGL. Cada miniatura es un `<SceneView>` que marca su hueco en el HTML (sustituye al `View` de drei).

@@ -2,6 +2,7 @@ import { ContactShadows, OrbitControls } from '@react-three/drei';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from 'react';
 import * as THREE from 'three';
+import { currentNeon, usePreferenceVersion } from '../lib/preferences';
 import type { CustomDetail, GarmentLike } from '../api/types';
 import { t } from '../i18n';
 import { LoadingScope } from '../lib/loading';
@@ -38,8 +39,7 @@ const HOME_DIR = new THREE.Vector3(0, 0.1, 1).normalize();
 const Y_AXIS = new THREE.Vector3(0, 1, 0);
 /** Color de la peana: grafito, como los paneles de la interfaz. */
 const PLINTH_COLOR = '#3a3a40';
-/** Acento de la app (naranja). Solo en el aro: no ilumina la prenda. */
-const NEON = '#ff4d00';
+/** Acento de la app (el color neón de «Personalizar»). Solo en el aro: no ilumina la prenda. */
 
 export interface CreationStudioProps {
   garment: GarmentLike;
@@ -147,7 +147,9 @@ function StageLights() {
 
 /** Peana giratoria: disco grafito, aro de neón en el canto y charco de luz en el suelo. */
 function Plinth() {
+  const prefsV = usePreferenceVersion();
   const parts = useMemo(() => {
+    const NEON = currentNeon();
     const disc = new THREE.Mesh(
       new THREE.CylinderGeometry(PLINTH_R, PLINTH_R + 0.03, PLINTH_H, 96, 1),
       new THREE.MeshStandardMaterial({ color: PLINTH_COLOR, roughness: 0.62, metalness: 0.18 }),
@@ -183,7 +185,9 @@ function Plinth() {
     // Charco de luz gris que funde el suelo con el fondo.
     const pool = makeFloorPool(FLOOR, 2.4, '#55555c');
     return [pool, halo, disc, ring, inner];
-  }, []);
+    // Se rehace al cambiar el color neón.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [prefsV]);
 
   useEffect(
     () => () => {

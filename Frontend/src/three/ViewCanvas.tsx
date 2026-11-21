@@ -1,6 +1,7 @@
 import { Canvas, createPortal, useFrame, useThree, type RootState } from '@react-three/fiber';
 import { memo, useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore, type RefObject } from 'react';
 import * as THREE from 'three';
+import { quality3d, usePreferenceVersion } from '../lib/preferences';
 import { setupRenderer } from './env';
 import { ViewEntryContext, bindCanvas, lastActivity, requestDraw, subscribeViews, touchEntry, views, viewsVersion, type ViewEntry } from './viewStore';
 
@@ -26,6 +27,10 @@ export function ViewCanvas() {
   const layer = useRef<HTMLDivElement>(null);
   const stage = useRef<HTMLDivElement>(null);
   const [height, setHeight] = useState(stageHeight);
+  // «Personalizar › Calidad 3D»: con ahorro de batería, menos resolución y sin
+  // suavizado de bordes (el suavizado solo se elige al crear el canvas: key).
+  usePreferenceVersion();
+  const saver = quality3d() === 'saver';
 
   useEffect(() => {
     const onResize = () => {
@@ -41,10 +46,11 @@ export function ViewCanvas() {
     <div ref={layer} className="view-layer" aria-hidden="true">
       <div ref={stage} className="view-stage" style={{ height }}>
         <Canvas
+          key={saver ? 'saver' : 'high'}
           className="view-canvas"
           frameloop="demand"
-          dpr={[1, coarsePointer() ? 1.5 : 2]}
-          gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
+          dpr={saver ? 1 : [1, coarsePointer() ? 1.5 : 2]}
+          gl={{ antialias: !saver, alpha: true, powerPreference: saver ? 'low-power' : 'high-performance' }}
           resize={{ scroll: false, debounce: 0 }}
           onCreated={(state) => {
             setupRenderer(state);

@@ -1,3 +1,4 @@
+import type { Preferences } from '../lib/preferences';
 import { api, apiBaseUrl, fetchBlob, uploadFile } from './client';
 import type {
   AccountLocale,
@@ -121,6 +122,7 @@ export const usersApi = {
   me: () => api<User>('GET', '/users/me'),
   /** «Descargar mis datos»: todo lo de la cuenta en JSON (sin contraseñas ni tokens). */
   exportData: () => api<Record<string, unknown>>('GET', '/users/me/export'),
+  savePreferences: (body: Preferences) => api<Preferences>('PUT', '/users/me/preferences', { body }),
   update: (body: ProfileInput) => api<User>('PATCH', '/users/me', { body }),
   usernameAvailable: (username: string) =>
     api<{ username: string; available: boolean; valid: boolean }>('GET', '/users/me/username-available', { query: { username } }),

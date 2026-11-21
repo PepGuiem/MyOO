@@ -15,7 +15,7 @@ La app del móvil es la misma web envuelta con [Capacitor](https://capacitorjs.c
 | `package.json` | Dependencias de Capacitor 8 y los scripts `cap:sync`, `cap:android`, `cap:ios` y `cap:assets` |
 | `src/lib/native.ts` | Dentro de la app (no en la web): marca `<html class="is-native">`, pone la app a pantalla completa respetando la muesca y la barra de gestos, hace que el botón «atrás» de Android vuelva atrás (y salga en la primera pantalla) y quita la pantalla de carga al arrancar |
 | `src/styles.css` (sección «App de Android/iOS») | Zonas seguras (barra de estado, muesca, barra de gestos) |
-| `assets/` | Imágenes de origen del icono (la T-percha) y de la pantalla de carga (el logo). `npm run cap:assets` genera con ellas todos los tamaños |
+| `assets/` | Imágenes de origen del icono (las «OO» del logo MyOO sobre fondo grafito) y de la pantalla de carga (el logo completo). `npm run cap:assets` genera con ellas todos los tamaños |
 | Cuenta → «Eliminar la cuenta» | Borra la cuenta y todos sus datos. Apple y Google lo **exigen** a las apps que permiten registrarse (backend: `DELETE /api/users/me`, que pide la contraseña) |
 | Cuenta → planes | En la app **no se muestra el cambio de plan**: Apple y Google obligan a cobrar las suscripciones digitales con su propio sistema de pagos. En la web sigue igual |
 
