@@ -14,7 +14,7 @@ import type { Body } from './body';
 import { bakeShading } from './cloth';
 import { fabricFor, type FabricKind } from './fabric';
 import type { GarmentBuild, GarmentPart, Role } from './garments';
-import { loadGltf } from './gltfLoad';
+import { loadGltfUncached } from './gltfLoad';
 import { fitGeometry, hemHeight, scaleGeometry, shortenGeometry, tightenCollar, warpDetail } from './libraryFit';
 import { libraryModel, type LibraryEntry } from './libraryCatalog';
 
@@ -70,7 +70,8 @@ export function useLibraryLoaded(url: string | null): boolean {
 export function loadLibrary(url: string): Promise<LibraryPart[]> {
   let p = geometryCache.get(url);
   if (!p) {
-    p = loadGltf(url).then((gltf) => {
+    // Sin la caché de gltfLoad: aquí se guarda solo la geometría ya preparada.
+    p = loadGltfUncached(url).then((gltf) => {
       gltf.scene.updateMatrixWorld(true);
       const parts: LibraryPart[] = [];
       gltf.scene.traverse((obj) => {
@@ -131,10 +132,15 @@ function shaded(g: THREE.BufferGeometry, fabric: FabricKind | 'none'): THREE.Buf
   const ao = out.getAttribute('ao') as THREE.BufferAttribute | undefined;
   const col = out.getAttribute('color') as THREE.BufferAttribute;
   if (ao) {
+    // Arrays planos (los crean loadLibrary y bakeShading): acceso directo, sin getX/setXYZ.
+    const a = ao.array as Float32Array;
+    const c = col.array as Float32Array;
     for (let i = 0; i < col.count; i++) {
       // La curvatura ya oscurece los pliegues: suavizamos un poco la del archivo.
-      const k = 0.15 + 0.85 * ao.getX(i);
-      col.setXYZ(i, col.getX(i) * k, col.getY(i) * k, col.getZ(i) * k);
+      const k = 0.15 + 0.85 * a[i];
+      c[i * 3] *= k;
+      c[i * 3 + 1] *= k;
+      c[i * 3 + 2] *= k;
     }
     col.needsUpdate = true;
   }
@@ -179,15 +185,25 @@ function smoothVertexColors(g: THREE.BufferGeometry, iterations: number): void {
     for (let i = 0; i < n; i++) {
       const s = deg[i];
       const e = deg[i + 1];
-      for (let k = 0; k < 3; k++) {
-        if (e === s) {
-          dst[i * 3 + k] = src[i * 3 + k];
-          continue;
-        }
-        let sum = 0;
-        for (let j = s; j < e; j++) sum += src[nb[j] * 3 + k];
-        dst[i * 3 + k] = 0.4 * src[i * 3 + k] + (0.6 * sum) / (e - s);
+      if (e === s) {
+        dst[i * 3] = src[i * 3];
+        dst[i * 3 + 1] = src[i * 3 + 1];
+        dst[i * 3 + 2] = src[i * 3 + 2];
+        continue;
       }
+      // Los tres canales en una sola pasada por los vecinos (mismo orden de suma).
+      let s0 = 0;
+      let s1 = 0;
+      let s2 = 0;
+      for (let j = s; j < e; j++) {
+        const q = nb[j] * 3;
+        s0 += src[q];
+        s1 += src[q + 1];
+        s2 += src[q + 2];
+      }
+      dst[i * 3] = 0.4 * src[i * 3] + (0.6 * s0) / (e - s);
+      dst[i * 3 + 1] = 0.4 * src[i * 3 + 1] + (0.6 * s1) / (e - s);
+      dst[i * 3 + 2] = 0.4 * src[i * 3 + 2] + (0.6 * s2) / (e - s);
     }
     [src, dst] = [dst, src];
   }

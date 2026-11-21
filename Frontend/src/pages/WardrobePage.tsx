@@ -21,6 +21,14 @@ import { useAsync } from '../lib/useAsync';
 import { usePagedList } from '../lib/usePagedList';
 
 const PAGE_SIZE = 24;
+
+/** Acciones de una ficha del armario (ver handlersFor). */
+interface CardHandlers {
+  onOpen: () => void;
+  onEdit: () => void;
+  onDelete: () => void;
+  onFavorite: (on: boolean) => void;
+}
 const VIEW_KEY = 'myout.wardrobe.view';
 const VIEWS: { value: WardrobeView; label: string; icon: IconName }[] = [
   { value: 'grid', label: t('Cuadrícula'), icon: 'grid' },
@@ -184,6 +192,25 @@ export function WardrobePage() {
       refreshFacets();
       toast.show(t('No se ha podido guardar la favorita.'), { tone: 'danger' });
     }
+  }
+
+  // Acciones de cada ficha con identidad estable (una por prenda): así las
+  // fichas memorizadas no se repintan cada vez que se repinta la página.
+  const cardActions = useRef({ open: setDetail, edit: setEditing, remove: setDeleting, favorite: toggleFavorite });
+  cardActions.current = { open: setDetail, edit: setEditing, remove: setDeleting, favorite: toggleFavorite };
+  const cardHandlers = useRef(new WeakMap<WardrobeItem, CardHandlers>());
+  function handlersFor(item: WardrobeItem): CardHandlers {
+    let h = cardHandlers.current.get(item);
+    if (!h) {
+      h = {
+        onOpen: () => cardActions.current.open(item),
+        onEdit: () => cardActions.current.edit(item),
+        onDelete: () => cardActions.current.remove(item),
+        onFavorite: (on: boolean) => void cardActions.current.favorite(item, on),
+      };
+      cardHandlers.current.set(item, h);
+    }
+    return h;
   }
 
   async function confirmDelete() {
@@ -504,10 +531,7 @@ export function WardrobePage() {
               item={item}
               index={i % PAGE_SIZE}
               view={view}
-              onOpen={() => setDetail(item)}
-              onEdit={() => setEditing(item)}
-              onDelete={() => setDeleting(item)}
-              onFavorite={(on) => void toggleFavorite(item, on)}
+              {...handlersFor(item)}
             />
           ))}
         </div>

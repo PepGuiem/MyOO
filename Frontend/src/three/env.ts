@@ -25,4 +25,8 @@ export function useStudioEnv(): THREE.Texture {
 export function setupRenderer({ gl }: { gl: THREE.WebGLRenderer }): void {
   gl.toneMapping = THREE.NeutralToneMapping;
   gl.toneMappingExposure = 1;
+  // Comprobar cada shader al compilarlo obliga a esperar a la GPU (lectura
+  // síncrona de sus registros) en el hilo principal: solo en desarrollo.
+  // (three.js recomienda desactivarlo en producción.)
+  gl.debug.checkShaderErrors = !!import.meta.env.DEV;
 }

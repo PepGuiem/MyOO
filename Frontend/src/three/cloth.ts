@@ -49,22 +49,25 @@ export function bakeShading(g: THREE.BufferGeometry, fabric: FabricOrNone, flat 
   if (!g.getAttribute('normal')) g.computeVertexNormals();
   const nor = g.getAttribute('normal') as THREE.BufferAttribute;
   const idx = index.array;
+  // Lectura directa de los arrays (mucho más rápida que getX/getY/getZ); los
+  // valores son exactamente los mismos.
+  const P = vec3Array(pos);
+  let N = vec3Array(nor);
 
   // ¿Las normales apuntan hacia fuera? Para una superficie cerrada,
   // Σ n·(p − centro) > 0 si apuntan hacia fuera.
   let cx = 0, cy = 0, cz = 0;
   for (let i = 0; i < n; i++) {
-    cx += pos.getX(i);
-    cy += pos.getY(i);
-    cz += pos.getZ(i);
+    cx += P[i * 3];
+    cy += P[i * 3 + 1];
+    cz += P[i * 3 + 2];
   }
   cx /= n;
   cy /= n;
   cz /= n;
   let orient = 0;
   for (let i = 0; i < n; i++) {
-    orient +=
-      nor.getX(i) * (pos.getX(i) - cx) + nor.getY(i) * (pos.getY(i) - cy) + nor.getZ(i) * (pos.getZ(i) - cz);
+    orient += N[i * 3] * (P[i * 3] - cx) + N[i * 3 + 1] * (P[i * 3 + 1] - cy) + N[i * 3 + 2] * (P[i * 3 + 2] - cz);
   }
   if (orient < 0) {
     // Invertimos el sentido de los triángulos y las normales.
@@ -74,7 +77,12 @@ export function bakeShading(g: THREE.BufferGeometry, fabric: FabricOrNone, flat 
       idx[t + 2] = b;
     }
     index.needsUpdate = true;
-    for (let i = 0; i < n; i++) nor.setXYZ(i, -nor.getX(i), -nor.getY(i), -nor.getZ(i));
+    if (N === nor.array) {
+      for (let i = 0; i < n * 3; i++) N[i] = -N[i];
+    } else {
+      for (let i = 0; i < n; i++) nor.setXYZ(i, -nor.getX(i), -nor.getY(i), -nor.getZ(i));
+      N = vec3Array(nor);
+    }
     nor.needsUpdate = true;
   }
 
@@ -83,18 +91,24 @@ export function bakeShading(g: THREE.BufferGeometry, fabric: FabricOrNone, flat 
   // Positiva = cóncavo (valle de un pliegue); negativa = convexo (cresta).
   // (Por arista y no con el laplaciano, porque las mallas son anisótropas:
   // aristas cortas alrededor y largas a lo largo.)
+  // Vecinos en arrays planos (CSR) en vez de un array por vértice: mismo
+  // orden y mismo resultado, sin miles de arrays pequeños que recoger.
+  const start = new Uint32Array(n + 1);
+  for (let t = 0; t < idx.length; t++) start[idx[t] + 1] += 2;
+  for (let i = 0; i < n; i++) start[i + 1] += start[i];
+  const nb = new Uint32Array(start[n]);
+  const deg = new Uint32Array(n);
   const ksum = new Float32Array(n);
   const cnt = new Float32Array(n);
-  const neighbors: number[][] = Array.from({ length: n }, () => []);
   const addEdge = (a: number, b: number) => {
-    const dx = pos.getX(b) - pos.getX(a);
-    const dy = pos.getY(b) - pos.getY(a);
-    const dz = pos.getZ(b) - pos.getZ(a);
+    const dx = P[b * 3] - P[a * 3];
+    const dy = P[b * 3 + 1] - P[a * 3 + 1];
+    const dz = P[b * 3 + 2] - P[a * 3 + 2];
     const l2 = dx * dx + dy * dy + dz * dz;
     if (l2 < 1e-12) return;
-    ksum[a] += (2 * (dx * nor.getX(a) + dy * nor.getY(a) + dz * nor.getZ(a))) / l2;
+    ksum[a] += (2 * (dx * N[a * 3] + dy * N[a * 3 + 1] + dz * N[a * 3 + 2])) / l2;
     cnt[a] += 1;
-    neighbors[a].push(b);
+    nb[start[a] + deg[a]++] = b;
   };
   for (let t = 0; t < idx.length; t += 3) {
     const a = idx[t], b = idx[t + 1], c = idx[t + 2];
@@ -105,17 +119,23 @@ export function bakeShading(g: THREE.BufferGeometry, fabric: FabricOrNone, flat 
   let curv: Float32Array = new Float32Array(n);
   for (let i = 0; i < n; i++) if (cnt[i]) curv[i] = ksum[i] / cnt[i];
   // Suavizado: la oclusión real es difusa, no un dibujo de líneas.
+  // (Alterna entre dos arrays nuevos: nunca escribe en `src`.)
   const smooth = (src: Float32Array, passes: number) => {
     let cur = src;
+    let a = new Float32Array(n);
+    let b = new Float32Array(n);
     for (let pass = 0; pass < passes; pass++) {
-      const next = new Float32Array(n);
+      const next = a;
       for (let i = 0; i < n; i++) {
-        const nb = neighbors[i];
+        const s0 = start[i];
+        const e = s0 + deg[i];
         let s = cur[i] * 2;
-        for (const j of nb) s += cur[j];
-        next[i] = s / (nb.length + 2);
+        for (let j = s0; j < e; j++) s += cur[nb[j]];
+        next[i] = s / (deg[i] + 2);
       }
       cur = next;
+      a = b;
+      b = next;
     }
     return cur;
   };
@@ -135,6 +155,25 @@ export function bakeShading(g: THREE.BufferGeometry, fabric: FabricOrNone, flat 
     colors[i * 3 + 2] = v;
   }
   g.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+}
+
+/**
+ * Coordenadas xyz de un atributo como array plano. Si el atributo ya es un
+ * Float32Array simple (lo normal), se usa tal cual; si no (intercalado,
+ * normalizado...), se copia con getX/getY/getZ.
+ */
+function vec3Array(attr: THREE.BufferAttribute | THREE.InterleavedBufferAttribute): Float32Array | Float64Array {
+  const plain = attr as THREE.BufferAttribute;
+  if (!(attr as THREE.InterleavedBufferAttribute).isInterleavedBufferAttribute && plain.array instanceof Float32Array && plain.itemSize === 3 && !plain.normalized) {
+    return plain.array as Float32Array;
+  }
+  const out = new Float64Array(attr.count * 3);
+  for (let i = 0; i < attr.count; i++) {
+    out[i * 3] = attr.getX(i);
+    out[i * 3 + 1] = attr.getY(i);
+    out[i * 3 + 2] = attr.getZ(i);
+  }
+  return out;
 }
 
 // ---------------------------------------------------------------------------

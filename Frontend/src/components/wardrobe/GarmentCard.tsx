@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from 'react';
+import { memo, useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from 'react';
 import { createPortal } from 'react-dom';
 import type { WardrobeItem } from '../../api/types';
 import { t } from '../../i18n';
@@ -33,8 +33,14 @@ export function isNewItem(item: WardrobeItem, now = Date.now()): boolean {
  * Ficha de prenda del armario, como la de una tienda: modelo 3D protagonista,
  * cinta arriba, nombre, categoría, marca y color. Los botones (favorita y
  * menú) van fuera del escenario 3D: el lienzo compartido se pinta por encima.
+ *
+ * Memorizada: si la página se repinta (al escribir en el buscador, abrir una
+ * ficha...) y sus props no cambian, la ficha y su miniatura 3D no se repintan.
+ * Para aprovecharlo, quien la usa debe pasar funciones estables.
  */
-export function GarmentCard({
+export const GarmentCard = memo(GarmentCardBase);
+
+function GarmentCardBase({
   item,
   index,
   view,

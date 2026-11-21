@@ -591,6 +591,8 @@ Panel con tus cifras, destacados, STYLE INSIGHTS, estilos (barra rayada = estilo
 - **Solo se dibuja cuando algo cambia** (`frameloop="demand"`): en reposo no hay trabajo. Un vigilante ligero (`requestAnimationFrame`) pide un fotograma si una tarjeta se mueve o cambia de tamaño (hover, animaciones de entrada); el giro (`Turntable`) pide fotogramas solo mientras gira y se ve.
 - **Solo lo que está cerca:** el 3D de cada miniatura se monta al acercarse a la pantalla (60 % de margen), dos por fotograma y primero las del centro, y se desmonta a más de 2,2 pantallas. Una lista de 60 prendas ya no carga ni construye las 60 de golpe.
 - Resolución máxima 2× en escritorio y 1,5× en pantallas táctiles.
+- **Prendas construidas en caché** (`three/buildCache.ts`): la misma prenda con el mismo cuerpo se reutiliza (al volver con el scroll, prendas repetidas, la misma prenda en varios outfits). Cada uso recibe su copia de las geometrías; máximo 48 MB / 80 prendas, se descarta primero la menos usada.
+- El horneado del sombreado y el suavizado de color recorren arrays planos (mismo resultado, ~1,5× más rápido); al llegar un modelo, se construye en una transición de React (una prenda por tarea); `checkShaderErrors` solo en desarrollo; las fichas del armario están memorizadas con acciones estables.
 
 ## QR del perfil
 

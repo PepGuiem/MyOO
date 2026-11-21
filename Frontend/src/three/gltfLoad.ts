@@ -35,3 +35,12 @@ export function loadGltf(url: string): Promise<GLTF> {
   return p;
 }
 
+/**
+ * Carga sin guardar el resultado en la caché de arriba. Para quien guarda su
+ * propia versión ya procesada (garmentLibrary.ts): así no quedan en memoria
+ * dos copias de cada modelo (la original decodificada y la preparada).
+ */
+export function loadGltfUncached(url: string): Promise<GLTF> {
+  const hit = cache.get(url);
+  return hit ?? gltfLoader().loadAsync(url);
+}

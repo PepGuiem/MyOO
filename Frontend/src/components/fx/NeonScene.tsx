@@ -41,11 +41,20 @@ export function NeonScene() {
     let frame = 0;
     let px = 0;
     let py = 0;
+    // Último valor escrito de cada variable: si no cambia (p. ej. el scroll
+    // pasado el tope de 2400 px), no se toca el estilo y el navegador no
+    // tiene que recalcular el fondo.
+    const last: Record<string, string> = {};
+    const set = (name: string, value: string) => {
+      if (last[name] === value) return;
+      last[name] = value;
+      el.style.setProperty(name, value);
+    };
     const apply = () => {
       frame = 0;
-      el.style.setProperty('--px', px.toFixed(3));
-      el.style.setProperty('--py', py.toFixed(3));
-      el.style.setProperty('--sy', String(Math.min(window.scrollY, 2400)));
+      set('--px', px.toFixed(3));
+      set('--py', py.toFixed(3));
+      set('--sy', String(Math.min(window.scrollY, 2400)));
     };
     const queue = () => {
       if (!frame) frame = requestAnimationFrame(apply);

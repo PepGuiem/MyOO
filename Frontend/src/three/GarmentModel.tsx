@@ -1,5 +1,5 @@
 import { useFrame, useThree, type ThreeEvent } from '@react-three/fiber';
-import { useContext, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { startTransition, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import * as THREE from 'three';
 import type { GarmentLike, Styling } from '../api/types';
 import { useReportLoading } from '../lib/loading';
@@ -13,6 +13,7 @@ import { useStudioEnv } from './env';
 import type { FabricKind } from './fabric';
 import { buildGarment, garmentMinY, type GarmentBuild } from './garments';
 import { applyStyling, stylingNeeded, type OutfitContext } from './styling';
+import { cachedBuild } from './buildCache';
 import { buildLibraryGarment, libraryModel, libraryUrl, loadLibrary, type LibraryDetail, type LibraryPart } from './garmentLibrary';
 import { isBlenderModel, LIBRARY_PART_ROLE } from './libraryCatalog';
 import { tightenCollar } from './libraryFit';
@@ -105,7 +106,10 @@ export function GarmentModel({
     if (!url) return;
     let alive = true;
     loadLibrary(url).then(
-      (parts) => alive && setLoaded({ url, parts }),
+      // En transición: si llegan muchas prendas a la vez (una página llena de
+      // miniaturas), React las construye por turnos y cede el hilo entre una y
+      // otra, en vez de hacerlo todo en una sola tarea larga que bloquea el scroll.
+      (parts) => alive && startTransition(() => setLoaded({ url, parts })),
       (err: unknown) => {
         // Si el archivo no carga, seguimos con el modelo generado por código.
         console.warn('No se pudo cargar el modelo 3D', url, err);
@@ -127,22 +131,31 @@ export function GarmentModel({
   const build = useMemo<GarmentBuild | null>(
     () => {
       if (entry && libParts === undefined) return null; // cargando
-      const [parts, buttonStyle, stitchStyle] = JSON.parse(shapeKey) as [Record<string, boolean>, never, never];
-      if (entry && libParts) {
-        // Piezas que el modelo permite quitar (p. ej. los flecos de la bufanda, que
-        // son su "ribete", o los cordones y el tirador del calzado).
-        const removed = new Set((entry.parts ?? []).filter((k) => parts[k] === false).map((k) => LIBRARY_PART_ROLE[k]));
-        for (const role of entry.hidden ?? []) removed.add(role);
-        const kept = removed.size ? libParts.filter((p) => !removed.has(p.role)) : libParts;
-        return buildLibraryGarment(entry, kept, modelKey, garment.attributes ?? {}, body ?? null, layer);
-      }
-      // Pantalones y camisetas solo existen como modelos de Blender: si el
-      // archivo no carga, no se pinta uno generado por código.
-      if (modelKey === 'pants' || (entry && isBlenderModel(entry))) return null;
-      const built = buildGarment(modelKey, garment.attributes ?? {}, fitBody, layer, { parts, buttonStyle, stitchStyle });
-      // Sobre el maniquí, el escote abraza su cuello (como en los modelos de la biblioteca).
-      if (body && COLLARED.includes(modelKey)) tightenCollar(built.parts.map((p) => p.geometry), body, layer);
-      return built;
+      const make = (): GarmentBuild | null => {
+        const [parts, buttonStyle, stitchStyle] = JSON.parse(shapeKey) as [Record<string, boolean>, never, never];
+        if (entry && libParts) {
+          // Piezas que el modelo permite quitar (p. ej. los flecos de la bufanda, que
+          // son su "ribete", o los cordones y el tirador del calzado).
+          const removed = new Set((entry.parts ?? []).filter((k) => parts[k] === false).map((k) => LIBRARY_PART_ROLE[k]));
+          for (const role of entry.hidden ?? []) removed.add(role);
+          const kept = removed.size ? libParts.filter((p) => !removed.has(p.role)) : libParts;
+          return buildLibraryGarment(entry, kept, modelKey, garment.attributes ?? {}, body ?? null, layer);
+        }
+        // Pantalones y camisetas solo existen como modelos de Blender: si el
+        // archivo no carga, no se pinta uno generado por código.
+        if (modelKey === 'pants' || (entry && isBlenderModel(entry))) return null;
+        const built = buildGarment(modelKey, garment.attributes ?? {}, fitBody, layer, { parts, buttonStyle, stitchStyle });
+        // Sobre el maniquí, el escote abraza su cuello (como en los modelos de la biblioteca).
+        if (body && COLLARED.includes(modelKey)) tightenCollar(built.parts.map((p) => p.geometry), body, layer);
+        return built;
+      };
+      // Si el modelo de la biblioteca falló, no se guarda en caché (puede cargar en otra visita).
+      if (entry && !libParts) return make();
+      // La misma prenda con el mismo cuerpo sale igual: se reutiliza (buildCache.ts).
+      // La marca no cambia la forma (ningún código 3D la lee): no cuenta en la clave.
+      const shapeAttrs = { ...(garment.attributes ?? {}) };
+      delete shapeAttrs.brand;
+      return cachedBuild(`${url ?? '-'}|${modelKey}|${JSON.stringify(shapeAttrs)}|${shapeKey}|${layer}`, body ?? null, make);
     },
     // attrsKey y shapeKey representan el contenido de attributes y customization
     [entry, libParts, modelKey, attrsKey, shapeKey, fitBody, body, layer],
