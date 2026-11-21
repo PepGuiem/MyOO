@@ -44,7 +44,7 @@ export interface PhotoPlacement {
  * ha cargado (su tamaño no cambia durante unos fotogramas), proyecta cada
  * gráfico de frente, en la misma posición relativa que tenía en la foto.
  */
-function PhotoPlacer({ request, onPlaced }: { request: PhotoPlacement; onPlaced: (key: string, details: CustomDetail[]) => void }) {
+export function PhotoPlacer({ request, onPlaced }: { request: PhotoPlacement; onPlaced: (key: string, details: CustomDetail[]) => void }) {
   const scene = useThree((s) => s.scene);
   const st = useRef({ key: '', sig: '', stable: 0, since: 0 });
   useFrame(({ clock }) => {

@@ -15,13 +15,14 @@ import type {
 import { CATEGORY_LABEL, SEASONS, SEASON_LABEL } from '../lib/labels';
 import { MAX_STYLES_PER_ITEM, PURCHASE_PLATFORMS, STYLE_TAGS } from '../lib/stylist';
 import { patternFromPhoto, readGarmentPhoto } from '../lib/photoGarment';
-import { GarmentViewer, type PhotoPlacement } from '../three/GarmentViewer';
+import type { PhotoPlacement } from '../three/GarmentViewer';
 import { isBlenderModel, libraryModel } from '../three/libraryCatalog';
 import { DetailList } from './DetailList';
 import { ErrorNote } from './ErrorNote';
 import { Modal } from './Modal';
 import { Select } from './Select';
 import { Busy } from './Spinner';
+import { CreationStage, type CreationStep } from './wardrobe/CreationStage';
 import { t } from '../i18n';
 
 const PALETTE = ['#E8E8E8', '#8E8E93', '#2E2E33', '#151517', '#2B3445', '#8FA6C1', '#C8B79A', '#3B2F2A', '#5F6B52', '#8C3B3B'];
@@ -182,6 +183,15 @@ export function ItemEditor({ item, wardrobes, garmentTypes, defaultWardrobeId, o
     ? { color: /^#[0-9a-fA-F]{6}$/.test(color) ? color : '#8E8E93', attributes, garmentType: type, customization }
     : null;
 
+  // Pasos que el plató marca como hechos (solo presentación: no bloquean nada).
+  const filledDetails = fields.filter(([k]) => attributes[k] !== undefined).length;
+  const steps: CreationStep[] = [
+    { key: 'type', label: t('Tipo'), done: !!type },
+    { key: 'color', label: t('Color'), done: /^#[0-9a-fA-F]{6}$/.test(color) },
+    { key: 'name', label: t('Nombre'), done: name.trim().length > 0 },
+    { key: 'details', label: t('Detalles'), done: fields.length === 0 || filledDetails > 0 },
+  ];
+
   /**
    * Foto de la prenda: se lee en el navegador (tipo, cortes, color, estampado y
    * gráficos) y se rellena el formulario; los gráficos recortados se guardan
@@ -251,10 +261,18 @@ export function ItemEditor({ item, wardrobes, garmentTypes, defaultWardrobeId, o
   return (
     <Modal title={item ? t('Editar prenda') : t('Nueva prenda')} onClose={onClose} wide className="dialog-editor">
       <form className="editor" onSubmit={submit}>
-        <div className="editor-stage" aria-hidden="true">
-          {preview && <GarmentViewer garment={preview} place={placement} onPlaced={onPlaced} />}
-          <p className="stage-hint">{t('Arrastra para girar')}</p>
-        </div>
+        <CreationStage
+          garment={preview}
+          type={type}
+          name={name}
+          color={color}
+          editing={!!item}
+          steps={steps}
+          place={placement}
+          onPlaced={onPlaced}
+          photoReading={photo?.status === 'reading'}
+          photoThumbnail={photo?.status === 'done' ? photo.thumbnail : undefined}
+        />
 
         <div className="editor-fields">
           <section className="field photo-box" aria-labelledby="photo-title">

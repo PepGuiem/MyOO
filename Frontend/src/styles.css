@@ -32350,3 +32350,646 @@ p.hm-outfit-meta:not(:has(+ ul)) {
   will-change: transform;
   contain: strict;
 }
+
+/* =============================================================================
+   Plató de la creación de prendas (editor «Nueva prenda» / «Editar prenda»)
+   components/wardrobe/CreationStage.tsx + three/CreationStudio.tsx.
+   Estudio gris grafito detrás de la prenda: foco de luz, haz, marcas de visor,
+   peana con aro naranja (en 3D) y etiquetas del estilo de la calle encima.
+   Solo afecta al editor de prendas (clases .cs-* y .dialog-editor).
+   ========================================================================== */
+
+/* Por encima de la barra superior del móvil (40), como la ficha ampliada */
+.overlay:has(> .dialog-editor) {
+  z-index: 50;
+  background:
+    radial-gradient(60% 60% at 30% 40%, rgba(91, 16, 40, 0.28), transparent 70%),
+    rgba(8, 8, 8, 0.8);
+}
+
+.dialog.dialog-editor {
+  width: min(1120px, 100%);
+  background:
+    radial-gradient(60% 40% at 10% 0%, rgba(255, 77, 0, 0.08), transparent 60%),
+    linear-gradient(180deg, rgba(30, 29, 32, 0.99), rgba(18, 18, 20, 0.99));
+  border-color: rgba(255, 77, 0, 0.22);
+  border-radius: 16px;
+  box-shadow:
+    0 40px 90px rgba(0, 0, 0, 0.65),
+    0 0 70px -28px rgba(255, 77, 0, 0.45);
+}
+
+.dialog-editor .dialog-head h2 {
+  margin: 0;
+  font-size: 1.55rem;
+  font-weight: 800;
+  font-stretch: 62%;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: #f1eee9;
+  text-shadow:
+    2px 2px 0 #ff1744,
+    4px 4px 0 #5b1028;
+}
+
+@media (min-width: 961px) {
+  .dialog-editor .editor {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
+/* ---- Escenario ---- */
+.cs-stage {
+  --cs-orange: #ff4d00;
+  --cs-red: #ff1744;
+  --cs-wine: #5b1028;
+  --cs-bone: #f1eee9;
+  --cs-black: #080808;
+  --cs-glass: rgba(10, 10, 11, 0.62);
+  --cs-edge: rgba(241, 238, 233, 0.09);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: 460px;
+  color: var(--cs-bone);
+  /* Pared del estudio: foco cenital suave, rebote cálido abajo y degradado grafito */
+  background:
+    radial-gradient(56% 36% at 50% 36%, rgba(241, 238, 233, 0.1), transparent 72%),
+    radial-gradient(90% 24% at 50% 102%, rgba(255, 77, 0, 0.13), transparent 72%),
+    linear-gradient(180deg, #232327 0%, #1a1a1d 46%, #111113 76%, #0b0b0c 100%);
+  border: 1px solid var(--cs-edge);
+  border-radius: 14px;
+  box-shadow:
+    inset 0 1px 0 rgba(241, 238, 233, 0.05),
+    inset 0 -80px 90px -60px rgba(0, 0, 0, 0.7);
+}
+
+.cs-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Textura de hormigón casi invisible: la pared no es un plano liso */
+.cs-backdrop::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--wall) center / 420px repeat;
+  opacity: 0.06;
+  mix-blend-mode: screen;
+}
+
+/* Viñeta: oscurece los bordes y centra la mirada en la prenda */
+.cs-backdrop::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120% 90% at 50% 45%, transparent 55%, rgba(0, 0, 0, 0.55) 100%);
+}
+
+/* Haz de luz del foco */
+.cs-beam {
+  position: absolute;
+  top: -6%;
+  left: 50%;
+  width: 84%;
+  height: 82%;
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, rgba(241, 238, 233, 0.08), rgba(241, 238, 233, 0.02) 60%, transparent 92%);
+  clip-path: polygon(41% 0, 59% 0, 100% 100%, 0 100%);
+  filter: blur(14px);
+}
+
+/* Marcas de visor en las esquinas */
+.cs-corners {
+  --c: rgba(241, 238, 233, 0.26);
+  position: absolute;
+  inset: 10px;
+  background:
+    linear-gradient(var(--c), var(--c)) left top / 16px 1.5px no-repeat,
+    linear-gradient(var(--c), var(--c)) left top / 1.5px 16px no-repeat,
+    linear-gradient(var(--c), var(--c)) right top / 16px 1.5px no-repeat,
+    linear-gradient(var(--c), var(--c)) right top / 1.5px 16px no-repeat,
+    linear-gradient(var(--c), var(--c)) left bottom / 16px 1.5px no-repeat,
+    linear-gradient(var(--c), var(--c)) left bottom / 1.5px 16px no-repeat,
+    linear-gradient(var(--c), var(--c)) right bottom / 16px 1.5px no-repeat,
+    linear-gradient(var(--c), var(--c)) right bottom / 1.5px 16px no-repeat;
+}
+
+/* El lienzo 3D (transparente) ocupa todo el escenario */
+.cs-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.cs-canvas > div:not(.loading-overlay) {
+  position: absolute !important;
+  inset: 0;
+}
+
+/* Carga del modelo: cápsula de vidrio con el arco en naranja */
+.cs-stage .loading-overlay .spinner-wrap {
+  gap: 10px;
+  padding: 14px 20px 12px;
+  color: var(--cs-orange);
+  background: rgba(8, 8, 8, 0.62);
+  border: 1px solid rgba(255, 77, 0, 0.28);
+  border-radius: 12px;
+  box-shadow: 0 0 30px -10px rgba(255, 77, 0, 0.6);
+}
+
+.cs-stage .loading-overlay .spinner-icon {
+  color: var(--cs-orange);
+}
+
+.cs-stage .loading-overlay .spinner-label {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(241, 238, 233, 0.75);
+}
+
+/* ---- Capa de etiquetas (no tapa el giro con el ratón, salvo los botones) ---- */
+.cs-hud {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+  pointer-events: none;
+}
+
+.cs-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+/* Cinta pegada (como la de las cabeceras del armario) */
+.cs-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  padding: 4px 12px 4px 10px;
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--cs-black);
+  background: var(--cs-bone);
+  clip-path: polygon(0 8%, 3% 0, 100% 4%, 98% 100%, 2% 94%);
+  transform: rotate(-2deg);
+  box-shadow: 0 0 18px rgba(255, 77, 0, 0.35);
+  animation: wd-slap 0.6s 0.15s cubic-bezier(0.2, 0.9, 0.3, 1.3) backwards;
+}
+
+.cs-kicker .icon {
+  color: var(--cs-red);
+}
+
+.cs-tools {
+  display: flex;
+  gap: 8px;
+  pointer-events: auto;
+}
+
+.cs-tool {
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  font: inherit;
+  color: rgba(241, 238, 233, 0.82);
+  background: var(--cs-glass);
+  border: 1px solid rgba(241, 238, 233, 0.12);
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  cursor: pointer;
+  transition:
+    color 0.2s,
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.cs-tool:hover {
+  color: var(--cs-bone);
+  border-color: rgba(255, 77, 0, 0.55);
+}
+
+.cs-tool:focus-visible {
+  outline: 2px solid var(--cs-orange);
+  outline-offset: 2px;
+}
+
+.cs-tool.is-on {
+  color: var(--cs-orange);
+  border-color: rgba(255, 77, 0, 0.7);
+  box-shadow: 0 0 18px -4px rgba(255, 77, 0, 0.7);
+}
+
+/* Tipo de prenda y nombre que se va escribiendo */
+.cs-label {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+  max-width: 78%;
+}
+
+.cs-cat {
+  min-width: 0;
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--cs-orange);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cs-cat i {
+  font-style: normal;
+  color: rgba(241, 238, 233, 0.3);
+}
+
+.cs-name {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  font-size: clamp(1.3rem, 0.9rem + 1.3vw, 1.95rem);
+  font-weight: 800;
+  font-stretch: 62%;
+  line-height: 0.95;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+  color: var(--cs-bone);
+  text-shadow:
+    2px 2px 0 var(--cs-red),
+    4px 4px 0 var(--cs-wine);
+}
+
+.cs-name.is-placeholder {
+  color: rgba(241, 238, 233, 0.5);
+  text-shadow: 2px 2px 0 rgba(91, 16, 40, 0.8);
+}
+
+.cs-hint {
+  margin: auto 0 0;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(241, 238, 233, 0.42);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
+}
+
+/* Barra inferior: color elegido, pasos completados y progreso */
+.cs-dock {
+  display: grid;
+  gap: 9px;
+  padding: 10px 12px 12px;
+  background: var(--cs-glass);
+  border: 1px solid var(--cs-edge);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 14px 30px -12px rgba(0, 0, 0, 0.7);
+}
+
+.cs-dock-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-width: 0;
+}
+
+.cs-swatch {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--cs-bone);
+  white-space: nowrap;
+}
+
+.cs-swatch > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cs-swatch > span::first-letter {
+  text-transform: uppercase;
+}
+
+.cs-swatch i {
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid rgba(241, 238, 233, 0.35);
+  box-shadow: 0 0 0 2px rgba(8, 8, 8, 0.6);
+}
+
+.cs-swatch small {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: rgba(241, 238, 233, 0.45);
+}
+
+.cs-status {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(241, 238, 233, 0.5);
+}
+
+.cs-status.is-ready {
+  color: var(--cs-orange);
+}
+
+.cs-status.is-ready::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--cs-orange);
+  box-shadow: 0 0 8px var(--cs-orange);
+}
+
+.cs-steps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cs-steps li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(241, 238, 233, 0.45);
+}
+
+.cs-steps li > span:not(.visually-hidden) {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cs-steps b {
+  flex: 0 0 auto;
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  font-size: 0.56rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  color: rgba(241, 238, 233, 0.6);
+  border: 1px solid rgba(241, 238, 233, 0.2);
+  border-radius: 4px;
+  transform: rotate(-3deg);
+  transition:
+    background 0.25s,
+    color 0.25s,
+    box-shadow 0.25s;
+}
+
+.cs-steps li.is-done {
+  color: var(--cs-bone);
+}
+
+.cs-steps li.is-done b {
+  color: var(--cs-black);
+  background: var(--cs-orange);
+  border-color: transparent;
+  box-shadow: 0 0 12px rgba(255, 77, 0, 0.5);
+}
+
+.cs-meter {
+  display: block;
+  height: 2px;
+  overflow: hidden;
+  background: rgba(241, 238, 233, 0.08);
+  border-radius: 2px;
+}
+
+.cs-meter i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(100deg, #ff4d00, #ff1744 60%, #ff3d6e);
+  transform-origin: left center;
+  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.25, 1);
+}
+
+/* Recorte de la foto, pegado como una polaroid */
+.cs-photo {
+  position: absolute;
+  right: 16px;
+  top: 72px;
+  z-index: 3;
+  width: 92px;
+  margin: 0;
+  padding: 5px 5px 3px;
+  background: var(--cs-bone);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.55);
+  transform: rotate(4deg);
+  pointer-events: none;
+  animation: wd-slap 0.6s cubic-bezier(0.2, 0.9, 0.3, 1.3) backwards;
+}
+
+.cs-photo::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  width: 46px;
+  height: 14px;
+  transform: translateX(-50%) rotate(-5deg);
+  background: rgba(241, 238, 233, 0.55);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+}
+
+.cs-photo img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: contain;
+  background: #e2ded6;
+}
+
+.cs-photo figcaption {
+  padding-top: 2px;
+  font-family: var(--marker);
+  font-size: 0.7rem;
+  text-align: center;
+  color: var(--cs-black);
+}
+
+/* Leyendo la foto: barrido de escáner sobre el plató */
+.cs-scan {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: grid;
+  place-items: center;
+  background: rgba(8, 8, 8, 0.35);
+  pointer-events: none;
+}
+
+.cs-scan-line {
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  top: 10%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #ff4d00 20%, #ff3d6e 80%, transparent);
+  box-shadow: 0 0 18px 2px rgba(255, 77, 0, 0.55);
+  animation: cs-scan 1.6s ease-in-out infinite alternate;
+}
+
+.cs-scan-label {
+  position: relative;
+  z-index: 1;
+  padding: 8px 14px;
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--cs-bone);
+  background: rgba(8, 8, 8, 0.72);
+  border: 1px solid rgba(255, 77, 0, 0.4);
+  border-radius: 999px;
+}
+
+@keyframes cs-scan {
+  from {
+    top: 10%;
+  }
+  to {
+    top: 88%;
+  }
+}
+
+/* ---- Móvil: el editor ocupa toda la pantalla y el plató, el ancho entero ---- */
+@media (max-width: 960px) {
+  .cs-stage {
+    height: min(64vh, 540px);
+    min-height: 360px;
+  }
+}
+
+@media (max-width: 720px) {
+  .overlay:has(> .dialog-editor) {
+    padding: 0;
+  }
+
+  .dialog.dialog-editor {
+    width: 100%;
+    height: 100dvh;
+    max-height: none;
+    padding: 14px 14px 22px;
+    border-width: 0;
+    border-radius: 0;
+  }
+
+  .dialog-editor .dialog-head {
+    margin-bottom: 12px;
+  }
+
+  .dialog-editor .dialog-head .icon-btn {
+    width: 44px;
+    height: 44px;
+  }
+
+  .cs-stage {
+    border-radius: 12px;
+  }
+
+  .cs-hud {
+    padding: 10px;
+    gap: 8px;
+  }
+
+  .cs-label {
+    max-width: 70%;
+  }
+
+  .cs-name {
+    -webkit-line-clamp: 1;
+    font-size: 1.25rem;
+  }
+
+  .cs-dock {
+    padding: 8px 10px 10px;
+    gap: 7px;
+  }
+
+  .cs-steps {
+    gap: 4px;
+  }
+
+  .cs-steps li {
+    gap: 4px;
+    font-size: 0.54rem;
+    letter-spacing: 0.06em;
+  }
+
+  .cs-photo {
+    top: 64px;
+    right: 12px;
+    width: 64px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cs-kicker,
+  .cs-photo {
+    animation: none;
+  }
+
+  .cs-scan-line {
+    top: 50%;
+    animation: none;
+  }
+
+  .cs-meter i,
+  .cs-steps b,
+  .cs-tool {
+    transition: none;
+  }
+}
