@@ -2,6 +2,7 @@ import { lazy, Suspense, type ReactNode } from 'react';
 import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { AuthProvider, useAuth } from './auth/AuthContext';
 import { PreferencesProvider } from './lib/preferences';
+import { BrandFavicon } from './components/Logo';
 import { GlobalFx } from './components/fx/GlobalFx';
 import { NeonScene } from './components/fx/NeonScene';
 import { Layout } from './components/Layout';
@@ -58,6 +59,7 @@ export function App() {
       {/* Fondo de neón y efectos globales: una sola vez para toda la app */}
       <NeonScene />
       <GlobalFx />
+      <BrandFavicon />
       <AuthProvider>
         <PreferencesProvider>
         <BodyProvider>

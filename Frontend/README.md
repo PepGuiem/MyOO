@@ -590,6 +590,7 @@ Panel con tus cifras, destacados, STYLE INSIGHTS, estilos (barra rayada = estilo
 - Se aplica con variables CSS en `<html>`: paleta `--neon`…`--neon-5` (y `-rgb` para transparencias: `rgb(var(--neon-rgb) / 0.5)`), `--neon-hi` y `--neon-deep`; y atributos `data-neon`, `data-bg`, `data-motion`, `data-text`, `data-density`, `data-menu`, `data-quality` (bloque «Personalizar» al final de `styles.css`). **Para colores de acento nuevos, usa siempre estas variables**, nunca el naranja escrito a mano.
 - El menú sale de `components/navCatalog.ts` (los `id` se guardan en las cuentas: no renombrarlos). Inicio, Armario, tu perfil y Admin no se pueden ocultar.
 - Los colores propios muy claros se oscurecen lo justo para que el texto blanco encima se lea (contraste ≥ 3:1).
+- **El logo y el icono también cambian de color** (`lib/brandColors.ts`): se cambian los 5 tonos naranja-rojo de los degradados de `logo.svg` / `mark.svg` por los de la paleta y se usan como `data:` URL (siguen siendo `<img>`). También el icono de la pestaña (`BrandFavicon`) y el centro del QR del perfil. Con el naranja de siempre se usan los archivos tal cual.
 
 ## Iconos de la web y de la app
 

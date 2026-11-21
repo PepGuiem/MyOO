@@ -4,6 +4,7 @@ import { t } from '../../i18n';
 import { encodeQr, type QrCode } from '../../lib/qr';
 import { Icon } from '../Icon';
 import { Modal } from '../Modal';
+import { brandSvgUrl, useBrandSvg } from '../../lib/brandColors';
 import { MARK_URL } from '../Logo';
 import { personName, profilePath } from './PersonAvatar';
 
@@ -64,7 +65,8 @@ function qrSvg(qr: QrCode, logoHref: string | null, px?: number): string {
 
 /** QR dibujado (escalable). Lleva el icono de MyOO en el centro. */
 export function QrImage({ text, label, className = '' }: { text: string; label: string; className?: string }) {
-  const svg = useMemo(() => qrSvg(encodeQr(text, 'H'), MARK_URL), [text]);
+  const mark = useBrandSvg(MARK_URL);
+  const svg = useMemo(() => qrSvg(encodeQr(text, 'H'), mark), [text, mark]);
   return <span className={`qr-image ${className}`} role="img" aria-label={label} dangerouslySetInnerHTML={{ __html: svg }} />;
 }
 
@@ -83,7 +85,9 @@ async function dataUrl(url: string): Promise<string | null> {
 
 /** PNG de 1080 px (cuadrado, para redes) con el QR y el nombre debajo. */
 async function qrPng(text: string, caption: string): Promise<Blob> {
-  const logo = await dataUrl(MARK_URL).catch(() => null);
+  const logo = await brandSvgUrl(MARK_URL)
+    .then(dataUrl)
+    .catch(() => null);
   const side = 860;
   const svg = qrSvg(encodeQr(text, 'H'), logo, side);
   const img = new Image();
