@@ -96,7 +96,9 @@ function readGlb(path) {
   let base = 0;
   const roleOf = (prim) => {
     const mat = prim.material !== undefined ? json.materials?.[prim.material] : undefined;
-    return typeof mat?.extras?.role === 'string' ? mat.extras.role : 'body';
+    const role = typeof mat?.extras?.role === 'string' ? mat.extras.role : 'body';
+    // La etiqueta interior (sudaderas v2) va con la tela: en la web no tiene color propio.
+    return role === 'label' ? 'body' : role;
   };
   const visit = (nodeIndex, parent) => {
     const node = json.nodes[nodeIndex];

@@ -1,159 +1,161 @@
 [
  {
   "archivo": "01_sudadera_capucha.glb",
-  "prenda": "Sudadera con capucha",
+  "prenda": "Scene",
   "original": {
-   "triangulos": 555474,
-   "bytes": 13389164
+   "triangulos": 198276,
+   "bytes": 4723156
   },
   "piezas": [
    "body",
-   "trim",
-   "hardware"
+   "hardware",
+   "trim"
   ],
   "alto": {
-   "triangulos": 138868,
-   "bytes": 819016
+   "triangulos": 110202,
+   "bytes": 711504
   },
   "lod": {
-   "triangulos": 27524,
-   "bytes": 192144
+   "triangulos": 22588,
+   "bytes": 192756
   }
  },
  {
   "archivo": "02_sudadera_capucha_oversize.glb",
-  "prenda": "Sudadera con capucha oversize",
+  "prenda": "Scene",
   "original": {
-   "triangulos": 555994,
-   "bytes": 13408508
+   "triangulos": 199588,
+   "bytes": 4750888
   },
   "piezas": [
    "body",
-   "trim",
-   "hardware"
+   "hardware",
+   "trim"
   ],
   "alto": {
-   "triangulos": 138996,
-   "bytes": 834124
+   "triangulos": 110924,
+   "bytes": 733336
   },
   "lod": {
-   "triangulos": 34738,
-   "bytes": 239404
+   "triangulos": 23424,
+   "bytes": 196756
   }
  },
  {
   "archivo": "03_sudadera_capucha_crop.glb",
-  "prenda": "Sudadera con capucha crop",
+  "prenda": "Scene",
   "original": {
-   "triangulos": 556210,
-   "bytes": 13415912
+   "triangulos": 147412,
+   "bytes": 3592836
   },
   "piezas": [
    "body",
-   "trim",
-   "hardware"
+   "hardware",
+   "trim"
   ],
   "alto": {
-   "triangulos": 139052,
-   "bytes": 806112
+   "triangulos": 82238,
+   "bytes": 565252
   },
   "lod": {
-   "triangulos": 20454,
-   "bytes": 146948
+   "triangulos": 22482,
+   "bytes": 193220
   }
  },
  {
   "archivo": "04_sudadera_cremallera.glb",
-  "prenda": "Sudadera con capucha y cremallera",
+  "prenda": "Scene",
   "original": {
-   "triangulos": 574502,
-   "bytes": 13882796
+   "triangulos": 238140,
+   "bytes": 6917372
   },
   "piezas": [
    "body",
-   "trim",
    "hardware",
+   "trim",
    "zipper"
   ],
   "alto": {
-   "triangulos": 148010,
-   "bytes": 885464
+   "triangulos": 142826,
+   "bytes": 1107772
   },
   "lod": {
-   "triangulos": 31116,
-   "bytes": 220504
+   "triangulos": 50994,
+   "bytes": 558764
   }
  },
  {
   "archivo": "05_sudadera_cuello_redondo.glb",
-  "prenda": "Sudadera de cuello redondo",
+  "prenda": "Scene",
   "original": {
-   "triangulos": 524856,
-   "bytes": 12654488
+   "triangulos": 176080,
+   "bytes": 4096604
   },
   "alto": {
-   "triangulos": 131214,
-   "bytes": 761332
+   "triangulos": 96840,
+   "bytes": 605216
   },
   "lod": {
-   "triangulos": 23406,
-   "bytes": 163508
+   "triangulos": 19994,
+   "bytes": 156908
   }
  },
  {
   "archivo": "06_sudadera_media_cremallera.glb",
-  "prenda": "Sudadera de media cremallera",
+  "prenda": "Scene",
   "original": {
-   "triangulos": 535750,
-   "bytes": 12905860
+   "triangulos": 195412,
+   "bytes": 4872192
   },
   "piezas": [
    "body",
-   "zipper"
+   "zipper",
+   "hardware"
   ],
   "alto": {
-   "triangulos": 135368,
-   "bytes": 784624
+   "triangulos": 110794,
+   "bytes": 757112
   },
   "lod": {
-   "triangulos": 21938,
-   "bytes": 152520
+   "triangulos": 28724,
+   "bytes": 271888
   }
  },
  {
   "archivo": "07_sudadera_cuarto_cremallera.glb",
-  "prenda": "Sudadera de cuarto de cremallera",
+  "prenda": "Scene",
   "original": {
-   "triangulos": 535716,
-   "bytes": 12904428
+   "triangulos": 183108,
+   "bytes": 4464100
   },
   "piezas": [
    "body",
-   "zipper"
+   "zipper",
+   "hardware"
   ],
   "alto": {
-   "triangulos": 134008,
-   "bytes": 772104
+   "triangulos": 102818,
+   "bytes": 682632
   },
   "lod": {
-   "triangulos": 20160,
-   "bytes": 142172
+   "triangulos": 25502,
+   "bytes": 231188
   }
  },
  {
   "archivo": "08_sudadera_deportiva.glb",
-  "prenda": "Sudadera deportiva",
+  "prenda": "Scene",
   "original": {
-   "triangulos": 826702,
-   "bytes": 19982032
+   "triangulos": 175864,
+   "bytes": 4085980
   },
   "alto": {
-   "triangulos": 206676,
-   "bytes": 1177660
+   "triangulos": 96724,
+   "bytes": 600836
   },
   "lod": {
-   "triangulos": 29128,
-   "bytes": 213396
+   "triangulos": 19994,
+   "bytes": 153884
   }
  }
 ]

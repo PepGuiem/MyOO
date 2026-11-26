@@ -14,7 +14,7 @@
     "models:casual": "node scripts/prepare-garments.mjs ../prendas_casual_glb public/models/prendas/casual",
     "models:street": "node scripts/prepare-garments.mjs ../prendas_street_glb public/models/prendas/street",
     "models:camisetas": "node scripts/prepare-garments.mjs ../prendas_street_glb/camisetas public/models/prendas/camisetas 20000 0.25",
-    "models:sudaderas": "node scripts/prepare-garments.mjs ../prendas_street_glb/sudaderas public/models/prendas/sudaderas 20000 0.25",
+    "models:sudaderas": "node scripts/prepare-garments.mjs ../prendas_street_glb/sudaderas_v2/glb public/models/prendas/sudaderas 20000",
     "models:camisas": "node scripts/prepare-garments.mjs ../prendas_street_glb/camisas public/models/prendas/camisas 20000 0.25",
     "models:jerseis": "node scripts/prepare-garments.mjs ../prendas_street_glb/jerseis public/models/prendas/jerseis 20000 0.25",
     "models:chaquetas": "node scripts/prepare-garments.mjs ../prendas_street_glb/chaquetas public/models/prendas/chaquetas 20000 0.25",
