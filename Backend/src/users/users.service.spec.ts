@@ -50,6 +50,7 @@ function setup(
     storage as any,
     {} as any,
     oauth as any,
+    { cancelForDeletedUser: async () => undefined } as any,
   );
   return { service, calls };
 }

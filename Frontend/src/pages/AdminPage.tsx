@@ -33,14 +33,16 @@ import {
 import { NoMatch } from '../components/street/EmptyStage';
 import { SectionHead } from '../components/street/SectionHead';
 import { CountUp } from '../components/street/Street';
+import { AdminBilling } from './AdminBilling';
 import { IdeaBoard } from './IdeasPage';
 import { ReleaseBody } from './ReleasesPage';
-import { t, tn } from '../i18n';
+import { LOCALE_TAG, t, tn } from '../i18n';
 
-type Tab = 'resumen' | 'usuarios' | 'ideas' | 'denuncias' | 'novedades' | 'registro';
+type Tab = 'resumen' | 'usuarios' | 'pagos' | 'ideas' | 'denuncias' | 'novedades' | 'registro';
 const TABS: { key: Tab; label: string }[] = [
   { key: 'resumen', label: t('Resumen') },
   { key: 'usuarios', label: t('Usuarios') },
+  { key: 'pagos', label: t('Pagos') },
   { key: 'ideas', label: t('Ideas') },
   { key: 'denuncias', label: t('Denuncias') },
   { key: 'novedades', label: t('Novedades') },
@@ -68,7 +70,7 @@ export function AdminPage() {
           <h1 className="wd-title ux-title" data-text={t('Admin')}>
             {t('Admin')}
           </h1>
-          <p className="ux-lede">{t('Usuarios, ideas, denuncias y novedades. Todo lo que hagas aquí queda en el registro.')}</p>
+          <p className="ux-lede">{t('Usuarios, pagos, ideas, denuncias y novedades. Todo lo que hagas aquí queda en el registro.')}</p>
         </div>
         <div className="wd-head-actions">
           <Link to="/monitor" className="btn wd-btn-line">
@@ -87,6 +89,7 @@ export function AdminPage() {
         <SectionHead n={TABS.findIndex((x) => x.key === tab) + 1} title={TABS.find((x) => x.key === tab)!.label} />
         {tab === 'resumen' && <Overview go={go} />}
         {tab === 'usuarios' && <Users />}
+        {tab === 'pagos' && <AdminBilling />}
         {tab === 'ideas' && <IdeaBoard defaultSort="new" defaultStatus="NEW" numbered={false} />}
         {tab === 'denuncias' && <Reports />}
         {tab === 'novedades' && <Releases />}
@@ -841,7 +844,15 @@ const ACTION_LABEL: Record<string, string> = {
   'release.publish': t('publicó la novedad'),
   'release.unpublish': t('retiró la novedad'),
   'release.delete': t('borró la novedad'),
+  'billing.assign_plan': t('asignó un plan a'),
+  'billing.gift_months': t('regaló meses a'),
+  'billing.cancel': t('canceló la suscripción de'),
+  'billing.refund': t('reembolsó un pago de'),
+  'billing.update_plan': t('editó el plan'),
 };
+
+/** Acciones sin cuenta afectada (no se pone «a <cuenta>» detrás). */
+const NO_TARGET = (action: string) => action.startsWith('release.') || action === 'billing.update_plan';
 
 function actionDetail(a: AdminAction): string {
   const d = a.details ?? {};
@@ -851,6 +862,13 @@ function actionDetail(a: AdminAction): string {
   if (a.action === 'idea.update' && typeof d.status === 'string') return t('Estado: {v}', { v: IDEA_STATUS_LABEL[d.status as keyof typeof IDEA_STATUS_LABEL] ?? d.status });
   if (a.action === 'report.update' && typeof d.status === 'string') return REPORT_STATUS_LABEL[d.status as ReportStatus] ?? '';
   if (a.action.startsWith('outfit.') || a.action === 'idea.delete') return str('name') ?? str('title') ?? '';
+  if (a.action === 'billing.assign_plan')
+    return [str('plan'), typeof d.months === 'number' ? t('{n} meses', { n: d.months }) : t('sin fecha de fin')].filter(Boolean).join(' · ');
+  if (a.action === 'billing.gift_months' && typeof d.months === 'number') return t('{n} meses', { n: d.months });
+  if (a.action === 'billing.cancel') return d.immediate ? t('al momento') : t('al final del periodo');
+  if (a.action === 'billing.refund' && typeof d.amountCents === 'number')
+    return new Intl.NumberFormat(LOCALE_TAG, { style: 'currency', currency: 'EUR' }).format(d.amountCents / 100);
+  if (a.action === 'billing.update_plan') return str('code') ?? '';
   return '';
 }
 
@@ -866,7 +884,7 @@ function ActionList({ actions }: { actions: AdminAction[] }) {
             </time>
             <span>
               <strong>{a.admin ? personName(a.admin) : t('Un admin')}</strong> {ACTION_LABEL[a.action] ?? a.action}
-              {!a.action.startsWith('release.') &&
+              {!NO_TARGET(a.action) &&
                 (a.targetUser === undefined ? (
                   t(' esta cuenta')
                 ) : (
@@ -875,7 +893,7 @@ function ActionList({ actions }: { actions: AdminAction[] }) {
                     <strong>{a.targetUser ? personName(a.targetUser) : t('una cuenta eliminada')}</strong>
                   </>
                 ))}
-              {detail && (a.action.startsWith('release.') ? <> {detail}</> : <span className="muted"> · {detail}</span>)}
+              {detail && (NO_TARGET(a.action) ? <> {detail}</> : <span className="muted"> · {detail}</span>)}
             </span>
           </li>
         );

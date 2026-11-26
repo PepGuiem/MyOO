@@ -139,6 +139,21 @@ export class EnvironmentVariables {
     message: 'TOKEN_ENCRYPTION_KEY must be 32 bytes in base64 (44 characters)',
   })
   TOKEN_ENCRYPTION_KEY?: string;
+
+  // --- Pagos con Stripe (SOLO modo prueba) -----------------------------------
+  // Sin STRIPE_SECRET_KEY los pagos están apagados (la web lo indica). Una
+  // clave real (sk_live_) o mal copiada NO tumba la app: BillingConfig la
+  // ignora y el panel de admin avisa (AGENTS.md no permite cobros reales).
+
+  /** Clave secreta de prueba (sk_test_… o restringida rk_test_…). */
+  @IsOptional()
+  @IsString()
+  STRIPE_SECRET_KEY?: string;
+
+  /** Secreto de firma del webhook (whsec_…), del endpoint /api/billing/webhook. */
+  @IsOptional()
+  @IsString()
+  STRIPE_WEBHOOK_SECRET?: string;
 }
 
 export function validateEnv(

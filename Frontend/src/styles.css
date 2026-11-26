@@ -33602,3 +33602,164 @@ html[data-density='compact'] .nx .nx-link {
     display: none;
   }
 }
+
+/* ---------------------------------------------------------------- pagos (Stripe, modo prueba) */
+.billing-now {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
+.billing-now p {
+  margin: 0;
+  flex: 1 1 200px;
+}
+
+.billing-now .btn {
+  min-height: 44px;
+}
+
+.billing-now.is-warning {
+  border-color: rgba(217, 138, 126, 0.5);
+  color: var(--danger);
+}
+
+.billing-test {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 6px;
+  max-width: 640px;
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+  text-align: left;
+}
+
+.billing-period {
+  margin-top: 4px;
+}
+
+.billing-period button {
+  min-height: 44px;
+}
+
+.plans-note.is-info {
+  color: var(--muted);
+}
+
+.plan-save {
+  margin: -6px 0 0;
+  font-size: 0.8rem;
+  color: var(--ok);
+}
+
+.table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.status-paid {
+  color: var(--ok);
+  border-color: rgba(169, 194, 164, 0.4);
+}
+
+.status-failed {
+  color: var(--danger);
+  border-color: rgba(217, 138, 126, 0.45);
+}
+
+.status-partially_refunded,
+.status-refunded {
+  color: var(--muted);
+}
+
+/* Admin · pagos */
+.admin-billing .admin-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.admin-billing .billing-now {
+  justify-content: flex-start;
+}
+
+.admin-pill.is-ok {
+  color: var(--ok);
+  border-color: rgba(169, 194, 164, 0.4);
+}
+
+.link-button {
+  font: inherit;
+  color: var(--text);
+  background: none;
+  border: 0;
+  padding: 0;
+  min-height: 44px;
+  text-align: left;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.admin-payments td {
+  vertical-align: top;
+}
+
+.refund-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 200px;
+}
+
+.refund-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.plan-editors {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+  gap: 12px;
+}
+
+.plan-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+
+.plan-editor-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.plan-editor-prices {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.plan-editor .actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}

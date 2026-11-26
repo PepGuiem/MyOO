@@ -9,7 +9,8 @@ import { AppModule } from './app.module';
 import { setupApp } from './app.setup';
 
 async function bootstrap(): Promise<void> {
-  const app = await NestFactory.create(AppModule);
+  // rawBody: el webhook de Stripe comprueba la firma sobre el cuerpo exacto.
+  const app = await NestFactory.create(AppModule, { rawBody: true });
   setupApp(app);
 
   const config = app.get(ConfigService);

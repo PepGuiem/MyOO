@@ -63,6 +63,15 @@ import type {
   StylistResult,
   StylistSignal,
   Subscription,
+  AdminBillingSummary,
+  AdminBillingUser,
+  AdminPayment,
+  AdminPlan,
+  AdminPlanInput,
+  BillingConfig,
+  BillingInterval,
+  MyBilling,
+  PaymentStatus,
   User,
   AdminAction,
   AdminReport,
@@ -145,6 +154,19 @@ export const subscriptionsApi = {
   history: () => api<Subscription[]>('GET', '/subscriptions'),
   changePlan: (planCode: string) =>
     api<Subscription>('POST', '/subscriptions/change-plan', { body: { planCode } }),
+};
+
+/** Pagos con Stripe (modo prueba): la tarjeta se escribe en Stripe, nunca aquí. */
+export const billingApi = {
+  config: () => api<BillingConfig>('GET', '/billing/config'),
+  me: () => api<MyBilling>('GET', '/billing/me'),
+  checkout: (planCode: string, interval: BillingInterval) =>
+    api<{ url: string }>('POST', '/billing/checkout', { body: { planCode, interval } }),
+  confirm: (sessionId: string) => api<MyBilling>('POST', '/billing/checkout/confirm', { body: { sessionId } }),
+  change: (planCode: string, interval: BillingInterval) =>
+    api<MyBilling>('POST', '/billing/change', { body: { planCode, interval } }),
+  cancel: () => api<MyBilling>('POST', '/billing/cancel'),
+  resume: () => api<MyBilling>('POST', '/billing/resume'),
 };
 
 export const garmentTypesApi = {
@@ -445,6 +467,20 @@ export const adminApi = {
   unpublishRelease: (id: string) => api<Release>('POST', `/admin/releases/${id}/unpublish`),
   deleteRelease: (id: string) => api<void>('DELETE', `/admin/releases/${id}`),
   actions: (page = 1) => api<Paginated<AdminAction>>('GET', '/admin/actions', { query: { page } }),
+  billingSummary: () => api<AdminBillingSummary>('GET', '/admin/billing/summary'),
+  payments: (q: { status?: PaymentStatus; search?: string; page?: number }) =>
+    api<Paginated<AdminPayment>>('GET', '/admin/billing/payments', { query: q }),
+  refund: (id: string, amountCents?: number) =>
+    api<AdminPayment>('POST', `/admin/billing/payments/${id}/refund`, { body: amountCents ? { amountCents } : {} }),
+  billingUser: (id: string) => api<AdminBillingUser>('GET', `/admin/billing/users/${id}`),
+  assignPlan: (id: string, planCode: string, months?: number) =>
+    api<AdminBillingUser>('POST', `/admin/billing/users/${id}/plan`, { body: { planCode, ...(months ? { months } : {}) } }),
+  giftMonths: (id: string, months: number) =>
+    api<AdminBillingUser>('POST', `/admin/billing/users/${id}/gift`, { body: { months } }),
+  cancelSubscription: (id: string, immediate: boolean) =>
+    api<AdminBillingUser>('POST', `/admin/billing/subscriptions/${id}/cancel`, { body: { immediate } }),
+  plans: () => api<AdminPlan[]>('GET', '/admin/billing/plans'),
+  updatePlan: (id: string, body: AdminPlanInput) => api<AdminPlan[]>('PATCH', `/admin/billing/plans/${id}`, { body }),
 };
 
 /** Monitor (solo admins). */

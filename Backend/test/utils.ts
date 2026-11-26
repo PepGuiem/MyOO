@@ -34,7 +34,9 @@ export async function createTestApp(): Promise<TestContext> {
     imports: [AppModule],
   }).compile();
 
-  const app = moduleRef.createNestApplication<INestApplication<App>>();
+  const app = moduleRef.createNestApplication<INestApplication<App>>({
+    rawBody: true,
+  });
   setupApp(app);
   // listen(0) = puerto libre aleatorio. Necesario para peticiones simultáneas.
   await app.listen(0);
@@ -77,6 +79,8 @@ export async function resetDatabase(prisma: PrismaService): Promise<void> {
   await prisma.wardrobeItem.deleteMany();
   await prisma.asset.deleteMany();
   await prisma.wardrobe.deleteMany();
+  await prisma.payment.deleteMany();
+  await prisma.stripeEvent.deleteMany();
   await prisma.subscription.deleteMany();
   await prisma.user.deleteMany();
 }

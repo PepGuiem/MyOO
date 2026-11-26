@@ -1,7 +1,7 @@
 import { useEffect, useState, type CSSProperties, type FormEvent } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { plansApi, subscriptionsApi, usersApi } from '../api/endpoints';
-import type { LimitedResource, Plan, ProviderSlug, UsageEntry, User } from '../api/types';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { billingApi, plansApi, subscriptionsApi, usersApi } from '../api/endpoints';
+import type { BillingInterval, LimitedResource, Payment, Plan, ProviderSlug, UsageEntry, User } from '../api/types';
 import { useAuth } from '../auth/AuthContext';
 import { ErrorNote } from '../components/ErrorNote';
 import { Icon, type IconName } from '../components/Icon';
@@ -28,11 +28,36 @@ const ONE: Record<LimitedResource, string> = { WARDROBE_ITEMS: t('prenda'), WARD
 /** Lo que incluyen todos los planes (funciones de la app, sin límites). */
 const INCLUDED = [t('Visor 3D de cada prenda'), t('Personalización de colores, piezas y detalles'), t('Maniquíes genéricos de hombre y de mujer')];
 
-function priceParts(plan: Plan): { amount: string; period: string | null } {
-  if (plan.priceCents === 0) return { amount: '0 €', period: t('para siempre') };
-  const amount = new Intl.NumberFormat(LOCALE_TAG, { style: 'currency', currency: plan.currency }).format(plan.priceCents / 100);
-  return { amount, period: t('al mes') };
+function money(cents: number, currency = 'EUR'): string {
+  return new Intl.NumberFormat(LOCALE_TAG, { style: 'currency', currency }).format(cents / 100);
 }
+
+/** Precio de un plan para el periodo elegido (con lo que se ahorra al año). */
+function priceParts(plan: Plan, interval: BillingInterval = 'MONTH'): { amount: string; period: string | null; note: string | null } {
+  if (plan.priceCents === 0) return { amount: '0 €', period: t('para siempre'), note: null };
+  if (interval === 'YEAR') {
+    if (!plan.annualPriceCents) return { amount: money(plan.priceCents, plan.currency), period: t('al mes'), note: t('Solo pago mensual') };
+    const save = plan.priceCents * 12 - plan.annualPriceCents;
+    return {
+      amount: money(plan.annualPriceCents, plan.currency),
+      period: t('al año'),
+      note: save > 0 ? t('Ahorras {amount} al año', { amount: money(save, plan.currency) }) : null,
+    };
+  }
+  return { amount: money(plan.priceCents, plan.currency), period: t('al mes'), note: null };
+}
+
+/** Coste mensual equivalente (para saber si un cambio sube o baja). */
+function monthly(plan: Plan, interval: BillingInterval): number {
+  return interval === 'YEAR' && plan.annualPriceCents ? plan.annualPriceCents / 12 : plan.priceCents;
+}
+
+const PAYMENT_STATUS: Record<Payment['status'], string> = {
+  PAID: t('Pagado'),
+  FAILED: t('Fallido'),
+  PARTIALLY_REFUNDED: t('Reembolso parcial'),
+  REFUNDED: t('Reembolsado'),
+};
 
 function limitText(plan: Plan, resource: LimitedResource): string {
   const l = plan.limits.find((x) => x.resource === resource);
@@ -59,10 +84,16 @@ export function AccountPage() {
   const mine = useAsync(() => plansApi.mine(), []);
   const plans = useAsync(() => plansApi.list(), []);
   const history = useAsync(() => subscriptionsApi.history(), []);
+  const billing = useAsync(() => billingApi.me(), []);
+  const navigate = useNavigate();
 
   const [error, setError] = useState<unknown>(null);
   const [changing, setChanging] = useState<string | null>(null);
   const [changedTo, setChangedTo] = useState<string | null>(null);
+  // Pagos (Stripe, modo prueba): periodo elegido, aviso y confirmación en dos pasos.
+  const [cycle, setCycle] = useState<BillingInterval>('MONTH');
+  const [note, setNote] = useState<{ ok: boolean; text: string } | null>(null);
+  const [confirming, setConfirming] = useState<string | null>(null);
   const [deleting, setDeleting] = useState(false);
   const [exporting, setExporting] = useState(false);
   const [exportError, setExportError] = useState<unknown>(null);
@@ -103,6 +134,99 @@ export function AccountPage() {
     }
   }, [back.oauth]);
 
+  const cfg = billing.data?.config;
+  const sub = billing.data?.subscription ?? null;
+  const paying = sub?.source === 'STRIPE' ? sub : null;
+  const payments = billing.data?.payments ?? [];
+
+  useEffect(() => {
+    if (paying?.interval) setCycle(paying.interval);
+  }, [paying?.interval]);
+
+  // Vuelta de Stripe Checkout (?checkout=success&session_id=… o ?checkout=cancel).
+  useEffect(() => {
+    const q = new URLSearchParams(location.search);
+    const result = q.get('checkout');
+    if (!result) return;
+    const sessionId = q.get('session_id');
+    navigate('/account', { replace: true, state: location.state });
+    if (result !== 'success' || !sessionId) {
+      setNote({ ok: false, text: t('Pago cancelado: no se ha cobrado nada.') });
+      return;
+    }
+    setNote({ ok: false, text: t('Confirmando el pago…') });
+    billingApi
+      .confirm(sessionId)
+      .then(async (b) => {
+        billing.setData(b);
+        await Promise.all([mine.reload(), history.reload()]);
+        setNote({ ok: true, text: t('Pago completado. Ya estás en {plan}.', { plan: b.subscription?.plan.name ?? '' }) });
+      })
+      .catch((err: unknown) => {
+        setNote(null);
+        setError(err);
+      });
+    // Solo al entrar en la página.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  async function refreshAll(b?: Awaited<ReturnType<typeof billingApi.me>>) {
+    if (b) billing.setData(b);
+    await Promise.all([mine.reload(), history.reload(), b ? Promise.resolve() : billing.reload()]);
+  }
+
+  /** Elegir un plan: con Stripe, pagar o cambiar; sin Stripe, el cambio simulado. */
+  async function choose(plan: Plan) {
+    setError(null);
+    setNote(null);
+    setChangedTo(null);
+    if (!cfg?.enabled) return changePlan(plan);
+    if (paying && confirming !== plan.code) {
+      setConfirming(plan.code);
+      return;
+    }
+    setConfirming(null);
+    setChanging(plan.code);
+    try {
+      if (!paying) {
+        const { url } = await billingApi.checkout(plan.code, cycle);
+        window.location.assign(url);
+        return;
+      }
+      const b = plan.isDefault ? await billingApi.cancel() : await billingApi.change(plan.code, cycle);
+      await refreshAll(b);
+      setNote({
+        ok: true,
+        text:
+          plan.isDefault && b.subscription?.endsAt
+            ? t('Suscripción cancelada: mantienes {plan} hasta el {date}.', { plan: b.subscription.plan.name, date: formatDate(b.subscription.endsAt) })
+            : t('Ahora estás en {changedTo}.', { changedTo: plan.name }),
+      });
+    } catch (err) {
+      setError(err);
+    }
+    setChanging(null);
+  }
+
+  async function cancelOrResume(resume: boolean) {
+    setError(null);
+    setNote(null);
+    if (!resume && confirming !== '__cancel') {
+      setConfirming('__cancel');
+      return;
+    }
+    setConfirming(null);
+    setChanging('__cancel');
+    try {
+      const b = resume ? await billingApi.resume() : await billingApi.cancel();
+      await refreshAll(b);
+      setNote({ ok: true, text: resume ? t('Suscripción reanudada: se renovará con normalidad.') : t('Suscripción cancelada: no se renovará.') });
+    } catch (err) {
+      setError(err);
+    }
+    setChanging(null);
+  }
+
   async function changePlan(plan: Plan) {
     setChanging(plan.code);
     setChangedTo(null);
@@ -121,7 +245,9 @@ export function AccountPage() {
   const current = mine.data?.plan;
   const name = user?.displayName?.trim() || user?.email?.split('@')[0] || '';
   const initial = (name || '?').charAt(0).toUpperCase();
-  const currentPrice = current ? priceParts(current) : null;
+  const currentPrice = current ? priceParts(current, paying?.interval ?? 'MONTH') : null;
+  const showInterval: BillingInterval = cfg?.enabled ? cycle : 'MONTH';
+  const busy = changing !== null;
 
   return (
     <section className="page account ux ac">
@@ -169,7 +295,7 @@ export function AccountPage() {
         </ul>
       )}
 
-      <ErrorNote error={error ?? mine.error ?? plans.error} />
+      <ErrorNote error={error ?? mine.error ?? plans.error ?? billing.error} />
 
       <SectionHead n={1} title={t('Tu cuenta')} />
       <div className="account-grid">
@@ -186,6 +312,47 @@ export function AccountPage() {
               </p>
             )}
           </div>
+          {paying && (
+            <div className={`billing-now${paying.stripeStatus === 'past_due' ? ' is-warning' : ''}`}>
+              <p>
+                {paying.cancelAtPeriodEnd && paying.endsAt
+                  ? t('Cancelada: mantienes el plan hasta el {date}.', { date: formatDate(paying.endsAt) })
+                  : paying.stripeStatus === 'past_due'
+                    ? t('No se pudo cobrar la renovación. Stripe lo reintentará en los próximos días.')
+                    : paying.stripeStatus === 'trialing' && paying.currentPeriodEnd
+                      ? t('Meses regalados: no se cobra nada hasta el {date}.', { date: formatDate(paying.currentPeriodEnd) })
+                      : paying.currentPeriodEnd
+                        ? t('Pago {period}. Se renueva el {date}.', {
+                            period: paying.interval === 'YEAR' ? t('anual') : t('mensual'),
+                            date: formatDate(paying.currentPeriodEnd),
+                          })
+                        : t('Suscripción activa.')}
+              </p>
+              {!isNative && (
+                <button
+                  type="button"
+                  className="btn wd-btn-line"
+                  disabled={busy}
+                  onClick={() => void cancelOrResume(paying.cancelAtPeriodEnd)}
+                >
+                  {changing === '__cancel'
+                    ? t('Un momento…')
+                    : paying.cancelAtPeriodEnd
+                      ? t('Reanudar suscripción')
+                      : confirming === '__cancel'
+                        ? t('Confirmar: no se renovará')
+                        : t('Cancelar suscripción')}
+                </button>
+              )}
+            </div>
+          )}
+          {sub?.source === 'ADMIN' && (
+            <p className="billing-now">
+              {sub.endsAt
+                ? t('Plan regalado por el equipo de MyOO hasta el {date}.', { date: formatDate(sub.endsAt) })
+                : t('Plan regalado por el equipo de MyOO.')}
+            </p>
+          )}
           <div className="usage-list">
             {mine.data?.usage.map((u) => <UsageBar key={u.resource} entry={u} />)}
           </div>
@@ -251,20 +418,61 @@ export function AccountPage() {
       <section className="plans-section" aria-labelledby="plans-title">
         <div className="plans-intro">
           <SectionHead n={2} id="plans-title" title={t('Elige tu plan')} />
-          <p className="muted">{t('Cambia cuando quieras. El cambio es simulado: no se realiza ningún cobro.')}</p>
+          {cfg?.enabled ? (
+            <>
+              <p className="muted">{t('Paga al mes o al año y cancela cuando quieras. El pago se hace en Stripe: tu tarjeta nunca pasa por MyOO.')}</p>
+              <p className="note billing-test" role="note">
+                <Icon name="bulb" size={14} />{' '}
+                {t('Modo de prueba: no se cobra dinero real. Paga con la tarjeta 4242 4242 4242 4242, cualquier fecha futura y cualquier CVC.')}
+              </p>
+              <div className="segmented segmented-tabs billing-period" role="group" aria-label={t('Periodo de pago')}>
+                {(['MONTH', 'YEAR'] as const).map((iv) => (
+                  <button key={iv} type="button" aria-pressed={cycle === iv} onClick={() => { setCycle(iv); setConfirming(null); }}>
+                    {iv === 'MONTH' ? t('Mensual') : t('Anual (2 meses gratis)')}
+                  </button>
+                ))}
+              </div>
+            </>
+          ) : (
+            <p className="muted">
+              {cfg && !cfg.simulated
+                ? t('Los pagos todavía no están disponibles.')
+                : t('Cambia cuando quieras. El cambio es simulado: no se realiza ningún cobro.')}
+            </p>
+          )}
           {changedTo && (
             <p className="note plans-note" role="status">
               <Icon name="check" size={14} /> {t('Ahora estás en {changedTo}.', { changedTo })}
+            </p>
+          )}
+          {note && (
+            <p className={`note plans-note${note.ok ? '' : ' is-info'}`} role="status">
+              <Icon name={note.ok ? 'check' : 'bulb'} size={14} /> {note.text}
             </p>
           )}
         </div>
 
         <div className="plans">
           {plans.data?.map((plan) => {
-            const isCurrent = plan.id === current?.id;
+            const isCurrent = paying
+              ? plan.id === paying.plan.id && (paying.interval ?? 'MONTH') === showInterval
+              : plan.id === current?.id;
+            const samePlan = paying ? plan.id === paying.plan.id : false;
             const recommended = plan.code === RECOMMENDED;
-            const upgrade = current ? plan.priceCents > current.priceCents : true;
-            const { amount, period } = priceParts(plan);
+            const upgrade = current ? monthly(plan, showInterval) > monthly(current, paying?.interval ?? 'MONTH') : true;
+            const { amount, period, note: priceNote } = priceParts(plan, showInterval);
+            const noAnnual = !!cfg?.enabled && !plan.isDefault && showInterval === 'YEAR' && !plan.annualPriceCents;
+            const freeBlocked = !!cfg?.enabled && plan.isDefault && (!paying || paying.cancelAtPeriodEnd);
+            const off = !cfg || (!cfg.enabled && !cfg.simulated);
+            let label: string;
+            if (changing === plan.code) label = cfg?.enabled && !paying ? t('Abriendo el pago…') : t('Cambiando…');
+            else if (confirming === plan.code)
+              label = plan.isDefault ? t('Confirmar: no se renovará') : t('Confirmar: se cobra o abona la diferencia');
+            else if (plan.isDefault && cfg?.enabled)
+              label = paying?.cancelAtPeriodEnd && paying.endsAt ? t('Desde el {date}', { date: formatDate(paying.endsAt) }) : paying ? t('Cancelar y pasar a {name}', { name: plan.name }) : t('Plan gratuito');
+            else if (samePlan) label = showInterval === 'YEAR' ? t('Pagar al año') : t('Pagar al mes');
+            else if (cfg?.enabled && !paying) label = t('Suscribirme a {name}', { name: plan.name });
+            else label = upgrade ? t('Pasar a {name}', { name: plan.name }) : t('Bajar a {name}', { name: plan.name });
             return (
               <article key={plan.id} className={`plan${isCurrent ? ' is-current' : ''}${recommended ? ' is-recommended' : ''}`}>
                 {(recommended || isCurrent) && <span className="plan-badge">{isCurrent ? t('Tu plan') : t('Recomendado')}</span>}
@@ -274,6 +482,7 @@ export function AccountPage() {
                   {amount}
                   {period && <span className="plan-period">{period}</span>}
                 </p>
+                {priceNote && <p className="plan-save">{priceNote}</p>}
                 <ul className="plan-limits">
                   {RESOURCES.map((r) => (
                     <li key={r}>
@@ -290,11 +499,11 @@ export function AccountPage() {
                   ) : (
                     <button
                       type="button"
-                      className={`btn btn-block${upgrade && recommended ? ' wd-add' : ' wd-btn-line'}`}
-                      disabled={changing !== null || !current}
-                      onClick={() => changePlan(plan)}
+                      className={`btn btn-block${upgrade && recommended && !plan.isDefault ? ' wd-add' : ' wd-btn-line'}`}
+                      disabled={busy || !current || off || noAnnual || freeBlocked}
+                      onClick={() => void choose(plan)}
                     >
-                      {changing === plan.code ? t('Cambiando…') : upgrade ? t('Pasar a {name}', { name: plan.name }) : t('Bajar a {name}', { name: plan.name })}
+                      {label}
                     </button>
                   )}
                 </div>
@@ -347,9 +556,49 @@ export function AccountPage() {
         )}
       </section>
 
+      <section className="panel history" aria-labelledby="payments-title">
+        <SectionHead n={isNative ? 3 : 4} id="payments-title" title={t('Pagos')} />
+        {payments.length > 0 ? (
+          <div className="table-scroll">
+            <table className="table">
+              <thead>
+                <tr>
+                  <th scope="col">{t('Fecha')}</th>
+                  <th scope="col">{t('Plan')}</th>
+                  <th scope="col">{t('Importe')}</th>
+                  <th scope="col">{t('Estado')}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {payments.map((p) => (
+                  <tr key={p.id}>
+                    <td>{formatDate(p.paidAt ?? p.createdAt)}</td>
+                    <td>
+                      {p.plan?.name ?? '—'}
+                      {p.interval && <span className="muted small"> · {p.interval === 'YEAR' ? t('anual') : t('mensual')}</span>}
+                    </td>
+                    <td>
+                      {money(p.amountCents, p.currency)}
+                      {p.refundedCents > 0 && (
+                        <span className="muted small"> · {t('{amount} devuelto', { amount: money(p.refundedCents, p.currency) })}</span>
+                      )}
+                    </td>
+                    <td>
+                      <span className={`status status-${p.status.toLowerCase()}`}>{PAYMENT_STATUS[p.status]}</span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <p className="muted">{t('Todavía no hay pagos.')}</p>
+        )}
+      </section>
+
       <section className="panel danger-zone" aria-labelledby="delete-title">
         <div>
-          <SectionHead n={isNative ? 3 : 4} id="delete-title" title={t('Eliminar la cuenta')} />
+          <SectionHead n={isNative ? 4 : 5} id="delete-title" title={t('Eliminar la cuenta')} />
           <p className="muted">
             {t('Se borran para siempre tu cuenta, tus armarios, prendas, outfits e imágenes. No se puede deshacer.')}
           </p>

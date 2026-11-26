@@ -28,6 +28,8 @@ interface PlanSeed {
   name: string;
   description: string;
   priceCents: number;
+  /** Precio anual (0 = sin pago anual). Por defecto, 10 mensualidades. */
+  annualPriceCents: number;
   isDefault: boolean;
   limits: Record<LimitedResource, { isUnlimited: boolean; maxCount: number }>;
 }
@@ -38,6 +40,7 @@ export const PLAN_SEEDS: PlanSeed[] = [
     name: 'Free',
     description: 'Para empezar: tu armario básico y tus primeros outfits.',
     priceCents: 0,
+    annualPriceCents: 0,
     isDefault: true,
     limits: {
       WARDROBES: { isUnlimited: false, maxCount: 2 },
@@ -51,6 +54,7 @@ export const PLAN_SEEDS: PlanSeed[] = [
     name: 'Básico',
     description: 'Todo tu armario del día a día, con sitio de sobra.',
     priceCents: 199,
+    annualPriceCents: 1990,
     isDefault: false,
     limits: {
       WARDROBES: { isUnlimited: false, maxCount: 3 },
@@ -65,6 +69,7 @@ export const PLAN_SEEDS: PlanSeed[] = [
     description:
       'Varias temporadas, maletas de viaje, muchos looks y maniquíes para toda la familia.',
     priceCents: 349,
+    annualPriceCents: 3490,
     isDefault: false,
     limits: {
       WARDROBES: { isUnlimited: false, maxCount: 8 },
@@ -79,6 +84,7 @@ export const PLAN_SEEDS: PlanSeed[] = [
     description:
       'Sin límites: armarios, prendas, outfits y maniquíes ilimitados.',
     priceCents: 499,
+    annualPriceCents: 4990,
     isDefault: false,
     limits: {
       WARDROBES: { isUnlimited: true, maxCount: 0 },
@@ -98,21 +104,24 @@ export { GARMENT_TYPE_SEEDS };
 /** Planes, límites y tipos de prenda. Seguro de ejecutar muchas veces. */
 export async function seedReferenceData(prisma: PrismaClient): Promise<void> {
   for (const p of PLAN_SEEDS) {
+    // Si un admin editó el plan desde la web (customizedAt), el seed respeta
+    // su nombre, descripción y precios; solo se asegura del plan por defecto.
+    const existing = await prisma.plan.findUnique({
+      where: { code: p.code },
+      select: { customizedAt: true },
+    });
+    const content = {
+      name: p.name,
+      description: p.description,
+      priceCents: p.priceCents,
+      annualPriceCents: p.annualPriceCents,
+    };
     const plan = await prisma.plan.upsert({
       where: { code: p.code },
-      create: {
-        code: p.code,
-        name: p.name,
-        description: p.description,
-        priceCents: p.priceCents,
-        isDefault: p.isDefault,
-      },
-      update: {
-        name: p.name,
-        description: p.description,
-        priceCents: p.priceCents,
-        isDefault: p.isDefault,
-      },
+      create: { code: p.code, ...content, isDefault: p.isDefault },
+      update: existing?.customizedAt
+        ? { isDefault: p.isDefault }
+        : { ...content, isDefault: p.isDefault },
     });
 
     for (const resource of Object.values(LimitedResource)) {

@@ -30,6 +30,7 @@ export async function exportUserData(prisma: PrismaClient, userId: string): Prom
       where: { id: userId },
       include: {
         subscriptions: { include: { plan: { select: { code: true, name: true } } } },
+        payments: { include: { plan: { select: { code: true, name: true } } } },
         wardrobes: true,
         wardrobeItems: true,
         outfits: true,

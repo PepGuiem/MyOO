@@ -593,6 +593,23 @@ npm run test:e2e       # incluye test/sneakers.e2e-spec.ts
 - `gain` cuenta combinaciones con tus prendas: (arriba × abajo + vestidos) × calzado × (abrigos + 1). Es un recuento, no mira colores ni estilos. Para accesorios es `null`.
 - `stats.combinations`: combinaciones posibles hoy.
 
+## Pagos de suscripciones (Stripe, modo prueba) (`/api/billing`)
+
+- Los planes de pago se pagan **al mes o al año** con **Stripe Checkout**: la tarjeta se escribe en la página de Stripe y nunca pasa por MyOO; solo guardamos importes y referencias de Stripe (`Payment`).
+- **Solo modo prueba** (AGENTS.md): `STRIPE_SECRET_KEY` debe ser `sk_test_…`/`rk_test_…`. Una clave real o mal copiada no tumba la app: los pagos quedan apagados y el panel de admin lo avisa. Sin clave se mantiene el cambio de plan simulado (`ALLOW_SIMULATED_PLAN_CHANGE`).
+- Sin SDK: `src/billing/stripe.client.ts` llama a la API REST con `fetch` y una versión fija (`2024-06-20`) y comprueba la firma del webhook con HMAC-SHA256.
+- **Webhook** `POST /api/billing/webhook` (firmado con `STRIPE_WEBHOOK_SECRET`): no se fía del contenido del evento, vuelve a pedir el objeto a Stripe y sincroniza. Eventos: `checkout.session.completed`, `customer.subscription.created/updated/deleted`, `invoice.paid`, `invoice.payment_failed`, `charge.refunded`. Cada evento se procesa una vez (`StripeEvent`).
+- Al volver de Checkout la web llama a `POST /api/billing/checkout/confirm`, que hace la misma sincronización (funciona aunque el webhook tarde).
+- Usuario: `GET /billing/me`, `POST /billing/checkout {planCode, interval}`, `POST /billing/change` (cambio prorrateado; al plan gratis = cancelar al final del periodo), `POST /billing/cancel`, `POST /billing/resume`. Al borrar la cuenta se cancela su suscripción en Stripe (si Stripe no responde, no se borra).
+- Admin (`/api/admin/billing/*`): resumen (ingresos del mes, reembolsos, fallidos, activas por plan), pagos con reembolso total o parcial, ficha de una cuenta (asignar un plan sin cobro, regalar meses —en Stripe, periodo de prueba hasta esa fecha—, cancelar al final del periodo o ya) y editar nombre, descripción, precios y si se ofrece cada plan. Un plan editado desde la web (`customizedAt`) ya no lo pisa el seed. Todo queda en `AdminAction`.
+
+### Configurarlo (una vez)
+
+1. Crea una cuenta en Stripe y quédate en **modo de prueba**. En *Developers → API keys* copia la *Secret key* (`sk_test_…`).
+2. En *Developers → Webhooks* añade el endpoint `https://myout.vercel.app/api/billing/webhook` con los eventos de arriba y copia su *Signing secret* (`whsec_…`).
+3. En Vercel (proyecto, *Settings → Environment Variables*, Production) añade `STRIPE_SECRET_KEY` y `STRIPE_WEBHOOK_SECRET` y vuelve a desplegar.
+4. Prueba con la tarjeta `4242 4242 4242 4242`, cualquier fecha futura y cualquier CVC (`4000 0000 0000 0341` para un pago que falla).
+
 ## Despliegue en Vercel (servicios)
 
 `vercel.json` (en la raíz del repositorio) despliega las dos carpetas como un único proyecto de Vercel con dos servicios y un solo dominio:

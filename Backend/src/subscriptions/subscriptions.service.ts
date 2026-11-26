@@ -5,7 +5,8 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { SubscriptionStatus } from '@prisma/client';
+import { SubscriptionSource, SubscriptionStatus } from '@prisma/client';
+import { BillingConfig } from '../billing/billing.config';
 import type { AppConfig } from '../config/env.validation';
 import { PlansService } from '../plans/plans.service';
 import { PrismaService } from '../prisma/prisma.service';
@@ -26,6 +27,7 @@ export class SubscriptionsService {
     private readonly prisma: PrismaService,
     private readonly plans: PlansService,
     private readonly config: ConfigService<AppConfig, true>,
+    private readonly billing: BillingConfig,
   ) {}
 
   /** Historial completo de suscripciones del usuario (la más reciente primero). */
@@ -48,6 +50,10 @@ export class SubscriptionsService {
     if (!this.config.get('ALLOW_SIMULATED_PLAN_CHANGE', { infer: true })) {
       throw new ForbiddenException('Plan changes are disabled');
     }
+    // Con Stripe activo los planes se pagan (POST /billing/checkout o /billing/change).
+    if (this.billing.status.enabled) {
+      throw new ForbiddenException('Plans are paid with Stripe now; use checkout');
+    }
 
     return this.prisma.$transaction(async (tx) => {
       // Bloqueo de la fila del usuario: evita dos cambios de plan simultáneos.
@@ -56,6 +62,18 @@ export class SubscriptionsService {
       const target = await this.plans.findActiveByCode(dto.planCode, tx);
       if (!target) {
         throw new NotFoundException('Plan not found');
+      }
+
+      // Quien paga con Stripe cambia de plan desde Stripe (si no, se le seguiría cobrando).
+      const paying = await tx.subscription.findFirst({
+        where: {
+          ...this.plans.activeSubscriptionWhere(userId),
+          source: SubscriptionSource.STRIPE,
+        },
+        select: { id: true },
+      });
+      if (paying) {
+        throw new ConflictException('You pay with Stripe; change your plan there');
       }
 
       const current = await this.plans.getEffectivePlan(userId, tx);

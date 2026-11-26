@@ -28,6 +28,28 @@ enum SubscriptionStatus {
   EXPIRED
 }
 
+/// De dónde sale una suscripción.
+enum SubscriptionSource {
+  /// Cambio de plan simulado (sin cobro; solo si ALLOW_SIMULATED_PLAN_CHANGE).
+  SIMULATED
+  /// Pagada con Stripe (modo prueba).
+  STRIPE
+  /// Asignada por un admin desde el panel (sin cobro).
+  ADMIN
+}
+
+enum BillingInterval {
+  MONTH
+  YEAR
+}
+
+enum PaymentStatus {
+  PAID
+  FAILED
+  PARTIALLY_REFUNDED
+  REFUNDED
+}
+
 /// Recursos cuya cantidad limita el plan. Los límites son POR USUARIO en total.
 enum LimitedResource {
   WARDROBES
@@ -119,6 +141,8 @@ model User {
   /// Ajustes de la web (color neón, menú, efectos, lectura, calidad 3D).
   /// JSON con formato cerrado: ver src/users/preferences.ts. Null = por defecto.
   preferences     Json?
+  /// Cliente de Stripe (se crea en el primer pago). Nunca guardamos tarjetas.
+  stripeCustomerId String? @unique @db.VarChar(64)
 
   // --- Administración --------------------------------------------------------
   /// ADMIN solo se da con el comando `npm run admin:grant` (nunca por la API).
@@ -138,6 +162,7 @@ model User {
   coverAsset    Asset? @relation("UserCover", fields: [coverAssetId], references: [id], onDelete: SetNull)
 
   subscriptions Subscription[]
+  payments      Payment[]
   wardrobes     Wardrobe[]
   wardrobeItems WardrobeItem[]
   outfits       Outfit[]
@@ -565,9 +590,15 @@ model Plan {
   code        String   @unique @db.VarChar(32)
   name        String   @db.VarChar(60)
   description String?  @db.VarChar(500)
-  /// Precio informativo en céntimos. No hay cobros reales.
+  /// Precio mensual en céntimos (se cobra con Stripe en modo prueba).
   priceCents  Int      @default(0)
+  /// Precio anual en céntimos (0 = no se ofrece pago anual).
+  annualPriceCents Int @default(0)
   currency    String   @default("EUR") @db.Char(3)
+  /// Producto de Stripe del plan (se crea al primer pago).
+  stripeProductId String? @unique @db.VarChar(64)
+  /// Si un admin lo editó desde la web: el seed ya no pisa nombre, descripción ni precios.
+  customizedAt DateTime?
   /// Plan que se aplica cuando el usuario NO tiene una suscripción activa.
   /// Debe existir exactamente uno (lo garantiza el seed y lo comprueba el servicio).
   isDefault   Boolean  @default(false)
@@ -578,6 +609,7 @@ model Plan {
 
   limits        PlanLimit[]
   subscriptions Subscription[]
+  payments      Payment[]
 }
 
 /// Límite de un plan para un tipo de recurso.
@@ -608,15 +640,67 @@ model Subscription {
   /// null = sin fecha de fin.
   endsAt     DateTime?
   canceledAt DateTime?
+  source     SubscriptionSource @default(SIMULATED)
+  interval   BillingInterval?
+  /// Suscripción de Stripe. Un cambio de plan dentro de la misma suscripción
+  /// de Stripe cierra esta fila y abre otra con el mismo id (no es único).
+  stripeSubscriptionId String?  @db.VarChar(64)
+  /// Estado tal cual lo da Stripe (active, past_due, canceled...).
+  stripeStatus         String?  @db.VarChar(32)
+  /// Fin del periodo pagado (renovación o fin si se canceló).
+  currentPeriodEnd     DateTime?
+  cancelAtPeriodEnd    Boolean  @default(false)
   createdAt  DateTime           @default(now())
   updatedAt  DateTime           @updatedAt
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   /// Restrict: no se puede borrar un plan con suscripciones (protege el historial).
   plan Plan @relation(fields: [planId], references: [id], onDelete: Restrict)
+  payments Payment[]
 
   @@index([userId, status])
   @@index([planId])
+  @@index([stripeSubscriptionId])
+}
+
+/// Pago de una factura de Stripe. Solo importes y referencias de Stripe:
+/// la tarjeta la gestiona Stripe y nunca llega a MyOO.
+model Payment {
+  id                    String          @id @default(uuid()) @db.Uuid
+  /// null si el usuario borró la cuenta (el registro contable se conserva sin datos personales).
+  userId                String?         @db.Uuid
+  subscriptionId        String?         @db.Uuid
+  planId                String?         @db.Uuid
+  interval              BillingInterval?
+  amountCents           Int
+  refundedCents         Int             @default(0)
+  currency              String          @db.Char(3)
+  status                PaymentStatus
+  stripeInvoiceId       String?         @unique @db.VarChar(64)
+  stripePaymentIntentId String?         @db.VarChar(64)
+  stripeChargeId        String?         @db.VarChar(64)
+  failureReason         String?         @db.VarChar(300)
+  periodStart           DateTime?
+  periodEnd             DateTime?
+  paidAt                DateTime?
+  createdAt             DateTime        @default(now())
+  updatedAt             DateTime        @updatedAt
+
+  user         User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
+  subscription Subscription? @relation(fields: [subscriptionId], references: [id], onDelete: SetNull)
+  plan         Plan?         @relation(fields: [planId], references: [id], onDelete: SetNull)
+
+  @@index([createdAt])
+  @@index([userId, createdAt])
+  @@index([status, createdAt])
+  @@index([stripeChargeId])
+}
+
+/// Eventos de Stripe ya procesados (el webhook puede llegar repetido).
+model StripeEvent {
+  id        String   @id @db.VarChar(255)
+  type      String   @db.VarChar(80)
+  createdAt DateTime @default(now())
 }
 
 // -----------------------------------------------------------------------------

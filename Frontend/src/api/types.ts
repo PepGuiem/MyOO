@@ -617,6 +617,8 @@ export interface Plan {
   name: string;
   description: string | null;
   priceCents: number;
+  /** Precio anual en céntimos (0 = sin pago anual). */
+  annualPriceCents: number;
   currency: string;
   isDefault: boolean;
   isActive: boolean;
@@ -643,6 +645,93 @@ export interface Subscription {
   endsAt: string | null;
   canceledAt: string | null;
   plan: { id: string; code: string; name: string };
+}
+
+// ---------------------------------------------------------------- pagos (Stripe, modo prueba)
+
+export type BillingInterval = 'MONTH' | 'YEAR';
+export type SubscriptionSource = 'SIMULATED' | 'STRIPE' | 'ADMIN';
+export type PaymentStatus = 'PAID' | 'FAILED' | 'PARTIALLY_REFUNDED' | 'REFUNDED';
+
+export interface BillingConfig {
+  enabled: boolean;
+  testMode: true;
+  simulated: boolean;
+}
+
+export interface BillingSubscription extends Subscription {
+  source: SubscriptionSource;
+  interval: BillingInterval | null;
+  stripeStatus: string | null;
+  currentPeriodEnd: string | null;
+  cancelAtPeriodEnd: boolean;
+}
+
+export interface Payment {
+  id: string;
+  amountCents: number;
+  refundedCents: number;
+  currency: string;
+  status: PaymentStatus;
+  interval: BillingInterval | null;
+  failureReason: string | null;
+  periodStart: string | null;
+  periodEnd: string | null;
+  paidAt: string | null;
+  createdAt: string;
+  plan: { id: string; code: string; name: string } | null;
+}
+
+export interface MyBilling {
+  config: BillingConfig;
+  subscription: BillingSubscription | null;
+  payments: Payment[];
+}
+
+export interface AdminPayment extends Payment {
+  refundableCents: number;
+  user?: { id: string; email: string; username: string | null; displayName: string | null } | null;
+}
+
+export interface AdminBillingSummary {
+  config: { enabled: boolean; testMode: true; keyProblem: 'missing' | 'live' | 'invalid' | null; webhookConfigured: boolean };
+  currency: string;
+  month: { grossCents: number; refundedCents: number; payments: number };
+  previousMonth: { grossCents: number; refundedCents: number };
+  failedLast30Days: number;
+  pastDue: number;
+  cancelling: number;
+  byPlan: { plan: { id: string; code: string; name: string }; stripe: number; admin: number; simulated: number }[];
+}
+
+export interface AdminBillingUser {
+  user: { id: string; email: string; username: string | null; displayName: string | null; hasStripeCustomer: boolean };
+  plan: { id: string; code: string; name: string };
+  activeSubscriptionId: string | null;
+  subscriptions: BillingSubscription[];
+  payments: AdminPayment[];
+}
+
+export interface AdminPlan {
+  id: string;
+  code: string;
+  name: string;
+  description: string | null;
+  priceCents: number;
+  annualPriceCents: number;
+  currency: string;
+  isDefault: boolean;
+  isActive: boolean;
+  customizedAt: string | null;
+  activeSubscriptions: number;
+}
+
+export interface AdminPlanInput {
+  name?: string;
+  description?: string | null;
+  priceCents?: number;
+  annualPriceCents?: number;
+  isActive?: boolean;
 }
 
 /** Lo mínimo que necesita el modelo 3D para dibujar una prenda. */

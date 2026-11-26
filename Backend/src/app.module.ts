@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { MannequinsModule } from './mannequins/mannequins.module';
 import { OAuthModule } from './oauth/oauth.module';
 import { AdminModule } from './admin/admin.module';
+import { BillingModule } from './billing/billing.module';
 import { MonitoringModule } from './monitoring/monitoring.module';
 import { ChatModule } from './chat/chat.module';
 import { IdeasModule } from './ideas/ideas.module';
@@ -55,6 +56,7 @@ import { WardrobesModule } from './wardrobes/wardrobes.module';
     UsersModule,
     PlansModule,
     SubscriptionsModule,
+    BillingModule,
     GarmentTypesModule,
     WardrobesModule,
     WardrobeItemsModule,

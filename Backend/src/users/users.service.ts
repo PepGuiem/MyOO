@@ -8,6 +8,7 @@ import {
 } from '@nestjs/common';
 import { AuthProvider, FollowStatus, Prisma } from '@prisma/client';
 import { AssetsService } from '../assets/assets.service';
+import { BillingService } from '../billing/billing.service';
 import { PasswordService } from '../auth/password.service';
 import { OAuthService } from '../oauth/oauth.service';
 import { PrismaService } from '../prisma/prisma.service';
@@ -31,6 +32,7 @@ export class UsersService {
     private readonly storage: StorageService,
     private readonly assets: AssetsService,
     private readonly oauth: OAuthService,
+    private readonly billing: BillingService,
     private readonly realtime?: RealtimeService,
   ) {}
 
@@ -230,6 +232,8 @@ export class UsersService {
       dto.reauthToken,
     );
 
+    // Corta su suscripción de Stripe antes de borrar (si falla, no se borra).
+    await this.billing.cancelForDeletedUser(userId);
     await this.prisma.user.delete({ where: { id: userId } });
     // Cierra sus conexiones en tiempo real (chats abiertos en otras pestañas).
     this.realtime?.disconnect(userId, 4003, 'account deleted');
