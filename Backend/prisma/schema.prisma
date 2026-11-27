@@ -683,6 +683,8 @@ model Payment {
   periodStart           DateTime?
   periodEnd             DateTime?
   paidAt                DateTime?
+  /// Página pública de la factura en Stripe (hosted_invoice_url); null si no hay.
+  invoiceUrl            String?         @db.VarChar(500)
   createdAt             DateTime        @default(now())
   updatedAt             DateTime        @updatedAt
 

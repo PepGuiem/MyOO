@@ -9,6 +9,27 @@ import { createHmac, timingSafeEqual } from 'node:crypto';
 export const STRIPE_API_VERSION = '2024-06-20';
 const BASE = 'https://api.stripe.com/v1';
 
+/** Dominios desde los que Stripe sirve las facturas a los clientes. */
+export const STRIPE_INVOICE_HOSTS = ['invoice.stripe.com', 'pay.stripe.com'] as const;
+
+/**
+ * Enlace de factura que se puede guardar y enseñar: solo https y solo en los
+ * dominios de facturas de Stripe (nada de credenciales, puertos ni otros
+ * hosts). Cualquier otra cosa devuelve null y no se muestra el enlace.
+ */
+export function safeInvoiceUrl(value: unknown): string | null {
+  if (typeof value !== 'string' || !value || value.length > 500) return null;
+  let url: URL;
+  try {
+    url = new URL(value);
+  } catch {
+    return null;
+  }
+  if (url.protocol !== 'https:' || url.username || url.password || url.port) return null;
+  if (!(STRIPE_INVOICE_HOSTS as readonly string[]).includes(url.hostname)) return null;
+  return url.toString();
+}
+
 export class StripeApiError extends Error {
   constructor(
     readonly status: number,
@@ -167,6 +188,8 @@ export interface StripeInvoice {
   attempt_count: number;
   charge: string | null;
   payment_intent: string | null;
+  /** Página pública de la factura en Stripe (null en borradores). */
+  hosted_invoice_url?: string | null;
   status_transitions: { paid_at: number | null };
   lines: {
     data: {

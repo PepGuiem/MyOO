@@ -678,6 +678,8 @@ export interface Payment {
   periodStart: string | null;
   periodEnd: string | null;
   paidAt: string | null;
+  /** Página de la factura en Stripe (solo invoice.stripe.com / pay.stripe.com). */
+  invoiceUrl: string | null;
   createdAt: string;
   plan: { id: string; code: string; name: string } | null;
 }

@@ -12,6 +12,7 @@ import type {
 } from '../api/types';
 import { ErrorNote } from '../components/ErrorNote';
 import { Icon } from '../components/Icon';
+import { InvoiceLink } from '../components/InvoiceLink';
 import { Modal } from '../components/Modal';
 import { PersonAvatar, personName } from '../components/social/PersonAvatar';
 import { Busy, Spinner } from '../components/Spinner';
@@ -314,6 +315,7 @@ function PaymentTable({
             <th scope="col">{t('Plan')}</th>
             <th scope="col">{t('Importe')}</th>
             <th scope="col">{t('Estado')}</th>
+            <th scope="col">{t('Factura')}</th>
             <th scope="col">
               <span className="visually-hidden">{t('Acciones')}</span>
             </th>
@@ -346,6 +348,9 @@ function PaymentTable({
                 <span className={`status status-${p.status.toLowerCase()}`} title={p.failureReason ?? undefined}>
                   {STATUS_LABEL[p.status]}
                 </span>
+              </td>
+              <td>
+                <InvoiceLink url={p.invoiceUrl} />
               </td>
               <td>
                 {refunding === p.id ? (

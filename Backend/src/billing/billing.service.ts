@@ -33,6 +33,7 @@ import {
   StripeEventPayload,
   StripeInvoice,
   StripeSubscription,
+  safeInvoiceUrl,
   verifyStripeSignature,
 } from './stripe.client';
 
@@ -63,6 +64,7 @@ export const paymentSelect = {
   periodStart: true,
   periodEnd: true,
   paidAt: true,
+  invoiceUrl: true,
   createdAt: true,
   plan: { select: { id: true, code: true, name: true } },
 } satisfies Prisma.PaymentSelect;
@@ -458,6 +460,8 @@ export class BillingService {
       periodStart: fromUnix(line?.period.start),
       periodEnd: fromUnix(line?.period.end),
       paidAt: paid ? (fromUnix(inv.status_transitions.paid_at) ?? new Date()) : null,
+      // Enlace a la factura de Stripe (solo si es de un dominio de facturas de Stripe).
+      invoiceUrl: safeInvoiceUrl(inv.hosted_invoice_url),
     };
     await this.prisma.payment.upsert({
       where: { stripeInvoiceId: inv.id },

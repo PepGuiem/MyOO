@@ -265,6 +265,23 @@ export function AuthPage({ mode }: { mode: 'login' | 'register' }) {
               <ErrorNote error={error} />
             )}
 
+            {!isLogin && (
+              <p className="auth-legal">
+                {/* Una sola frase traducible; los huecos {terms} y {privacy} son enlaces. */}
+                {t('Al crear la cuenta aceptas los {terms} y la {privacy}.')
+                  .split(/(\{terms\}|\{privacy\})/)
+                  .map((part, i) =>
+                    part === '{terms}' ? (
+                      <Link key={i} to="/legal/terminos">{t('términos')}</Link>
+                    ) : part === '{privacy}' ? (
+                      <Link key={i} to="/legal/privacidad">{t('política de privacidad')}</Link>
+                    ) : (
+                      part
+                    ),
+                  )}
+              </p>
+            )}
+
             <button type="submit" className="btn btn-primary btn-block au-cta" disabled={busy} aria-busy={busy}>
               {busy && <span className="spinner" aria-hidden="true" />}
               <span>{busy ? t('Un momento…') : isLogin ? t('Entrar') : t('Crear cuenta')}</span>

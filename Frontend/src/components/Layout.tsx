@@ -10,6 +10,7 @@ import { ViewCanvas } from '../three/ViewCanvas';
 import { NotificationBell } from './community/NotificationBell';
 import { ErrorNote } from './ErrorNote';
 import { Icon, type IconName } from './Icon';
+import { LegalLinks } from './LegalLinks';
 import { availableNavItems, NAV_GROUP_META, type NavCatalogItem } from './navCatalog';
 import { usePreferences, type NavGroupId, type NavItemId } from '../lib/preferences';
 import { ToastProvider } from './fx/Toast';
@@ -266,6 +267,7 @@ export function Layout() {
               <Icon name="key" size={16} />
             </NavLink>
           </div>
+          <LegalLinks className="legal-links-nav" />
         </nav>
       </aside>
 

@@ -2,7 +2,7 @@ import { createHmac } from 'node:crypto';
 import { BillingInterval, PaymentStatus, SubscriptionStatus } from '@prisma/client';
 import { addMonths, keyProblem, planPrice, subscriptionState, toInterval } from './billing.config';
 import { paymentStatus } from './billing.service';
-import { encodeForm, verifyStripeSignature } from './stripe.client';
+import { encodeForm, safeInvoiceUrl, verifyStripeSignature } from './stripe.client';
 
 describe('encodeForm', () => {
   it('codifica parámetros anidados como Stripe', () => {
@@ -114,5 +114,33 @@ describe('ayudas', () => {
     expect(paymentStatus(499, 0)).toBe(PaymentStatus.PAID);
     expect(paymentStatus(499, 100)).toBe(PaymentStatus.PARTIALLY_REFUNDED);
     expect(paymentStatus(499, 499)).toBe(PaymentStatus.REFUNDED);
+  });
+});
+
+describe('safeInvoiceUrl', () => {
+  it('acepta facturas de invoice.stripe.com y pay.stripe.com por https', () => {
+    expect(safeInvoiceUrl('https://invoice.stripe.com/i/acct_123/test_abc?s=ap')).toBe(
+      'https://invoice.stripe.com/i/acct_123/test_abc?s=ap',
+    );
+    expect(safeInvoiceUrl('https://pay.stripe.com/invoice/acct_123/test_abc')).toBe(
+      'https://pay.stripe.com/invoice/acct_123/test_abc',
+    );
+  });
+
+  it('rechaza vacíos, otros tipos, http, otros dominios y trucos con el host', () => {
+    expect(safeInvoiceUrl(null)).toBeNull();
+    expect(safeInvoiceUrl(undefined)).toBeNull();
+    expect(safeInvoiceUrl('')).toBeNull();
+    expect(safeInvoiceUrl(42)).toBeNull();
+    expect(safeInvoiceUrl('no es una url')).toBeNull();
+    expect(safeInvoiceUrl('http://invoice.stripe.com/i/x')).toBeNull();
+    expect(safeInvoiceUrl('javascript:alert(1)')).toBeNull();
+    expect(safeInvoiceUrl('https://stripe.com/i/x')).toBeNull();
+    expect(safeInvoiceUrl('https://evil.com/invoice.stripe.com')).toBeNull();
+    expect(safeInvoiceUrl('https://invoice.stripe.com.evil.com/i/x')).toBeNull();
+    expect(safeInvoiceUrl('https://invoice.stripe.com@evil.com/i/x')).toBeNull();
+    expect(safeInvoiceUrl('https://user:pass@invoice.stripe.com/i/x')).toBeNull();
+    expect(safeInvoiceUrl('https://invoice.stripe.com:8443/i/x')).toBeNull();
+    expect(safeInvoiceUrl(`https://invoice.stripe.com/${'a'.repeat(500)}`)).toBeNull();
   });
 });

@@ -5,6 +5,8 @@ import type { BillingInterval, LimitedResource, Payment, Plan, ProviderSlug, Usa
 import { useAuth } from '../auth/AuthContext';
 import { ErrorNote } from '../components/ErrorNote';
 import { Icon, type IconName } from '../components/Icon';
+import { InvoiceLink } from '../components/InvoiceLink';
+import { LegalLinks } from '../components/LegalLinks';
 import { SectionHead } from '../components/street/SectionHead';
 import { CountUp } from '../components/street/Street';
 import { LanguageSwitch } from '../components/LanguageSwitch';
@@ -567,6 +569,7 @@ export function AccountPage() {
                   <th scope="col">{t('Plan')}</th>
                   <th scope="col">{t('Importe')}</th>
                   <th scope="col">{t('Estado')}</th>
+                  <th scope="col">{t('Factura')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -586,6 +589,9 @@ export function AccountPage() {
                     <td>
                       <span className={`status status-${p.status.toLowerCase()}`}>{PAYMENT_STATUS[p.status]}</span>
                     </td>
+                    <td>
+                      <InvoiceLink url={p.invoiceUrl} />
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -594,6 +600,7 @@ export function AccountPage() {
         ) : (
           <p className="muted">{t('Todavía no hay pagos.')}</p>
         )}
+        <LegalLinks className="legal-links-account" />
       </section>
 
       <section className="panel danger-zone" aria-labelledby="delete-title">

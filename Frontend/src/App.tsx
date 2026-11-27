@@ -11,6 +11,7 @@ import { AuthCallbackPage } from './pages/AuthCallbackPage';
 import { AuthPage } from './pages/AuthPage';
 import { FEATURES } from './lib/features';
 import { HomePage } from './pages/HomePage';
+import { LegalPage } from './pages/LegalPage';
 import { RealtimeProvider } from './lib/realtime';
 import { Spinner } from './components/Spinner';
 import { t } from './i18n';
@@ -68,6 +69,9 @@ export function App() {
           <Route path="/register" element={<AuthPage mode="register" />} />
           {/* Vuelta de Google, Apple e Instagram (con o sin sesión) */}
           <Route path="/auth/callback" element={<AuthCallbackPage />} />
+          {/* Páginas legales: públicas (también sin sesión) */}
+          <Route path="/legal/:doc" element={<LegalPage />} />
+          <Route path="/legal" element={<Navigate to="/legal/terminos" replace />} />
           <Route
             element={
               <RequireAuth>
