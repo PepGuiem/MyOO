@@ -140,6 +140,15 @@ export class EnvironmentVariables {
   })
   TOKEN_ENCRYPTION_KEY?: string;
 
+  // --- Tiempo real con Ably (opcional) ---------------------------------------
+  // Sin ella todo sigue igual (WebSocket en local, consultas periódicas en
+  // Vercel). Una clave mal copiada no tumba la app: AblyService la ignora.
+
+  /** Clave de la API de Ably: `appId.keyId:secret` (ver el README). */
+  @IsOptional()
+  @IsString()
+  ABLY_API_KEY?: string;
+
   // --- Pagos con Stripe (SOLO modo prueba) -----------------------------------
   // Sin STRIPE_SECRET_KEY los pagos están apagados (la web lo indica). Una
   // clave real (sk_live_) o mal copiada NO tumba la app: BillingConfig la

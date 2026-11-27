@@ -48,7 +48,7 @@ export class NotificationsService {
         data: data.slice(i, i + BATCH),
       });
     }
-    this.realtime.emit(ids, {
+    await this.realtime.emit(ids, {
       type: 'notification',
       notificationType: n.type,
       title: n.title,

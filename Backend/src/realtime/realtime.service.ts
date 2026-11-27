@@ -1,5 +1,6 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, Optional } from '@nestjs/common';
 import { createHash, randomBytes } from 'node:crypto';
+import { AblyService } from './ably.service';
 
 /** Lo que el servidor manda por el WebSocket: `{ type, ...datos }`. */
 export interface ServerEvent {
@@ -35,6 +36,9 @@ export const MAX_CONNECTIONS_PER_USER = 6;
  *   en 30 s; aquí solo se guarda su hash.
  * - Todo vive en la memoria de ESTE proceso: con varias instancias del
  *   backend haría falta un intermediario (p. ej. Redis pub/sub).
+ * - Con `ABLY_API_KEY` (opcional), cada evento se publica además en Ably
+ *   (solo el tipo y los ids): así llega también en Vercel, donde no hay
+ *   WebSocket. Ver `ably.service.ts`.
  */
 @Injectable()
 export class RealtimeService {
@@ -48,6 +52,8 @@ export class RealtimeService {
   /** Contadores desde que arrancó el proceso (para el monitor). */
   private eventsSent = 0;
   private eventsReceived = 0;
+
+  constructor(@Optional() private readonly ably?: AblyService) {}
 
   // --- Tickets -------------------------------------------------------------
 
@@ -134,10 +140,16 @@ export class RealtimeService {
     this.connections.delete(userId);
   }
 
-  /** Envía un evento a todas las conexiones de esos usuarios. */
-  emit(userIds: Iterable<string>, event: ServerEvent): void {
+  /**
+   * Envía un evento a todas las conexiones de esos usuarios. La promesa
+   * acaba cuando también se ha publicado en Ably (si está configurado) y
+   * nunca falla: conviene esperarla con `await` para que en Vercel la
+   * función no se congele antes de publicar.
+   */
+  emit(userIds: Iterable<string>, event: ServerEvent): Promise<void> {
     const data = JSON.stringify(event);
-    for (const id of new Set(userIds)) {
+    const ids = [...new Set(userIds)];
+    for (const id of ids) {
       for (const c of this.connections.get(id) ?? []) {
         if (c.readyState !== OPEN) continue;
         try {
@@ -148,6 +160,8 @@ export class RealtimeService {
         }
       }
     }
+    if (!this.ably?.enabled) return Promise.resolve();
+    return this.ably.publish(ids, event).catch(() => undefined);
   }
 
   // --- Mensajes del navegador ----------------------------------------------

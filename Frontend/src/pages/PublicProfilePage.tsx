@@ -57,7 +57,7 @@ export function PublicProfilePage() {
 
   // Si te aceptan la solicitud mientras miras su perfil, se actualiza solo.
   useRealtimeEvent((e) => {
-    if (e.type === 'follow_accepted' && e.user?.id === profile?.id) load();
+    if (e.type === 'follow_accepted' && (e.user?.id ?? e.userId) === profile?.id) load();
   });
 
   const cover = usePersonImage(profile?.id, profile?.cover, 'cover');

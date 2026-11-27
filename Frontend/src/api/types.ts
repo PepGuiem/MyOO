@@ -1002,12 +1002,19 @@ export type RealtimeEvent =
   | { type: 'ready' }
   | { type: 'pong' }
   | { type: 'message'; message: ChatMessage }
+  /** Por Ably solo llegan los ids: el contenido se pide a la API. */
+  | { type: 'message_ref'; conversationId: string; messageId: string; senderId: string | null }
   | { type: 'message_deleted'; conversationId: string; messageId: string }
   | { type: 'read'; conversationId: string; userId: string; at: string }
   | { type: 'typing'; conversationId: string; userId: string }
   | { type: 'conversation'; conversationId: string }
-  | { type: 'follow_request' | 'new_follower' | 'follow_accepted'; user: UserBrief | null }
-  | { type: 'notification'; notificationType: NotificationType; title: string; link: string | null };
+  | { type: 'follow_request' | 'new_follower' | 'follow_accepted'; user: UserBrief | null; userId?: string }
+  | { type: 'notification'; notificationType: NotificationType; title?: string; link?: string | null };
+
+/** Respuesta de `POST /realtime/token`: sin Ably configurado, `enabled: false`. */
+export type RealtimeToken =
+  | { enabled: false }
+  | { enabled: true; token: string; expires: number; expiresIn: number; channel: string };
 
 // -----------------------------------------------------------------------------
 // Avisos, ideas, denuncias, novedades y administración

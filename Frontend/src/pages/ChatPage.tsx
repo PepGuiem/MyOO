@@ -74,8 +74,8 @@ export function ChatPage() {
   }, []);
   useEffect(load, [load]);
 
-  // Sin conexión en tiempo real (en Vercel no hay WebSocket): la lista se
-  // vuelve a pedir cada 10 s mientras la pestaña está a la vista.
+  // Sin conexión en tiempo real (en Vercel no hay WebSocket y Ably es
+  // opcional): la lista se vuelve a pedir cada 10 s mientras se vea la pestaña.
   const { status: rtStatus } = useRealtime();
   useEffect(() => {
     if (rtStatus === 'online') return;
@@ -85,8 +85,18 @@ export function ChatPage() {
     return () => window.clearInterval(timer);
   }, [rtStatus]);
 
+  // Por Ably solo llegan los ids: se vuelve a pedir la lista (una vez por
+  // ráfaga de mensajes).
+  const reloadTimer = useRef<number | undefined>(undefined);
+  const reloadSoon = useCallback(() => {
+    window.clearTimeout(reloadTimer.current);
+    reloadTimer.current = window.setTimeout(load, 300);
+  }, [load]);
+  useEffect(() => () => window.clearTimeout(reloadTimer.current), []);
+
   useRealtimeEvent((e) => {
     if (e.type === 'ready' || e.type === 'conversation') load();
+    if (e.type === 'message_ref') reloadSoon();
     if (e.type === 'message') {
       setConvs((list) => {
         if (!list) return list;
@@ -252,35 +262,40 @@ function Thread({ id, me, onSeen, onLeft }: { id: string; me: string; onSeen: (i
       .catch(setError);
   }, [id, loadDetail, markRead]);
 
-  // Sin conexión en tiempo real: cada 4 s se piden los últimos mensajes y se
-  // añaden los nuevos (y se marcan los borrados), mientras se vea la pestaña.
+  // Pide los últimos mensajes y añade los nuevos (y marca los borrados). Lo
+  // usan la consulta periódica y los avisos de Ably (que solo traen ids).
+  const pullLatest = useCallback(() => {
+    chatApi
+      .messages(id)
+      .then((latest) => {
+        const cur = messagesRef.current;
+        if (!cur) return;
+        const known = new Set(cur.map((m) => m.id));
+        const fresh = latest.filter((m) => !known.has(m.id));
+        const gone = new Set(latest.filter((m) => m.deleted).map((m) => m.id));
+        const changed = cur.some((m) => gone.has(m.id) && !m.deleted);
+        if (fresh.length === 0 && !changed) return;
+        setMessages((l) => {
+          if (!l) return l;
+          const ids = new Set(l.map((m) => m.id));
+          const updated = changed ? l.map((m) => (gone.has(m.id) ? { ...m, deleted: true, body: null, outfit: null } : m)) : l;
+          return [...updated, ...fresh.filter((m) => !ids.has(m.id))];
+        });
+        if (fresh.some((m) => m.sender?.id !== me)) markRead();
+        if (fresh.some((m) => m.kind === 'SYSTEM')) loadDetail();
+      })
+      .catch(() => undefined);
+  }, [id, me, markRead, loadDetail]);
+
+  // Sin conexión en tiempo real: cada 4 s se piden los últimos mensajes,
+  // mientras se vea la pestaña.
   useEffect(() => {
     if (rtStatus === 'online') return;
     const timer = window.setInterval(() => {
-      if (document.visibilityState !== 'visible') return;
-      chatApi
-        .messages(id)
-        .then((latest) => {
-          const cur = messagesRef.current;
-          if (!cur) return;
-          const known = new Set(cur.map((m) => m.id));
-          const fresh = latest.filter((m) => !known.has(m.id));
-          const gone = new Set(latest.filter((m) => m.deleted).map((m) => m.id));
-          const changed = cur.some((m) => gone.has(m.id) && !m.deleted);
-          if (fresh.length === 0 && !changed) return;
-          setMessages((l) => {
-            if (!l) return l;
-            const ids = new Set(l.map((m) => m.id));
-            const updated = changed ? l.map((m) => (gone.has(m.id) ? { ...m, deleted: true, body: null, outfit: null } : m)) : l;
-            return [...updated, ...fresh.filter((m) => !ids.has(m.id))];
-          });
-          if (fresh.some((m) => m.sender?.id !== me)) markRead();
-          if (fresh.some((m) => m.kind === 'SYSTEM')) loadDetail();
-        })
-        .catch(() => undefined);
+      if (document.visibilityState === 'visible') pullLatest();
     }, 4000);
     return () => window.clearInterval(timer);
-  }, [rtStatus, id, me, markRead, loadDetail]);
+  }, [rtStatus, pullLatest]);
 
   // Al volver a la pestaña, lo que llegó mientras tanto queda leído.
   useEffect(() => {
@@ -300,6 +315,17 @@ function Thread({ id, me, onSeen, onLeft }: { id: string; me: string; onSeen: (i
       if (e.message.sender?.id !== me) markRead();
       if (e.message.kind === 'SYSTEM') loadDetail();
     }
+    if (e.type === 'message_ref' && e.conversationId === id) {
+      if (e.senderId) {
+        const sender = e.senderId;
+        setTyping((cur) => {
+          const n = { ...cur };
+          delete n[sender];
+          return n;
+        });
+      }
+      if (!messagesRef.current?.some((m) => m.id === e.messageId)) pullLatest();
+    }
     if (e.type === 'message_deleted' && e.conversationId === id) {
       setMessages((l) => l?.map((m) => (m.id === e.messageId ? { ...m, deleted: true, body: null, outfit: null } : m)) ?? l);
     }
@@ -308,7 +334,11 @@ function Thread({ id, me, onSeen, onLeft }: { id: string; me: string; onSeen: (i
     }
     if (e.type === 'typing' && e.conversationId === id) setTyping((cur) => ({ ...cur, [e.userId]: Date.now() }));
     if (e.type === 'conversation' && e.conversationId === id) loadDetail();
-    if (e.type === 'ready') loadDetail();
+    if (e.type === 'ready') {
+      // Al (re)conectar se recupera lo que llegó mientras no había conexión.
+      loadDetail();
+      pullLatest();
+    }
   });
 
   // "Está escribiendo…" desaparece a los 4 s sin avisos nuevos.

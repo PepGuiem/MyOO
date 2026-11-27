@@ -361,7 +361,7 @@ export class SocialService {
       throw err;
     }
     const me = await this.brief(viewerId);
-    this.realtime.emit([targetId], {
+    await this.realtime.emit([targetId], {
       type: status === FollowStatus.PENDING ? 'follow_request' : 'new_follower',
       user: me,
     });
@@ -424,7 +424,10 @@ export class SocialService {
     });
     if (count === 0) throw new NotFoundException('Request not found');
     const me = await this.brief(viewerId);
-    this.realtime.emit([followerId], { type: 'follow_accepted', user: me });
+    await this.realtime.emit([followerId], {
+      type: 'follow_accepted',
+      user: me,
+    });
     await this.notifications.notify([followerId], {
       type: NotificationType.FOLLOW_ACCEPTED,
       title: `${displayOf(me)} ha aceptado tu solicitud`,

@@ -358,6 +358,26 @@ npm run test:e2e        # e2e (incluye test/profile-oauth.e2e-spec.ts)
 
 **Limitación:** las conexiones y los tickets viven en la memoria del proceso. Con varias instancias del backend haría falta Redis (pub/sub) para repartir los eventos.
 
+### Tiempo real en Vercel con Ably (opcional)
+Vercel no mantiene conexiones abiertas, así que allí no hay WebSocket y la web consulta cada 4 s (conversación abierta), 10 s (lista de chats) y 30 s (contadores). Con **Ably** (servicio externo, plan gratis) los avisos llegan al momento. Sin `ABLY_API_KEY` todo sigue exactamente igual.
+
+Cómo funciona (sin SDK, solo `fetch`; código en `src/realtime/ably.ts` y `ably.service.ts`):
+1. Cada evento que el backend ya emitía (mensaje nuevo, leído, borrado, cambios de conversación, seguidores, avisos) se publica también en el canal privado del destinatario, `user:<id>`, con la API REST de Ably (`POST https://rest.ably.io/channels/<canal>/messages`, autenticación básica con la clave). **Solo viajan el tipo y los ids** (p. ej. `{ type: "message", conversationId, messageId, senderId }`), nunca el texto, el outfit, nombres ni títulos. Si Ably falla o tarda más de 3 s, se anota en el log y el envío sigue.
+2. El navegador pide `POST /api/realtime/token` (con sesión). El backend firma con HMAC-SHA256 una petición de token y Ably la canjea: el token solo permite **escuchar** (`subscribe`) `user:<tu id>`, dura 30 min y su `clientId` es tu id. La clave nunca sale del servidor. Sin clave responde `{ enabled: false }`.
+3. La web abre `EventSource` a `https://realtime.ably.io/sse?channels=user:<id>&v=1.2&accessToken=<token>`, renueva el token 2 min antes de que caduque y, si se corta, reconecta esperando cada vez más (1 s, 2 s, 4 s… hasta 30 s). Con la conexión viva no hay consultas periódicas; si falla, vuelven solas.
+4. Al llegar un aviso, la web pide a la API solo lo necesario (mensajes de la conversación abierta, lista, contadores, avisos); la API comprueba permisos como siempre.
+5. Sin sesión no se conecta, y con la pestaña oculta más de 5 min se cierra la conexión (se reabre al volver).
+6. Con Ably no hay «escribiendo…» (el navegador solo escucha); en local, sin clave, sigue el WebSocket con todo.
+
+Crear la cuenta y la clave (una vez):
+1. Regístrate en [ably.com](https://ably.com) con el plan gratis y crea una app (p. ej. `myoo`).
+2. En la app, *API Keys → Create new API key*: nombre `myoo-backend` y permisos **Publish** y **Subscribe** (hacen falta los dos: con *Subscribe* se firman los tokens del navegador). No marques nada más.
+3. Copia la clave completa, con forma `appId.keyId:secret`.
+4. En Vercel (proyecto, *Settings → Environment Variables*, entorno Production) añade `ABLY_API_KEY` con ese valor y vuelve a desplegar. No la pongas en el repositorio ni en el frontend.
+5. Comprueba: abre un chat en dos navegadores; el mensaje debe aparecer al momento. En el panel de Ably (*Stats*) verás los mensajes y conexiones. Para apagarlo, borra la variable y vuelve a desplegar.
+
+Una clave con otro formato se ignora (aviso en el log) y la web sigue con las consultas periódicas.
+
 ### Dependencia nueva
 - `ws` (y `@types/ws` en desarrollo): servidor WebSocket estándar y muy usado en Node. Se usa directamente (sin `@nestjs/websockets`) para que el flujo quede explícito en `src/realtime/realtime.gateway.ts`.
 
@@ -622,11 +642,11 @@ npm run test:e2e       # incluye test/sneakers.e2e-spec.ts
 
 Dirección fija de producción: **https://myout.vercel.app** (siempre apunta al último despliegue; las URL largas de cada despliegue se quedan con su versión). El navegador llama a `/api` en el mismo dominio (`VITE_API_URL` sin definir), así que no hay llamadas de servidor a servidor ni *bindings*.
 
-Variables de entorno del servicio `backend` (en el panel de Vercel, nunca en el repositorio): `DATABASE_URL` (PostgreSQL accesible desde internet), `JWT_SECRET`, `CORS_ORIGIN`, `FRONTEND_URL` y `OAUTH_PUBLIC_API_URL` (con el dominio de Vercel), y las de Google / Apple si se usan.
+Variables de entorno del servicio `backend` (en el panel de Vercel, nunca en el repositorio): `DATABASE_URL` (PostgreSQL accesible desde internet), `JWT_SECRET`, `CORS_ORIGIN`, `FRONTEND_URL` y `OAUTH_PUBLIC_API_URL` (con el dominio de Vercel), las de Google / Apple si se usan y `ABLY_API_KEY` si se quiere chat al instante.
 
 Limitaciones conocidas en Vercel:
 
-- **Chat en tiempo real**: las funciones de Vercel no aceptan WebSockets; los mensajes llegan al recargar, no al instante.
+- **Chat en tiempo real**: las funciones de Vercel no aceptan WebSockets; sin Ably la web consulta cada pocos segundos. Con `ABLY_API_KEY` los avisos llegan al momento (ver «Tiempo real en Vercel con Ably»).
 - **Imágenes subidas**: `LocalDiskStorage` escribe en disco y en Vercel el disco no es persistente. Hace falta un almacenamiento de objetos (Vercel Blob, S3, R2...).
 - **Migraciones**: el build del servicio `backend` ejecuta `prisma migrate deploy` (script `vercel:migrate`) con la conexión directa de Neon (`DATABASE_URL_UNPOOLED`) antes de compilar, y después `prisma/seed-reference.ts` (planes y tipos de prenda, sin el usuario de demo; idempotente). Ojo: los despliegues de *preview* usan la misma base de datos que producción.
 - **Previews sin migraciones**: el build solo ejecuta `vercel:migrate` (migraciones, datos de referencia y ajustes de cuentas) cuando `VERCEL_ENV=production`. Los despliegues de prueba siguen leyendo la misma base de datos, pero ya no pueden cambiar su estructura.

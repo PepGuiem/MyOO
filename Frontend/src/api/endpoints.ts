@@ -55,6 +55,7 @@ import type {
   RatingComparison,
   RatingEntry,
   RatingResult,
+  RealtimeToken,
   Paginated,
   Plan,
   StylistAlternatives,
@@ -407,6 +408,8 @@ export const chatApi = {
 export const realtimeApi = {
   /** Ticket de un solo uso para abrir el WebSocket. */
   ticket: () => api<{ ticket: string; expiresIn: number }>('POST', '/realtime/ticket'),
+  /** Token de Ably (solo escuchar tu canal) o `{ enabled: false }` si no está configurado. */
+  token: () => api<RealtimeToken>('POST', '/realtime/token'),
 };
 
 /** Campanita: avisos guardados (los nuevos llegan también por el WebSocket). */

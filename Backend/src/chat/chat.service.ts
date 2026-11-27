@@ -77,7 +77,8 @@ const memberSelect = {
 
 /**
  * Chats 1 a 1 y de grupo. Todo pasa por aquí (REST) y los cambios se avisan
- * en tiempo real a los miembros por el WebSocket (RealtimeService).
+ * en tiempo real a los miembros por el WebSocket y, si está configurado, por
+ * Ably (RealtimeService; a Ably solo van el tipo y los ids).
  *
  * Quién puede escribir:
  *  - 1 a 1: para empezar, lo que diga el ajuste de quien recibe. Ya empezado,
@@ -394,7 +395,7 @@ export class ChatService implements OnModuleInit {
       select: { id: true },
     });
     const detail = await this.detail(userId, c.id);
-    this.realtime.emit([userId, ...others], {
+    await this.realtime.emit([userId, ...others], {
       type: 'conversation',
       conversationId: c.id,
     });
@@ -464,7 +465,7 @@ export class ChatService implements OnModuleInit {
       }),
     ]);
     const view = toView(msg);
-    this.realtime.emit(members, { type: 'message', message: view });
+    await this.realtime.emit(members, { type: 'message', message: view });
     return view;
   }
 
@@ -486,7 +487,7 @@ export class ChatService implements OnModuleInit {
       data: { deletedAt: new Date(), body: null, outfit: Prisma.DbNull },
     });
     if (count === 0) throw new NotFoundException('Message not found');
-    this.realtime.emit(await this.memberIds(conversationId), {
+    await this.realtime.emit(await this.memberIds(conversationId), {
       type: 'message_deleted',
       conversationId,
       messageId,
@@ -504,7 +505,7 @@ export class ChatService implements OnModuleInit {
       where: { conversationId_userId: { conversationId, userId } },
       data: { lastReadAt: at },
     });
-    this.realtime.emit(await this.memberIds(conversationId), {
+    await this.realtime.emit(await this.memberIds(conversationId), {
       type: 'read',
       conversationId,
       userId,
@@ -523,7 +524,7 @@ export class ChatService implements OnModuleInit {
     if (this.typingAt.size > 10_000) this.typingAt.clear();
     const members = await this.memberIds(conversationId);
     if (!members.includes(userId)) return;
-    this.realtime.emit(
+    await this.realtime.emit(
       members.filter((id) => id !== userId),
       { type: 'typing', conversationId, userId },
     );
@@ -549,7 +550,7 @@ export class ChatService implements OnModuleInit {
         },
       }),
     ]);
-    this.realtime.emit(await this.memberIds(conversationId), {
+    await this.realtime.emit(await this.memberIds(conversationId), {
       type: 'conversation',
       conversationId,
     });
@@ -582,7 +583,7 @@ export class ChatService implements OnModuleInit {
         }),
       ),
     ]);
-    this.realtime.emit([...current, ...fresh], {
+    await this.realtime.emit([...current, ...fresh], {
       type: 'conversation',
       conversationId,
     });
@@ -653,7 +654,10 @@ export class ChatService implements OnModuleInit {
         },
       });
     });
-    this.realtime.emit(before, { type: 'conversation', conversationId });
+    await this.realtime.emit(before, {
+      type: 'conversation',
+      conversationId,
+    });
   }
 
   async setRole(
@@ -675,7 +679,7 @@ export class ChatService implements OnModuleInit {
       data: { role: ConversationRole[role] },
     });
     if (count === 0) throw new NotFoundException('Member not found');
-    this.realtime.emit(await this.memberIds(conversationId), {
+    await this.realtime.emit(await this.memberIds(conversationId), {
       type: 'conversation',
       conversationId,
     });

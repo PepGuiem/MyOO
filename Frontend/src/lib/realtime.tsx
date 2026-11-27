@@ -1,17 +1,18 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import { apiBaseUrl } from '../api/client';
+import { ApiError, apiBaseUrl } from '../api/client';
 import { chatApi, notificationsApi, peopleApi, realtimeApi } from '../api/endpoints';
-import type { RealtimeEvent } from '../api/types';
+import type { RealtimeEvent, RealtimeToken } from '../api/types';
 import { useAuth } from '../auth/AuthContext';
+import { ablySseUrl, parseAblyEvent } from './ablyEvents';
 
 type Listener = (event: RealtimeEvent) => void;
 export type RealtimeStatus = 'off' | 'connecting' | 'online';
 
 interface RealtimeState {
   status: RealtimeStatus;
-  /** Escucha los eventos del WebSocket. Devuelve la función para dejar de escuchar. */
+  /** Escucha los eventos en tiempo real. Devuelve la función para dejar de escuchar. */
   subscribe: (listener: Listener) => () => void;
-  /** Manda un mensaje pequeño al servidor (p. ej. "estoy escribiendo"). */
+  /** Manda un mensaje pequeño al servidor (p. ej. "estoy escribiendo"; solo con WebSocket). */
   send: (payload: Record<string, unknown>) => void;
   /** Mensajes sin leer en total y solicitudes para seguirte. */
   unread: number;
@@ -26,6 +27,11 @@ interface RealtimeState {
 
 const RealtimeContext = createContext<RealtimeState | null>(null);
 
+/** Con la pestaña oculta este rato se cierra la conexión de Ably (se reabre al volver). */
+const HIDDEN_CLOSE_MS = 5 * 60_000;
+/** El token de Ably se renueva 2 minutos antes de caducar. */
+const RENEW_BEFORE_MS = 2 * 60_000;
+
 /** URL del WebSocket a partir de la de la API (`/api` → ws://<esta web>/api/ws). */
 function socketUrl(ticket: string): string {
   const base = apiBaseUrl();
@@ -35,8 +41,12 @@ function socketUrl(ticket: string): string {
 
 /**
  * Conexión en tiempo real (una por pestaña, mientras hay sesión):
- * pide un ticket de un solo uso, abre el WebSocket y, si se corta, vuelve a
- * conectar esperando cada vez un poco más (1 s, 2 s, 4 s… hasta 30 s).
+ * - Con Ably en el servidor (`POST /realtime/token` da un token): escucha tu
+ *   canal de Ably por SSE. Solo llegan el tipo y los ids; el contenido se
+ *   pide a la API.
+ * - Sin Ably: pide un ticket de un solo uso y abre el WebSocket.
+ * Si se corta, vuelve a conectar esperando cada vez un poco más (1 s, 2 s,
+ * 4 s… hasta 30 s). Mientras no hay conexión, las páginas consultan cada poco.
  */
 export function RealtimeProvider({ children }: { children: ReactNode }) {
   const { user, refreshUser } = useAuth();
@@ -78,14 +88,39 @@ export function RealtimeProvider({ children }: { children: ReactNode }) {
     let stopped = false;
     let attempt = 0;
     let timer: number | undefined;
+    /** 'ws': el WebSocket de siempre (sin Ably). 'ably': SSE de Ably. */
+    let mode: 'ws' | 'ably' | null = null;
 
-    const schedule = () => {
-      if (stopped) return;
-      const delay = Math.min(30_000, 1000 * 2 ** attempt++) + Math.random() * 400;
-      timer = window.setTimeout(() => void connect(), delay);
+    const backoff = () => Math.min(30_000, 1000 * 2 ** attempt++) + Math.random() * 400;
+
+    /** Lo común a los dos sistemas: contadores y avisar a quien escucha. */
+    const deliver = (event: RealtimeEvent) => {
+      if (event.type === 'ready') {
+        attempt = 0;
+        setStatus('online');
+        // Lo que pasó mientras no había conexión se recupera pidiéndolo.
+        refreshUnread();
+        refreshRequests();
+        refreshNotifications();
+      }
+      if (event.type === 'message' || event.type === 'message_ref' || event.type === 'read' || event.type === 'message_deleted') refreshUnread();
+      if (event.type === 'follow_request') refreshRequests();
+      if (event.type === 'notification') {
+        // Por Ably no llega el aviso entero: se pide el número real.
+        if (mode === 'ably') refreshNotifications();
+        else setNotifications((n) => n + 1);
+      }
+      for (const l of listeners.current) l(event);
     };
 
-    const connect = async () => {
+    // --- WebSocket (sin Ably: como siempre) ------------------------------------
+
+    const scheduleWs = () => {
+      if (stopped) return;
+      timer = window.setTimeout(() => void connectWs(), backoff());
+    };
+
+    const connectWs = async () => {
       if (stopped) return;
       setStatus('connecting');
       let ticket: string;
@@ -93,7 +128,7 @@ export function RealtimeProvider({ children }: { children: ReactNode }) {
         ticket = (await realtimeApi.ticket()).ticket;
       } catch {
         setStatus('off');
-        schedule();
+        scheduleWs();
         return;
       }
       if (stopped) return;
@@ -106,18 +141,7 @@ export function RealtimeProvider({ children }: { children: ReactNode }) {
         } catch {
           return;
         }
-        if (event.type === 'ready') {
-          attempt = 0;
-          setStatus('online');
-          // Lo que pasó mientras no había conexión se recupera pidiéndolo.
-          refreshUnread();
-          refreshRequests();
-          refreshNotifications();
-        }
-        if (event.type === 'message' || event.type === 'read' || event.type === 'message_deleted') refreshUnread();
-        if (event.type === 'follow_request') refreshRequests();
-        if (event.type === 'notification') setNotifications((n) => n + 1);
-        for (const l of listeners.current) l(event);
+        deliver(event);
       };
       ws.onclose = (ev) => {
         if (socket.current === ws) socket.current = null;
@@ -128,35 +152,173 @@ export function RealtimeProvider({ children }: { children: ReactNode }) {
           void refreshUser().catch(() => undefined);
           return;
         }
-        if (!stopped && ev.code !== 4003) schedule();
+        if (!stopped && ev.code !== 4003) scheduleWs();
       };
     };
 
-    void connect();
+    // --- Ably (con ABLY_API_KEY en el backend) ---------------------------------
+    // EventSource a Ably con un token que solo deja escuchar tu canal. El
+    // token se renueva antes de caducar (se abre la conexión nueva y luego se
+    // cierra la vieja) y, si se corta, se reconecta esperando cada vez más.
+
+    let current: EventSource | null = null;
+    let pending: EventSource | null = null;
+    let renewTimer: number | undefined;
+    let hiddenTimer: number | undefined;
+    /** Cerrada por llevar la pestaña oculta mucho rato. */
+    let sleeping = false;
+
+    const closeAbly = () => {
+      window.clearTimeout(renewTimer);
+      current?.close();
+      pending?.close();
+      current = null;
+      pending = null;
+    };
+
+    const ablyFailed = () => {
+      if (stopped || sleeping) return;
+      window.clearTimeout(renewTimer);
+      if (current) {
+        // La conexión anterior sigue viva: se vuelve a intentar renovar en 30 s.
+        renewTimer = window.setTimeout(() => void openAbly(), 30_000);
+        return;
+      }
+      setStatus('off');
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => void openAbly(), backoff());
+    };
+
+    const openAbly = async (given?: RealtimeToken) => {
+      if (stopped || sleeping) return;
+      if (!current) setStatus('connecting');
+      let tok = given;
+      if (!tok) {
+        try {
+          tok = await realtimeApi.token();
+        } catch {
+          ablyFailed();
+          return;
+        }
+      }
+      if (stopped || sleeping) return;
+      if (!tok.enabled) {
+        // Ya no hay Ably en el servidor: vuelve al sistema de siempre.
+        closeAbly();
+        mode = 'ws';
+        attempt = 0;
+        void connectWs();
+        return;
+      }
+      pending?.close();
+      const source = new EventSource(ablySseUrl(tok.channel, tok.token));
+      pending = source;
+      source.onopen = () => {
+        if (source !== pending) return;
+        pending = null;
+        const wasOnline = current !== null;
+        current?.close();
+        current = source;
+        attempt = 0;
+        if (!wasOnline) deliver({ type: 'ready' });
+      };
+      source.onmessage = (ev) => {
+        const event = parseAblyEvent(String(ev.data));
+        if (event) deliver(event);
+      };
+      // Corte de red, token caducado o rechazado: se cierra y se gestiona aquí
+      // (el EventSource reintentaría solo con el token viejo).
+      source.onerror = () => {
+        source.close();
+        if (source === pending) pending = null;
+        else if (source === current) current = null;
+        else return;
+        ablyFailed();
+      };
+      window.clearTimeout(renewTimer);
+      renewTimer = window.setTimeout(() => void openAbly(), Math.max(30_000, tok.expiresIn * 1000 - RENEW_BEFORE_MS));
+    };
+
+    const start = async () => {
+      setStatus('connecting');
+      let tok: RealtimeToken;
+      try {
+        tok = await realtimeApi.token();
+      } catch (err) {
+        // 4xx (p. ej. un backend sin esta ruta): el sistema de siempre. Un
+        // fallo del servidor o de red: se reintenta (si resulta que no hay
+        // Ably, `openAbly` vuelve al WebSocket).
+        tok = { enabled: false };
+        if (!(err instanceof ApiError) || err.status === 0 || err.status >= 500) {
+          if (stopped) return;
+          mode = 'ably';
+          ablyFailed();
+          return;
+        }
+      }
+      if (stopped) return;
+      if (tok.enabled) {
+        mode = 'ably';
+        if (document.visibilityState === 'hidden') onVisibility();
+        void openAbly(tok);
+      } else {
+        mode = 'ws';
+        void connectWs();
+      }
+    };
+
+    void start();
     refreshUnread();
     refreshRequests();
     refreshNotifications();
-    // Al volver a la pestaña, si se había cortado, se reconecta ya.
-    const onVisible = () => {
-      if (document.visibilityState === 'visible' && !socket.current && !stopped) {
-        window.clearTimeout(timer);
-        attempt = 0;
-        void connect();
+
+    function onVisibility() {
+      if (stopped) return;
+      const visible = document.visibilityState === 'visible';
+      if (mode === 'ws') {
+        // Al volver a la pestaña, si se había cortado, se reconecta ya.
+        if (visible && !socket.current) {
+          window.clearTimeout(timer);
+          attempt = 0;
+          void connectWs();
+        }
+        return;
       }
-    };
-    document.addEventListener('visibilitychange', onVisible);
+      if (mode !== 'ably') return;
+      window.clearTimeout(hiddenTimer);
+      if (!visible) {
+        // Oculta unos minutos: se cierra (no gasta conexiones de Ably).
+        hiddenTimer = window.setTimeout(() => {
+          sleeping = true;
+          window.clearTimeout(timer);
+          closeAbly();
+          setStatus('off');
+        }, HIDDEN_CLOSE_MS);
+        return;
+      }
+      if (sleeping || (!current && !pending)) {
+        sleeping = false;
+        attempt = 0;
+        window.clearTimeout(timer);
+        void openAbly();
+      }
+    }
+    document.addEventListener('visibilitychange', onVisibility);
     return () => {
       stopped = true;
       window.clearTimeout(timer);
-      document.removeEventListener('visibilitychange', onVisible);
+      window.clearTimeout(hiddenTimer);
+      document.removeEventListener('visibilitychange', onVisibility);
       socket.current?.close(1000);
       socket.current = null;
+      closeAbly();
       setStatus('off');
     };
   }, [userId, refreshUnread, refreshRequests, refreshNotifications, refreshUser]);
 
-  // Sin conexión en tiempo real (en Vercel no hay WebSocket), los contadores
-  // de mensajes, solicitudes y avisos se actualizan cada 30 s.
+  // Sin conexión en tiempo real (en Vercel no hay WebSocket y Ably es
+  // opcional), los contadores de mensajes, solicitudes y avisos se
+  // actualizan cada 30 s.
   useEffect(() => {
     if (!userId || status === 'online') return;
     const timer = window.setInterval(() => {

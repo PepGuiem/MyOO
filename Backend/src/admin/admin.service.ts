@@ -624,7 +624,7 @@ export class AdminService {
       where: { conversationId: m.conversationId },
       select: { userId: true },
     });
-    this.realtime.emit(
+    await this.realtime.emit(
       members.map((x) => x.userId),
       {
         type: 'message_deleted',
