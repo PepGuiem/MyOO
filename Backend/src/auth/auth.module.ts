@@ -7,6 +7,7 @@ import { AuthController } from './auth.controller';
 import { AuthSessionController } from './auth-session.controller';
 import { AuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
+import { EmailAuthService } from './email-auth.service';
 import { PasswordService } from './password.service';
 
 @Module({
@@ -25,6 +26,8 @@ import { PasswordService } from './password.service';
   providers: [
     AuthService,
     PasswordService,
+    // Contraseña olvidada y verificar el email (usa MailService, global).
+    EmailAuthService,
     // Todos los endpoints de la app quedan protegidos salvo los @Public().
     { provide: APP_GUARD, useClass: AuthGuard },
   ],

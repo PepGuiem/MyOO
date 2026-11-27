@@ -154,6 +154,15 @@ model User {
   /// Versión de la sesión: va dentro de cada token. Al cerrar sesión sube y
   /// todos los tokens anteriores dejan de valer (en todos los dispositivos).
   sessionVersion  Int       @default(0)
+  /// Última vez que usó la web (se apunta como mucho cada pocos minutos). Sirve
+  /// para avisar por correo de mensajes solo a quien lleva un rato sin entrar.
+  lastSeenAt      DateTime?
+
+  // --- Avisos por correo (se apagan en la cuenta o con el enlace del correo) --
+  /// Pagos: pago recibido, cobro fallido, suscripción cancelada o terminando.
+  emailPaymentNotices Boolean @default(true)
+  /// Mensajes nuevos del chat (como mucho uno cada pocas horas por conversación).
+  emailChatNotices    Boolean @default(true)
 
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
@@ -173,6 +182,7 @@ model User {
   stylistFeedback StylistFeedback[]
   authAccounts  AuthAccount[]
   oauthFlows    OAuthFlow[]
+  emailTokens   EmailToken[]
 
   /// A quién sigue (y solicitudes que ha enviado).
   following     Follow[] @relation("Follower")
@@ -474,6 +484,8 @@ model ConversationMember {
   joinedAt       DateTime         @default(now())
   /// Hasta cuándo ha leído (para "no leídos" y "Visto").
   lastReadAt     DateTime?
+  /// Último aviso por correo de mensajes nuevos en esta conversación.
+  emailNotifiedAt DateTime?
 
   conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
   user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -577,6 +589,33 @@ model OAuthFlow {
 
   user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@index([expiresAt])
+}
+
+/// Para qué sirve un enlace enviado por correo.
+enum EmailTokenPurpose {
+  /// Confirmar que el email es suyo (24 h).
+  VERIFY_EMAIL
+  /// Poner una contraseña nueva (1 h).
+  RESET_PASSWORD
+}
+
+/// Enlace de un solo uso enviado por correo. Solo se guarda el HASH (SHA-256)
+/// del token: con una copia de la base de datos no se pueden usar los enlaces.
+model EmailToken {
+  id        String            @id @default(uuid()) @db.Uuid
+  userId    String            @db.Uuid
+  purpose   EmailTokenPurpose
+  tokenHash String            @unique @db.Char(64)
+  /// Email al que se envió: si la cuenta cambia de email, el enlace deja de valer.
+  email     String            @db.VarChar(254)
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime          @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, purpose, createdAt])
   @@index([expiresAt])
 }
 

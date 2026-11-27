@@ -37,6 +37,8 @@ export const profileSelect = {
   messagePolicy: true,
   locale: true,
   preferences: true,
+  emailPaymentNotices: true,
+  emailChatNotices: true,
   role: true,
   createdAt: true,
   authAccounts: {
@@ -79,6 +81,8 @@ export interface ProfileView {
   locale: Locale;
   /** Ajustes de «Personalizar» (null = los de por defecto). */
   preferences: Preferences | null;
+  /** Avisos por correo (pagos y mensajes); se cambian en «Cuenta». */
+  emailNotices: { payments: boolean; chat: boolean };
   /** USER o ADMIN (el frontend enseña el panel de admin). */
   role: UserRole;
   createdAt: Date;
@@ -108,6 +112,7 @@ export function toProfileView(u: ProfileRow): ProfileView {
     messagePolicy: u.messagePolicy,
     locale: u.locale,
     preferences: readPreferences(u.preferences),
+    emailNotices: { payments: u.emailPaymentNotices, chat: u.emailChatNotices },
     role: u.role,
     createdAt: u.createdAt,
     accounts: u.authAccounts.map((a) => ({

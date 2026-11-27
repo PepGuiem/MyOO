@@ -2,6 +2,7 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
+  Optional,
   UnauthorizedException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -14,6 +15,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { loadProfile, type ProfileView } from '../users/profile';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
+import { EmailAuthService } from './email-auth.service';
 import { PasswordService } from './password.service';
 
 export interface AuthResponse {
@@ -31,6 +33,7 @@ export class AuthService {
     private readonly jwt: JwtService,
     private readonly passwords: PasswordService,
     private readonly config: ConfigService<AppConfig, true>,
+    @Optional() private readonly emailAuth?: EmailAuthService,
   ) {}
 
   async register(dto: RegisterDto): Promise<AuthResponse> {
@@ -47,6 +50,9 @@ export class AuthService {
         },
         select: { id: true },
       });
+      // Correo para confirmar el email (si hay correo configurado). Si no sale,
+      // la cuenta se crea igual: se puede reenviar desde «Cuenta».
+      await this.emailAuth?.sendVerification(user.id).catch(() => undefined);
       return this.issue(user.id);
     } catch (error) {
       if (

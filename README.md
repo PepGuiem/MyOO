@@ -24,3 +24,5 @@ npm run dev
 ```
 
 Abre http://localhost:5173 y entra con `demo@myout.dev` / `Demo1234!`. Es una base de datos local de prueba, con 39 prendas y 10 outfits.
+
+Correo (opcional): con `RESEND_API_KEY` y `EMAIL_FROM` en el backend se activan «¿Olvidaste tu contraseña?», verificar el email y los avisos por correo. Sin ellas todo funciona igual. Cómo crear la cuenta de Resend, verificar un dominio y qué poner en Vercel: «Correo con Resend» en `Backend/README.md`.

@@ -68,6 +68,8 @@ export class AuthGuard implements CanActivate {
     request.user = { id: user.id, email: user.email, role: user.role };
     // Cuenta como activo hoy (una escritura por usuario y día, sin esperar).
     this.activity.touch(user.id);
+    // Última visita (para no mandar por correo avisos a quien está usando la web).
+    this.activity.markSeen(user.id);
     return true;
   }
 

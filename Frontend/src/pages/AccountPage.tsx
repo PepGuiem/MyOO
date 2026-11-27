@@ -1,6 +1,6 @@
 import { useEffect, useState, type CSSProperties, type FormEvent } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { billingApi, plansApi, subscriptionsApi, usersApi } from '../api/endpoints';
+import { authApi, billingApi, mailApi, plansApi, subscriptionsApi, usersApi } from '../api/endpoints';
 import type { BillingInterval, LimitedResource, Payment, Plan, ProviderSlug, UsageEntry, User } from '../api/types';
 import { useAuth } from '../auth/AuthContext';
 import { ErrorNote } from '../components/ErrorNote';
@@ -11,6 +11,7 @@ import { SectionHead } from '../components/street/SectionHead';
 import { CountUp } from '../components/street/Street';
 import { LanguageSwitch } from '../components/LanguageSwitch';
 import { Modal } from '../components/Modal';
+import { explain } from '../lib/apiErrors';
 import { RESOURCE_LABEL, formatDate } from '../lib/labels';
 import { isNative } from '../lib/native';
 import { useAsync } from '../lib/useAsync';
@@ -81,7 +82,7 @@ const USAGE_ICON: Record<LimitedResource, IconName> = {
 };
 
 export function AccountPage() {
-  const { user, logout } = useAuth();
+  const { user, logout, setUser } = useAuth();
   const location = useLocation();
   const mine = useAsync(() => plansApi.mine(), []);
   const plans = useAsync(() => plansApi.list(), []);
@@ -411,6 +412,7 @@ export function AccountPage() {
             </button>
           </div>
           {exportError ? <ErrorNote error={exportError} /> : null}
+          {user && <EmailSettings user={user} onUser={setUser} />}
         </section>
       </div>
 
@@ -629,6 +631,91 @@ export function AccountPage() {
         />
       )}
     </section>
+  );
+}
+
+const MAIL_ERRORS: Record<string, string> = {
+  mail_wait: t('Espera un minuto antes de pedir otro correo.'),
+  mail_failed: t('No se ha podido enviar el correo. Inténtalo más tarde.'),
+  mail_disabled: t('El correo no está disponible ahora mismo.'),
+};
+
+/**
+ * Correo de la cuenta: aviso discreto si el email no está confirmado (con
+ * «Reenviar») y los interruptores de los avisos por correo. Solo aparece si
+ * el servidor puede mandar correos.
+ */
+function EmailSettings({ user, onUser }: { user: User; onUser: (u: User) => void }) {
+  const mail = useAsync(() => mailApi.config(), []);
+  const [resend, setResend] = useState<'idle' | 'busy' | 'sent'>('idle');
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<unknown>(null);
+  if (!mail.data?.enabled) return null;
+  const notices = user.emailNotices ?? { payments: true, chat: true };
+
+  async function resendLink() {
+    setResend('busy');
+    setError(null);
+    try {
+      const r = await authApi.resendVerification();
+      if (r.status === 'already_verified') onUser({ ...user, emailVerified: true });
+      setResend('sent');
+    } catch (err) {
+      setError(explain(err, MAIL_ERRORS));
+      setResend('idle');
+    }
+  }
+
+  async function toggle(key: 'payments' | 'chat', on: boolean) {
+    setSaving(true);
+    setError(null);
+    try {
+      const next = await mailApi.savePreferences(key === 'payments' ? { payments: on } : { chat: on });
+      onUser({ ...user, emailNotices: next });
+    } catch (err) {
+      setError(err);
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div className="mail-settings">
+      {!user.emailVerified && (
+        <div className="mail-verify" role="note">
+          <p className="muted small">
+            <Icon name="mail" size={13} /> {t('Tu email aún no está confirmado. Te mandamos un enlace al crear la cuenta.')}
+          </p>
+          <button type="button" className="btn wd-btn-line mail-resend" disabled={resend !== 'idle'} onClick={() => void resendLink()}>
+            {resend === 'sent' ? t('Enviado: mira tu correo') : resend === 'busy' ? t('Enviando…') : t('Reenviar')}
+          </button>
+        </div>
+      )}
+      <fieldset className="mail-notices">
+        <legend className="eyebrow">{t('Avisos por correo')}</legend>
+        <label className="switch-row mail-switch">
+          <input type="checkbox" role="switch" checked={notices.payments} disabled={saving} onChange={(e) => void toggle('payments', e.target.checked)} />
+          <span className="switch" aria-hidden="true" />
+          <span>
+            <strong>{t('Pagos')}</strong>
+            <small className="muted">{t('Pago recibido, cobro fallido y suscripción cancelada.')}</small>
+          </span>
+        </label>
+        <label className="switch-row mail-switch">
+          <input type="checkbox" role="switch" checked={notices.chat} disabled={saving} onChange={(e) => void toggle('chat', e.target.checked)} />
+          <span className="switch" aria-hidden="true" />
+          <span>
+            <strong>{t('Mensajes')}</strong>
+            <small className="muted">
+              {user.emailVerified
+                ? t('Si llevas un rato sin entrar. Como mucho uno cada pocas horas por conversación.')
+                : t('Llegarán cuando confirmes tu email.')}
+            </small>
+          </span>
+        </label>
+      </fieldset>
+      <ErrorNote error={error} />
+    </div>
   );
 }
 

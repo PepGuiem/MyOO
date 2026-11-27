@@ -163,6 +163,21 @@ export class EnvironmentVariables {
   @IsOptional()
   @IsString()
   STRIPE_WEBHOOK_SECRET?: string;
+
+  // --- Correo con Resend (OPCIONAL) ------------------------------------------
+  // Sin las dos variables no se envía ningún correo y la web funciona igual
+  // (se ocultan «¿Olvidaste tu contraseña?» y los avisos por correo). Un valor
+  // mal escrito no tumba la app: MailService lo ignora y lo dice en el log.
+
+  /** Clave de la API de Resend (re_…). */
+  @IsOptional()
+  @IsString()
+  RESEND_API_KEY?: string;
+
+  /** Remitente, p. ej. «MyOO <hola@tudominio.com>» (dominio verificado en Resend). */
+  @IsOptional()
+  @IsString()
+  EMAIL_FROM?: string;
 }
 
 export function validateEnv(

@@ -223,5 +223,9 @@ export interface StripeEventPayload {
   id: string;
   type: string;
   livemode: boolean;
-  data: { object: { id?: string; object?: string } };
+  data: {
+    object: { id?: string; object?: string };
+    /** Campos que han cambiado (solo en eventos *.updated). */
+    previous_attributes?: Record<string, unknown>;
+  };
 }

@@ -31,7 +31,7 @@ export type AccountLocale = 'ES' | 'EN';
 export interface User {
   id: string;
   email: string;
-  /** Google o Apple han confirmado que el email es suyo. */
+  /** Email confirmado (con el enlace del correo, o lo confirmó Google o Apple). */
   emailVerified: boolean;
   /** false si la cuenta se creó con Google/Apple y aún no tiene contraseña. */
   hasPassword: boolean;
@@ -59,6 +59,14 @@ export interface User {
   accounts: ConnectedAccount[];
   /** Ajustes de «Personalizar» (null = los de por defecto). */
   preferences?: Preferences | null;
+  /** Avisos por correo (pagos y mensajes), si el servidor los conoce. */
+  emailNotices?: EmailNotices;
+}
+
+/** Avisos por correo que se pueden apagar. */
+export interface EmailNotices {
+  payments: boolean;
+  chat: boolean;
 }
 
 export type UserRole = 'USER' | 'ADMIN';

@@ -25,6 +25,8 @@ export class ActivityService {
   private readonly logger = new Logger(ActivityService.name);
   private day = '';
   private seen = new Set<string>();
+  /** Última vez que se apuntó lastSeenAt de cada usuario (en esta instancia). */
+  private lastSeenWrite = new Map<string, number>();
 
   constructor(private readonly prisma: PrismaService) {}
 
@@ -50,4 +52,28 @@ export class ActivityService {
         );
       });
   }
+
+  /**
+   * Apunta User.lastSeenAt («usó la web hace poco»), como mucho cada
+   * SEEN_EVERY_MS por usuario. Lo usan los avisos por correo de mensajes: solo
+   * se avisa a quien lleva un rato sin entrar. SQL directo para no tocar
+   * `updatedAt` (no es un cambio de la cuenta). No espera ni falla nunca.
+   */
+  markSeen(userId: string, now = new Date()): void {
+    const last = this.lastSeenWrite.get(userId) ?? 0;
+    if (now.getTime() - last < SEEN_EVERY_MS) return;
+    if (this.lastSeenWrite.size > 10_000) this.lastSeenWrite.clear();
+    this.lastSeenWrite.set(userId, now.getTime());
+    this.prisma
+      .$executeRaw`UPDATE "User" SET "lastSeenAt" = ${now} WHERE "id" = ${userId}::uuid`
+      .catch((err: unknown) => {
+        this.lastSeenWrite.delete(userId);
+        this.logger.warn(
+          `No se pudo apuntar la última visita: ${err instanceof Error ? err.name : 'error'}`,
+        );
+      });
+  }
 }
+
+/** Cada cuánto se apunta, como mucho, la última visita de un usuario. */
+export const SEEN_EVERY_MS = 5 * 60 * 1000;

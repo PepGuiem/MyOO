@@ -631,6 +631,31 @@ npm run test:e2e       # incluye test/sneakers.e2e-spec.ts
 3. En Vercel (proyecto, *Settings → Environment Variables*, Production) añade `STRIPE_SECRET_KEY` y `STRIPE_WEBHOOK_SECRET` y vuelve a desplegar.
 4. Prueba con la tarjeta `4242 4242 4242 4242`, cualquier fecha futura y cualquier CVC (`4000 0000 0000 0341` para un pago que falla).
 
+## Correo con Resend: verificar email, contraseña olvidada y avisos (`/api/auth/*`, `/api/mail/*`)
+
+Todo es **opcional**: sin `RESEND_API_KEY` y `EMAIL_FROM` no se envía nada y la web funciona como antes (no aparecen «¿Olvidaste tu contraseña?», el «Reenviar» ni los avisos por correo; `GET /api/mail/config` devuelve `{ enabled: false }`). Sin SDK: `src/mail/mail.service.ts` hace un `POST https://api.resend.com/emails` con `fetch` y `Authorization: Bearer`. Si Resend falla, el correo no sale y queda en el log (sin la clave ni el contenido); nunca rompe un registro, un pago ni un mensaje.
+
+### Qué hay
+
+- **Contraseña olvidada**: `POST /api/auth/forgot-password {email}` responde **siempre lo mismo** (202), exista la cuenta o no, y tarda al menos ~1,2 s para que el tiempo tampoco lo delate. Manda un enlace a `/reset-password?token=…` que vale **1 hora y una sola vez**. `POST /api/auth/reset-password {token, password}` guarda la contraseña nueva (Argon2id), **cierra todas las sesiones** (`sessionVersion`) y anula los demás enlaces pendientes. Si la cuenta entra solo con Google/Apple, el correo explica cómo entrar (sin enlace).
+- **Verificar el email**: al registrarse llega un enlace a `/verify-email?token=…` (24 h, un solo uso); `POST /api/auth/verify-email {token}` (o `GET ?token=`) marca `emailVerifiedAt`. Desde «Cuenta» se puede **reenviar** (`POST /api/auth/verify-email/resend`, con sesión). No bloquea nada: la cuenta muestra un aviso discreto. Quien entra con Google/Apple con el email verificado por el proveedor ya queda verificado (como antes).
+- **Tokens**: 32 bytes aleatorios; en la tabla `EmailToken` solo se guarda su **hash SHA-256**, su caducidad, si se usó y el email al que se envió (si el email de la cuenta cambia, el enlace deja de valer). El «un solo uso» es un `updateMany … where usedAt IS NULL` dentro de una transacción: dos peticiones a la vez no pueden usarlo dos veces.
+- **Avisos por correo** (interruptores en «Cuenta», encendidos por defecto, columnas `User.emailPaymentNotices` y `User.emailChatNotices`):
+  - Pagos, desde el webhook de Stripe: pago recibido (`invoice.paid`), cobro fallido (`invoice.payment_failed`), suscripción cancelada al final del periodo (`customer.subscription.updated` con `cancel_at_period_end` recién activado) y suscripción terminada (`customer.subscription.deleted`).
+  - Mensajes nuevos del chat, solo a quien **lleva un rato sin entrar** (30 min sin leer esa conversación ni usar la web —`User.lastSeenAt`, que se apunta como mucho cada 5 min— y sin WebSocket abierto), con el **email verificado** (para no escribir a direcciones que alguien puso sin ser suyas), y **como mucho uno cada 4 h por conversación** (`ConversationMember.emailNotifiedAt`). Nunca lleva el texto del mensaje.
+  - Cada aviso lleva en el pie «Dejar de recibir estos avisos» (`/email-preferences?token=…`, enlace firmado con HMAC que solo apaga ese tipo de aviso, sin iniciar sesión) y la cabecera `List-Unsubscribe` para la baja en un clic de Gmail (`POST /api/mail/unsubscribe/one-click?token=`).
+- **Límites de peticiones** (por IP, `ThrottlerGuard`): olvidé la contraseña 5 cada 15 min, nueva contraseña 10/15 min, verificar 20/15 min, reenviar 5/15 min, baja 20/15 min. Además, como mucho **un correo por minuto** de cada tipo a la misma cuenta. Ojo: en Vercel el contador por IP vive en la memoria de cada instancia (es orientativo); el de un correo por minuto está en la base de datos.
+- Plantillas en `src/mail/templates.ts` (HTML con estilos en línea + texto plano), gris oscuro con el naranja de la web y el logo de `<FRONTEND_URL>/brand/icons/icon-192.png`. Idioma: el de la cuenta (`User.locale`, ES por defecto).
+- Tras actualizar el código en local: `npx prisma generate` y `npm run db:migrate` (migración `20261127150000_email_tokens_and_notices`, solo añade).
+
+### Configurarlo (una vez)
+
+1. Crea una cuenta en [resend.com](https://resend.com) y, en *API Keys*, una clave con permiso *Sending access* (`re_…`).
+2. **Dominio**: en *Domains → Add domain* añade un dominio tuyo (mejor un subdominio, p. ej. `mail.tudominio.com`) y crea en tu proveedor de DNS los registros que te indica (SPF/MX y DKIM; DMARC recomendado). Espera a que salga *Verified*.
+   - **Sin dominio propio verificado** Resend solo deja enviar **a la dirección del dueño de la cuenta de Resend** (con `EMAIL_FROM=MyOO <onboarding@resend.dev>`): sirve para probar, pero los demás usuarios no recibirán nada. `myout.vercel.app` no se puede verificar (el DNS es de Vercel): hace falta un dominio propio.
+3. En Vercel (proyecto, *Settings → Environment Variables*, Production) añade `RESEND_API_KEY` y `EMAIL_FROM` (p. ej. `MyOO <hola@mail.tudominio.com>`), comprueba que `FRONTEND_URL=https://myout.vercel.app` y `OAUTH_PUBLIC_API_URL=https://myout.vercel.app/api` están puestas (forman los enlaces de los correos) y vuelve a desplegar.
+4. Prueba: «¿Olvidaste tu contraseña?» en la pantalla de acceso, o «Reenviar» en «Cuenta». En Resend (*Emails*) ves cada envío y si se entregó.
+
 ## Despliegue en Vercel (servicios)
 
 `vercel.json` (en la raíz del repositorio) despliega las dos carpetas como un único proyecto de Vercel con dos servicios y un solo dominio:
@@ -642,7 +667,7 @@ npm run test:e2e       # incluye test/sneakers.e2e-spec.ts
 
 Dirección fija de producción: **https://myout.vercel.app** (siempre apunta al último despliegue; las URL largas de cada despliegue se quedan con su versión). El navegador llama a `/api` en el mismo dominio (`VITE_API_URL` sin definir), así que no hay llamadas de servidor a servidor ni *bindings*.
 
-Variables de entorno del servicio `backend` (en el panel de Vercel, nunca en el repositorio): `DATABASE_URL` (PostgreSQL accesible desde internet), `JWT_SECRET`, `CORS_ORIGIN`, `FRONTEND_URL` y `OAUTH_PUBLIC_API_URL` (con el dominio de Vercel), las de Google / Apple si se usan y `ABLY_API_KEY` si se quiere chat al instante.
+Variables de entorno del servicio `backend` (en el panel de Vercel, nunca en el repositorio): `DATABASE_URL` (PostgreSQL accesible desde internet), `JWT_SECRET`, `CORS_ORIGIN`, `FRONTEND_URL` y `OAUTH_PUBLIC_API_URL` (con el dominio de Vercel), las de Google / Apple si se usan y `ABLY_API_KEY` si se quiere chat al instante. Opcionales: `STRIPE_*` (pagos) y `RESEND_API_KEY` + `EMAIL_FROM` (correo, ver «Correo con Resend»).
 
 Limitaciones conocidas en Vercel:
 

@@ -7,6 +7,7 @@ import {
   Injectable,
   NotFoundException,
   OnModuleInit,
+  Optional,
 } from '@nestjs/common';
 import {
   ConversationRole,
@@ -14,6 +15,7 @@ import {
   MessagePolicy,
   Prisma,
 } from '@prisma/client';
+import { MailNoticesService } from '../mail/mail-notices.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { RealtimeService } from '../realtime/realtime.service';
 import { sharedOutfitSelect } from '../social/social.service';
@@ -95,6 +97,7 @@ export class ChatService implements OnModuleInit {
     private readonly prisma: PrismaService,
     private readonly relations: RelationsService,
     private readonly realtime: RealtimeService,
+    @Optional() private readonly notices?: MailNoticesService,
   ) {}
 
   onModuleInit(): void {
@@ -466,6 +469,8 @@ export class ChatService implements OnModuleInit {
     ]);
     const view = toView(msg);
     await this.realtime.emit(members, { type: 'message', message: view });
+    // Aviso por correo a quien lleva un rato sin entrar (opcional; nunca falla).
+    await this.notices?.chatMessage(conversationId, userId, now);
     return view;
   }
 

@@ -1996,6 +1996,21 @@ input:disabled {
   text-align: center;
 }
 
+/* «¿Olvidaste tu contraseña?» bajo la contraseña (zona táctil de 44 px). */
+.au-forgot {
+  align-self: flex-end;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: 0.86rem;
+  color: var(--muted);
+}
+
+.au-forgot:hover,
+.au-forgot:focus-visible {
+  color: var(--neon);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .auth-piece,
   .auth-grain {
@@ -4987,6 +5002,95 @@ a.sidebar-user:hover {
 
 .legal-back {
   min-height: 44px;
+}
+
+/* --- Enlaces de los correos (contraseña, verificar email, bajas) y correo en Cuenta --- */
+.mail-card {
+  width: min(460px, 100%);
+}
+
+.mail-title {
+  font-size: clamp(1.8rem, 1.3rem + 2.4vw, 2.8rem);
+  overflow-wrap: anywhere;
+}
+
+.mail-form {
+  width: 100%;
+}
+
+.mail-form input:not([type='checkbox']) {
+  min-height: 44px;
+}
+
+.mail-check {
+  align-self: flex-start;
+  min-height: 44px;
+  padding-bottom: 0;
+}
+
+.mail-cta,
+.mail-back,
+.mail-resend {
+  min-height: 44px;
+}
+
+.mail-done {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0;
+  padding: 10px 14px;
+  border: 1px solid rgb(var(--neon-rgb) / 0.35);
+  border-radius: var(--radius-m);
+  color: var(--text);
+}
+
+.mail-settings {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+
+.mail-verify {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 12px;
+  padding: 10px 12px;
+  border: 1px dashed rgb(var(--neon-rgb) / 0.45);
+  border-radius: var(--radius-m);
+}
+
+.mail-verify p {
+  margin: 0;
+  flex: 1 1 200px;
+}
+
+.mail-notices {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+.mail-notices legend {
+  margin-bottom: 6px;
+  padding: 0;
+}
+
+.mail-switch {
+  min-height: 44px;
+  align-items: center;
+}
+
+.mail-switch > span:last-child {
+  min-width: 0;
 }
 
 /* Enlaces legales: fila de enlaces pequeños con zona táctil de 44 px */

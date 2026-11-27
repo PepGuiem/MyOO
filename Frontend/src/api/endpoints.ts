@@ -15,6 +15,7 @@ import type {
   Mannequin,
   MannequinInput,
   AuthResponse,
+  EmailNotices,
   GarmentCategory,
   InstagramOverview,
   OAuthLoginResponse,
@@ -114,6 +115,23 @@ export const authApi = {
   renew: () => api<AuthResponse>('POST', '/auth/renew'),
   /** Cierra la sesión en el servidor: el token deja de valer en todos los dispositivos. */
   logout: () => api<void>('POST', '/auth/logout'),
+  /** «He olvidado mi contraseña»: la respuesta es la misma exista la cuenta o no. */
+  forgotPassword: (email: string) => api<{ message: string }>('POST', '/auth/forgot-password', { body: { email } }),
+  /** Contraseña nueva con el enlace del correo (cierra todas las sesiones). */
+  resetPassword: (token: string, password: string) =>
+    api<void>('POST', '/auth/reset-password', { body: { token, password } }),
+  verifyEmail: (token: string) => api<{ verified: true }>('POST', '/auth/verify-email', { body: { token } }),
+  /** Con sesión: vuelve a mandar el correo para confirmar el email. */
+  resendVerification: () =>
+    api<{ status: 'sent' | 'already_verified' }>('POST', '/auth/verify-email/resend'),
+};
+
+/** Correo (Resend, opcional): si está disponible y los avisos por correo. */
+export const mailApi = {
+  config: () => api<{ enabled: boolean }>('GET', '/mail/config'),
+  savePreferences: (body: Partial<EmailNotices>) => api<EmailNotices>('PUT', '/mail/preferences', { body }),
+  /** Baja desde el enlace del correo (sin sesión). */
+  unsubscribe: (token: string) => api<{ kind: 'payments' | 'chat' }>('POST', '/mail/unsubscribe', { body: { token } }),
 };
 
 /** Login con Google/Apple y cuentas conectadas (el backend habla con el proveedor). */

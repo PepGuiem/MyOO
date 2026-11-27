@@ -11,6 +11,7 @@ import { BillingModule } from './billing/billing.module';
 import { MonitoringModule } from './monitoring/monitoring.module';
 import { ChatModule } from './chat/chat.module';
 import { IdeasModule } from './ideas/ideas.module';
+import { MailModule } from './mail/mail.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { ReleasesModule } from './releases/releases.module';
 import { ReportsModule } from './reports/reports.module';
@@ -51,6 +52,8 @@ import { WardrobesModule } from './wardrobes/wardrobes.module';
     }),
     PrismaModule,
     StorageModule,
+    // Correo (Resend, opcional): global, lo usan auth, billing y chat.
+    MailModule,
     AuthModule,
     OAuthModule,
     UsersModule,

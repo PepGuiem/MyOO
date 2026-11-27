@@ -4,6 +4,7 @@ import {
   Injectable,
   Logger,
   NotFoundException,
+  Optional,
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -14,6 +15,7 @@ import {
   SubscriptionStatus,
 } from '@prisma/client';
 import type { AppConfig } from '../config/env.validation';
+import { MailNoticesService } from '../mail/mail-notices.service';
 import { PlansService } from '../plans/plans.service';
 import { PrismaService } from '../prisma/prisma.service';
 import {
@@ -88,6 +90,7 @@ export class BillingService {
     private readonly plans: PlansService,
     readonly billing: BillingConfig,
     private readonly config: ConfigService<AppConfig, true>,
+    @Optional() private readonly notices?: MailNoticesService,
   ) {}
 
   // ------------------------------------------------------------ usuario
@@ -316,7 +319,36 @@ export class BillingService {
       await this.prisma.stripeEvent.delete({ where: { id: event.id } }).catch(() => undefined);
       throw err;
     }
+    // Avisos por correo (opcionales): después de sincronizar, con los datos ya
+    // guardados. Nunca fallan, así un correo no hace que Stripe repita el evento.
+    await this.emailNotice(event);
     return { received: true };
+  }
+
+  /**
+   * Qué aviso por correo toca para cada evento (uno por hecho: de las dos
+   * señales de pago de Stripe, solo invoice.paid).
+   */
+  private async emailNotice(event: StripeEventPayload): Promise<void> {
+    if (!this.notices) return;
+    const obj = event.data.object as { id?: string; cancel_at_period_end?: unknown };
+    if (!obj.id) return;
+    switch (event.type) {
+      case 'invoice.paid':
+        return this.notices.paymentReceived(obj.id);
+      case 'invoice.payment_failed':
+        return this.notices.paymentFailed(obj.id, event.id);
+      case 'customer.subscription.updated':
+        // Solo cuando se acaba de pedir la cancelación al final del periodo.
+        if (obj.cancel_at_period_end === true && event.data.previous_attributes?.cancel_at_period_end === false) {
+          return this.notices.subscriptionEnding(obj.id, event.id);
+        }
+        return;
+      case 'customer.subscription.deleted':
+        return this.notices.subscriptionEnded(obj.id);
+      default:
+        return;
+    }
   }
 
   // ------------------------------------------------------- sincronización

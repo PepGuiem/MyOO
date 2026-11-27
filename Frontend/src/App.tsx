@@ -48,12 +48,22 @@ const PublicProfilePage = lazy(() => import('./pages/PublicProfilePage').then((m
 const ProfilePage = lazy(() => import('./pages/ProfilePage').then((m) => ({ default: m.ProfilePage })));
 const StylistPage = lazy(() => import('./pages/StylistPage').then((m) => ({ default: m.StylistPage })));
 const WardrobePage = lazy(() => loadWardrobePage().then((m) => ({ default: m.WardrobePage })));
+// Páginas de los enlaces del correo (públicas): contraseña, verificar email y bajas.
+const ForgotPasswordPage = lazy(() => import('./pages/EmailLinkPages').then((m) => ({ default: m.ForgotPasswordPage })));
+const ResetPasswordPage = lazy(() => import('./pages/EmailLinkPages').then((m) => ({ default: m.ResetPasswordPage })));
+const VerifyEmailPage = lazy(() => import('./pages/EmailLinkPages').then((m) => ({ default: m.VerifyEmailPage })));
+const EmailPreferencesPage = lazy(() => import('./pages/EmailLinkPages').then((m) => ({ default: m.EmailPreferencesPage })));
 
 // Con una sesión guardada, quien abre la web por Inicio llega enseguida a él:
 // su código (con el 3D) se pide ya, a la vez que se renueva la sesión, en vez
 // de esperar a que termine. Sin sesión (login) no se descarga nada de 3D aquí.
 if (typeof window !== 'undefined' && window.location.pathname === '/' && tokenStore.get()) {
   loadHomePage().catch(() => undefined);
+}
+
+/** Las páginas públicas cargadas aparte necesitan su propio aviso de carga. */
+function PublicPage({ children }: { children: ReactNode }) {
+  return <Suspense fallback={<div className="boot"><Spinner size={26} label={t('Cargando…')} /></div>}>{children}</Suspense>;
 }
 
 function RequireAuth({ children }: { children: ReactNode }) {
@@ -82,6 +92,11 @@ export function App() {
           {/* Páginas legales: públicas (también sin sesión) */}
           <Route path="/legal/:doc" element={<LegalPage />} />
           <Route path="/legal" element={<Navigate to="/legal/terminos" replace />} />
+          {/* Enlaces de los correos (con o sin sesión) */}
+          <Route path="/forgot-password" element={<PublicPage><ForgotPasswordPage /></PublicPage>} />
+          <Route path="/reset-password" element={<PublicPage><ResetPasswordPage /></PublicPage>} />
+          <Route path="/verify-email" element={<PublicPage><VerifyEmailPage /></PublicPage>} />
+          <Route path="/email-preferences" element={<PublicPage><EmailPreferencesPage /></PublicPage>} />
           <Route
             element={
               <RequireAuth>

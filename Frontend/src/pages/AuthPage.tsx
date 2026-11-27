@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect, useId, useState, type CSSProperties, type FormEvent, type KeyboardEvent } from 'react';
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
-import { oauthApi } from '../api/endpoints';
+import { mailApi, oauthApi } from '../api/endpoints';
 import type { GarmentLike, ProviderSlug } from '../api/types';
 import { useAuth } from '../auth/AuthContext';
 import { ErrorNote } from '../components/ErrorNote';
@@ -70,6 +70,8 @@ export function AuthPage({ mode }: { mode: 'login' | 'register' }) {
   const [busy, setBusy] = useState(false);
   const ids = useId();
   const providers = useAsync(() => oauthApi.providers(), []);
+  // «¿Olvidaste tu contraseña?» solo si el servidor puede mandar correos.
+  const mail = useAsync(() => mailApi.config(), []);
   const [leaving, setLeaving] = useState<ProviderSlug | null>(null);
   // Al entrar se vuelve a la página que se quería abrir (p. ej. un perfil
   // escaneado con su QR), no siempre al inicio.
@@ -265,6 +267,11 @@ export function AuthPage({ mode }: { mode: 'login' | 'register' }) {
                   </>
                 )}
               </div>
+              {isLogin && mail.data?.enabled && (
+                <Link to="/forgot-password" state={{ email: email.trim() }} className="au-forgot">
+                  {t('¿Olvidaste tu contraseña?')}
+                </Link>
+              )}
             </div>
 
             {suspended ? (
