@@ -1,6 +1,8 @@
 import type { RootState } from '@react-three/fiber';
 import { createContext, type ReactNode } from 'react';
-import * as THREE from 'three';
+// Solo tipos: este registro lo usa también el menú (Layout) para saber si hay
+// miniaturas, y no debe arrastrar three.js al paquete de arranque.
+import type * as THREE from 'three';
 
 /**
  * Registro de las miniaturas 3D de la página (cada una es un hueco en el HTML
@@ -12,8 +14,8 @@ export interface ViewEntry {
   el: HTMLElement;
   /** Contenido 3D (cámara, luces, modelo). */
   content: ReactNode;
-  /** Escena propia de la miniatura. */
-  scene: THREE.Scene;
+  /** Escena propia de la miniatura (la crea el canvas compartido al montarla). */
+  scene: THREE.Scene | null;
   /** Estado del portal (para leer su cámara). */
   get: (() => RootState) | null;
   /** Cerca de la pantalla: se sigue su posición y se pinta. */
@@ -56,7 +58,7 @@ export function createEntry(el: HTMLElement, content: ReactNode): ViewEntry {
     id: nextId++,
     el,
     content,
-    scene: new THREE.Scene(),
+    scene: null,
     get: null,
     near: false,
     mounted: false,

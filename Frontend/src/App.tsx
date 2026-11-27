@@ -10,15 +10,18 @@ import { BodyProvider } from './lib/bodyPref';
 import { AuthCallbackPage } from './pages/AuthCallbackPage';
 import { AuthPage } from './pages/AuthPage';
 import { FEATURES } from './lib/features';
-import { HomePage } from './pages/HomePage';
 import { LegalPage } from './pages/LegalPage';
 import { RealtimeProvider } from './lib/realtime';
+import { loadHomePage, loadWardrobePage } from './lib/preload3d';
+import { tokenStore } from './api/client';
 import { Spinner } from './components/Spinner';
 import { t } from './i18n';
 
 // Carga diferida: cada página (y el visor 3D) se descarga la primera vez que
-// se abre, así la web arranca con mucho menos código. Inicio, acceso y la
-// vuelta del login van en el paquete principal.
+// se abre, así la web arranca con mucho menos código. Acceso y la vuelta del
+// login van en el paquete principal; Inicio también se carga aparte porque
+// enseña miniaturas 3D (three.js, ver lib/preload3d.ts).
+const HomePage = lazy(() => loadHomePage().then((m) => ({ default: m.HomePage })));
 const ItemShowcasePage = lazy(() => import('./pages/ItemShowcasePage'));
 const PersonalizePage = lazy(() => import('./pages/PersonalizePage').then((m) => ({ default: m.PersonalizePage })));
 const AccountPage = lazy(() => import('./pages/AccountPage').then((m) => ({ default: m.AccountPage })));
@@ -44,7 +47,14 @@ const PeoplePage = lazy(() => import('./pages/PeoplePage').then((m) => ({ defaul
 const PublicProfilePage = lazy(() => import('./pages/PublicProfilePage').then((m) => ({ default: m.PublicProfilePage })));
 const ProfilePage = lazy(() => import('./pages/ProfilePage').then((m) => ({ default: m.ProfilePage })));
 const StylistPage = lazy(() => import('./pages/StylistPage').then((m) => ({ default: m.StylistPage })));
-const WardrobePage = lazy(() => import('./pages/WardrobePage').then((m) => ({ default: m.WardrobePage })));
+const WardrobePage = lazy(() => loadWardrobePage().then((m) => ({ default: m.WardrobePage })));
+
+// Con una sesión guardada, quien abre la web por Inicio llega enseguida a él:
+// su código (con el 3D) se pide ya, a la vez que se renueva la sesión, en vez
+// de esperar a que termine. Sin sesión (login) no se descarga nada de 3D aquí.
+if (typeof window !== 'undefined' && window.location.pathname === '/' && tokenStore.get()) {
+  loadHomePage().catch(() => undefined);
+}
 
 function RequireAuth({ children }: { children: ReactNode }) {
   const { user, loading } = useAuth();

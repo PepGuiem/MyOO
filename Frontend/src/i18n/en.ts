@@ -2098,6 +2098,7 @@ export const EN: Record<string, string> = {
   "Vista previa en vivo": "Live preview",
   "Vista previa: {preview}": "Preview: {preview}",
   "Viste el maniquí": "Dress the mannequin",
+  "Vistiendo el maniquí…": "Dressing the mannequin…",
   "Visto": "Seen",
   "Visto por {n}": "Seen by {n}",
   "Volver": "Back",

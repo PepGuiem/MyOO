@@ -1,4 +1,4 @@
-import { useId, useState, type CSSProperties, type FormEvent, type KeyboardEvent } from 'react';
+import { lazy, Suspense, useEffect, useId, useState, type CSSProperties, type FormEvent, type KeyboardEvent } from 'react';
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { oauthApi } from '../api/endpoints';
 import type { GarmentLike, ProviderSlug } from '../api/types';
@@ -9,10 +9,15 @@ import { LanguageSwitch } from '../components/LanguageSwitch';
 import { Logo } from '../components/Logo';
 import { banFromError, banMessage } from '../lib/ban';
 import { useAsync } from '../lib/useAsync';
-import { OutfitStage } from '../three/OutfitMannequin';
+import { LoadingOverlay } from '../components/Spinner';
+import { preload3dWhenIdle } from '../lib/preload3d';
 import { t } from '../i18n';
 
 /** Outfit de muestra para la pantalla de acceso (no viene de la API). */
+// El maniquí del fondo usa three.js: se descarga aparte, así el formulario de
+// acceso aparece enseguida. Mientras llega, el mismo aviso de carga del escenario.
+const OutfitStage = lazy(() => import('../three/OutfitMannequin').then((m) => ({ default: m.OutfitStage })));
+
 const SAMPLE: GarmentLike[] = [
   { color: '#5C5C62', attributes: { closure: 'open' }, garmentType: { modelKey: 'jacket', category: 'OUTERWEAR' } },
   { color: '#E2E0DB', attributes: { sleeve: 'short' }, garmentType: { modelKey: 'tshirt', category: 'TOP' } },
@@ -70,6 +75,9 @@ export function AuthPage({ mode }: { mode: 'login' | 'register' }) {
   // escaneado con su QR), no siempre al inicio.
   const location = useLocation();
   const back = returnPath(location.state);
+  // Mientras se escribe el correo, el resto del 3D (Inicio, armario) se
+  // precarga en un rato libre: al entrar ya está listo.
+  useEffect(() => preload3dWhenIdle(), []);
 
   if (user) return <Navigate to={back} replace />;
 
@@ -128,7 +136,9 @@ export function AuthPage({ mode }: { mode: 'login' | 'register' }) {
       </ul>
 
       <div className="auth-stage" aria-hidden="true">
-        <OutfitStage garments={SAMPLE} />
+        <Suspense fallback={<LoadingOverlay show label={t('Vistiendo el maniquí…')} />}>
+          <OutfitStage garments={SAMPLE} />
+        </Suspense>
       </div>
 
       <main className="auth-panel">

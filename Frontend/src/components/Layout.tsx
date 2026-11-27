@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useState, type FormEvent } from 'react';
+import { lazy, Suspense, useEffect, useState, useSyncExternalStore, type FormEvent } from 'react';
 import { Link, NavLink, Outlet, useLocation, useOutletContext, useSearchParams } from 'react-router-dom';
 import { garmentTypesApi, wardrobesApi } from '../api/endpoints';
 import type { GarmentType, Wardrobe } from '../api/types';
@@ -6,7 +6,8 @@ import { useAuth } from '../auth/AuthContext';
 import { useAssetUrl } from '../lib/assetUrl';
 import { useRealtime } from '../lib/realtime';
 import { useAsync } from '../lib/useAsync';
-import { ViewCanvas } from '../three/ViewCanvas';
+import { loadViewCanvas, preload3dWhenIdle } from '../lib/preload3d';
+import { subscribeViews, views } from '../three/viewStore';
 import { NotificationBell } from './community/NotificationBell';
 import { ErrorNote } from './ErrorNote';
 import { Icon, type IconName } from './Icon';
@@ -17,6 +18,10 @@ import { ToastProvider } from './fx/Toast';
 import { Logo } from './Logo';
 import { Spinner } from './Spinner';
 import { t } from '../i18n';
+
+// El canvas compartido de las miniaturas 3D usa three.js: se descarga aparte
+// (lib/preload3d.ts) y no retrasa el arranque del menú.
+const ViewCanvas = lazy(() => loadViewCanvas().then((m) => ({ default: m.ViewCanvas })));
 
 export interface AppData {
   wardrobes: Wardrobe[];
@@ -51,6 +56,14 @@ export function Layout() {
     };
   }, [menuOpen]);
   const activeWardrobe = params.get('w');
+
+  // Canvas 3D compartido: se monta en cuanto la página tiene su primera
+  // miniatura y ya se queda (cambiar de página no lo vuelve a crear).
+  const hasViews = useSyncExternalStore(subscribeViews, () => views.size > 0);
+  const [canvasOn, setCanvasOn] = useState(hasViews);
+  if (hasViews && !canvasOn) setCanvasOn(true);
+  // En las páginas sin 3D, el motor 3D se precarga en un rato libre.
+  useEffect(() => preload3dWhenIdle(), []);
 
   const wardrobes = useAsync(() => wardrobesApi.list(), []);
   const types = useAsync(() => garmentTypesApi.list(), []);
@@ -280,7 +293,11 @@ export function Layout() {
         </div>
       </main>
 
-      <ViewCanvas />
+      {canvasOn ? (
+        <Suspense fallback={null}>
+          <ViewCanvas />
+        </Suspense>
+      ) : null}
     </div>
     </ToastProvider>
   );

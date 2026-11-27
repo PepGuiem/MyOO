@@ -2,18 +2,36 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState, t
 import { mannequinsApi } from '../api/endpoints';
 import type { Mannequin } from '../api/types';
 import { useAuth } from '../auth/AuthContext';
-import { BODY_SHAPES, DEFAULT_BODY, type BodyShape } from '../three/body';
-import { shapeFromMeasures } from '../three/bodyMeasures';
+// bodyShapes (y no body/bodyMeasures): el arranque no debe descargar three.js.
+import { BODY_SHAPES, DEFAULT_BODY, type BodyShape } from '../three/bodyShapes';
 
 /** Prefijo de los ids de selección que son maniquíes de la cuenta: «m:<uuid>». */
 const MANNEQUIN_PREFIX = 'm:';
 
 export const mannequinSelectionId = (id: string) => MANNEQUIN_PREFIX + id;
 
+type ShapeFromMeasures = (typeof import('../three/bodyMeasures'))['shapeFromMeasures'];
+
 /** Silueta 3D de un maniquí de la cuenta (sus medidas reales). */
-export function shapeOfMannequin(m: Mannequin): BodyShape {
+function shapeOfMannequin(m: Mannequin, shapeFromMeasures: ShapeFromMeasures): BodyShape {
   // El id cambia con updatedAt: al editar las medidas, makeBody recalcula.
   return shapeFromMeasures(m.sex, m.measures, `m:${m.id}:${m.updatedAt}`, m.name);
+}
+
+/**
+ * Pasar medidas a silueta construye el cuerpo en 3D (three.js), así que ese
+ * código se descarga aparte, solo cuando la cuenta tiene maniquíes propios.
+ */
+let measuresModule: Promise<ShapeFromMeasures> | null = null;
+function loadShapeFromMeasures(): Promise<ShapeFromMeasures> {
+  measuresModule ??= import('../three/bodyMeasures').then(
+    (m) => m.shapeFromMeasures,
+    (err: unknown) => {
+      measuresModule = null; // se reintenta la próxima vez
+      throw err;
+    },
+  );
+  return measuresModule;
 }
 
 interface BodyPref {
@@ -53,6 +71,7 @@ export function BodyProvider({ children }: { children: ReactNode }) {
   const [mannequins, setMannequins] = useState<Mannequin[]>([]);
   const [loaded, setLoaded] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(() => readStored(userId));
+  const [fromMeasures, setFromMeasures] = useState<ShapeFromMeasures | null>(null);
 
   const reloadMannequins = useCallback(async () => {
     if (!userId) {
@@ -62,6 +81,16 @@ export function BodyProvider({ children }: { children: ReactNode }) {
     }
     try {
       const list = await mannequinsApi.list();
+      // Antes de enseñarlos, el código que pasa sus medidas a silueta (así
+      // nunca hay maniquíes sin silueta; mientras, se ve la genérica).
+      if (list.length) {
+        try {
+          const fn = await loadShapeFromMeasures();
+          setFromMeasures(() => fn);
+        } catch {
+          /* sin red: los maniquíes de la cuenta se ven con la silueta genérica */
+        }
+      }
       setMannequins(list);
       return list;
     } catch {
@@ -79,7 +108,10 @@ export function BodyProvider({ children }: { children: ReactNode }) {
     void reloadMannequins();
   }, [userId, reloadMannequins]);
 
-  const mannequinShapes = useMemo(() => new Map(mannequins.map((m) => [m.id, shapeOfMannequin(m)])), [mannequins]);
+  const mannequinShapes = useMemo(
+    () => (fromMeasures ? new Map(mannequins.map((m) => [m.id, shapeOfMannequin(m, fromMeasures)])) : new Map<string, BodyShape>()),
+    [mannequins, fromMeasures],
+  );
 
   const setShapeId = useCallback(
     (next: string) => {

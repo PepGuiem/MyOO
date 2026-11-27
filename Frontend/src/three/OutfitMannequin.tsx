@@ -15,6 +15,7 @@ import { Mannequin } from './Mannequin';
 import { LoadingScope, LoadingWatch } from '../lib/loading';
 import { pendingSimulations } from './simClient';
 import { makeFloorPool } from './showcase/studio';
+import { t } from '../i18n';
 
 /**
  * Viste el maniquí. Cada prenda se genera para ESTE cuerpo, así que encaja en
@@ -198,7 +199,7 @@ export function OutfitStage({
     typeof window !== 'undefined' && (document.documentElement.dataset.motion === 'reduced' || !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches);
   const spin = rig ? rig.spin : true;
   return (
-    <LoadingScope label="Vistiendo el maniquí…">
+    <LoadingScope label={t('Vistiendo el maniquí…')}>
     <Canvas shadows dpr={[1, 2]} camera={{ position: [0, EYE_Y + 0.12, distance], fov: 32 }} gl={{ alpha: true }} onCreated={setupRenderer}>
       <StudioLights shadows />
       <group rotation={[0, BASE_TURN, 0]}>

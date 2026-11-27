@@ -153,6 +153,8 @@ const ViewScene = memo(function ViewScene({ entry }: { entry: ViewEntry }) {
     },
     () => entry.version,
   );
+  // La escena se crea aquí (y no en viewStore) para que viewStore no importe three.
+  entry.scene ??= new THREE.Scene();
   return createPortal(
     <ViewEntryContext.Provider value={entry}>
       <Grab entry={entry} />
@@ -207,7 +209,7 @@ function drawAll(state: RootState, layer: HTMLDivElement | null, stage: HTMLDivE
     if (!e.mounted || !e.near) continue;
     const r = e.el.getBoundingClientRect();
     e.last = { x: r.left + drawnScrollX, y: r.top + drawnScrollY, w: r.width, h: r.height };
-    if (!e.get || r.width < 1 || r.height < 1) continue;
+    if (!e.get || !e.scene || r.width < 1 || r.height < 1) continue;
     if (Math.abs(r.width - e.size.width) > 1 || Math.abs(r.height - e.size.height) > 1) {
       e.size = { width: r.width, height: r.height };
       touchEntry(e);
