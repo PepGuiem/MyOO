@@ -47,6 +47,14 @@
  *   8 camisas de Blender (formal, oxford, oversize, lino, franela, vaquera,
  *   cubana y manga corta). Sustituyen a las anteriores salvo las sin manga.
  *
+ * - «calzado» (prendas_calzado_glb/coleccion/glb, en public/models/prendas/calzado):
+ *   8 zapatillas de Blender (SNK01-SNK08: pista de piel, caña alta de lona,
+ *   running de malla, skate de ante, chunky, slip-on de denim, runner de punto
+ *   y baloncesto de caña media), en par sobre los tobillos del cuerpo de
+ *   referencia de 1,78 m como el resto de calzado. Cada pieza trae su papel
+ *   (`secondary`, `trim`, `lace`, `sole`, `hardware`) y se tiñe aparte. Por
+ *   defecto, las zapatillas usan esta colección (ver `footwearModel`).
+ *
  * Pantalones largos: SOLO los 10 vaqueros hechos en Blender (street 19-28).
  * Todo pantalón usa la malla del corte más parecido con su color y su tejido
  * (chino, lana, felpa...), sin modelo generado por código y sin los antiguos
@@ -206,14 +214,18 @@ function pantsModel(attributes: Attributes, parts?: Record<string, boolean>): Li
 /** ¿Es un vaquero? El mismo tejido que usa el 3D (lo escrito en material o, si no, el del corte). */
 const isDenim = (a: Attributes): boolean => fabricFor('pants', a) === 'denim';
 
-type Collection = 'classic' | 'knit' | 'casual' | 'street';
+type Collection = 'classic' | 'knit' | 'casual' | 'street' | 'footwear';
 
+// La colección de calzado solo tiene zapatillas: en «auto» va primero; si se
+// pide otra colección, queda como último recurso (p. ej. un estilo que la
+// street no tiene).
 const ORDER: Record<string, Collection[]> = {
-  auto: ['street', 'knit', 'casual', 'classic'],
-  knit: ['knit', 'casual', 'classic', 'street'],
-  casual: ['casual', 'knit', 'classic', 'street'],
-  classic: ['classic', 'casual', 'knit', 'street'],
-  street: ['street', 'knit', 'casual', 'classic'],
+  auto: ['footwear', 'street', 'knit', 'casual', 'classic'],
+  footwear: ['footwear', 'street', 'knit', 'casual', 'classic'],
+  knit: ['knit', 'casual', 'classic', 'street', 'footwear'],
+  casual: ['casual', 'knit', 'classic', 'street', 'footwear'],
+  classic: ['classic', 'casual', 'knit', 'street', 'footwear'],
+  street: ['street', 'knit', 'casual', 'classic', 'footwear'],
 };
 
 /**
@@ -257,13 +269,15 @@ export function libraryModel(modelKey: string, attributes: Attributes, parts?: R
   if (pref === 'procedural') return null;
   for (const c of ORDER[pref] ?? ORDER.auto) {
     const e =
-      c === 'knit'
-        ? knitModel(modelKey, attributes, parts, pref === 'knit')
-        : c === 'casual'
-          ? casualModel(modelKey, attributes)
-          : c === 'street'
-            ? streetModel(modelKey, attributes, pref === 'street')
-            : classicModel(modelKey, attributes);
+      c === 'footwear'
+        ? footwearModel(modelKey, attributes)
+        : c === 'knit'
+          ? knitModel(modelKey, attributes, parts, pref === 'knit')
+          : c === 'casual'
+            ? casualModel(modelKey, attributes)
+            : c === 'street'
+              ? streetModel(modelKey, attributes, pref === 'street')
+              : classicModel(modelKey, attributes);
     if (e) return e;
   }
   return null;
@@ -733,6 +747,39 @@ function streetModel(modelKey: string, attributes: Attributes, chosen: boolean):
     default:
       return null;
   }
+}
+
+/**
+ * Zapatillas de la colección «calzado» por tipo (atributo `style`): archivo,
+ * piezas que se colorean aparte y si llevan cordones (que se pueden quitar).
+ * Sin tipo, o «casual», la de pista (SNK01).
+ */
+export const FOOTWEAR_MODELS: Record<string, { file: string; colors: NonNullable<LibraryEntry['colors']>; laces: boolean }> = {
+  court: { file: 'SNK01_CourtLow.glb', colors: ['secondary', 'trim', 'laces', 'sole'], laces: true },
+  high_top: { file: 'SNK02_CanvasHigh.glb', colors: ['trim', 'laces', 'sole', 'hardware'], laces: true },
+  running: { file: 'SNK03_RunningMesh.glb', colors: ['secondary', 'trim', 'laces', 'sole'], laces: true },
+  skate: { file: 'SNK04_SkateSuede.glb', colors: ['secondary', 'trim', 'laces', 'sole', 'hardware'], laces: true },
+  chunky: { file: 'SNK05_ChunkyRetro.glb', colors: ['secondary', 'trim', 'laces', 'sole'], laces: true },
+  slip_on: { file: 'SNK06_SlipOnDenim.glb', colors: ['secondary', 'trim', 'sole'], laces: false },
+  knit: { file: 'SNK07_KnitRunner.glb', colors: ['secondary', 'trim', 'laces', 'sole'], laces: true },
+  mid_top: { file: 'SNK08_BasketMid.glb', colors: ['secondary', 'trim', 'laces', 'sole'], laces: true },
+};
+
+/** Colección «calzado» (zapatillas de Blender): modelo del tipo pedido. */
+function footwearModel(modelKey: string, attributes: Attributes): LibraryEntry | null {
+  if (modelKey !== 'sneakers') return null;
+  const style = str(attributes, 'style') ?? 'court';
+  const hit = FOOTWEAR_MODELS[style === 'casual' ? 'court' : style];
+  if (!hit) return null;
+  return {
+    file: `calzado/${hit.file}`,
+    // En los pies, siguiendo el eje de cada pierna (como el resto del calzado).
+    region: 'lower',
+    fit: 1,
+    armDeg: 32,
+    colors: hit.colors,
+    ...(hit.laces ? { parts: ['laces'] } : {}),
+  };
 }
 
 /** Colección clásica (brazos a 44°). */

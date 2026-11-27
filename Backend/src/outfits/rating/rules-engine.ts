@@ -107,7 +107,7 @@ export const STYLE_PROFILES: Record<OutfitStyleKey, StyleProfile> = {
     bold: true,
     dark: false,
     marker: (it) =>
-      ['skate', 'high_top'].includes(attr(it, 'style')) ||
+      ['skate', 'high_top', 'mid_top'].includes(attr(it, 'style')) ||
       ['baggy', 'wide', 'relaxed', 'cargo'].includes(attr(it, 'fit')) ||
       ['shorts', 'cap', 'beanie'].includes(it.modelKey),
   },

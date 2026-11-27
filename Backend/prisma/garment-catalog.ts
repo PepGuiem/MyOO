@@ -263,6 +263,18 @@ const model3dCap = enumField(
   ['street', 'Colección street'],
   ['procedural', 'Generado por código (colores por pieza)'],
 );
+/**
+ * Zapatillas: la colección de calzado de Blender (por defecto), la street y la
+ * casual (las anteriores) o el modelo por código.
+ */
+const model3dFootwear = enumField(
+  'Modelo 3D',
+  ['auto', 'Automático'],
+  ['footwear', 'Colección calzado'],
+  ['street', 'Colección street'],
+  ['casual', 'Colección casual'],
+  ['procedural', 'Generado por código (colores por pieza)'],
+);
 /** Camisas: la colección casual (cerradas, con botones) y la clásica (abierta). */
 const model3dShirt = enumField(
   'Modelo 3D',
@@ -551,7 +563,10 @@ export const GARMENT_TYPE_SEEDS: GarmentTypeSeed[] = [
           ['slip_on', 'Sin cordones (slip-on)'],
           ['chunky', 'Chunky (suela gruesa)'],
           ['skate', 'Skate'],
+          ['knit', 'Runner de punto (knit)'],
+          ['mid_top', 'Caña media (baloncesto)'],
         ),
+        model3d: model3dFootwear,
         material,
         brand,
       },

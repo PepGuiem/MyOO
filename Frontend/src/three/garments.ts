@@ -2160,6 +2160,9 @@ const SNEAKER_STYLES: Record<string, ShoeStyle> = {
   slip_on: { sole: 0.022, soleTone: 'sole', laces: false, collar: 0.005, elasticSides: true },
   chunky: { sole: 0.05, soleTone: 'sole', laces: true, collar: 0.008 },
   skate: { sole: 0.028, soleTone: 'sole', laces: true, collar: 0.01, toeSeam: true },
+  // Runner de punto y baloncesto de caña media (tienen modelo en la colección calzado).
+  knit: { sole: 0.03, soleTone: 'light', laces: true, collar: 0.006 },
+  mid_top: { sole: 0.026, soleTone: 'sole', laces: true, collar: 0.007, toeSeam: true, shaftTop: (b) => b.y.ankle + 0.04 * b.s },
 };
 
 function sneakers(a: Attributes, b: Body): GarmentBuild {

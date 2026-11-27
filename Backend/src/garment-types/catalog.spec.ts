@@ -29,6 +29,20 @@ describe('Catálogo de tipos de prenda y cortes', () => {
     expect(withoutFit.map((g) => g.code)).toEqual([]);
   });
 
+  it('las zapatillas tienen los tipos de la colección de calzado y su «Modelo 3D»', () => {
+    const sneakers = GARMENT_TYPE_SEEDS.find((g) => g.code === 'SNEAKERS')!;
+    const style = sneakers.attributeSchema.fields.style;
+    const model3d = sneakers.attributeSchema.fields.model3d;
+    const values = (f: typeof style) => (f?.type === 'enum' ? f.options.map((o) => o.value) : []);
+    // Un tipo por cada zapatilla de Blender (SNK01-SNK08); los valores ya guardados siguen ahí.
+    expect(values(style)).toEqual(
+      expect.arrayContaining(['casual', 'court', 'high_top', 'running', 'skate', 'chunky', 'slip_on', 'knit', 'mid_top']),
+    );
+    expect(values(model3d)).toEqual(['auto', 'footwear', 'street', 'casual', 'procedural']);
+    expect(validateAttributes(sneakers.attributeSchema, { style: 'mid_top', model3d: 'footwear' }).errors).toEqual([]);
+    expect(validateAttributes(sneakers.attributeSchema, { model3d: 'knit' }).errors).not.toEqual([]);
+  });
+
   it('las prendas de demostración usan valores válidos del catálogo', () => {
     for (const item of DEMO_ITEMS) {
       const type = GARMENT_TYPE_SEEDS.find((g) => g.code === item.type);

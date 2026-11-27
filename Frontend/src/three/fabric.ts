@@ -256,7 +256,7 @@ const STYLE_FABRIC: Record<string, Record<string, FabricKind>> = {
     puffer_vest: 'nylon',
   },
   coat: { trench: 'woven', parka: 'canvas', puffer: 'nylon', raincoat: 'nylon' },
-  sneakers: { running: 'knit', court: 'leather', high_top: 'leather', skate: 'canvas', chunky: 'leather', slip_on: 'canvas' },
+  sneakers: { running: 'knit', court: 'leather', high_top: 'leather', skate: 'canvas', chunky: 'leather', slip_on: 'canvas', knit: 'knit', mid_top: 'leather' },
   cap: { trucker: 'canvas', snapback: 'wool', five_panel: 'nylon', bucket: 'canvas' },
 };
 

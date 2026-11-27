@@ -318,7 +318,7 @@ export function formality(it: EngineItem): number {
       return m[style ?? ''] ?? 0.6;
     }
     case 'sneakers':
-      return style === 'court' ? 0.32 : style === 'running' ? 0.1 : 0.2;
+      return style === 'court' ? 0.32 : style === 'running' || style === 'knit' ? 0.1 : 0.2;
     case 'boots': {
       const m: Record<string, number> = {
         chelsea: 0.66,
@@ -446,10 +446,10 @@ export function inferStyles(it: EngineItem): StyleTag[] {
       break;
     case 'sneakers':
       add('casual', 'streetwear');
-      if (style === 'running') add('sporty');
+      if (style === 'running' || style === 'knit') add('sporty');
       if (style === 'court') add('minimalist', 'smart_casual');
       if (style === 'chunky') add('y2k');
-      if (style === 'skate' || style === 'high_top') add('vintage');
+      if (style === 'skate' || style === 'high_top' || style === 'mid_top') add('vintage');
       break;
     case 'boots':
       if (style === 'chelsea' || style === 'dress')
