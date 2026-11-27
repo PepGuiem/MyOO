@@ -1,6 +1,7 @@
 import { ContactShadows, OrbitControls, PerspectiveCamera } from '@react-three/drei';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 import * as THREE from 'three';
 import type { GarmentCategory, GarmentLike } from '../api/types';
 import { makeBody, type BodyShape } from './body';
@@ -11,7 +12,8 @@ import type { GarmentBuild } from './garments';
 import type { OutfitContext } from './styling';
 import { FRONT_GAP, jacketForStyling, libraryModel } from './libraryCatalog';
 import { Mannequin } from './Mannequin';
-import { LoadingScope } from '../lib/loading';
+import { LoadingScope, LoadingWatch } from '../lib/loading';
+import { pendingSimulations } from './simClient';
 import { makeFloorPool } from './showcase/studio';
 
 /**
@@ -220,6 +222,106 @@ export function OutfitStage({
     </Canvas>
     </LoadingScope>
   );
+}
+
+/**
+ * Foto del maniquí vestido para compartir (components/share). Monta su propio
+ * <Canvas> del tamaño de la imagen, fuera de la pantalla (no usa el lienzo
+ * compartido de las miniaturas), con la misma luz, suelo y sombras que el
+ * escenario. Espera a que carguen los modelos y la caída de la tela, copia el
+ * fotograma a un canvas 2D y lo entrega con `onCapture`. Al desmontarlo,
+ * React Three Fiber libera el renderer (y su contexto WebGL).
+ */
+export function OutfitSnapshot({
+  garments,
+  shape,
+  width,
+  height,
+  distance,
+  targetY,
+  onCapture,
+}: {
+  garments: GarmentLike[];
+  shape?: BodyShape;
+  /** Tamaño de la imagen en píxeles reales (sin escalar por la pantalla). */
+  width: number;
+  height: number;
+  /** Encuadre: distancia de la cámara y altura a la que mira. */
+  distance: number;
+  targetY: number;
+  onCapture: (frame: HTMLCanvasElement) => void;
+}) {
+  // Modelos que aún se descargan (lo avisan las prendas y el maniquí).
+  const pending = useRef(0);
+  const onPending = useCallback((n: number) => {
+    pending.current = n;
+  }, []);
+  return createPortal(
+    <div
+      className="outfit-snapshot"
+      aria-hidden="true"
+      // Fuera de la pantalla por la izquierda: no se ve ni crea scroll.
+      style={{ position: 'fixed', top: 0, left: -(width + 4000), width, height, pointerEvents: 'none', overflow: 'hidden' }}
+    >
+      <LoadingWatch onChange={onPending}>
+        <Canvas
+          shadows
+          dpr={1}
+          gl={{ alpha: true, antialias: true, preserveDrawingBuffer: true }}
+          camera={{ position: [0, targetY + 0.12, distance], fov: 30 }}
+          onCreated={(state) => {
+            setupRenderer(state);
+            state.gl.setClearColor(0x000000, 0);
+            state.camera.lookAt(0, targetY, 0);
+          }}
+          style={{ width, height }}
+        >
+          <StudioLights shadows />
+          <group rotation={[0, BASE_TURN, 0]}>
+            <Dressed garments={garments} shape={shape} detail="high" />
+          </group>
+          <FloorPool />
+          <ContactShadows position={[0, 0.002, 0]} opacity={0.7} scale={2.4} blur={2.2} far={1.2} color="#050506" />
+          <SnapshotCapture pending={pending} onCapture={onCapture} />
+        </Canvas>
+      </LoadingWatch>
+    </div>,
+    document.body,
+  );
+}
+
+/** Mínimo, calma necesaria y máximo de espera antes de hacer la foto (ms). */
+const SNAP_MIN_MS = 900;
+const SNAP_QUIET_MS = 1100;
+const SNAP_MAX_MS = 15000;
+
+/**
+ * Hace la foto cuando la escena lleva un rato quieta: nada cargando ni
+ * simulándose (los colores tardan menos de un segundo en asentarse). Si algo
+ * se alarga, a los 15 s se hace igualmente con lo que haya.
+ */
+function SnapshotCapture({ pending, onCapture }: { pending: { current: number }; onCapture: (frame: HTMLCanvasElement) => void }) {
+  const start = useRef(0);
+  const quietSince = useRef(0);
+  const done = useRef(false);
+  useFrame((state) => {
+    if (done.current) return;
+    const now = performance.now();
+    if (!start.current) start.current = quietSince.current = now;
+    if (pending.current > 0 || pendingSimulations() > 0) quietSince.current = now;
+    const ready = now - start.current > SNAP_MIN_MS && now - quietSince.current > SNAP_QUIET_MS;
+    if (!ready && now - start.current < SNAP_MAX_MS) return;
+    done.current = true;
+    // Se pinta y se copia en el mismo paso, con el fotograma recién hecho.
+    state.gl.render(state.scene, state.camera);
+    const src = state.gl.domElement;
+    const frame = document.createElement('canvas');
+    frame.width = src.width;
+    frame.height = src.height;
+    frame.getContext('2d')?.drawImage(src, 0, 0);
+    onCapture(frame);
+  });
+  return null;
 }
 
 /** Giro inicial del maniquí (de tres cuartos). */

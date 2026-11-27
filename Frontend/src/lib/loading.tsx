@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useId, useState, type ReactNode } from 'react';
+import { createContext, useCallback, useContext, useEffect, useId, useRef, useState, type ReactNode } from 'react';
 import { LoadingOverlay } from '../components/Spinner';
 
 /**
@@ -27,6 +27,25 @@ export function LoadingScope({ children, label }: { children: ReactNode; label?:
       <LoadingOverlay show={keys.size > 0} label={label} />
     </LoadingCtx.Provider>
   );
+}
+
+/**
+ * Como `LoadingScope`, pero sin icono: avisa a quien lo usa de cuántas cosas
+ * siguen cargando (p. ej. la imagen para compartir espera a que no quede nada).
+ */
+export function LoadingWatch({ children, onChange }: { children: ReactNode; onChange: (pending: number) => void }) {
+  const keys = useRef(new Set<string>());
+  const report = useCallback<Report>(
+    (key, loading) => {
+      const set = keys.current;
+      if (set.has(key) === loading) return;
+      if (loading) set.add(key);
+      else set.delete(key);
+      onChange(set.size);
+    },
+    [onChange],
+  );
+  return <LoadingCtx.Provider value={report}>{children}</LoadingCtx.Provider>;
 }
 
 export function useReportLoading(loading: boolean): void {

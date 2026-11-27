@@ -6,6 +6,7 @@ import { useAuth } from '../auth/AuthContext';
 import { ErrorNote } from '../components/ErrorNote';
 import { Icon, type IconName } from '../components/Icon';
 import { useAppData } from '../components/Layout';
+import { OutfitShareDialog } from '../components/share/OutfitShareDialog';
 import { CountUp } from '../components/street/Street';
 import { GarmentCard, GarmentCardSkeletons } from '../components/wardrobe/GarmentCard';
 import { useBodyShape } from '../lib/bodyPref';
@@ -55,6 +56,8 @@ export function HomePage() {
   const [error, setError] = useState<unknown>(null);
   // Outfit destacado: el más reciente; «Otro» pasa al siguiente.
   const [featured, setFeatured] = useState(0);
+  // Diálogo «Compartir imagen» del outfit destacado.
+  const [sharing, setSharing] = useState(false);
 
   useEffect(() => {
     let alive = true;
@@ -221,6 +224,9 @@ export function HomePage() {
                 <Link to={`/outfits/${outfit.id}`} className="btn wd-add">
                   <Icon name="external" size={14} /> <span>{t('Abrir')}</span>
                 </Link>
+                <button type="button" className="btn wd-btn-line share-open" onClick={() => setSharing(true)} disabled={!garments.length}>
+                  <Icon name="camera" size={14} /> {t('Compartir imagen')}
+                </button>
                 {data && data.outfits.length > 1 && (
                   <button type="button" className="btn wd-btn-line" onClick={() => setFeatured((f) => f + 1)}>
                     <Icon name="shuffle" size={14} /> {t('Ver otro')}
@@ -308,6 +314,16 @@ export function HomePage() {
             ))}
           </div>
         </HomeSection>
+      )}
+      {/* Fuera del bloque animado del inicio: el diálogo va fijo sobre la pantalla. */}
+      {sharing && outfit && (
+        <OutfitShareDialog
+          name={outfit.name}
+          garments={garments}
+          shape={shape}
+          isPrivate={!outfit.isShared || !!user?.isPrivate}
+          onClose={() => setSharing(false)}
+        />
       )}
     </section>
   );

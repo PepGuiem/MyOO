@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useId, useMemo, useRef, useState, type CSSProperties, type FormEvent } from 'react';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { calendarApi, itemsApi, outfitsApi, ratingsApi } from '../api/endpoints';
+import { useAuth } from '../auth/AuthContext';
 import type { OutfitStyle, RatingEntry, RatingResult, RatingTip, Season, Styling, StylingOption, WardrobeItem } from '../api/types';
 import { BodySelector } from '../components/BodySelector';
 import { ErrorNote } from '../components/ErrorNote';
@@ -13,6 +14,7 @@ import { OutfitRatingPanel } from '../components/rating/OutfitRatingPanel';
 import { ScoreRing } from '../components/rating/RatingGauge';
 import { Select } from '../components/Select';
 import { useAppData } from '../components/Layout';
+import { OutfitShareDialog } from '../components/share/OutfitShareDialog';
 import { Busy } from '../components/Spinner';
 import { stickerTilt } from '../components/street/Street';
 import { useBodyShape } from '../lib/bodyPref';
@@ -68,6 +70,9 @@ export function OutfitEditorPage() {
   const [style, setStyle] = useState<OutfitStyle | null>(null);
   const [isFavorite, setIsFavorite] = useState(false);
   const [slot, setSlot] = useState<SlotId | 'all'>('all');
+  // Diálogo «Compartir imagen» (la foto del maniquí se genera al abrirlo).
+  const [sharing, setSharing] = useState(false);
+  const { user } = useAuth();
   /** Burro: todo, solo lo que tienes o solo la wishlist. */
   const [owned, setOwned] = useState<'all' | 'mine' | 'wish'>('all');
   const [search, setSearch] = useState('');
@@ -502,6 +507,17 @@ export function OutfitEditorPage() {
           </button>
           <button type="button" className="btn wd-btn-line" onClick={clearAll} disabled={!selected.length}>
             <Icon name="undo" size={14} /> {t('Vaciar')}
+          </button>
+          <button
+            type="button"
+            className="btn wd-btn-line share-open"
+            onClick={() => {
+              play('click');
+              setSharing(true);
+            }}
+            disabled={loading || !selected.length}
+          >
+            <Icon name="camera" size={14} /> {t('Compartir imagen')}
           </button>
           <SoundToggle />
         </div>
@@ -996,6 +1012,16 @@ export function OutfitEditorPage() {
           {dirty && !saving && <p className="dirty-note">{t('Cambios sin guardar')}</p>}
         </form>
       </div>
+
+      {sharing && (
+        <OutfitShareDialog
+          name={name || (isNew ? t('Nuevo outfit') : t('Outfit'))}
+          garments={dressed}
+          shape={shape}
+          isPrivate={!isShared || !!user?.isPrivate}
+          onClose={() => setSharing(false)}
+        />
+      )}
 
       {confirmDelete && (
         <ConfirmDialog

@@ -60,6 +60,11 @@ function pump() {
   w.postMessage({ id: job.id, parts, params: job.plan.params }, transfer);
 }
 
+/** Simulaciones en cola o en marcha (la imagen para compartir espera a que acaben). */
+export function pendingSimulations(): number {
+  return queue.length + (busy ? 1 : 0);
+}
+
 /** Pide la simulación (o la devuelve de la caché). `priority` mayor = antes. */
 export function requestSimulation(key: string, plan: SimPlan, priority: number): Promise<Positions | null> {
   const cached = cache.get(key);

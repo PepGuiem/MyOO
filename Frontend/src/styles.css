@@ -31973,6 +31973,101 @@ p.hm-outfit-meta:not(:has(+ ul)) {
 }
 
 /* =============================================================================
+   Compartir un outfit como imagen (components/share/OutfitShareDialog.tsx)
+   ========================================================================== */
+.dialog.share-dialog {
+  width: min(100%, 460px);
+}
+
+.share-formats {
+  margin: 0 0 14px;
+  padding-right: 0;
+  border-right: 0;
+}
+
+.share-formats button {
+  min-height: 44px;
+}
+
+.share-preview {
+  display: grid;
+  place-items: center;
+  /* El ancho lo pone el componente: cabe en el diálogo y en 58vh de alto. */
+  width: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+  border: 1px solid rgba(241, 238, 233, 0.12);
+  border-radius: 14px;
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 45%, rgb(var(--neon-rgb) / 0.12), transparent 70%),
+    #19191b;
+  box-shadow: 0 24px 50px -28px rgba(0, 0, 0, 0.95);
+}
+
+.share-preview img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  animation: wd-rise 0.4s var(--wd-ease, ease) backwards;
+}
+
+.share-failed {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  padding: 16px;
+  text-align: center;
+}
+
+.share-failed .btn {
+  min-height: 44px;
+}
+
+.share-warn {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 14px 0 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.share-warn .icon {
+  flex: none;
+  margin-top: 2px;
+  color: var(--neon);
+}
+
+.share-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.share-actions .btn {
+  min-height: 44px;
+}
+
+.share-note {
+  margin: 10px 0 0;
+  text-align: center;
+  color: var(--neon);
+}
+
+.share-open {
+  min-height: 44px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .share-preview img {
+    animation: none;
+  }
+}
+
+/* =============================================================================
    Menú lateral agrupado (.nx): Inicio y Armario arriba; Estilo, Colección,
    Comunidad (y Admin) como grupos plegables; tu perfil y la cuenta al pie.
    Mismos enlaces y rutas de siempre; solo cambia cómo se ordenan y se ven.
