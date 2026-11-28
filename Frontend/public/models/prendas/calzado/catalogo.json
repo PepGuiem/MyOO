@@ -1,0 +1,186 @@
+[
+ {
+  "archivo": "SNK01_CourtLow.glb",
+  "prenda": "Zapatilla de pista de piel",
+  "original": {
+   "triangulos": 58216,
+   "bytes": 3932144
+  },
+  "piezas": [
+   "body",
+   "lace",
+   "trim",
+   "sole",
+   "secondary"
+  ],
+  "alto": {
+   "triangulos": 32019,
+   "bytes": 281328
+  },
+  "lod": {
+   "triangulos": 19997,
+   "bytes": 198776
+  }
+ },
+ {
+  "archivo": "SNK02_CanvasHigh.glb",
+  "prenda": "Zapatilla alta de lona",
+  "original": {
+   "triangulos": 53396,
+   "bytes": 4374020
+  },
+  "piezas": [
+   "body",
+   "lace",
+   "trim",
+   "hardware",
+   "sole"
+  ],
+  "alto": {
+   "triangulos": 29462,
+   "bytes": 270872
+  },
+  "lod": {
+   "triangulos": 19999,
+   "bytes": 202332
+  }
+ },
+ {
+  "archivo": "SNK03_RunningMesh.glb",
+  "prenda": "Running de malla",
+  "original": {
+   "triangulos": 57816,
+   "bytes": 4250392
+  },
+  "piezas": [
+   "body",
+   "lace",
+   "secondary",
+   "trim",
+   "sole"
+  ],
+  "alto": {
+   "triangulos": 31796,
+   "bytes": 289504
+  },
+  "lod": {
+   "triangulos": 19997,
+   "bytes": 205212
+  }
+ },
+ {
+  "archivo": "SNK04_SkateSuede.glb",
+  "prenda": "Zapatilla de skate de ante",
+  "original": {
+   "triangulos": 55020,
+   "bytes": 4550132
+  },
+  "piezas": [
+   "body",
+   "lace",
+   "trim",
+   "secondary",
+   "hardware",
+   "sole"
+  ],
+  "alto": {
+   "triangulos": 30257,
+   "bytes": 266536
+  },
+  "lod": {
+   "triangulos": 19997,
+   "bytes": 196840
+  }
+ },
+ {
+  "archivo": "SNK05_ChunkyRetro.glb",
+  "prenda": "Zapatilla chunky",
+  "original": {
+   "triangulos": 68780,
+   "bytes": 4710684
+  },
+  "piezas": [
+   "body",
+   "lace",
+   "secondary",
+   "trim",
+   "sole"
+  ],
+  "alto": {
+   "triangulos": 37827,
+   "bytes": 327832
+  },
+  "lod": {
+   "triangulos": 19998,
+   "bytes": 202588
+  }
+ },
+ {
+  "archivo": "SNK06_SlipOnDenim.glb",
+  "prenda": "Slip-on vaquera",
+  "original": {
+   "triangulos": 46784,
+   "bytes": 3088200
+  },
+  "piezas": [
+   "body",
+   "secondary",
+   "trim",
+   "sole"
+  ],
+  "alto": {
+   "triangulos": 25729,
+   "bytes": 207672
+  },
+  "lod": {
+   "triangulos": 20036,
+   "bytes": 171188
+  }
+ },
+ {
+  "archivo": "SNK07_KnitRunner.glb",
+  "prenda": "Runner de punto",
+  "original": {
+   "triangulos": 54448,
+   "bytes": 3764392
+  },
+  "piezas": [
+   "body",
+   "lace",
+   "trim",
+   "sole",
+   "secondary"
+  ],
+  "alto": {
+   "triangulos": 29944,
+   "bytes": 265072
+  },
+  "lod": {
+   "triangulos": 20000,
+   "bytes": 197804
+  }
+ },
+ {
+  "archivo": "SNK08_BasketMid.glb",
+  "prenda": "Baloncesto de caña media",
+  "original": {
+   "triangulos": 68056,
+   "bytes": 4776600
+  },
+  "piezas": [
+   "body",
+   "lace",
+   "secondary",
+   "trim",
+   "sole"
+  ],
+  "alto": {
+   "triangulos": 37429,
+   "bytes": 331576
+  },
+  "lod": {
+   "triangulos": 19999,
+   "bytes": 207144
+  }
+ }
+]

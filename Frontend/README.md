@@ -240,6 +240,7 @@ Hay cuatro colecciones y se usan todas:
 | Punto | `prendas_punto_glb/` (10 prendas) | `public/models/prendas/punto/` | 32° |
 | Casual | `prendas_casual_glb/` (7 prendas y 3 de calzado, con su generador) | `public/models/prendas/casual/` | 32° |
 | Street | `prendas_street_glb/` (8 prendas, 5 zapatillas, 4 gorras y gorro, con su generador) | `public/models/prendas/street/` | 32° |
+| Calzado | `prendas_calzado_glb/coleccion/glb` (8 zapatillas SNK01-SNK08 de Blender, con su generador) | `public/models/prendas/calzado/` | — |
 
 **Colección de punto** (se usa por defecto cuando tiene la prenda):
 
@@ -308,8 +309,23 @@ Hay cuatro colecciones y se usan todas:
 | Zapatillas *Running* | `street/17_zapatillas_running` (punto, mediasuela con balancín) | Suela, cordones, contrafuerte (secundario) |
 | Zapatillas *Sin cordones (slip-on)* | `street/18_zapatillas_slip_on` (elásticos a los lados) | Suela, elásticos (secundario) |
 
+**Colección de calzado** (zapatillas de Blender, `prendas_calzado_glb/coleccion`; es la que usan por defecto las zapatillas). Cada modelo es un par sobre los tobillos del cuerpo de 1,78 m; en el maniquí se agranda un 9 % en planta (`FOOTWEAR_FIT`: el pie del maniquí es más largo que la zapatilla real). Se prepara con `node scripts/prepare-garments.mjs ../prendas_calzado_glb/coleccion/glb public/models/prendas/calzado`.
+
+| Zapatillas «Tipo» | Modelo | Piezas que se colorean aparte |
+| --- | --- | --- |
+| *Casual*, *Pista (minimal)* o sin tipo | `calzado/SNK01_CourtLow` (piel, puntera picada) | Refuerzos (secundario), etiqueta y forro (ribetes), cordones, suela |
+| *Bota (caña alta)* | `calzado/SNK02_CanvasHigh` (lona vulcanizada) | Ribetes, cordones, suela, ojales (herrajes) |
+| *Running* | `calzado/SNK03_RunningMesh` (malla y EVA) | Refuerzos (secundario), ribetes, cordones, suela |
+| *Skate* | `calzado/SNK04_SkateSuede` (ante, goma miel) | Refuerzos (secundario), ribetes, cordones, suela, ojales (herrajes) |
+| *Chunky (suela gruesa)* | `calzado/SNK05_ChunkyRetro` (malla, ante y piel por capas) | Secundario, ribetes, cordones, suela |
+| *Sin cordones (slip-on)* | `calzado/SNK06_SlipOnDenim` (denim con elásticos en V) | Elásticos (secundario), ribetes, suela |
+| *Runner de punto (knit)* (tipo nuevo) | `calzado/SNK07_KnitRunner` (punto con jacquard, cuello calcetín) | Refuerzos (secundario), ribetes, cordones, suela |
+| *Caña media (baloncesto)* (tipo nuevo) | `calzado/SNK08_BasketMid` (piel blanca y negra) | Refuerzos (secundario), ribetes, cordones, suela |
+
+Los cordones se pueden quitar (pieza «Cordones»). En «Modelo 3D» de las zapatillas se puede volver a la colección street o casual, o al modelo por código.
+
 **Elegir el modelo**: en «Editar» prenda, el campo **«Modelo 3D»** ofrece:
-- Automático: los cortes de la street (*Baggy*, paracaídas, baloncesto, plumífero, varsity, cortavientos, caña alta, skate, chunky, running, slip-on, gorras trucker, snapback, cinco paneles y pescador, sudadera *Oversize*) usan esa colección; el resto, punto si existe; si no, casual; si no, clásica.
+- Automático: las zapatillas, la colección de calzado; los cortes de la street (*Baggy*, paracaídas, baloncesto, plumífero, varsity, cortavientos, gorras trucker, snapback, cinco paneles y pescador, sudadera *Oversize*) usan esa colección; el resto, punto si existe; si no, casual; si no, clásica.
 - Colección punto, colección casual (camisas), colección street (jerséis con capucha, pantalones, pantalones cortos, chaquetas y abrigos: usa su modelo también con otros cortes; gorras) o colección clásica.
 - Generado por código: admite colores por pieza.
 

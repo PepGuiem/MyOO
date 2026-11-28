@@ -765,6 +765,9 @@ export const FOOTWEAR_MODELS: Record<string, { file: string; colors: NonNullable
   mid_top: { file: 'SNK08_BasketMid.glb', colors: ['secondary', 'trim', 'laces', 'sole'], laces: true },
 };
 
+/** Escala en planta de las zapatillas de la colección «calzado» sobre el maniquí. */
+export const FOOTWEAR_FIT = 1.09;
+
 /** Colección «calzado» (zapatillas de Blender): modelo del tipo pedido. */
 function footwearModel(modelKey: string, attributes: Attributes): LibraryEntry | null {
   if (modelKey !== 'sneakers') return null;
@@ -775,7 +778,11 @@ function footwearModel(modelKey: string, attributes: Attributes): LibraryEntry |
     file: `calzado/${hit.file}`,
     // En los pies, siguiendo el eje de cada pierna (como el resto del calzado).
     region: 'lower',
-    fit: 1,
+    // Las zapatillas se modelaron a su tamaño real (unos 30,8 cm de largo) y el
+    // pie del maniquí mide 28,6 cm: la puntera del pie asomaba por la de la
+    // zapatilla. Un 9 % más (en planta, alrededor del tobillo) lo cubre con la
+    // misma holgura que el resto del calzado de la biblioteca.
+    fit: FOOTWEAR_FIT,
     armDeg: 32,
     colors: hit.colors,
     ...(hit.laces ? { parts: ['laces'] } : {}),
