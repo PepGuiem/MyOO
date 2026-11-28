@@ -4,7 +4,9 @@ import * as THREE from 'three';
 import type { GarmentLike, Styling } from '../api/types';
 import { useReportLoading } from '../lib/loading';
 import { makeBody, type Body } from './body';
-import { createClothMotion, makeClothMaterial, setPatternUniforms, stepInertia, swayProfile, type ClothMotion, type PatternUniforms } from './cloth';
+import { createClothMotion, makeClothMaterial, makeDetailUniforms, setPatternUniforms, stepInertia, swayProfile, type ClothMotion, type DetailUniforms, type PatternUniforms } from './cloth';
+import { acquireDetail, detailSaver, detailSizes, flatNormal, pickDetailSize, releaseDetail } from './detailMaps';
+import { usePreferenceVersion } from '../lib/preferences';
 import { applySimResult, simPlan } from './clothPlan';
 import { GARMENT_ROOT } from './DrawBridge';
 import { GarmentDetails } from './GarmentDetails';
@@ -186,6 +188,7 @@ export function GarmentModel({
       simKey={`${modelKey}|${attrsKey}|${shapeKey}|${fitBody.shape.id}|${fitBody.armSpread}|${layer}`}
       styling={body ? styling : undefined}
       outfit={outfit}
+      thumb={detail === 'low'}
     />
   );
 }
@@ -208,6 +211,7 @@ function GarmentMeshes({
   simKey,
   styling,
   outfit,
+  thumb,
 }: {
   build: GarmentBuild;
   garment: GarmentLike;
@@ -225,6 +229,8 @@ function GarmentMeshes({
   simKey: string;
   styling?: Styling;
   outfit?: OutfitContext;
+  /** Miniatura (versión ligera del modelo): relieve horneado de 512 px o ninguno. */
+  thumb: boolean;
 }) {
   const { modelKey } = garment.garmentType;
   const custom = garment.customization;
@@ -284,7 +290,7 @@ function GarmentMeshes({
       const fabric: FabricKind | 'none' = part.metal ? 'none' : (part.fabric ?? build.fabric);
       const look = partLook(garment.color, part, build.fabric, custom);
       const patterned = !!pattern && partHasPattern(part, pattern.spec.target);
-      const key = `${look.key}:${fabric}:${part.lined ? 'L' : ''}:${patterned ? 'P' : ''}`;
+      const key = `${look.key}:${fabric}:${part.lined ? 'L' : ''}:${patterned ? 'P' : ''}:${part.detail ? 'D' : ''}`;
       keys.push(key);
       if (map.has(key)) continue;
       map.set(
@@ -300,6 +306,8 @@ function GarmentMeshes({
           triplanar: !!build.library,
           solid: !!build.library,
           pattern: patterned ? pattern : null,
+          // Relieve horneado: empieza plano; el mapa llega después (abajo).
+          detail: part.detail ? makeDetailUniforms(flatNormal(), part.detail.uvMeters) : null,
         }),
       );
     }
@@ -341,6 +349,41 @@ function GarmentMeshes({
     // colorKey representa el contenido de los colores y el acabado
   }, [materials, partKeys, build, colorKey]);
 
+  // Relieve horneado (detailMaps.ts): 512 px en miniaturas (nada con ahorro de
+  // datos o calidad 3D en ahorro) y, en grande, el tamaño que pida la prenda
+  // en pantalla (sube a 1024 al acercarse; nunca baja mientras se ve).
+  const detailInfo = useMemo(() => build.parts.find((p) => p.detail)?.detail ?? null, [build]);
+  const prefVersion = usePreferenceVersion();
+  // prefVersion: se vuelve a mirar al cambiar los ajustes (calidad 3D)
+  const saver = useMemo(() => detailSaver(), [prefVersion]);
+  const sizes = useMemo(() => (detailInfo ? detailSizes(detailInfo) : []), [detailInfo]);
+  const [wanted, setWanted] = useState(0);
+  const detailSize = detailInfo ? pickDetailSize(sizes, { thumb, saver, wanted }) : 0;
+  useEffect(() => {
+    if (!detailInfo) return;
+    const setMap = (tex: THREE.Texture) => {
+      materials.forEach((m) => {
+        const d = m.userData.detail as DetailUniforms | undefined;
+        if (d) d.uDetailMap.value = tex;
+      });
+      invalidate();
+    };
+    if (!detailSize) {
+      setMap(flatNormal());
+      return;
+    }
+    const url = detailInfo.normal[detailSize];
+    let alive = true;
+    acquireDetail(url).then(
+      (tex) => alive && setMap(tex),
+      (err: unknown) => console.warn('No se pudo cargar el relieve', url, err),
+    );
+    return () => {
+      alive = false;
+      releaseDetail(url);
+    };
+  }, [detailInfo, detailSize, materials, invalidate]);
+
   // Movimiento: tiempo, viento en el espacio de la prenda e inercia al girar.
   const group = useRef<THREE.Group>(null);
   const spin = useRef({ last: NaN, x: 0, v: 0 });
@@ -363,6 +406,11 @@ function GarmentMeshes({
       cloth.uMotion.value = Math.abs(diff) < 0.002 ? wind : cloth.uMotion.value + diff * Math.min(1, delta * 1.5);
       if (cloth.uMotion.value > 0 || diff !== 0) animating = true;
       updateCloth(cloth, state.camera, group.current, delta);
+    }
+    // ¿La prenda ya ocupa en pantalla más de lo que da el relieve cargado?
+    if (detailInfo && !thumb && !saver && group.current && detailSize < sizes[sizes.length - 1]) {
+      const need = texelsOnScreen(state.camera, state.size.height, group.current, detailInfo.uvMeters, local.v);
+      if (pickDetailSize(sizes, { thumb, saver, wanted: need }) > detailSize) setWanted(need);
     }
     // Con frameloop="demand" pedimos más fotogramas mientras algo se anima.
     if (animating) state.invalidate();
@@ -452,6 +500,25 @@ function GarmentMeshes({
       ))}
     </group>
   );
+}
+
+/**
+ * Píxeles de pantalla que ocupa una unidad de UV del relieve horneado
+ * (`uvMeters` metros de tela) con la prenda a la distancia actual.
+ */
+function texelsOnScreen(camera: THREE.Camera, heightPx: number, g: THREE.Object3D, uvMeters: number, tmp: THREE.Vector3): number {
+  const scale = g.matrixWorld.getMaxScaleOnAxis();
+  let pxPerUnit = 0;
+  const persp = camera as THREE.PerspectiveCamera;
+  const ortho = camera as THREE.OrthographicCamera;
+  if (persp.isPerspectiveCamera) {
+    tmp.setFromMatrixPosition(g.matrixWorld);
+    const dist = Math.max(0.01, tmp.distanceTo(camera.position));
+    pxPerUnit = heightPx / (2 * dist * Math.tan(THREE.MathUtils.degToRad(persp.fov) / 2));
+  } else if (ortho.isOrthographicCamera) {
+    pxPerUnit = (heightPx * ortho.zoom) / Math.max(1e-6, ortho.top - ortho.bottom);
+  }
+  return pxPerUnit * scale * uvMeters;
 }
 
 /**

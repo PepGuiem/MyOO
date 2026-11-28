@@ -147,7 +147,33 @@ export function fabricRoughnessMap(kind: FabricKind): THREE.DataTexture {
 export function fabricNormalMap(kind: FabricKind): THREE.DataTexture {
   const cached = cache.get(kind);
   if (cached) return cached;
-  const heights = heightsOf(kind);
+  const tex = normalFromHeights(heightsOf(kind));
+  cache.set(kind, tex);
+  return tex;
+}
+
+// Canalé 2x2 (cintura, puños y cuellos de las sudaderas): 30 costillas por
+// repetición (~5 mm cada una con TEX_DENSITY = 7), en relieve redondeado, y
+// en cada costilla dos columnas de puntos en «uve» muy suaves.
+const RIB = (u: number, v: number): number => {
+  const rib = 0.5 + 0.5 * Math.cos(TAU * u * 30);
+  const raised = Math.pow(rib, 0.6);
+  const wale = Math.abs(((u * 60) % 1) - 0.5);
+  const stitch = Math.sin(TAU * (v * 64 + wale * 1.2));
+  return 0.15 + 0.7 * raised + 0.08 * stitch * raised + 0.05 * n64(u, v);
+};
+let ribTex: THREE.DataTexture | null = null;
+/** Normal map (compartido) del canalé. */
+export function ribNormalMap(): THREE.DataTexture {
+  if (!ribTex) {
+    const heights = new Float32Array(SIZE * SIZE);
+    for (let j = 0; j < SIZE; j++) for (let i = 0; i < SIZE; i++) heights[j * SIZE + i] = RIB(i / SIZE, j / SIZE);
+    ribTex = normalFromHeights(heights);
+  }
+  return ribTex;
+}
+
+function normalFromHeights(heights: Float32Array): THREE.DataTexture {
   const data = new Uint8Array(SIZE * SIZE * 4);
   const strength = 2.2;
   for (let j = 0; j < SIZE; j++) {
@@ -166,9 +192,7 @@ export function fabricNormalMap(kind: FabricKind): THREE.DataTexture {
       data[k + 3] = 255;
     }
   }
-  const tex = tileTexture(data);
-  cache.set(kind, tex);
-  return tex;
+  return tileTexture(data);
 }
 
 export interface FabricLook {

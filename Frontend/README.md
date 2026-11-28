@@ -359,14 +359,25 @@ El script:
 - simplifica con un error máximo de 0,35 mm (alta, para el visor) y genera una versión de 20.000 triángulos en `lod/` (miniaturas y outfits) con un error máximo de 1,2 mm (con más error salían manchas oscuras en las prendas);
 - cuantiza y comprime con meshopt: de unos 3,5 MB a unos 450 KB (alta) y 110 KB (miniatura) por prenda;
 - marca la tela como teñible;
-- conserva cada pieza (material con `extras.role`) como una primitiva aparte. La oclusión se calcula con todas juntas.
+- conserva cada pieza (material con `extras.role`) como una primitiva aparte. La oclusión se calcula con todas juntas;
+- la oclusión ignora los choques que no son sombra (rayos que salen por dentro del grosor de la tela o que rozan la tela vecina en los bajos y puños doblados) y corrige los vértices sueltos mucho más oscuros que sus vecinos: así no salen motas oscuras en los bajos;
+- con relieve horneado (ver abajo), conserva las UV de las piezas que lo usan.
+
+**Relieve horneado en Blender** (sudaderas v2; el sistema vale para cualquier colección que traiga mapas normales 4K, también el calzado):
+1. `npm run textures:sudaderas` (`scripts/prepare-textures.py`, Python con Pillow y numpy): reduce el mapa normal 4K de cada prenda a 1024 y 512 px en WebP (`public/models/prendas/sudaderas/tex/`). Solo el normal: el color lo pone la web (se tiñe) y la oclusión del archivo de Blender no sirve (se horneó con el maniquí). La trama fina del punto (2-3 px a 4K) no cabe en 1024 px: queda el relieve que sí se ve (costuras, cantos, bolsillo, arrugas).
+2. `npm run models:sudaderas`: con `--pbr=<carpeta glb_hi>` el script sabe qué piezas llevan la textura (las que coinciden con las texturizadas de `<nombre>_pbr.glb`) y cuáles son de canalé (mallas `Cintura`, `Puno…`, `Cuello`, salvo los cuellos alzados de felpa); guarda sus UV (`TEXCOORD_0`), el tipo de pieza en el alfa de `COLOR_0` (0 nada, 128 tela, 255 canalé) y las rutas de los mapas en `asset.extras.detail`. Si el `.glb` de entrada ya trae `normalTexture` (calzado), se usan esas UV sin `--pbr`.
+3. En la web (`src/three/detailMaps.ts` y `cloth.ts`): el relieve se suma al tejido de siempre, que en esas piezas se lee en las mismas UV (las columnas del punto siguen cada pieza, como en Blender) y es de canalé en cintura, puños y cuellos. Carga progresiva: miniaturas con 512 px (ninguno con «ahorro de datos» o calidad 3D en ahorro); en grande, 512 al abrir y 1024 cuando la prenda ocupa en pantalla más de lo que da el de 512 (con ahorro se queda en 512). Mientras llega, la prenda se ve como antes.
+
+Peso extra de las 8 sudaderas: unos 300 KB de mapas (1024 + 512) y 1 MB de geometría (las UV: unos 750 KB en las versiones altas y 250 KB en las ligeras). Cada visita solo descarga lo de las prendas que ve.
+
+Para el calzado: `npm run textures:calzado && npm run models:calzado` (unos 1,5 MB de mapas y 1 MB de UV para los 8 pares; de momento no se ha subido: la mejora se nota poco frente al peso).
 
 El generador de la colección casual y del maniquí está en `prendas_casual_glb/generador/` (ver su `LEEME.md`); el de la street, en `prendas_street_glb/generador/`. Es el mismo sistema de campos de distancia que la colección de punto, con componentes por papel.
 
 Si cambias o añades modelos, vuelve a ejecutar el script de su colección. Para una colección nueva, añade su carpeta y sus reglas en `libraryCatalog.ts` (con el ángulo de brazos con que se modeló).
 
 **En la web:**
-- El tejido (normal map, rugosidad, sheen) se proyecta en **triplanar**, porque los modelos no traen coordenadas UV. La oclusión del archivo se combina con la de curvatura.
+- El tejido (normal map, rugosidad, sheen) se proyecta en **triplanar**, porque los modelos no traen coordenadas UV (salvo las piezas con relieve horneado, ver arriba). La oclusión del archivo se combina con la de curvatura.
 - **Prenda sola**: se ve tal cual la modelaste, en pose A.
 - **En el maniquí y los outfits**: se deforma para cada silueta (`src/three/libraryFit.ts`):
   - tronco por secciones;

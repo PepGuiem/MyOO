@@ -1,0 +1,58 @@
+[
+ {
+  "archivo": "01_sudadera_capucha.glb",
+  "origen": "01_sudadera_capucha_Normal_4K.png",
+  "px": 4096,
+  "1024": 28706,
+  "512": 9858
+ },
+ {
+  "archivo": "02_sudadera_capucha_oversize.glb",
+  "origen": "02_sudadera_capucha_oversize_Normal_4K.png",
+  "px": 4096,
+  "1024": 33236,
+  "512": 11506
+ },
+ {
+  "archivo": "03_sudadera_capucha_crop.glb",
+  "origen": "03_sudadera_capucha_crop_Normal_4K.png",
+  "px": 4096,
+  "1024": 29150,
+  "512": 9958
+ },
+ {
+  "archivo": "04_sudadera_cremallera.glb",
+  "origen": "04_sudadera_cremallera_Normal_4K.png",
+  "px": 4096,
+  "1024": 29076,
+  "512": 9952
+ },
+ {
+  "archivo": "05_sudadera_cuello_redondo.glb",
+  "origen": "05_sudadera_cuello_redondo_Normal_4K.png",
+  "px": 4096,
+  "1024": 18612,
+  "512": 6348
+ },
+ {
+  "archivo": "06_sudadera_media_cremallera.glb",
+  "origen": "06_sudadera_media_cremallera_Normal_4K.png",
+  "px": 4096,
+  "1024": 20808,
+  "512": 7360
+ },
+ {
+  "archivo": "07_sudadera_cuarto_cremallera.glb",
+  "origen": "07_sudadera_cuarto_cremallera_Normal_4K.png",
+  "px": 4096,
+  "1024": 19262,
+  "512": 6674
+ },
+ {
+  "archivo": "08_sudadera_deportiva.glb",
+  "origen": "08_sudadera_deportiva_Normal_4K.png",
+  "px": 4096,
+  "1024": 27830,
+  "512": 6570
+ }
+]

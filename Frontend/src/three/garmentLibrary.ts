@@ -12,6 +12,7 @@ import * as THREE from 'three';
 import type { Attributes } from '../api/types';
 import type { Body } from './body';
 import { bakeShading } from './cloth';
+import { parseDetailInfo, type DetailMapInfo } from './detailMaps';
 import { fabricFor, type FabricKind } from './fabric';
 import type { GarmentBuild, GarmentPart, Role } from './garments';
 import { loadGltfUncached } from './gltfLoad';
@@ -39,6 +40,8 @@ export function libraryUrl(entry: LibraryEntry, detail: LibraryDetail): string {
 export interface LibraryPart {
   geometry: THREE.BufferGeometry;
   role: Role;
+  /** Relieve horneado del modelo (si lo trae y esta pieza tiene sus UV). */
+  detail?: DetailMapInfo;
 }
 
 const ROLES: Role[] = ['body', 'trim', 'secondary', 'lining', 'seam', 'stitch', 'thread', 'button', 'zipper', 'hardware', 'sole', 'lace', 'label'];
@@ -73,6 +76,7 @@ export function loadLibrary(url: string): Promise<LibraryPart[]> {
     // Sin la caché de gltfLoad: aquí se guarda solo la geometría ya preparada.
     p = loadGltfUncached(url).then((gltf) => {
       gltf.scene.updateMatrixWorld(true);
+      const detail = parseDetailInfo(gltf.asset?.extras, url);
       const parts: LibraryPart[] = [];
       gltf.scene.traverse((obj) => {
         const mesh = obj as THREE.Mesh;
@@ -96,13 +100,29 @@ export function loadLibrary(url: string): Promise<LibraryPart[]> {
           for (let i = 0; i < col.count; i++) ao[i] = col.getX(i);
           g.setAttribute('ao', new THREE.BufferAttribute(ao, 1));
         }
+        // UV del relieve horneado y de qué es cada vértice (alfa de COLOR_0,
+        // ver prepare-garments.mjs): 0 sin relieve, 1 tela, 2 canalé.
+        const uv = detail ? src.getAttribute('uv') : undefined;
+        let textured = false;
+        if (uv) {
+          const du = new Float32Array(uv.count * 3);
+          for (let i = 0; i < uv.count; i++) {
+            const a = col && col.itemSize === 4 ? col.getW(i) : 0.5;
+            const m = a < 0.25 ? 0 : a < 0.75 ? 1 : 2;
+            du[i * 3] = uv.getX(i);
+            du[i * 3 + 1] = uv.getY(i);
+            du[i * 3 + 2] = m;
+            if (m) textured = true;
+          }
+          if (textured) g.setAttribute('detailUv', new THREE.BufferAttribute(du, 3));
+        }
         const index = src.getIndex();
         if (index) g.setIndex(Array.from(index.array as ArrayLike<number>));
         g.applyMatrix4(mesh.matrixWorld);
         if (!g.getAttribute('normal')) g.computeVertexNormals();
         const material = (Array.isArray(mesh.material) ? mesh.material[0] : mesh.material) as THREE.Material | undefined;
         const role = material?.userData?.role as Role | undefined;
-        parts.push({ geometry: g, role: role && ROLES.includes(role) ? role : 'body' });
+        parts.push({ geometry: g, role: role && ROLES.includes(role) ? role : 'body', ...(textured && detail ? { detail } : {}) });
       });
       if (!parts.length) throw new Error(`${url}: el archivo no tiene mallas`);
       return parts;
@@ -272,6 +292,7 @@ export function buildLibraryGarment(
       ...(part.role === 'trim' && (modelKey === 'coat' || modelKey === 'scarf') ? { fabric: 'wool' as const } : {}),
       // Botones: lisos y algo brillantes (sin trama de tela).
       ...(part.role === 'button' ? { fabric: 'none' as const } : {}),
+      ...(part.detail ? { detail: part.detail } : {}),
     };
   });
   // El escote abraza el cuello del maniquí (la bufanda se queda como está).

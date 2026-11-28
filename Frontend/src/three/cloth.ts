@@ -20,7 +20,7 @@
  */
 import * as THREE from 'three';
 import type { Body } from './body';
-import { FABRIC_LOOK, fabricNormalMap, fabricRoughnessMap, type FabricKind } from './fabric';
+import { FABRIC_LOOK, fabricNormalMap, fabricRoughnessMap, ribNormalMap, type FabricKind } from './fabric';
 import { TEX_DENSITY } from './surface';
 
 type FabricOrNone = FabricKind | 'none';
@@ -491,6 +491,58 @@ const TRI_NORMAL_GLSL = /* glsl */ `
 #endif
 `;
 
+/**
+ * Relieve horneado en Blender (detailMaps.ts) leído con las UV del modelo.
+ * Los uniforms se comparten con el shader: cambiar `uDetailMap.value` (al
+ * llegar el mapa de 512 o el de 1024) no recompila el material.
+ */
+export interface DetailUniforms {
+  uDetailMap: { value: THREE.Texture };
+  /** Tejido de canalé (cintura, puños, cuellos): columnas verticales de punto. */
+  uRibMap: { value: THREE.Texture };
+  uRibScale: { value: number };
+  /** Metros por unidad de UV × densidad del tejido = repeticiones del tejido por unidad de UV. */
+  uDetailTile: { value: number };
+  /** Intensidad del relieve horneado. */
+  uDetailStrength: { value: number };
+}
+
+export function makeDetailUniforms(map: THREE.Texture, uvMeters: number): DetailUniforms {
+  return {
+    uDetailMap: { value: map },
+    uRibMap: { value: ribNormalMap() },
+    uRibScale: { value: 0.6 },
+    uDetailTile: { value: uvMeters * TEX_DENSITY },
+    uDetailStrength: { value: 0.8 },
+  };
+}
+
+// Normal con el relieve horneado (solo en los vértices con máscara: los demás
+// siguen con la proyección triplanar). El tejido fino (la textura repetida de
+// siempre) se lee en las mismas UV, así las columnas del punto siguen cada
+// pieza del patrón (vertical en el cuerpo y las mangas, como en Blender) en vez
+// de proyectarse desde los ejes; en las piezas de canalé (vDetail.z = 2), el
+// tejido es el de canalé. Los dos relieves se suman (mezcla «whiteout»).
+// Todo se calcula fuera de condicionales: las derivadas (dFdx) y los mipmaps
+// no admiten ramas que cambien entre píxeles vecinos.
+const DETAIL_NORMAL_GLSL = /* glsl */ `
+{
+  vec2 dUv = vDetail.xy;
+  mat3 dFr = getTangentFrame(-vViewPosition, dGeo, dUv); dFr[0] *= faceDirection; dFr[1] *= faceDirection;
+  vec3 dMacro = texture2D(uDetailMap, dUv).xyz * 2.0 - 1.0;
+  // Textura sin voltear (UV de glTF): el verde va al revés que la tangente derivada.
+  dMacro.xy *= vec2(uDetailStrength, -uDetailStrength);
+  vec2 dTile = dUv * uDetailTile;
+  vec3 dMicro = mix(texture2D(normalMap, dTile).xyz, texture2D(normalMap, TRI_ALT(dTile)).xyz, triMix) * 2.0 - 1.0;
+  dMicro.xy *= normalScale;
+  vec3 dRib = texture2D(uRibMap, dTile).xyz * 2.0 - 1.0;
+  dRib.xy *= uRibScale;
+  dMicro = mix(dMicro, dRib, step(1.5, vDetail.z));
+  vec3 dN = normalize(dFr * normalize(vec3(dMacro.xy + dMicro.xy, dMacro.z * dMicro.z)));
+  normal = normalize(mix(normal, dN, step(0.5, vDetail.z)));
+}
+`;
+
 export interface ClothMaterialOptions {
   color: THREE.ColorRepresentation;
   fabric: FabricOrNone;
@@ -511,6 +563,8 @@ export interface ClothMaterialOptions {
   triplanar?: boolean;
   /** Estampado de la tela (rayas, cuadros...). Sin valor, liso. */
   pattern?: PatternLook | null;
+  /** Relieve horneado (necesita `triplanar` y el atributo `detailUv` en la geometría). */
+  detail?: DetailUniforms | null;
 }
 
 /** Material PBR de una pieza de prenda. */
@@ -547,7 +601,10 @@ export function makeClothMaterial(o: ClothMaterialOptions): THREE.MeshPhysicalMa
 
   const pattern: PatternUniforms | null = o.pattern ? makePatternUniforms(o.pattern) : null;
   if (pattern) m.userData.pattern = pattern;
-  applyClothShader(m, { macro: MACRO[fabric], heather: HEATHER[fabric], motion: o.motion ?? null, lining: o.lining ?? null, interior: !o.solid, triplanar: !!o.triplanar, pattern });
+  // Sin tejido (botones, metal) tampoco hay normal map: el relieve horneado necesita uno.
+  const detail = o.detail && o.triplanar && m.normalMap ? o.detail : null;
+  if (detail) m.userData.detail = detail;
+  applyClothShader(m, { macro: MACRO[fabric], heather: HEATHER[fabric], motion: o.motion ?? null, lining: o.lining ?? null, interior: !o.solid, triplanar: !!o.triplanar, pattern, detail });
   return m;
 }
 
@@ -559,7 +616,16 @@ export function makeClothMaterial(o: ClothMaterialOptions): THREE.MeshPhysicalMa
  */
 export function applyClothShader(
   m: THREE.MeshPhysicalMaterial,
-  o: { macro: number; heather?: number; motion: ClothMotion | null; lining: THREE.Color | null; interior: boolean; triplanar?: boolean; pattern?: PatternUniforms | null },
+  o: {
+    macro: number;
+    heather?: number;
+    motion: ClothMotion | null;
+    lining: THREE.Color | null;
+    interior: boolean;
+    triplanar?: boolean;
+    pattern?: PatternUniforms | null;
+    detail?: DetailUniforms | null;
+  },
 ): void {
   const macro = o.macro;
   const motion = o.motion;
@@ -571,9 +637,11 @@ export function applyClothShader(
   const tri = !!o.triplanar;
   const pattern = o.pattern ?? null;
   const heather = o.heather ?? 0;
+  const detail = tri ? (o.detail ?? null) : null;
   m.onBeforeCompile = (shader) => {
     shader.uniforms.uMacro = { value: macro };
     if (pattern) Object.assign(shader.uniforms, pattern);
+    if (detail) Object.assign(shader.uniforms, detail);
     shader.uniforms.uTriScale = { value: TEX_DENSITY };
     shader.uniforms.uLining = lining;
     if (motion) Object.assign(shader.uniforms, motion);
@@ -583,6 +651,7 @@ export function applyClothShader(
         `#include <common>
 varying vec3 vClothPos;
 varying vec3 vClothNormal;
+${detail ? 'attribute vec3 detailUv; varying vec3 vDetail;' : ''}
 ${motion ? 'uniform float uTime; uniform float uMotion; uniform vec2 uWind; uniform float uLag; uniform vec3 uSway; uniform vec2 uArm;' : ''}`,
       )
       .replace(
@@ -590,6 +659,7 @@ ${motion ? 'uniform float uTime; uniform float uMotion; uniform vec2 uWind; unif
         `#include <begin_vertex>
 vClothPos = transformed;
 vClothNormal = objectNormal;
+${detail ? 'vDetail = detailUv;' : ''}
 ${motion ? MOTION_GLSL : ''}`,
       );
     shader.fragmentShader = shader.fragmentShader
@@ -601,6 +671,7 @@ varying vec3 vClothNormal;
 uniform float uMacro;
 uniform vec3 uLining;
 uniform float uTriScale;
+${detail ? 'varying vec3 vDetail; uniform sampler2D uDetailMap; uniform sampler2D uRibMap; uniform float uRibScale; uniform float uDetailTile; uniform float uDetailStrength;' : ''}
 ${NOISE_GLSL}
 ${pattern ? PATTERN_GLSL : ''}`,
       )
@@ -620,7 +691,16 @@ ${interior ? `if (!gl_FrontFacing) diffuseColor.rgb = ${lined ? 'uLining * 0.82'
         `${tri ? TRI_ROUGHNESS_GLSL : '#include <roughnessmap_fragment>'}
 roughnessFactor = clamp(roughnessFactor * (1.0 + uMacro * 1.4 * (clothMacro - 0.5)), 0.04, 1.0);`,
       );
-    if (tri) shader.fragmentShader = shader.fragmentShader.replace('#include <normal_fragment_maps>', TRI_NORMAL_GLSL);
+    if (tri) {
+      // Con relieve horneado: primero el normal de siempre (triplanar) y, en las
+      // piezas con UV, el horneado + tejido en UV sobre la normal de la malla
+      // (dGeo). Necesita el normal map de tejido, como el triplanar.
+      const normalGlsl = detail
+        ? `#ifdef USE_NORMALMAP_TANGENTSPACE\nvec3 dGeo = normal;\n#endif\n${TRI_NORMAL_GLSL}\n#ifdef USE_NORMALMAP_TANGENTSPACE\n${DETAIL_NORMAL_GLSL}\n#endif\n`
+        : TRI_NORMAL_GLSL;
+      shader.fragmentShader = shader.fragmentShader.replace('#include <normal_fragment_maps>', normalGlsl);
+    }
   };
-  m.customProgramCacheKey = () => `cloth:${heather}:${motion ? 'm' : 's'}:${lined ? 'l' : ''}:${interior ? 'i' : ''}:${tri ? 't' : ''}:${pattern ? 'p' : ''}`;
+  m.customProgramCacheKey = () =>
+    `cloth:${heather}:${motion ? 'm' : 's'}:${lined ? 'l' : ''}:${interior ? 'i' : ''}:${tri ? 't' : ''}:${pattern ? 'p' : ''}:${detail ? 'd' : ''}`;
 }

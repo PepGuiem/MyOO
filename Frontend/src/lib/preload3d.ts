@@ -14,7 +14,7 @@ export const loadWardrobePage = () => import('../pages/WardrobePage');
 export const loadViewCanvas = () => import('../three/ViewCanvas');
 
 /** ¿El usuario pidió ahorrar datos o va con una conexión muy lenta? */
-function saveData(): boolean {
+export function saveData(): boolean {
   const c = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
   return !!c && (c.saveData === true || c.effectiveType === 'slow-2g' || c.effectiveType === '2g');
 }

@@ -15,6 +15,7 @@ import * as THREE from 'three';
 import type { Attributes } from '../api/types';
 import { footPoint, footSurface, makeBody, type Body, type Foot, type Limb, type Section } from './body';
 import { bakeShading } from './cloth';
+import type { DetailMapInfo } from './detailMaps';
 import type { LibraryEntry } from './libraryCatalog';
 import { fabricFor, type FabricKind } from './fabric';
 import { mergeGeometries, mergeVertices, toCreasedNormals } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
@@ -65,6 +66,11 @@ export interface GarmentPart {
   metal?: boolean;
   /** Prenda forrada: la cara interior se ve con el color del forro. */
   lined?: boolean;
+  /**
+   * Relieve horneado en Blender (modelos de la biblioteca que lo traen): la
+   * geometría lleva el atributo `detailUv` (u, v, máscara). Ver detailMaps.ts.
+   */
+  detail?: DetailMapInfo;
 }
 
 export interface GarmentBuild {

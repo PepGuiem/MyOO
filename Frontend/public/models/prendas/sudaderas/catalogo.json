@@ -11,13 +11,17 @@
    "hardware",
    "trim"
   ],
+  "relieve": {
+   "uvMetros": 1.6092,
+   "bytes": 84168
+  },
   "alto": {
    "triangulos": 110202,
-   "bytes": 711504
+   "bytes": 804192
   },
   "lod": {
    "triangulos": 22588,
-   "bytes": 192756
+   "bytes": 214436
   }
  },
  {
@@ -32,13 +36,17 @@
    "hardware",
    "trim"
   ],
+  "relieve": {
+   "uvMetros": 1.6768,
+   "bytes": 89196
+  },
   "alto": {
    "triangulos": 110924,
-   "bytes": 733336
+   "bytes": 839516
   },
   "lod": {
    "triangulos": 23424,
-   "bytes": 196756
+   "bytes": 220288
   }
  },
  {
@@ -53,13 +61,17 @@
    "hardware",
    "trim"
   ],
+  "relieve": {
+   "uvMetros": 1.5136,
+   "bytes": 77956
+  },
   "alto": {
    "triangulos": 82238,
-   "bytes": 565252
+   "bytes": 635896
   },
   "lod": {
    "triangulos": 22482,
-   "bytes": 193220
+   "bytes": 214404
   }
  },
  {
@@ -67,7 +79,7 @@
   "prenda": "Scene",
   "original": {
    "triangulos": 238140,
-   "bytes": 6917372
+   "bytes": 6917376
   },
   "piezas": [
    "body",
@@ -75,13 +87,17 @@
    "trim",
    "zipper"
   ],
+  "relieve": {
+   "uvMetros": 1.6099,
+   "bytes": 87488
+  },
   "alto": {
    "triangulos": 142826,
-   "bytes": 1107772
+   "bytes": 1255552
   },
   "lod": {
    "triangulos": 50994,
-   "bytes": 558764
+   "bytes": 631540
   }
  },
  {
@@ -89,15 +105,19 @@
   "prenda": "Scene",
   "original": {
    "triangulos": 176080,
-   "bytes": 4096604
+   "bytes": 4096608
+  },
+  "relieve": {
+   "uvMetros": 1.5785,
+   "bytes": 60708
   },
   "alto": {
    "triangulos": 96840,
-   "bytes": 605216
+   "bytes": 678600
   },
   "lod": {
    "triangulos": 19994,
-   "bytes": 156908
+   "bytes": 175564
   }
  },
  {
@@ -112,13 +132,17 @@
    "zipper",
    "hardware"
   ],
+  "relieve": {
+   "uvMetros": 1.5812,
+   "bytes": 62254
+  },
   "alto": {
    "triangulos": 110794,
-   "bytes": 757112
+   "bytes": 860268
   },
   "lod": {
    "triangulos": 28724,
-   "bytes": 271888
+   "bytes": 313520
   }
  },
  {
@@ -133,13 +157,17 @@
    "zipper",
    "hardware"
   ],
+  "relieve": {
+   "uvMetros": 1.5665,
+   "bytes": 58460
+  },
   "alto": {
    "triangulos": 102818,
-   "bytes": 682632
+   "bytes": 771916
   },
   "lod": {
    "triangulos": 25502,
-   "bytes": 231188
+   "bytes": 266688
   }
  },
  {
@@ -149,13 +177,17 @@
    "triangulos": 175864,
    "bytes": 4085980
   },
+  "relieve": {
+   "uvMetros": 1.5175,
+   "bytes": 94020
+  },
   "alto": {
    "triangulos": 96724,
-   "bytes": 600836
+   "bytes": 671620
   },
   "lod": {
    "triangulos": 19994,
-   "bytes": 153884
+   "bytes": 171956
   }
  }
 ]
