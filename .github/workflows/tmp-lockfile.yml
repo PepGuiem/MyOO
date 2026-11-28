@@ -1,0 +1,19 @@
+# TEMPORAL: regenera Frontend/package-lock.json con @playwright/test (aquí no hay red para npm).
+name: tmp-lockfile
+on:
+  push:
+    branches: [mejora-tests-e2e]
+jobs:
+  lock:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install --package-lock-only --no-audit --no-fund
+        working-directory: Frontend
+      - uses: actions/upload-artifact@v4
+        with:
+          name: frontend-lock
+          path: Frontend/package-lock.json
