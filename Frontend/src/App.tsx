@@ -53,6 +53,8 @@ const ForgotPasswordPage = lazy(() => import('./pages/EmailLinkPages').then((m) 
 const ResetPasswordPage = lazy(() => import('./pages/EmailLinkPages').then((m) => ({ default: m.ResetPasswordPage })));
 const VerifyEmailPage = lazy(() => import('./pages/EmailLinkPages').then((m) => ({ default: m.VerifyEmailPage })));
 const EmailPreferencesPage = lazy(() => import('./pages/EmailLinkPages').then((m) => ({ default: m.EmailPreferencesPage })));
+// Modo demo (pública, sin cuenta): el vestidor con un armario de ejemplo en el navegador.
+const DemoPage = lazy(() => import('./pages/DemoPage').then((m) => ({ default: m.DemoPage })));
 
 // Con una sesión guardada, quien abre la web por Inicio llega enseguida a él:
 // su código (con el 3D) se pide ya, a la vez que se renueva la sesión, en vez
@@ -97,6 +99,8 @@ export function App() {
           <Route path="/reset-password" element={<PublicPage><ResetPasswordPage /></PublicPage>} />
           <Route path="/verify-email" element={<PublicPage><VerifyEmailPage /></PublicPage>} />
           <Route path="/email-preferences" element={<PublicPage><EmailPreferencesPage /></PublicPage>} />
+          {/* Probar sin registrarse: nada de API ni de datos en el backend */}
+          <Route path="/demo" element={<PublicPage><DemoPage /></PublicPage>} />
           <Route
             element={
               <RequireAuth>

@@ -2011,6 +2011,34 @@ input:disabled {
   color: var(--neon);
 }
 
+/* «Probar sin cuenta» (modo demo, /demo) bajo el formulario de acceso. */
+.au-demo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  margin-top: 4px;
+  color: var(--text);
+  border: 1px dashed rgb(var(--neon-3-rgb) / 0.55);
+  border-radius: var(--radius-m);
+  text-decoration: none;
+  transition:
+    border-color 0.15s,
+    background-color 0.15s;
+}
+
+.au-demo:hover,
+.au-demo:focus-visible {
+  border-color: var(--neon-3);
+  background: rgb(var(--neon-3-rgb) / 0.1);
+}
+
+.au-demo-note {
+  margin: 0;
+  font-size: 0.86rem;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .auth-piece,
   .auth-grain {

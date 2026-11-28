@@ -1,0 +1,160 @@
+/* =============================================================================
+   Modo demo (/demo): el vestidor sin cuenta. Reutiliza las clases del vestidor
+   real (.dressing, .dress-grid, .rack, .stage-frame...); aquí solo va la barra
+   de arriba, la lista de colores y la llamada a la acción. Se carga con la
+   página (import en DemoPage.tsx), no en el paquete principal.
+   ========================================================================== */
+
+.demo-shell {
+  min-height: 100vh;
+  overflow-x: clip;
+}
+
+.demo-bar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  padding: 10px var(--gutter);
+  background: rgba(10, 10, 12, 0.82);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.demo-bar .spacer {
+  flex: 1;
+}
+
+.demo-brand {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+
+.demo-brand img {
+  height: 32px;
+  width: auto;
+}
+
+.demo-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 9px;
+  font-family: var(--mono, ui-monospace, monospace);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--neon-hi, #fff);
+  border: 1px solid rgb(var(--neon-3-rgb) / 0.55);
+  border-radius: 999px;
+  background: rgb(var(--neon-3-rgb) / 0.12);
+}
+
+.demo-bar .lang-switch .segmented button {
+  min-height: 36px;
+}
+
+.demo-bar-btn {
+  min-height: 44px;
+  text-decoration: none;
+}
+
+.demo-main {
+  padding-top: 32px;
+}
+
+.demo-lede {
+  max-width: 56ch;
+  margin: 10px 0 0;
+}
+
+/* Lo puesto: una fila de color por prenda y el botón de quitar */
+.demo-picked {
+  display: grid;
+  gap: 6px;
+  margin: 0 0 16px;
+  padding: 0;
+  list-style: none;
+}
+
+.demo-picked-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.demo-picked-row .color-slot {
+  flex: 1;
+  min-width: 0;
+}
+
+.demo-picked-row .color-slot-head {
+  min-height: 44px;
+}
+
+.demo .demo-remove {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+}
+
+.demo-cta {
+  display: grid;
+  gap: 8px;
+  padding-top: 14px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.12);
+}
+
+.demo-cta .demo-save {
+  width: 100%;
+  min-height: 48px;
+  justify-content: center;
+}
+
+.demo-cta p {
+  margin: 0;
+}
+
+@media (max-width: 860px) {
+  .demo-main {
+    padding-top: 18px;
+  }
+
+  .demo-badge {
+    display: none;
+  }
+
+  .demo .slot-tab {
+    min-height: 56px;
+  }
+
+  .demo .color-chip {
+    width: 34px;
+    height: 34px;
+  }
+
+  /* La llamada a la acción queda a mano, abajo del todo, al hacer scroll */
+  .demo-cta {
+    position: sticky;
+    bottom: 0;
+    margin: 0 -16px -16px;
+    padding: 12px 16px 16px;
+    border-radius: 0 0 16px 16px;
+    background: rgba(10, 10, 12, 0.94);
+  }
+}
+
+@media (max-width: 420px) {
+  .demo-bar {
+    gap: 6px 8px;
+  }
+
+  .demo-bar-btn {
+    padding-inline: 12px;
+  }
+}

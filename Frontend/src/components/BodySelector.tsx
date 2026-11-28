@@ -2,7 +2,8 @@ import type { CSSProperties } from 'react';
 import { Link } from 'react-router-dom';
 import { mannequinSelectionId, useBodyShape } from '../lib/bodyPref';
 import { play } from '../lib/sfx';
-import { BODY_SHAPES, type BodyShape } from '../three/body';
+// bodyShapes (y no body): las siluetas sin three.js, para no arrastrar el motor 3D.
+import { BODY_SHAPES, type BodyShape } from '../three/bodyShapes';
 import { Icon } from './Icon';
 import { t } from '../i18n';
 
@@ -16,7 +17,7 @@ const SEXES: { id: BodyShape['sex']; label: string }[] = [
  * reales) y las siluetas genéricas de hombre o de mujer. El cambio de
  * hombre a mujer desliza el interruptor y las siluetas entran de nuevo.
  */
-export function BodySelector({ className = '' }: { className?: string }) {
+export function BodySelector({ className = '', measures = true }: { className?: string; /** Enlace «Con tus medidas» (no en la demo sin cuenta). */ measures?: boolean }) {
   const { shape, selectedId, setShapeId, mannequins } = useBodyShape();
   const ownSelected = selectedId.startsWith('m:');
   const shapes = BODY_SHAPES.filter((b) => b.sex === shape.sex);
@@ -87,10 +88,12 @@ export function BodySelector({ className = '' }: { className?: string }) {
           })}
         </div>
       )}
-      <Link to="/maniquies" className="chip chip-measure">
-        <Icon name={mannequins.length ? 'edit' : 'plus'} size={12} />
-        {mannequins.length ? t('Editar maniquíes') : t('Con tus medidas')}
-      </Link>
+      {measures && (
+        <Link to="/maniquies" className="chip chip-measure">
+          <Icon name={mannequins.length ? 'edit' : 'plus'} size={12} />
+          {mannequins.length ? t('Editar maniquíes') : t('Con tus medidas')}
+        </Link>
+      )}
     </div>
   );
 }

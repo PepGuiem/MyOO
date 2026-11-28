@@ -15,6 +15,7 @@ import { LegalLinks } from './LegalLinks';
 import { availableNavItems, NAV_GROUP_META, type NavCatalogItem } from './navCatalog';
 import { usePreferences, type NavGroupId, type NavItemId } from '../lib/preferences';
 import { ToastProvider } from './fx/Toast';
+import { DemoImportOffer } from './demo/DemoImportOffer';
 import { Logo } from './Logo';
 import { Spinner } from './Spinner';
 import { t } from '../i18n';
@@ -299,6 +300,8 @@ export function Layout() {
         </Suspense>
       ) : null}
     </div>
+    {/* Outfit montado en /demo antes de tener cuenta: se ofrece crearlo */}
+    <DemoImportOffer onWardrobesChanged={wardrobes.reload} />
     </ToastProvider>
   );
 }

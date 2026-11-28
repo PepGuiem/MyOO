@@ -11,6 +11,7 @@ import { banFromError, banMessage } from '../lib/ban';
 import { useAsync } from '../lib/useAsync';
 import { LoadingOverlay } from '../components/Spinner';
 import { preload3dWhenIdle } from '../lib/preload3d';
+import { demoPending } from '../lib/demoOutfit';
 import { t } from '../i18n';
 
 /** Outfit de muestra para la pantalla de acceso (no viene de la API). */
@@ -77,6 +78,8 @@ export function AuthPage({ mode }: { mode: 'login' | 'register' }) {
   // escaneado con su QR), no siempre al inicio.
   const location = useLocation();
   const back = returnPath(location.state);
+  // ¿Viene de «Guardar este outfit» en la demo? Se le recuerda que lo espera.
+  const [demoWaiting] = useState(() => demoPending.read() !== null);
   // Mientras se escribe el correo, el resto del 3D (Inicio, armario) se
   // precarga en un rato libre: al entrar ya está listo.
   useEffect(() => preload3dWhenIdle(), []);
@@ -299,6 +302,12 @@ export function AuthPage({ mode }: { mode: 'login' | 'register' }) {
               </p>
             )}
 
+            {demoWaiting && (
+              <p className="note au-demo-note" role="status">
+                <Icon name="hanger" size={13} /> {t('Tu outfit de la demo te espera: al entrar te ofreceremos crearlo en tu cuenta.')}
+              </p>
+            )}
+
             <button type="submit" className="btn btn-primary btn-block au-cta" disabled={busy} aria-busy={busy}>
               {busy && <span className="spinner" aria-hidden="true" />}
               <span>{busy ? t('Un momento…') : isLogin ? t('Entrar') : t('Crear cuenta')}</span>
@@ -311,6 +320,11 @@ export function AuthPage({ mode }: { mode: 'login' | 'register' }) {
               </button>
             )}
           </form>
+
+          {/* Modo demo: el vestidor con un armario de ejemplo, sin crear cuenta */}
+          <Link to="/demo" className="au-demo">
+            <Icon name="hanger" size={15} /> {t('Probar sin cuenta')}
+          </Link>
 
           <p className="auth-switch">
             {isLogin ? (
