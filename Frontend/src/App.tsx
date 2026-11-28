@@ -5,6 +5,7 @@ import { PreferencesProvider } from './lib/preferences';
 import { BrandFavicon } from './components/Logo';
 import { GlobalFx } from './components/fx/GlobalFx';
 import { NeonScene } from './components/fx/NeonScene';
+import { UpdateBanner } from './components/pwa/UpdateBanner';
 import { Layout } from './components/Layout';
 import { BodyProvider } from './lib/bodyPref';
 import { AuthCallbackPage } from './pages/AuthCallbackPage';
@@ -83,6 +84,8 @@ export function App() {
       <NeonScene />
       <GlobalFx />
       <BrandFavicon />
+      {/* «Hay una versión nueva · Recargar» (service worker, ver lib/pwa.ts) */}
+      <UpdateBanner />
       <AuthProvider>
         <PreferencesProvider>
         <BodyProvider>

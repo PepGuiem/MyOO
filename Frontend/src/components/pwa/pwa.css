@@ -1,0 +1,144 @@
+/* ==========================================================================
+   Web instalable (PWA): aviso de versión nueva y «Instalar la app».
+   En su propio archivo para no tocar styles.css.
+   ========================================================================== */
+
+/* --- «Hay una versión nueva · Recargar» ----------------------------------- */
+.pwa-update {
+  position: fixed;
+  top: calc(12px + env(safe-area-inset-top, 0px));
+  left: 50%;
+  z-index: 1300;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: max-content;
+  max-width: calc(100vw - 24px);
+  padding: 6px 6px 6px 14px;
+  background: rgba(20, 20, 22, 0.94);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-m);
+  box-shadow:
+    inset 3px 0 0 var(--neon),
+    0 10px 30px rgba(0, 0, 0, 0.55);
+  color: var(--text);
+  font-size: 0.9rem;
+  transform: translateX(-50%);
+  animation: pwa-drop 0.32s cubic-bezier(0.2, 0.9, 0.3, 1.2) backwards;
+}
+
+.pwa-update > .icon {
+  flex: none;
+  color: var(--neon);
+}
+
+.pwa-update-text {
+  min-width: 0;
+  font-weight: 600;
+}
+
+.pwa-update-reload {
+  flex: none;
+  min-height: 44px;
+}
+
+@keyframes pwa-drop {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -12px);
+  }
+}
+
+/* Botón de cerrar (aviso y tarjeta del menú): 44 px para el dedo. */
+.pwa-close {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  color: var(--muted);
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-m);
+  cursor: pointer;
+}
+
+.pwa-close:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.pwa-close:focus-visible,
+.pwa-install-btn:focus-visible {
+  outline: 2px solid var(--neon);
+  outline-offset: 1px;
+}
+
+/* --- Tarjeta «Instalar la app» del menú ------------------------------------ */
+.pwa-install {
+  margin-top: auto;
+  padding-top: 10px;
+}
+
+/* La tarjeta ya empuja al pie; «Tú» va justo debajo. */
+.nav.nx .pwa-install + .nx-me {
+  margin-top: 6px;
+}
+
+.pwa-install-row {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius-m);
+}
+
+.pwa-install-btn {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  min-height: 44px;
+  padding: 0 10px;
+  font: inherit;
+  font-size: 0.86rem;
+  font-weight: 600;
+  text-align: left;
+  color: var(--text);
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-m);
+  cursor: pointer;
+}
+
+.pwa-install-btn .icon {
+  flex: none;
+  color: var(--neon);
+}
+
+.pwa-install-btn:hover {
+  background: rgb(var(--neon-rgb) / 0.08);
+}
+
+.pwa-ios-help {
+  margin: 6px 2px 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+
+dd > .pwa-ios-help {
+  margin: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pwa-update {
+    animation: none;
+  }
+}
+
+html[data-motion='reduced'] .pwa-update {
+  animation: none;
+}

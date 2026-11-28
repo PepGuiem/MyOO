@@ -16,6 +16,7 @@ import { availableNavItems, NAV_GROUP_META, type NavCatalogItem } from './navCat
 import { usePreferences, type NavGroupId, type NavItemId } from '../lib/preferences';
 import { ToastProvider } from './fx/Toast';
 import { DemoImportOffer } from './demo/DemoImportOffer';
+import { InstallAppCard } from './pwa/InstallApp';
 import { Logo } from './Logo';
 import { Spinner } from './Spinner';
 import { t } from '../i18n';
@@ -262,6 +263,9 @@ export function Layout() {
               </section>
             );
           })}
+
+          {/* Web instalable: se puede cerrar y no vuelve en un tiempo */}
+          <InstallAppCard />
 
           {/* Tú: perfil y cuenta, siempre a mano al final */}
           <div className="nx-me">

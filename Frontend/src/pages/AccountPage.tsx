@@ -11,6 +11,7 @@ import { SectionHead } from '../components/street/SectionHead';
 import { CountUp } from '../components/street/Street';
 import { LanguageSwitch } from '../components/LanguageSwitch';
 import { Modal } from '../components/Modal';
+import { InstallAppFact } from '../components/pwa/InstallApp';
 import { explain } from '../lib/apiErrors';
 import { RESOURCE_LABEL, formatDate } from '../lib/labels';
 import { isNative } from '../lib/native';
@@ -402,6 +403,7 @@ export function AccountPage() {
                 <LanguageSwitch />
               </dd>
             </div>
+            <InstallAppFact />
           </dl>
           <div className="actions">
             <Link to="/perfil" className="btn wd-btn-line">

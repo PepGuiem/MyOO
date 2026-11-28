@@ -25,6 +25,15 @@ npm run build      # build de producción en dist/
 
 La misma web, empaquetada como app nativa con Capacitor 8 (`capacitor.config.ts`, `src/lib/native.ts`). Instalar, compilar el APK/AAB para Google Play y el IPA para la App Store, y los requisitos de cada tienda: **[MOVIL.md](MOVIL.md)**. La app necesita el backend publicado con HTTPS (`VITE_API_URL` en `.env.production`).
 
+## Web instalable (PWA)
+
+Además de las tiendas, la web se puede instalar desde el navegador (`public/manifest.webmanifest`, accesos directos a Armario y Outfits).
+
+- **Service worker** (`public/sw.js`, registrado en `src/lib/pwa.ts`): solo en producción (`npm run build` / `vite preview`) y nunca dentro de la app de Capacitor. Navegación: red primero y, sin red, `public/offline.html`. `/assets/*` (con hash): caché primero. `/models/*`: se enseña lo guardado y se renueva por detrás (máx. 80 modelos de hasta 8 MB). `/api/*`: nunca en caché.
+- **Versiones**: el plugin `sw-build-id` de `vite.config.ts` mete un identificador de build en `dist/sw.js`; cada despliegue es un service worker nuevo que espera y la web avisa «Hay una versión nueva · Recargar» (`components/pwa/UpdateBanner.tsx`). Al activarse borra las cachés de versiones anteriores.
+- **Instalar la app** (`components/pwa/InstallApp.tsx`): tarjeta al pie del menú (se cierra y no vuelve en 30 días) y fila «App» en Cuenta. En iPhone/iPad, ayuda «Compartir → Añadir a pantalla de inicio».
+- **Probarlo**: `npm run build && npm run preview`, abrir `http://localhost:4173` en Chrome → DevTools › Application (Manifest, Service workers, Cache storage). Para la página offline: Network › Offline y recargar.
+
 ## Páginas
 
 | Ruta | Qué hay |

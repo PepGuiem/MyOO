@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#19191b" />
+    <meta name="robots" content="noindex" />
+    <title>MyOO · Sin conexión</title>
+    <link rel="icon" type="image/svg+xml" href="/brand/mark.svg" />
+    <!--
+      Página sin conexión: la sirve el service worker (public/sw.js) cuando no
+      hay red. Todo va aquí dentro (sin React ni CSS de la app) para que
+      funcione sin descargar nada más; la marca y la pared ya están guardadas.
+    -->
+    <style>
+      :root {
+        --bg: #19191b;
+        --panel: #202023;
+        --line: #34343a;
+        --line-strong: #48484f;
+        --text: #e6e4df;
+        --muted: #a8a6a1;
+        --neon: #ff4d00;
+        --neon-rgb: 255 77 0;
+        --neon-2: #ff1744;
+        --font: 'Archivo', system-ui, -apple-system, 'Segoe UI', sans-serif;
+        color-scheme: dark;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        min-height: 100%;
+        background: var(--bg) url('/brand/concrete.webp') repeat;
+        background-size: 512px;
+      }
+
+      body {
+        display: grid;
+        place-items: center;
+        min-height: 100vh;
+        min-height: 100dvh;
+        margin: 0;
+        padding: max(24px, env(safe-area-inset-top)) 20px max(24px, env(safe-area-inset-bottom));
+        color: var(--text);
+        font-family: var(--font);
+        font-size: 15px;
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+        background: radial-gradient(ellipse at 50% 35%, rgb(var(--neon-rgb) / 0.1), transparent 60%);
+      }
+
+      main {
+        width: 100%;
+        max-width: 420px;
+        padding: 32px 24px 28px;
+        text-align: center;
+        background: rgba(20, 20, 22, 0.86);
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        box-shadow: 0 18px 50px rgba(0, 0, 0, 0.55);
+      }
+
+      .mark {
+        display: block;
+        width: 88px;
+        height: 88px;
+        margin: 0 auto 18px;
+      }
+
+      .kicker {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin: 0 0 10px;
+        color: var(--muted);
+        font: 500 0.68rem/1 ui-monospace, 'SFMono-Regular', 'Cascadia Mono', Consolas, monospace;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+
+      /* Piloto que parpadea como un neón que se apaga */
+      .kicker::before {
+        content: '';
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--neon);
+        box-shadow: 0 0 8px var(--neon);
+        animation: flicker 2.6s steps(1) infinite;
+      }
+
+      h1 {
+        margin: 0 0 12px;
+        font-size: clamp(2rem, 9vw, 2.6rem);
+        font-weight: 800;
+        font-stretch: 72%;
+        line-height: 1.02;
+        letter-spacing: 0.01em;
+        text-transform: uppercase;
+        text-shadow:
+          0 0 18px rgb(var(--neon-rgb) / 0.45),
+          0 0 2px rgb(var(--neon-rgb) / 0.8);
+      }
+
+      p {
+        margin: 0 0 22px;
+        color: var(--muted);
+      }
+
+      button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 160px;
+        min-height: 44px;
+        padding: 10px 20px;
+        font: inherit;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: #fff;
+        background: linear-gradient(100deg, var(--neon), var(--neon-2));
+        border: 0;
+        border-radius: 6px;
+        cursor: pointer;
+        box-shadow: 0 6px 18px rgb(var(--neon-rgb) / 0.3);
+      }
+
+      button:hover {
+        filter: brightness(1.08);
+      }
+
+      button:focus-visible {
+        outline: 2px solid var(--text);
+        outline-offset: 3px;
+      }
+
+      .hint {
+        margin: 16px 0 0;
+        font-size: 0.8rem;
+        color: var(--muted);
+        opacity: 0.8;
+      }
+
+      @keyframes flicker {
+        0%,
+        62%,
+        68%,
+        100% {
+          opacity: 1;
+        }
+        64%,
+        70% {
+          opacity: 0.25;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .kicker::before {
+          animation: none;
+        }
+      }
+
+      html[data-motion='reduced'] .kicker::before {
+        animation: none;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <img class="mark" src="/brand/mark.svg" alt="MyOO" width="88" height="88" />
+      <p class="kicker" data-i18n="kicker">Sin red</p>
+      <h1 data-i18n="title">Sin conexión</h1>
+      <p data-i18n="text">No hay internet ahora mismo. Tu armario sigue a salvo: vuelve a intentarlo cuando tengas red.</p>
+      <button type="button" id="retry" data-i18n="retry">Reintentar</button>
+      <p class="hint" data-i18n="hint">La página se recargará sola al volver la conexión.</p>
+    </main>
+    <script>
+      (function () {
+        // Idioma y animaciones: los mismos ajustes que guarda la web en este navegador.
+        var lang = 'es';
+        try {
+          var saved = localStorage.getItem('myout.locale');
+          var nav = (navigator.languages && navigator.languages[0]) || navigator.language || 'es';
+          lang = saved === 'en' || saved === 'es' ? saved : nav.toLowerCase().indexOf('en') === 0 ? 'en' : 'es';
+          var prefs = JSON.parse(localStorage.getItem('myout.prefs') || 'null');
+          if (prefs && prefs.prefs && prefs.prefs.motion === 'reduced') document.documentElement.dataset.motion = 'reduced';
+        } catch (e) {
+          /* sin almacenamiento: español y animaciones del sistema */
+        }
+        if (lang === 'en') {
+          var EN = {
+            kicker: 'Offline',
+            title: 'No connection',
+            text: "There's no internet right now. Your wardrobe is safe: try again when you're back online.",
+            retry: 'Try again',
+            hint: 'The page will reload by itself when the connection comes back.',
+          };
+          document.documentElement.lang = 'en';
+          document.title = 'MyOO · Offline';
+          var nodes = document.querySelectorAll('[data-i18n]');
+          for (var i = 0; i < nodes.length; i++) nodes[i].textContent = EN[nodes[i].getAttribute('data-i18n')];
+        }
+        document.getElementById('retry').addEventListener('click', function () {
+          location.reload();
+        });
+        window.addEventListener('online', function () {
+          location.reload();
+        });
+      })();
+    </script>
+  </body>
+</html>
